@@ -1,0 +1,71 @@
+{
+  "page": 6,
+  "url": "/about-us/sme-policy/",
+  "title": "SME Policy: Quality, Safety & Environment | Steel Mind",
+  "description": "The Steel Mind Engineers SME Policy sets the standards for quality control, workplace safety and environmental care in steel fabrication in Pakistan.",
+  "keyword": "steel fabrication quality control in Pakistan",
+  "support": [
+    "safe steel erection in Pakistan",
+    "steel fabrication safety standards",
+    "environmentally responsible steel fabrication"
+  ],
+  "h1": "SME Policy: Quality, Health, Safety and Environment at Steel Mind Engineers",
+  "quickAnswer": "The SME Policy of Steel Mind Engineers sets the rules for quality control, health and safety, and environmental care in the workshop and on site.",
+  "alt": "Supervisor inspecting a steel connection on a safe construction site.",
+  "related": [
+    "Our Core Values",
+    "Committed To",
+    "Erection"
+  ],
+  "faq": [],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "Why Steel Mind Has This Policy"
+    },
+    {
+      "type": "p",
+      "text": "In steel construction, one poorly welded joint or one unsupervised lift can injure people and cost a client years of investment. The way a company manages quality, health, safety and the environment therefore affects the quality of its structures. The SME Policy sets the rules for the workshop, the site crews and the company's dealings with clients and suppliers."
+    },
+    {
+      "type": "h2",
+      "title": "Quality Management"
+    },
+    {
+      "type": "p",
+      "text": "Steel Mind inspects material when it arrives, checks dimensions after cutting, examines welds before assembly and checks alignment during erection. When a result falls short of the specification, the correction is recorded."
+    },
+    {
+      "type": "h2",
+      "title": "Health and Safety"
+    },
+    {
+      "type": "p",
+      "text": "Every employee is trained before working on site. Workers wear certified protective equipment and follow written site rules. Risk reviews take place regularly so that hazards are removed instead of tolerated."
+    },
+    {
+      "type": "h2",
+      "title": "Environmental Care"
+    },
+    {
+      "type": "p",
+      "text": "Cutting layouts are planned to reduce scrap, and offcuts are sent for recycling. Welding fumes and paint overspray are controlled. Working methods are chosen to limit noise, dust and waste at the workshop and on client premises."
+    },
+    {
+      "type": "h2",
+      "title": "Legal Compliance"
+    },
+    {
+      "type": "p",
+      "text": "Steel Mind follows the quality, environmental and workplace safety rules that apply to its operations. It keeps the records needed to show that compliance to clients and authorities."
+    },
+    {
+      "type": "h2",
+      "title": "Improvement and Responsibility"
+    },
+    {
+      "type": "p",
+      "text": "Feedback from clients, supervisors and workers is collected after each project and turned into changes in procedure. Management is responsible for applying the policy. Every employee has the right and the duty to stop work that looks unsafe and to report it."
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "page": 8,
+  "url": "/about-us/factory-tour/",
+  "title": "Steel Fabrication Factory in Lahore | Factory Tour",
+  "description": "Tour the Steel Mind Engineers fabrication factory at Karol Ghati, Lahore: cutting, welding, assembly, painting and dispatch of steel structures.",
+  "keyword": "steel fabrication factory in Lahore",
+  "support": [
+    "steel fabrication workshop Pakistan",
+    "PEB factory in Pakistan",
+    "steel structure manufacturing facility"
+  ],
+  "h1": "Factory Tour: Inside the Steel Mind Fabrication Factory in Lahore",
+  "quickAnswer": "The Steel Mind factory is at Karol Ghati, Lahore. Steel moves through five stages: material yard, cutting, fitting and welding, cleaning and painting, and packing and dispatch.",
+  "alt": "Fabrication area of the Steel Mind factory in Karol Ghati, Lahore, with steel columns and an overhead crane.",
+  "related": [
+    "Fabrication",
+    "Introduction",
+    "Pre-Engineered Buildings"
+  ],
+  "faq": [
+    {
+      "q": "Where is the Steel Mind factory?",
+      "a": "The factory is at Karol Ghati, Lahore, Punjab 54000."
+    },
+    {
+      "q": "Can I visit before I sign a contract?",
+      "a": "Yes. Call to book a visit and an engineer will take you through the factory."
+    },
+    {
+      "q": "Does Steel Mind fabricate outside Lahore?",
+      "a": "The fabrication is done in Lahore. The steel is then delivered and erected at project sites across Pakistan."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "Where the Factory Is"
+    },
+    {
+      "type": "p",
+      "text": "The Steel Mind factory is at Karol Ghati, Lahore, Punjab 54000. All fabrication for projects across Pakistan starts here. The head office is at 35-D Commercial, DHA EME Sector, Lahore."
+    },
+    {
+      "type": "h2",
+      "title": "What You Will See on the Tour"
+    },
+    {
+      "type": "p",
+      "text": "A steel part moves through the factory in a fixed order. The sections below follow that order."
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "name": "Material yard",
+          "text": "Steel plates and sections arrive and are checked against the order. Material is stored by size so that the cutting team finds it quickly."
+        },
+        {
+          "name": "Cutting",
+          "text": "Cutting machines cut plates and sections to the sizes on the fabrication drawings. Cutting layouts are planned to reduce scrap."
+        },
+        {
+          "name": "Fitting and welding",
+          "text": "Welders join the parts into columns, rafters and other members. Supervisors inspect welds before the parts move on."
+        },
+        {
+          "name": "Surface preparation and painting",
+          "text": "Parts are cleaned and painted with the coating system chosen for your project. See the Cleaning and Painting pages."
+        },
+        {
+          "name": "Packing and dispatch",
+          "text": "Parts are marked and packed in erection order. Material-handling systems move heavy members to the trucks. Site crews can then find each part quickly."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "title": "Why the Factory Matters to Your Project"
+    },
+    {
+      "type": "p",
+      "text": "A factory with its own cutting, welding and handling equipment lets Steel Mind run several projects at the same time. Work happens indoors and does not depend on weather. Quality checks take place at one location where the engineers can visit. Parts arrive on site ready to assemble."
+    },
+    {
+      "type": "h2",
+      "title": "Visit the Factory"
+    },
+    {
+      "type": "p",
+      "text": "Clients are welcome to visit by appointment. Call +92 300 4253966 or +92 307 7077549, or send a message from the Contact Us page."
+    }
+  ]
+}

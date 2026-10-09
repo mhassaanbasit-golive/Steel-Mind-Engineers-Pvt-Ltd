@@ -1,0 +1,101 @@
+{
+  "article": 9,
+  "url": "/blog/warehouse-height-for-racking-pakistan/",
+  "title": "Warehouse Height for Racking in Pakistan | Steel Mind",
+  "description": "How to set the eave height of a steel warehouse from your racks, forklifts, lights and sprinklers. A plain guide for storage warehouse construction in Pakistan.",
+  "keyword": "warehouse height for racking",
+  "support": [
+    "storage warehouse construction in Pakistan",
+    "steel storage building Pakistan",
+    "industrial storage shed",
+    "pallet racking warehouse design"
+  ],
+  "h1": "How to Choose Warehouse Height for Your Racking in Pakistan",
+  "quickAnswer": "Set the eave height of a warehouse from the top of your tallest rack, plus clearance for lights, sprinklers and handling equipment. Then check the clear span for aisles and the floor for point loads. Give the engineer your racking plan before the first drawing, because height is hard to change once the steel is made.",
+  "alt": "Warehouse height for racking in Pakistan",
+  "related": [
+    "Storage Warehouses",
+    "Basic Parameters",
+    "Mezzanine Floors"
+  ],
+  "faq": [
+    {
+      "q": "How tall can a warehouse be?",
+      "a": "The engineer sets the height from your racking and handling plan."
+    },
+    {
+      "q": "Can I raise the height later?",
+      "a": "It is very hard. Settle the height before steel is made."
+    },
+    {
+      "q": "Can Steel Mind build on a small plot?",
+      "a": "Yes. The frame can fit the plot shape, and a mezzanine can add floor area."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "Why Height Is the Decision You Cannot Undo"
+    },
+    {
+      "type": "p",
+      "text": "Width and length can often grow later, because bolted frames allow extra bays. Height is different. Once the columns are made, the eave height is fixed, and raising it means rebuilding the frame. For this reason the warehouse height for racking should be settled during design, together with your racking supplier and your operations team. Storage warehouse construction in Pakistan covers raw material stores, finished goods stores and distribution stores, and in each of them a wrong height means either wasted volume or racks that do not fit. A few careful questions at the start avoid both problems."
+    },
+    {
+      "type": "h2",
+      "title": "Start From the Top of the Tallest Rack"
+    },
+    {
+      "type": "p",
+      "text": "The simplest method works backward from your racks. Find the height of the tallest rack, including the top load, and add the clearance needed above it for lights, sprinklers and any pipes or ducts. The result is the minimum clear height under the rafter. The engineer then sets the eave height, which is measured to the top of the outer eave purlin, so that the clear height is available where it is needed. Ask your racking supplier for exact heights, because rack heights vary with the number of beam levels and the size of the pallets."
+    },
+    {
+      "type": "h2",
+      "title": "Allow for the Forklift or Reach Truck"
+    },
+    {
+      "type": "p",
+      "text": "Handling equipment needs room to lift. A forklift or reach truck raises the load above the top beam level before placing it, and its mast needs space above that. Tell the engineer which machines you use, since a reach truck, a counterbalance forklift and an automated crane each need different clearance. If a machine must pass through a door, the door height and the clear height inside must both suit it. A steel storage building in Pakistan is easy to design around such details when they are known early."
+    },
+    {
+      "type": "h2",
+      "title": "Check Aisles and Clear Span"
+    },
+    {
+      "type": "p",
+      "text": "A clear span allows straight rack rows and easy forklift movement, because no columns stand in the aisles. If your building has columns inside, they must fit between rack rows without blocking aisles. Aisle width depends on the equipment. Narrow aisles hold more racks but need special trucks, while wide aisles suit ordinary forklifts. Share your rack layout with the engineer so that the frame spacing, or bay spacing, matches the rack bays. Matching them saves floor space and avoids columns in awkward places."
+    },
+    {
+      "type": "h2",
+      "title": "Point Loads From Racks and Stacks"
+    },
+    {
+      "type": "p",
+      "text": "Racks and stacked goods place heavy point loads on the floor. Each rack leg carries a share of the load of every pallet above it. The floor slab must be designed for these loads, and the steel columns must agree with the slab at the base. Tell the engineer the weight of a loaded pallet and the number of levels, and ask your civil contractor to design the slab for the same figures. If the weights are not clear yet, give the heaviest case you can expect."
+    },
+    {
+      "type": "h2",
+      "title": "Light, Air and Fire Safety"
+    },
+    {
+      "type": "p",
+      "text": "A tall roof helps the stock stay dry and cool, because hot air collects above the racks. Ridge vents and skylights keep air moving and cut the use of electricity for lights during the day. Sprinklers and fire detection need clearance and pipe routes, so tell the engineer if your insurer or your authority requires them. Skylights should sit where they do not cause glare on the racks. Plan the number and position of skylights and vents in the design stage, so the roof is ready for them."
+    },
+    {
+      "type": "h2",
+      "title": "Doors and Truck Access"
+    },
+    {
+      "type": "p",
+      "text": "Put doors where trucks and forklifts enter, and size them from the largest vehicle. Sliding or rolling doors suit most warehouses, and sectional roll-up doors suit loading docks. Leave enough yard space for trucks to turn and back in. A door that is too low for the tallest truck or too narrow for the widest load causes daily delays. Measure twice and tell the engineer the largest vehicle."
+    },
+    {
+      "type": "h2",
+      "title": "Add Floor Area Without a Bigger Plot"
+    },
+    {
+      "type": "p",
+      "text": "If your plot is small, a mezzanine can give a second level for small items, picking or an office. Steel Mind built a 32,400 square foot mezzanine floor for Haier at Raiwind and a 7,020 square foot mezzanine for Maria B in Lahore. A mezzanine uses the empty height above the ground floor, but it needs enough clear height for both levels. Include it in the first brief, so the frame and the height can be set for it."
+    }
+  ]
+}

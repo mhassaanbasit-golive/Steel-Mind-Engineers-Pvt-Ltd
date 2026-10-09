@@ -1,0 +1,651 @@
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import pageData from "../content/generated/page-01.json";
+import { SITE } from "../data/site.ts";
+import { A } from "../data/assets.ts";
+import { PROJECTS } from "../data/projects.ts";
+import { videoSrc, videoPoster } from "../lib/cloudinary.ts";
+import { Button } from "../components/ui/Button.tsx";
+import { Section } from "../components/ui/Section.tsx";
+import { Stat } from "../components/ui/Stat.tsx";
+import { Img } from "../components/ui/Img.tsx";
+import { SwipeRow } from "../components/ui/SwipeRow.tsx";
+import { Marquee } from "../components/ui/Marquee.tsx";
+import { Accordion } from "../components/ui/Accordion.tsx";
+import { QuoteBand } from "../components/ui/QuoteBand.tsx";
+import { useReducedMotion } from "../hooks/useReducedMotion.ts";
+
+export const Home: React.FC = () => {
+  const reducedMotion = useReducedMotion();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [industryOpen, setIndustryOpen] = useState<number>(0);
+
+  // Pause video when off screen
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || reducedMotion) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            video.play().catch(() => {});
+          } else {
+            video.pause();
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [reducedMotion]);
+
+  // Selected 4 projects
+  const selectedProjectIds = [
+    "haier-crane-mezzanine",
+    "dravton-dairy-shed",
+    "maria-b-mezzanine",
+    "yascon-bridge",
+  ];
+  const selectedProjects = selectedProjectIds
+    .map((id) => PROJECTS.find((p) => p.id === id))
+    .filter(Boolean);
+
+  const whatWeBuildItems = [
+    {
+      title: "Pre-Engineered Buildings (PEB)",
+      desc: "Clear-span and multi-span steel buildings designed for the loads, cranes and clearances your operation needs.",
+      img: A.division.peb,
+      url: "/pre-engineered-buildings-pakistan/",
+    },
+    {
+      title: "Structural Steel Fabrication",
+      desc: "Columns, beams, trusses, platforms, bridges and complete steel frames, fabricated to drawing.",
+      img: A.division.structural,
+      url: "/structural-steel-fabrication-pakistan/",
+    },
+    {
+      title: "Industrial Sheds",
+      desc: "Steel sheds for production, storage, dairy and livestock use.",
+      img: A.division.sheds,
+      url: "/industrial-sheds-pakistan/",
+    },
+    {
+      title: "Steel Warehouses",
+      desc: "Wide-span storage and logistics buildings that make full use of the floor area.",
+      img: A.division.warehouses,
+      url: "/steel-warehouses-pakistan/",
+    },
+    {
+      title: "Custom Steel Fabrication",
+      desc: "Machine frames, tanks, hoppers, gates, stairs and other steel items made to your own drawings.",
+      img: A.division.custom,
+      url: "/custom-steel-fabrication-pakistan/",
+    },
+  ];
+
+  const services = [
+    { name: "Design", img: A.service.design, url: "/services/design/", desc: "the engineering of your structure." },
+    { name: "Detailing", img: A.service.detailing, url: "/services/detailing/", desc: "the drawings the factory and the site use." },
+    { name: "Fabrication", img: A.service.fabrication, url: "/services/fabrication/", desc: "cutting, welding and assembly in the factory." },
+    { name: "Cleaning", img: A.service.cleaning, url: "/services/cleaning/", desc: "surface preparation before coating." },
+    { name: "Painting", img: A.service.painting, url: "/services/painting/", desc: "protective coating systems." },
+    { name: "Erection", img: A.service.erection, url: "/services/erection/", desc: "assembly of the structure on your site." },
+    { name: "After Sale Services", img: A.service.aftersale, url: "/services/after-sale-services/", desc: "repairs, additions and extensions." },
+  ];
+
+  const industries = [
+    {
+      name: "Manufacturing",
+      img: A.industry.manufacturing,
+      desc: "Steel buildings for production halls, assembly lines and machine shops.",
+      url: "/pre-engineered-buildings-pakistan/",
+    },
+    {
+      name: "Dairy and Livestock",
+      img: A.industry.dairy,
+      desc: "Sheds for cattle and poultry with airflow, shade and drainage.",
+      url: "/industrial-sheds-pakistan/",
+    },
+    {
+      name: "Apparel and Retail",
+      img: A.industry.apparel,
+      desc: "Buildings for garment units, showrooms and retail floors.",
+      url: "/steel-warehouses-pakistan/",
+    },
+    {
+      name: "Steel and Engineering",
+      img: A.industry.steel,
+      desc: "Frames, trusses and mezzanines for steel processors.",
+      url: "/structural-steel-fabrication-pakistan/",
+    },
+    {
+      name: "Infrastructure",
+      img: A.industry.infrastructure,
+      desc: "Steel bridges, gantries and public works structures.",
+      url: "/custom-steel-fabrication-pakistan/",
+    },
+  ];
+
+  const blogArticles = [
+    {
+      title: "What Is a Pre-Engineered Building? A Plain Guide for Pakistani Business Owners",
+      category: "Pre-Engineered Building Basics",
+      img: A.blog.whatIsPeb,
+      url: "/blog/what-is-a-pre-engineered-building/",
+    },
+    {
+      title: "PEB vs Concrete Construction in Pakistan: Time, Cost and Flexibility",
+      category: "Pre-Engineered Building Basics",
+      img: A.blog.pebVsConcrete,
+      url: "/blog/peb-vs-concrete-construction-pakistan/",
+    },
+    {
+      title: "Factory Shed Checklist: Ten Questions to Answer Before You Build",
+      category: "Industrial Sheds",
+      img: A.blog.factoryShed,
+      url: "/blog/factory-shed-checklist-pakistan/",
+    },
+  ];
+
+  return (
+    <div className="w-full">
+      {/* 1. Hero Video Section */}
+      <section className="relative w-full h-[100svh] min-h-[560px] lg:h-screen overflow-hidden bg-[var(--ink)]">
+        {/* Video Wrapper */}
+        <div
+          className="absolute inset-0 w-full h-full overflow-hidden"
+          data-parallax="4"
+        >
+          <video
+            ref={videoRef}
+            autoPlay={!reducedMotion}
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster={videoPoster(A.video, 720)}
+            className="w-full h-full object-cover object-center"
+          >
+            <source src={videoSrc(A.video, 720)} media="(max-width: 768px)" type="video/mp4" />
+            <source src={videoSrc(A.video, 1280)} media="(min-width: 769px)" type="video/mp4" />
+            <source src={A.video} type="video/mp4" />
+          </video>
+
+          {/* Hero Gradient Overlay */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.25) 35%, rgba(0,0,0,0.20) 55%, rgba(0,0,0,0.80) 100%)",
+            }}
+          />
+        </div>
+
+        {/* Hero Content: Single block anchored bottom-left */}
+        <div
+          className="absolute z-10 text-white"
+          style={{
+            bottom: "calc(88px + env(safe-area-inset-bottom))",
+            left: "var(--pad-x)",
+            right: "var(--pad-x)",
+          }}
+        >
+          {/* H1 */}
+          <h1
+            className="text-[20px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] text-white max-w-[260px] lg:max-w-[560px]"
+            data-split=""
+          >
+            {pageData.h1}
+          </h1>
+
+          {/* Supporting line: 16px gap below H1, 13px mobile / 15px desktop, white 90% opacity, clamp 3 lines mobile, max-w-[260px] mobile */}
+          <p
+            className="mt-4 text-[13px] lg:text-[15px] leading-[1.5] text-white/90 line-clamp-3 max-w-[260px] lg:max-w-[480px]"
+            data-fade-up=""
+          >
+            Steel Mind designs, fabricates and erects steel structures for industry, agriculture and commerce. One team handles the work from the first drawing to the final handover.
+          </p>
+
+          {/* Buttons: 20px gap below supporting line, stack on mobile with 10px gap, side by side on desktop */}
+          {SITE.heroShowButtons && (
+            <div
+              className="mt-5 flex flex-col lg:flex-row gap-[10px] items-start"
+              data-fade-up=""
+            >
+              <Button
+                size="sm"
+                variant="hero-white"
+                href="/contact-us/#quote"
+                className="w-[min(200px,60vw)] lg:w-auto"
+              >
+                Request a Quote
+              </Button>
+              <Button
+                size="sm"
+                variant="hero"
+                href="/projects/"
+                className="w-[min(200px,60vw)] lg:w-auto"
+              >
+                View Our Projects
+              </Button>
+            </div>
+          )}
+        </div>
+
+        {/* Scroll Hint (Bottom Right Line) */}
+        <div className="hidden lg:block absolute bottom-8 right-8 z-10">
+          <div className="w-[1px] h-[40px] bg-white origin-top animate-[scrollLine_2.4s_cubic-bezier(0.76,0,0.24,1)_infinite]" />
+        </div>
+
+        <style>{`
+          @keyframes scrollLine {
+            0% { transform: scaleY(0); opacity: 0; }
+            50% { transform: scaleY(1); opacity: 1; }
+            100% { transform: scaleY(0); opacity: 0; }
+          }
+        `}</style>
+      </section>
+
+      {/* 2. Line under the hero (Quick Answer removed per Item E) */}
+      <section className="py-16 bg-white border-b border-[var(--line)]">
+        <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
+          <p
+            className="text-[18px] lg:text-[22px] font-medium leading-[1.3] text-[var(--ink)] max-w-[520px] mx-auto text-center"
+            data-split=""
+          >
+            Steel Mind builds turnkey steel structures in Pakistan, from engineering and fabrication to erection.
+          </p>
+        </div>
+      </section>
+
+      {/* 3. About Steel Mind (Offwhite) */}
+      <Section
+        bg="offwhite"
+        title="About Steel Mind"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+          <div className="lg:col-span-5 space-y-6" data-reveal-group="">
+            <p className="text-[15px] lg:text-[16px] leading-[1.65] text-[var(--grey)] max-w-[520px]" data-reveal="">
+              Steel Mind Engineers is a steel fabrication and engineering company based in Pakistan. It builds complete steel buildings and structures for manufacturers, dairy and livestock farms, retailers, logistics companies and public-sector clients. In more than eight years, the company has completed over thirty projects in more than ten cities.
+            </p>
+            <p className="text-[15px] lg:text-[16px] leading-[1.65] text-[var(--grey)] max-w-[520px]" data-reveal="">
+              The factory in Karol Ghati, Lahore, has cutting machines, welding units and material-handling systems. This allows the team to run several projects at the same time without losing control of quality or schedule. Many clients return for later phases, for example a feed storage building after a dairy shed.
+            </p>
+            <div className="pt-4" data-fade-up="">
+              <Button variant="secondary" href="/about-us/introduction/">
+                Read the Introduction
+              </Button>
+            </div>
+          </div>
+
+          <div className="lg:col-span-7">
+            <Img
+              src={A.about}
+              alt="Steel fabrication team at work at the Steel Mind Engineers factory"
+              ratio="5/6"
+              className="w-full"
+            />
+          </div>
+        </div>
+      </Section>
+
+      {/* 4. What We Build (White) — 5 uniform 4:5 cards, equal height, no numbering */}
+      <Section
+        bg="white"
+        title="What We Build"
+        intro="We build steel structures for factories, warehouses, farms, commercial buildings and other projects that need large, practical spaces."
+      >
+        <SwipeRow ariaLabel="What We Build">
+          {whatWeBuildItems.map((item) => (
+            <Link
+              key={item.title}
+              to={item.url}
+              className="group flex flex-col h-full bg-transparent cursor-pointer"
+              data-reveal=""
+            >
+              <div className="overflow-hidden">
+                <div className="transition-transform duration-500 group-hover:scale-[1.03]">
+                  <Img
+                    src={item.img}
+                    alt={item.title}
+                    ratio="4/5"
+                  />
+                </div>
+              </div>
+
+              <div className="p-5 flex-1 flex flex-col justify-between space-y-2">
+                <div>
+                  <h3 className="text-[18px] lg:text-[22px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors leading-[1.25]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-[15px] leading-[1.6] text-[var(--grey)] line-clamp-3">
+                    {item.desc}
+                  </p>
+                </div>
+                <div className="pt-2 flex items-center justify-end">
+                  <svg className="w-6 h-6 stroke-current text-[var(--blue)] transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
+                    <line x1="4" y1="12" x2="20" y2="12" />
+                    <polyline points="14 6 20 12 14 18" />
+                  </svg>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </SwipeRow>
+      </Section>
+
+      {/* 5. How We Work + 7 Services (Royal Blue Glossy) */}
+      <section
+        style={{
+          background: "var(--blue-glossy)",
+          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.15)",
+        }}
+        className="py-[var(--section-y)] text-white"
+      >
+        <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] mb-12 lg:mb-16">
+          <h2
+            className="text-[22px] lg:text-[36px] font-semibold leading-[1.2] tracking-[-0.015em] text-white mb-6"
+            data-split=""
+          >
+            How We Work
+          </h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 text-[15px] lg:text-[16px] text-white/78 leading-[1.65]" data-reveal-group="">
+            <p data-reveal="" className="max-w-[520px]">
+              We start with the drawings and requirements, then handle the engineering, fabrication and erection through the same team. This keeps the project coordinated from the workshop to the site.
+            </p>
+            <p data-reveal="" className="max-w-[520px]">
+              For you, this means one contract and one point of contact. The engineer who designs your building is available while the steel is cut, and the crew that erects it works from the same drawings the workshop used.
+            </p>
+          </div>
+        </div>
+
+        {/* 7 Services SwipeRow */}
+        <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
+          <SwipeRow theme="dark" ariaLabel="Seven Services">
+            {services.map((svc) => (
+              <Link
+                key={svc.name}
+                to={svc.url}
+                className="group block bg-transparent p-4"
+                data-reveal=""
+              >
+                <div className="overflow-hidden mb-3">
+                  <div className="transition-transform duration-500 group-hover:scale-[1.03]">
+                    <Img src={svc.img} alt={svc.name} ratio="4/5" />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <h3 className="text-[16px] lg:text-[20px] font-semibold text-white group-hover:text-white/80 transition-colors leading-[1.25]">
+                    {svc.name}
+                  </h3>
+                  <p className="text-[14px] leading-[1.6] text-white/78">
+                    {svc.desc}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </SwipeRow>
+        </div>
+      </section>
+
+      {/* 6. Trusted By (Offwhite) */}
+      <Marquee />
+
+      {/* 7. Our Work in Numbers (White) */}
+      <Section
+        bg="white"
+        title="Our Work in Numbers"
+        intro="We have completed 30+ projects, worked across 10+ cities and fabricated more than 1,000 tons of steel over 8+ years."
+      >
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+          {SITE.stats.map((st) => (
+            <Stat
+              key={st.label}
+              value={st.value}
+              suffix={st.suffix}
+              label={st.label}
+              format={st.format}
+            />
+          ))}
+        </div>
+      </Section>
+
+      {/* 8. Selected Projects (Offwhite) */}
+      <Section
+        bg="offwhite"
+        title="Selected Projects"
+      >
+        <SwipeRow ariaLabel="Selected Projects">
+          {selectedProjects.map((p) => {
+            if (!p) return null;
+            return (
+              <Link
+                key={p.id}
+                to={`/projects/${p.slug}/`}
+                className="group block bg-transparent"
+                data-reveal=""
+              >
+                <div className="overflow-hidden mb-3">
+                  <div className="transition-transform duration-500 group-hover:scale-[1.03]">
+                    <Img
+                      src={p.images[0]}
+                      alt={p.title}
+                      ratio="16/9"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1 mt-3">
+                  <div className="text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
+                    {p.client} · {p.location}
+                  </div>
+                  <h3 className="text-[16px] lg:text-[20px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors line-clamp-1 leading-[1.25]">
+                    {p.title}
+                  </h3>
+                  <div className="text-[14px] font-semibold text-[var(--blue)]">
+                    {p.area.toLocaleString()} sq ft
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </SwipeRow>
+      </Section>
+
+      {/* 9. Team (White Split Card) */}
+      <section className="relative w-full bg-white">
+        {/* Desktop View: image left (5 cols), text right (7 cols), gap 32px */}
+        <div className="hidden lg:block max-w-[1340px] mx-auto px-[var(--pad-x)] py-16 lg:py-20">
+          <div className="grid grid-cols-12 gap-8 items-center">
+            <div className="col-span-5 overflow-hidden">
+              <Img
+                src={A.team}
+                alt="Steel Mind Engineers fabrication team in front of the factory building in Lahore."
+                ratio="4/5"
+                className="w-full"
+              />
+            </div>
+            <div className="col-span-7 space-y-4">
+              <h2 className="text-[20px] lg:text-[32px] font-semibold text-[var(--ink)] leading-[1.2]" data-split="">
+                How the Team Is Organized
+              </h2>
+              <p className="text-[14px] lg:text-[15px] text-[var(--grey)] leading-[1.6] max-w-[520px]" data-reveal="">
+                Four groups share responsibility for each structure. Engineers handle design and detailing. The workshop team handles fabrication and quality checks. Site crews handle erection and safety. Project coordinators handle schedules, material flow and communication with you.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile View: Bordered offwhite card */}
+        <div className="lg:hidden px-[var(--pad-x)] py-12">
+          <div className="border border-[var(--line)] bg-[var(--offwhite)] p-5 flex flex-col gap-4">
+            <div className="overflow-hidden">
+              <Img
+                src={A.team}
+                alt="Steel Mind Engineers fabrication team in front of the factory building in Lahore."
+                ratio="4/5"
+                className="w-full"
+              />
+            </div>
+            <div>
+              <h3 className="text-[16px] font-semibold text-[var(--ink)] mb-2 leading-[1.25]">
+                How the Team Is Organized
+              </h3>
+              <p className="text-[14px] text-[var(--grey)] leading-[1.6]">
+                Four groups share responsibility for each structure. Engineers handle design and detailing. The workshop team handles fabrication and quality checks. Site crews handle erection and safety. Project coordinators handle schedules, material flow and communication with you.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 10. Industries We Serve (Offwhite) — Expanding list with description */}
+      <Section
+        bg="offwhite"
+        title="Industries We Serve"
+      >
+        <div className="divide-y divide-[var(--line)] border-y border-[var(--line)]">
+          {industries.map((ind, idx) => {
+            const isOpen = industryOpen === idx;
+            const numStr = String(idx + 1).padStart(2, "0");
+            return (
+              <div key={ind.name} className="py-4 overflow-hidden transition-all duration-500">
+                <button
+                  type="button"
+                  onClick={() => setIndustryOpen(isOpen ? -1 : idx)}
+                  className="w-full py-4 flex items-center justify-between text-left cursor-pointer group"
+                >
+                  <div className="flex items-center space-x-6">
+                    <span className="text-[14px] font-semibold text-[var(--blue)]">
+                      {numStr}
+                    </span>
+                    <span className="text-[16px] lg:text-[20px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors">
+                      {ind.name}
+                    </span>
+                  </div>
+                  <span className="relative w-4 h-4 flex items-center justify-center">
+                    <span className="absolute w-4 h-[1.5px] bg-[var(--ink)]" />
+                    <span
+                      className={`absolute h-4 w-[1.5px] bg-[var(--ink)] transition-transform duration-300 ${
+                        isOpen ? "scale-y-0" : "scale-y-100"
+                      }`}
+                    />
+                  </span>
+                </button>
+
+                {isOpen && (
+                  <div className="py-4 space-y-4 animate-[fadeIn_0.5s_ease-out]">
+                    <div className="max-w-[720px] overflow-hidden">
+                      <Img
+                        src={ind.img}
+                        alt={`${ind.name} sector: steel building by Steel Mind Engineers`}
+                        ratio="16/9"
+                      />
+                    </div>
+                    <p className="text-[14px] leading-[1.6] text-[var(--grey)] line-clamp-2 max-w-[640px]">
+                      {ind.desc}
+                    </p>
+                    <div>
+                      <Link
+                        to={ind.url}
+                        className="text-[14px] font-semibold text-[var(--blue)] hover:underline inline-flex items-center"
+                      >
+                        <span>Explore</span>
+                        <svg className="w-4 h-4 ml-1 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                          <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </Section>
+
+      {/* 11. Get a Quote Band */}
+      <QuoteBand />
+
+      {/* 12. Latest From the Blog (White) */}
+      <Section
+        bg="white"
+        title="Latest From the Blog"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {blogArticles.map((art) => (
+            <Link
+              key={art.title}
+              to={art.url}
+              className="group block bg-transparent"
+              data-reveal=""
+            >
+              <div className="overflow-hidden mb-4">
+                <div className="transition-transform duration-500 group-hover:scale-[1.03]">
+                  <Img src={art.img} alt={art.title} ratio="4/3" />
+                </div>
+              </div>
+              <span className="block text-[11px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-2">
+                {art.category}
+              </span>
+              <h3 className="text-[18px] lg:text-[22px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors leading-[1.25] line-clamp-3">
+                {art.title}
+              </h3>
+            </Link>
+          ))}
+        </div>
+
+        <div className="mt-8 pt-4">
+          <Link
+            to="/blog/"
+            className="text-[14px] font-semibold text-[var(--blue)] hover:underline inline-flex items-center"
+          >
+            <span>Blogs</span>
+            <svg className="w-4 h-4 ml-1 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </Link>
+        </div>
+      </Section>
+
+      {/* 13. Company Profile (Royal Blue Glossy) */}
+      <section
+        style={{
+          background: "var(--blue-glossy)",
+          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.15)",
+        }}
+        className="py-20 text-white"
+      >
+        <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] flex flex-col items-start space-y-6" data-fade-up="">
+          <h2 className="text-[22px] lg:text-[36px] font-semibold text-white leading-tight" data-split="">
+            Company Profile
+          </h2>
+          <p className="text-[15px] lg:text-[16px] text-white/78 max-w-[520px] leading-[1.65]">
+            The Steel Mind Engineers Pvt. Ltd. company profile is a 29-page PDF. It introduces the company, the head office and factory in Lahore, the services, the projects and the clients. Download it to share with your team or your consultant.
+          </p>
+          <a
+            href={SITE.profilePdf}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center font-semibold text-[11px] uppercase tracking-[0.1em] px-6 py-3 bg-white text-[var(--blue)] hover:bg-white/90 transition-colors rounded-none"
+          >
+            {SITE.profileButton}
+          </a>
+        </div>
+      </section>
+
+      {/* 14. Frequently Asked Questions (White) */}
+      <Section
+        bg="white"
+        title="Frequently Asked Questions"
+      >
+        <Accordion items={pageData.faq} />
+      </Section>
+    </div>
+  );
+};

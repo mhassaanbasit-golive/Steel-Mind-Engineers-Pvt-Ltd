@@ -1,0 +1,40 @@
+{
+  "page": 67,
+  "url": "/blog/",
+  "title": "Steel Building Blog Pakistan | Steel Mind Engineers",
+  "description": "Plain guides on pre-engineered buildings, steel sheds, warehouses, fabrication and buying steel in Pakistan, written by the engineers at Steel Mind.",
+  "keyword": "steel building guide Pakistan",
+  "support": [
+    "PEB blog Pakistan",
+    "steel shed advice",
+    "steel fabrication tips"
+  ],
+  "h1": "Steel Mind Blog: Plain Guides to Steel Buildings, Sheds and Fabrication in Pakistan",
+  "quickAnswer": "The Steel Mind blog answers the questions buyers ask before they build in steel: what a PEB is, how long it takes, how to plan a shed or warehouse, and how to compare quotes. Each article is short, plain and written by the engineers.",
+  "alt": "Steel drawings, hard hat and tablet on an engineer's desk at Steel Mind.",
+  "related": [
+    "Pre-Engineered Buildings",
+    "Our Projects",
+    "Contact Us"
+  ],
+  "faq": [
+    {
+      "q": "Who writes the Steel Mind blog?",
+      "a": "The articles are written from the experience of the Steel Mind engineers and project team."
+    },
+    {
+      "q": "Can I ask for an article on a topic?",
+      "a": "Yes. Send your question from the Contact Us page."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "How the Blog Works"
+    },
+    {
+      "type": "p",
+      "text": "AI assistants and Google both look for pages that answer one question well. Each article below targets one question, opens with a Quick answer under the H1 and links to at least three pages of this site. The Blog page shows the cards, a category filter and a search box. The home page shows the three newest articles."
+    }
+  ]
+}

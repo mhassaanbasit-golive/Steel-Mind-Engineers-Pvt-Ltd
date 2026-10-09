@@ -1,0 +1,101 @@
+{
+  "page": 48,
+  "url": "/services/fabrication/",
+  "title": "Steel Fabrication Services in Pakistan | Steel Mind",
+  "description": "Cutting, drilling, welding and assembly of steel structures for projects across Pakistan. Steel Mind fabricates columns, rafters and custom parts to drawing.",
+  "keyword": "steel fabrication services in Pakistan",
+  "support": [
+    "steel fabrication company in Pakistan",
+    "welding and fabrication services Pakistan",
+    "structural steel workshop Pakistan"
+  ],
+  "h1": "Steel Fabrication Services in Pakistan: Cutting, Welding and Assembly to Your Drawing",
+  "quickAnswer": "Fabrication is the stage where steel plates and sections become finished parts. Steel Mind Engineers Pvt. Ltd. cuts, drills, fits and welds each part in its own factory, inspects it and packs it in erection order.",
+  "alt": "Welder fabricating a steel column in the Steel Mind factory.",
+  "related": [
+    "Detailing",
+    "Cleaning",
+    "Structural Steel Fabrication"
+  ],
+  "faq": [
+    {
+      "q": "Can Steel Mind fabricate from my drawings?",
+      "a": "Yes. Send the drawings. An engineer reviews them and replies with questions and a quote."
+    },
+    {
+      "q": "How are parts packed?",
+      "a": "Parts are marked and packed in erection order, so site crews find each part quickly."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "What Fabrication Covers"
+    },
+    {
+      "type": "p",
+      "text": "Fabrication turns steel plates and sections into columns, rafters, beams, trusses and custom items. At Steel Mind, this work happens in one factory, under cover. Engineers send approved drawings to the workshop, and the workshop makes each part exactly as drawn."
+    },
+    {
+      "type": "h2",
+      "title": "The Fabrication Steps"
+    },
+    {
+      "type": "steps",
+      "items": [
+        {
+          "name": "Material check",
+          "text": "Plates and sections are checked against the order when they arrive."
+        },
+        {
+          "name": "Cutting",
+          "text": "Cutting machines cut each part to the size on the cutting list. Layouts are planned to reduce scrap."
+        },
+        {
+          "name": "Drilling",
+          "text": "Bolt holes are drilled or punched at the positions on the drawing."
+        },
+        {
+          "name": "Fitting",
+          "text": "Parts are placed in position and held true before welding starts."
+        },
+        {
+          "name": "Welding",
+          "text": "Welders join the parts. Supervisors inspect each weld."
+        },
+        {
+          "name": "Cleaning and painting",
+          "text": "The part moves to surface preparation and coating. See Cleaning and Painting."
+        },
+        {
+          "name": "Marking and packing",
+          "text": "Each part is marked and packed in erection order."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "title": "Equipment and Capacity"
+    },
+    {
+      "type": "p",
+      "text": "The factory has cutting machines, welding units and material-handling systems. Overhead handling moves heavy members safely. This allows the team to work on several projects at the same time without losing control of quality or schedule."
+    },
+    {
+      "type": "h2",
+      "title": "Checks Before a Part Leaves"
+    },
+    {
+      "type": "p",
+      "text": "Dimensions are measured after cutting. Welds are inspected before painting. Flat surfaces and bolt-hole positions are checked against the drawing. If a part fails a check, the team corrects it and records the correction."
+    },
+    {
+      "type": "h2",
+      "title": "Fabrication Only or the Full Chain"
+    },
+    {
+      "type": "p",
+      "text": "You can buy fabrication alone from your own drawings. You can also ask Steel Mind to design, detail, fabricate, paint and erect the whole structure. See One-Step Solution."
+    }
+  ]
+}

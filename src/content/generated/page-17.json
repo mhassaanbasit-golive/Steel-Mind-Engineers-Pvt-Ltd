@@ -1,0 +1,114 @@
+{
+  "page": 17,
+  "url": "/pre-engineered-buildings-pakistan/sub-structures/",
+  "title": "PEB Sub Structures: Purlins, Canopy, Fascia | Steel Mind",
+  "description": "Purlins, girts, bracing, canopies, fascia, roof monitors, platforms and stairs: the sub structures that complete a pre-engineered building.",
+  "keyword": "PEB sub structures",
+  "support": [
+    "PEB purlins and girts",
+    "steel canopy and fascia",
+    "roof monitor for steel building"
+  ],
+  "h1": "Sub Structures: Purlins, Girts, Bracing, Canopies and Roof Monitors in a PEB",
+  "quickAnswer": "Sub structures are the parts attached to the main frame of a PEB. They include purlins, girts and bracing, which carry the sheets and keep the building stable, and add-on structures such as canopies, fascia, roof monitors, platforms and stairs.",
+  "alt": "Purlins on steel rafters with roof sheeting being fitted on a pre-engineered building.",
+  "related": [
+    "Accessories",
+    "Primary Framing System",
+    "Steel Doors and Gates"
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between a purlin and a girt?",
+      "a": "A purlin is on the roof. A girt is on the wall."
+    },
+    {
+      "q": "Do I need insulated sheeting?",
+      "a": "It is useful for cold storage, poultry sheds and any building where machines or people need a lower temperature inside."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "What the Sub Structure Is"
+    },
+    {
+      "type": "p",
+      "text": "The main frame holds the building up, but the sub structure makes it work. It connects the main frames, carries the roof and wall sheets, keeps the building stable against wind and adds the covered entrances, light openings and access routes that people need every day."
+    },
+    {
+      "type": "h2",
+      "title": "Secondary Framing"
+    },
+    {
+      "type": "defs",
+      "items": [
+        {
+          "name": "Purlins",
+          "text": "Purlins run along the roof from frame to frame and support the roof sheets. They are light cold-formed steel sections that are strong for their weight."
+        },
+        {
+          "name": "Girts",
+          "text": "Girts run along the walls from column to column. They support the wall sheets and carry wind load from the wall into the frames."
+        },
+        {
+          "name": "Bracing",
+          "text": "Bracing prevents the building from swaying. Rods or angles form an X pattern in the roof and the walls. Without bracing, even a strong frame can fail in a storm."
+        },
+        {
+          "name": "Roof and wall sheeting",
+          "text": "Covers the building. Profiled steel sheets are coated against corrosion and come in many colors. Single-skin sheets suit simple sheds. Insulated panels suit cold stores, poultry sheds and offices because they lower heat inside the building."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "title": "Add-On Structures"
+    },
+    {
+      "type": "defs",
+      "items": [
+        {
+          "name": "Canopy",
+          "text": "A projecting roof over loading docks, entrances and walkways. It shelters people and goods from sun and rain."
+        },
+        {
+          "name": "Fascia",
+          "text": "A horizontal band along the roof edge that hides the gutter and the ends of the roof sheets. It gives the building a clean finished line."
+        },
+        {
+          "name": "Jack beam",
+          "text": "A beam that supports a rafter or purlin where a column has been left out. It allows a wide opening such as a large door or loading bay."
+        },
+        {
+          "name": "Partitions",
+          "text": "Steel-framed internal walls that divide the building into offices, stores or production zones. They can carry insulation for sound and temperature control."
+        },
+        {
+          "name": "Portal brace",
+          "text": "A braced frame built into a side or end wall. It resists wind while leaving a wide opening for doors."
+        },
+        {
+          "name": "Roof monitor",
+          "text": "A raised section along the ridge, fitted with louvers or glazing. It admits daylight and releases hot air."
+        },
+        {
+          "name": "Roof platform",
+          "text": "A safe, slip-resistant platform on the roof for maintaining fans, tanks and other equipment."
+        },
+        {
+          "name": "Stairs",
+          "text": "Steel staircases with correct tread depth, riser height and handrails. See Steel Stairs."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "title": "Fasteners and Sealing"
+    },
+    {
+      "type": "p",
+      "text": "Self-drilling screws with sealing washers fix the sheets. Flashings and trims close the gaps at the ridge, eaves and corners to keep rain out."
+    }
+  ]
+}

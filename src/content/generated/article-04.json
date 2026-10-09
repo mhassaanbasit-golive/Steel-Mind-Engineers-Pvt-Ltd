@@ -1,0 +1,101 @@
+{
+  "article": 4,
+  "url": "/blog/data-needed-to-quote-steel-building/",
+  "title": "What an Engineer Needs to Quote a Steel Building | Steel Mind",
+  "description": "Width, length, eave height, roof slope, loads, location and openings: the data you send to get an accurate steel building quote in Pakistan.",
+  "keyword": "steel building quotation requirements",
+  "support": [
+    "steel building dimensions",
+    "bay spacing PEB",
+    "eave height and roof slope",
+    "PEB design parameters"
+  ],
+  "h1": "The Data an Engineer Needs Before Quoting Your Steel Building in Pakistan",
+  "quickAnswer": "To quote a steel building, an engineer needs the use, width, length, eave height, roof slope, bay spacing, loads, site location, openings and any crane or mezzanine. A rough sketch with these numbers is enough to start, and the engineer will ask for the rest.",
+  "alt": "Data needed to quote a steel building in Pakistan",
+  "related": [
+    "Basic Parameters",
+    "Contact Us",
+    "3D Concept"
+  ],
+  "faq": [
+    {
+      "q": "What is eave height?",
+      "a": "It is the height from the floor to the point where the roof meets the side wall."
+    },
+    {
+      "q": "Do I need drawings to ask for a quote?",
+      "a": "No. A sketch with the main sizes and the use of the building is enough."
+    },
+    {
+      "q": "Can I change the size after I receive the quote?",
+      "a": "Yes. The engineer will update the price to match the new size."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "Why a Complete Brief Matters"
+    },
+    {
+      "type": "p",
+      "text": "Every steel design starts with a few numbers. If the numbers are right, the quote is accurate and the design is fast. If they are wrong, the structure may be too weak or too costly. The steel building quotation requirements below are the same for a small workshop and a very large crane shed. Collect them before you request a quote, and your engineer will spend less time on questions and more time on design. You do not need to be an engineer to supply them."
+    },
+    {
+      "type": "h2",
+      "title": "The Use of the Building"
+    },
+    {
+      "type": "p",
+      "text": "Start with what the building will do. A factory shed, a dairy shed, a poultry house, a cold store, a workshop and a warehouse all load the structure differently. The use also decides the height, the doors, the light, the air and the sheeting. Tell the engineer what will happen inside, which machines or racks will stand there and how many people will work in it. This one answer sets many other choices."
+    },
+    {
+      "type": "h2",
+      "title": "Width, Length and Bay Spacing"
+    },
+    {
+      "type": "p",
+      "text": "Steel building dimensions begin with width and length. The width is the distance between the two side walls, and it sets the span of the frame. The length runs between the end walls and is divided into bays. The bay spacing is the distance between two frames. The best bay spacing depends on the loads and the roof system, and the engineer will confirm it. Bay spacing for a PEB affects the weight of the steel and the position of doors, so share your layout early."
+    },
+    {
+      "type": "h2",
+      "title": "Eave Height and Roof Slope"
+    },
+    {
+      "type": "p",
+      "text": "The eave height is the height from the floor to the top of the outer eave purlin. Set it from the tallest machine, stack or truck that must enter. The clear height, measured to the bottom of the rafter, and the ridge height, measured to the peak, are also stated. For eave height and roof slope, a low slope between 0.5 in 10 and 1.5 in 10 is common for a PEB. Rain and the type of sheet affect the choice. If you plan a crane, the clear height must suit the crane hook."
+    },
+    {
+      "type": "h2",
+      "title": "Loads"
+    },
+    {
+      "type": "p",
+      "text": "Loads are the forces the building must carry. They include the dead load, which is the weight of the structure, the live load on the roof, the wind and any special loads. Special loads include solar panels, hanging equipment, fans, cooling pads and cranes. Tell the engineer about every item that will hang from or stand on the structure, including items that will come years later. A frame designed for a crane can take one later, but a frame that was not designed for one cannot do so safely."
+    },
+    {
+      "type": "h2",
+      "title": "Location"
+    },
+    {
+      "type": "p",
+      "text": "The site decides wind speed and rain intensity. Give the city and, if possible, the exact site. Pakistan has coastal, plain, desert and mountain areas, and each has its own conditions. Location also affects delivery, crane access and the coating system, because humid or dusty places need a stronger coating. Steel Mind has served more than ten cities, and the engineer sets the design loads from your site data."
+    },
+    {
+      "type": "h2",
+      "title": "Openings and Extras"
+    },
+    {
+      "type": "p",
+      "text": "List the number, size and position of doors, windows and loading docks. Measure door openings from the largest vehicle or machine that must pass. Then list the extras: skylights, ventilators, insulation, a mezzanine, stairs, canopies and any future extension. Many accessories can be added later, but the frame must be ready for them. Mention extensions early so the end wall can be designed for extra bays."
+    },
+    {
+      "type": "h2",
+      "title": "If You Do Not Have All the Data"
+    },
+    {
+      "type": "p",
+      "text": "Send what you have. A rough sketch, a photo of the site or a list of machines is enough to begin. The engineer will ask for the rest. You can also change the size after the first quote. The price will change with the size, and the engineer will update the quote. Use the Request a Quote button, or call +92 300 4253966 to talk to an engineer first."
+    }
+  ]
+}

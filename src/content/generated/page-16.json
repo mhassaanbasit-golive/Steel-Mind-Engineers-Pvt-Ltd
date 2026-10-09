@@ -1,0 +1,101 @@
+{
+  "page": 16,
+  "url": "/pre-engineered-buildings-pakistan/basic-parameters/",
+  "title": "PEB Design Parameters: Span, Height, Load | Steel Mind",
+  "description": "The data an engineer needs to design your steel building: width, length, eave height, roof slope, loads, bay spacing and site location.",
+  "keyword": "PEB design parameters",
+  "support": [
+    "steel building dimensions",
+    "bay spacing PEB",
+    "eave height and roof slope"
+  ],
+  "h1": "Basic Parameters: The Data Needed to Design Your Steel Building",
+  "quickAnswer": "To design a steel building, an engineer needs the width, length, eave height, roof slope, bay spacing, loads, site location, openings and any crane or mezzanine. A rough sketch with these numbers is enough to start.",
+  "alt": "Diagram showing width, eave height and roof slope of a pre-engineered building.",
+  "related": [
+    "Engineering Department",
+    "Primary Framing System",
+    "Contact Us"
+  ],
+  "faq": [
+    {
+      "q": "What is eave height?",
+      "a": "It is the height from the floor to the point where the roof meets the side wall."
+    },
+    {
+      "q": "Can I change the size after the quote?",
+      "a": "Yes. The price will change with the size, and the engineer will update the quote."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "Why These Parameters Matter"
+    },
+    {
+      "type": "p",
+      "text": "Every design starts with a few numbers. If they are correct, the quote is accurate and the design is fast. If they are wrong, the structure may be too weak or too costly. Collect the items below before you request a quote."
+    },
+    {
+      "type": "h2",
+      "title": "The Parameters"
+    },
+    {
+      "type": "defs",
+      "items": [
+        {
+          "name": "Width",
+          "text": "The distance between the two side walls, measured from the outside face of one sidewall girt to the outside face of the other. This sets the span of the frame."
+        },
+        {
+          "name": "Length",
+          "text": "The distance along the building between the end walls. It is divided into bays."
+        },
+        {
+          "name": "Bay spacing",
+          "text": "The distance between two frames. The best spacing depends on the loads and the roof system, and the engineer will confirm it."
+        },
+        {
+          "name": "Eave height",
+          "text": "The height from the floor to the top of the outer eave purlin. Set it from the tallest machine, stack or truck that must enter. Clear height, measured to the bottom of the rafter, and ridge height, measured to the peak, are also stated."
+        },
+        {
+          "name": "Roof slope",
+          "text": "The angle of the roof. A low slope between 0.5 in 10 and 1.5 in 10 is common for PEB. Rain and sheet type affect the choice."
+        },
+        {
+          "name": "Loads",
+          "text": "Include the dead load, the live load, wind, and any special loads such as solar panels, hanging equipment or cranes."
+        },
+        {
+          "name": "Location",
+          "text": "The site decides wind speed and rain intensity. Give the city and, if possible, the exact site."
+        },
+        {
+          "name": "Openings",
+          "text": "List the number, size and position of doors, windows and loading docks."
+        },
+        {
+          "name": "Extras",
+          "text": "Mention any crane, mezzanine, insulation, skylight or future extension."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "title": "Framing and Sheeting in the Parameters"
+    },
+    {
+      "type": "p",
+      "text": "Primary framing means the columns and rafters. Secondary framing means the purlins and girts that carry the sheets and brace the main frames. The sheeting is the roof and wall cover, usually hot-dip galvanized, zinc-aluminium coated steel."
+    },
+    {
+      "type": "h2",
+      "title": "If You Do Not Have All the Data"
+    },
+    {
+      "type": "p",
+      "text": "Send what you have. The engineer will ask for the rest. A rough sketch or a photo of the site is enough to begin."
+    }
+  ]
+}

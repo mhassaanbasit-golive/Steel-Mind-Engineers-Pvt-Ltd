@@ -1,0 +1,97 @@
+{
+  "page": 14,
+  "url": "/pre-engineered-buildings-pakistan/engineering-department/",
+  "title": "PEB Engineering and Design Team in Pakistan | Steel Mind",
+  "description": "The Steel Mind engineering department designs PEB frames, prepares fabrication drawings and checks every structure before steel is cut.",
+  "keyword": "PEB design and engineering in Pakistan",
+  "support": [
+    "steel structure design engineers Pakistan",
+    "PEB fabrication drawings",
+    "structural steel detailing"
+  ],
+  "h1": "Engineering Department: PEB Design and Detailing in Pakistan",
+  "quickAnswer": "The Steel Mind engineering department turns your requirement into a safe, buildable steel design, prepares the drawings used by the factory and the site crews, and checks each design before release.",
+  "alt": "Engineers reviewing a 3D model of a steel building in the Steel Mind design office.",
+  "related": [
+    "Primary Framing System",
+    "Basic Parameters",
+    "Design"
+  ],
+  "faq": [
+    {
+      "q": "Who checks the design?",
+      "a": "A second engineer checks each design before drawings are released to the factory."
+    },
+    {
+      "q": "Do I need my own structural engineer?",
+      "a": "You may use your own consultant. Steel Mind coordinates with consultants and works to their approved requirements."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "What the Engineering Department Does"
+    },
+    {
+      "type": "p",
+      "text": "The engineering department turns your requirement into a safe, buildable steel structure. It decides the frame shape, the size of each member and the way the parts connect. It then prepares the drawings that the factory and the site crews use."
+    },
+    {
+      "type": "h2",
+      "title": "The Design Process"
+    },
+    {
+      "type": "defs",
+      "items": [
+        {
+          "name": "Requirement study",
+          "text": "Engineers read your use, size, site and budget."
+        },
+        {
+          "name": "Load calculation",
+          "text": "They set the loads the building must carry: the weight of the structure, wind, rain, roof use, cranes and equipment."
+        },
+        {
+          "name": "Frame design",
+          "text": "They choose the frame type and size each column, rafter and brace."
+        },
+        {
+          "name": "3D model",
+          "text": "They build the model for your review. See 3D Concept."
+        },
+        {
+          "name": "Detailing",
+          "text": "They prepare fabrication drawings, cutting lists and erection drawings. See Detailing."
+        },
+        {
+          "name": "Internal check",
+          "text": "A second engineer checks the design before release."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "title": "Drawings You Receive"
+    },
+    {
+      "type": "p",
+      "text": "You receive the general arrangement drawings, the anchor bolt plan for your foundation contractor, and the erection drawings. The anchor bolt plan matters because the foundation must match the steel exactly."
+    },
+    {
+      "type": "h2",
+      "title": "Support During Fabrication and Erection"
+    },
+    {
+      "type": "p",
+      "text": "The designer stays available while the steel is cut and while it is erected. If the site shows a problem, such as a level difference in the foundation, the engineer answers it the same day."
+    },
+    {
+      "type": "h2",
+      "title": "Why Engineering Affects Cost"
+    },
+    {
+      "type": "p",
+      "text": "Good engineering uses steel only where it is needed. It also prevents rework in the factory and on site. Both effects lower the final cost of your building."
+    }
+  ]
+}

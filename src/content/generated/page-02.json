@@ -1,0 +1,51 @@
+{
+  "page": 2,
+  "url": "/about-us/introduction/",
+  "title": "About Steel Mind Engineers | Steel Structure Company Pakistan",
+  "description": "Steel Mind Engineers is a steel fabrication and PEB company in Pakistan. Read about its work, its factory and the way each project is run.",
+  "keyword": "steel structure company in Pakistan",
+  "support": [
+    "steel fabrication company in Pakistan",
+    "PEB manufacturer in Pakistan",
+    "steel erection company in Pakistan"
+  ],
+  "h1": "About Steel Mind Engineers: A Steel Fabrication and Engineering Company in Pakistan",
+  "quickAnswer": "Steel Mind Engineers Pvt. Ltd. designs, fabricates and erects steel structures in Pakistan. It has completed over thirty projects in more than ten cities and fabricated over a thousand tons of steel.",
+  "alt": "Steel Mind Engineers fabrication team in front of the factory building in Lahore.",
+  "related": [
+    "Factory Tour",
+    "Company Profile",
+    "Our Projects"
+  ],
+  "faq": [],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "Who Steel Mind Is"
+    },
+    {
+      "type": "p",
+      "text": "Steel Mind Engineers Pvt. Ltd. designs, fabricates and erects steel structures for industrial and commercial use in Pakistan. The company's tagline is \"Where Steel Meets Intelligence.\" In practice it means that every beam is planned, checked and coordinated before it enters the workshop."
+    },
+    {
+      "type": "p",
+      "text": "Clients include factories, dairy and livestock farms, retail and apparel brands, steel processors and infrastructure agencies. In more than eight years the company has delivered over thirty projects in more than ten cities and fabricated over a thousand tons of steel. The projects range from a 484 square foot milking-parlour exit structure to a crane-and-mezzanine shed of 97,888 square feet."
+    },
+    {
+      "type": "h2",
+      "title": "What Steel Mind Does"
+    },
+    {
+      "type": "p",
+      "text": "Steel Mind covers the full life of a steel project. Engineers prepare the design and the fabrication drawings. The factory cuts, welds and assembles the steel. Crews paint it, deliver it and erect it on your site. After handover, the team stays available for repairs, additions and extensions."
+    },
+    {
+      "type": "h2",
+      "title": "How the Team Is Organized"
+    },
+    {
+      "type": "p",
+      "text": "Four groups share responsibility for each structure. Engineers handle design and detailing. The workshop team handles fabrication and quality checks. Site crews handle erection and safety. Project coordinators handle schedules, material flow and communication with you."
+    }
+  ]
+}

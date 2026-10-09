@@ -1,0 +1,112 @@
+{
+  "page": 53,
+  "url": "/projects/",
+  "title": "Steel Building Projects in Pakistan | Steel Mind",
+  "description": "See real steel projects by Steel Mind Engineers: PEB crane sheds, dairy sheds, mezzanine floors and a steel bridge, with sizes, clients and locations.",
+  "keyword": "steel building projects in Pakistan",
+  "support": [
+    "PEB projects in Pakistan",
+    "crane shed project in Pakistan",
+    "dairy shed projects in Pakistan"
+  ],
+  "h1": "Our Projects: Steel Buildings and Structures Built Across Pakistan",
+  "quickAnswer": "Steel Mind Engineers Pvt. Ltd. has built six documented projects with full details here, from a 484 square foot exit structure to a 97,888 square foot crane and mezzanine shed. Each card opens a page with size, client and location.",
+  "alt": "Finished steel crane shed built by Steel Mind in Pakistan.",
+  "related": [
+    "Pre-Engineered Buildings",
+    "Industrial Sheds",
+    "Our Clients"
+  ],
+  "faq": [
+    {
+      "q": "What is the largest project Steel Mind has built?",
+      "a": "The PEB crane and mezzanine shed for Haier at Raiwind covers 97,888 square feet."
+    },
+    {
+      "q": "Can I visit a finished project?",
+      "a": "Call to ask. Visits depend on the client's permission."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "Proof You Can Check"
+    },
+    {
+      "type": "p",
+      "text": "A steel contractor is best judged by what it has built. Every project below lists the client, the place, the height, the width, the length and the covered area. The largest crane sheds cover almost 100,000 square feet, and the dairy sheds show repeat work for the same farms."
+    },
+    {
+      "type": "h2",
+      "title": "Project List"
+    },
+    {
+      "type": "table",
+      "headers": [
+        "Project",
+        "Client",
+        "Location",
+        "Area"
+      ],
+      "rows": [
+        [
+          "PEB Crane and Mezzanine Shed",
+          "Haier",
+          "Raiwind, Lahore",
+          "97,888 sq ft"
+        ],
+        [
+          "PEB Dairy Shed",
+          "Dravton Dairy",
+          "Chunian",
+          "39,330 sq ft"
+        ],
+        [
+          "PEB Milking Parlour Shed",
+          "Dravton Dairy",
+          "Chunian",
+          "21,686 sq ft"
+        ],
+        [
+          "PEB Mezzanine Floor",
+          "Maria B",
+          "Lahore",
+          "7,020 sq ft"
+        ],
+        [
+          "Water Requirement Bridge",
+          "M/S Yascon",
+          "Petaro Cantt, Sindh",
+          "900 sq ft"
+        ],
+        [
+          "Dairy Rapid Exit Structure",
+          "Dravton Dairy",
+          "Chunian",
+          "484 sq ft"
+        ]
+      ]
+    },
+    {
+      "type": "h2",
+      "title": "What the Projects Show"
+    },
+    {
+      "type": "bullets",
+      "bullets": [
+        "Scale. Crane sheds of almost 100,000 square feet.",
+        "Range. Sheds, mezzanine floors and a steel bridge.",
+        "Repeat clients. Haier and Dravton Dairy came back for more than one structure.",
+        "Reach. Projects in Lahore, Kasur, Chunian and Sindh."
+      ]
+    },
+    {
+      "type": "h2",
+      "title": "Start Your Own Project"
+    },
+    {
+      "type": "p",
+      "text": "Send the use, size and location of your building. An engineer will review it and reply."
+    }
+  ]
+}

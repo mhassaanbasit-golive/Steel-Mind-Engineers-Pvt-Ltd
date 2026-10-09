@@ -1,0 +1,113 @@
+{
+  "page": 15,
+  "url": "/pre-engineered-buildings-pakistan/primary-framing-system/",
+  "title": "PEB Primary Framing: Columns and Rafters | Steel Mind",
+  "description": "Compare PEB primary framing systems: clear span, lean-to, mono slope, multi-gable and multi-span frames, and choose the right steel frame.",
+  "keyword": "PEB primary framing system",
+  "support": [
+    "steel portal frame Pakistan",
+    "clear span frame",
+    "multi span PEB frame"
+  ],
+  "h1": "Primary Framing System: Columns and Rafters of a Pre-Engineered Building",
+  "quickAnswer": "The primary frame is the steel skeleton of a PEB. It is made of columns and rafters that carry every load to the foundation. Steel Mind designs ten frame types, from clear-span to multi-span and roof systems.",
+  "alt": "Diagram of the ten primary framing systems used in pre-engineered buildings.",
+  "related": [
+    "Basic Parameters",
+    "Columns and Beams",
+    "Crane System"
+  ],
+  "faq": [
+    {
+      "q": "What is a clear-span building?",
+      "a": "It is a building with no columns inside the width. The rafters span from wall to wall."
+    },
+    {
+      "q": "Why are the columns tapered?",
+      "a": "The depth follows the bending forces. This uses less steel than a uniform section."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "What the Primary Frame Is"
+    },
+    {
+      "type": "p",
+      "text": "The primary frame is the main skeleton of a PEB. It consists of columns and rafters joined at the eaves and the ridge. It carries all the loads of the building down to the foundation. Just as bones keep a body upright, the frame keeps the building standing in wind, rain and use."
+    },
+    {
+      "type": "h2",
+      "title": "Built-Up Sections"
+    },
+    {
+      "type": "p",
+      "text": "Most PEB frames use built-up sections. A built-up section is made by welding two flanges to a web plate. The engineer can vary the web depth and the plate thickness along the member. The section is deep where the forces are high and shallow where they are low. This saves steel."
+    },
+    {
+      "type": "h2",
+      "title": "The Ten Frame Types"
+    },
+    {
+      "type": "defs",
+      "items": [
+        {
+          "name": "Clear Span (CS)",
+          "text": "One rafter spans the full width with no inner columns. Use it for production halls, warehouses, sports halls and crane sheds."
+        },
+        {
+          "name": "Lean-To (LT)",
+          "text": "A smaller frame attached to the side of a main building, sharing its column. Use it for extensions, covered storage and loading areas."
+        },
+        {
+          "name": "Mono Slope (MS)",
+          "text": "The roof slopes in one direction. It suits narrow buildings and buildings placed next to another structure."
+        },
+        {
+          "name": "Mono Slope Multi-Span 1",
+          "text": "A mono-slope roof supported by one interior column line. It suits wider mono-slope buildings."
+        },
+        {
+          "name": "Multi-Gable (MG)",
+          "text": "Several gable roofs side by side across a wide plan. It suits large plants with repeating bays."
+        },
+        {
+          "name": "Multi-Gable (Clear Span and Multi-Span 1)",
+          "text": "A combination of one clear-span bay and bays with a single interior column. It suits plants with a wide central bay."
+        },
+        {
+          "name": "Multi-Span 1 (MS-1)",
+          "text": "Two bays divided by one interior column line. Use it for wide buildings where an inner column is acceptable."
+        },
+        {
+          "name": "Multi-Span 2 (MS-2)",
+          "text": "Three bays divided by two interior column lines. Use it for very wide plants and large warehouses."
+        },
+        {
+          "name": "Multi-Span 3 (MS-3)",
+          "text": "Four bays divided by three interior column lines. Use it for extremely wide buildings and large logistics facilities."
+        },
+        {
+          "name": "Roof System (RS)",
+          "text": "A roof framework supported by an existing structure or by concrete walls. Use it for re-roofing and for industrial roofs on masonry."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "title": "Connections"
+    },
+    {
+      "type": "p",
+      "text": "Frame parts are joined with bolted end-plate connections made in the factory. The bolts are tightened on site to the specified torque. Bolted joints make erection fast and allow later extension. See Erection."
+    },
+    {
+      "type": "h2",
+      "title": "Choosing the Right Frame"
+    },
+    {
+      "type": "p",
+      "text": "The frame type depends on the span, the height, the loads and any crane or mezzanine. A multi-span frame uses less steel in each rafter but places columns inside the floor. A clear-span frame costs more steel but leaves the floor fully open. Send these details through the Request a Quote form and an engineer will recommend a frame."
+    }
+  ]
+}

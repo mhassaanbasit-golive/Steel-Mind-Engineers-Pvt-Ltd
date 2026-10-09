@@ -1,0 +1,165 @@
+@import "tailwindcss";
+
+:root {
+  --blue: #22488F;
+  --blue-dark: #1A2B68;
+  --blue-glass: rgba(34, 72, 143, 0.85);
+  --blue-bright: #285AA1;
+  --blue-glossy: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.03) 45%, rgba(0, 0, 0, 0.02) 55%, rgba(0, 0, 0, 0.14) 100%), linear-gradient(155deg, #2A54A2 0%, #22488F 48%, #192C69 100%);
+  --blue-glass-glossy: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(0, 0, 0, 0.08) 100%), linear-gradient(180deg, rgba(42, 84, 162, 0.94) 0%, rgba(34, 72, 143, 0.90) 52%, rgba(25, 44, 105, 0.94) 100%);
+  --blue-btn-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.03) 48%, rgba(0, 0, 0, 0.06) 100%), linear-gradient(180deg, #2A54A2 0%, #22488F 58%, #1A2B68 100%);
+  --white: #FFFFFF;
+  --offwhite: #F4F5F7;
+  --ink: #0A0A0A;
+  --grey: #6B7280;
+  --grey-strong: #4B5563;
+  --line: #E5E5E5;
+  --error: #B42318;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-framer: cubic-bezier(0.23, 1, 0.32, 1);
+  --header-h: 64px;
+  --pad-x: 20px;
+  --section-y: 80px;
+  --gutter: 24px;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --header-h: 88px;
+    --pad-x: 40px;
+    --section-y: 120px;
+    --gutter: 32px;
+  }
+}
+
+@theme {
+  --color-blue: #22488F;
+  --color-blue-dark: #1A2B68;
+  --color-blue-glass: rgba(34, 72, 143, 0.85);
+  --color-blue-bright: #285AA1;
+  --color-offwhite: #F4F5F7;
+  --color-ink: #0A0A0A;
+  --color-grey: #6B7280;
+  --color-grey-strong: #4B5563;
+  --color-line: #E5E5E5;
+  --color-error: #B42318;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  font-family: 'Inter', system-ui, sans-serif !important;
+}
+
+html, body {
+  overflow-x: clip;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+[data-swipe-row], [data-swipe-row] * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+[data-swipe-row]::-webkit-scrollbar, [data-swipe-row] *::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+[role="log"] {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+[role="log"]::-webkit-scrollbar {
+  display: none;
+}
+
+.bg-blue-glossy {
+  background: var(--blue-glossy);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes drawerSlideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+/* Lenis CSS */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--blue);
+  color: white;
+}
+
+/* Initial state for motion attributes before animations or when js-ready */
+html.js-ready [data-reveal],
+html.js-ready [data-fade-up] {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+html.js-ready [data-split] {
+  visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-reveal],
+  [data-fade-up],
+  [data-split] {
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+  }
+}

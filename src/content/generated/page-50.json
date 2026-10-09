@@ -1,0 +1,97 @@
+{
+  "page": 50,
+  "url": "/services/painting/",
+  "title": "Steel Painting and Coating in Pakistan | Steel Mind",
+  "description": "Primer, intermediate and top coats for steel buildings, bridges and tanks. Steel Mind chooses the coating system by use and weather across Pakistan.",
+  "keyword": "steel structure painting in Pakistan",
+  "support": [
+    "protective coating for steel buildings",
+    "red oxide primer for steel",
+    "anti-corrosion paint for steel structures"
+  ],
+  "h1": "Steel Structure Painting in Pakistan: Coating Systems That Protect Steel for Years",
+  "quickAnswer": "Painting protects steel from rust. Steel Mind applies a primer and, where the project needs it, further coats chosen for the building's use and weather. Parts leave the factory with the agreed coating.",
+  "alt": "Steel rafters with a red-oxide primer coat at the Steel Mind factory.",
+  "related": [
+    "Cleaning",
+    "Steel Bridges",
+    "Dairy Farm Sheds"
+  ],
+  "faq": [
+    {
+      "q": "How long does a coating last?",
+      "a": "It depends on the system, the weather and the care the building receives. The engineer will explain the options with the quote."
+    },
+    {
+      "q": "Can I choose the color?",
+      "a": "Yes. Tell the engineer at the design stage."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "Why the Coating Matters"
+    },
+    {
+      "type": "p",
+      "text": "Steel rusts when it meets water and air. In Pakistan, heat, rain, humid air and dust all speed up the damage. A good coating is the cheapest protection a steel building can have."
+    },
+    {
+      "type": "h2",
+      "title": "What a Coating System Is"
+    },
+    {
+      "type": "p",
+      "text": "A coating system is a set of layers. The primer bonds to the steel and gives the first protection. Intermediate and top coats add thickness, resist weather and give the final color. Steel Mind selects the number of coats and the paint type from the use of the structure."
+    },
+    {
+      "type": "h2",
+      "title": "Choosing by Use"
+    },
+    {
+      "type": "defs",
+      "items": [
+        {
+          "name": "Dry indoor buildings",
+          "text": "A primer and a finish coat are usually enough."
+        },
+        {
+          "name": "Outdoor structures",
+          "text": "Bridges, gantries and open sheds need a stronger system, because rain and sun reach the steel."
+        },
+        {
+          "name": "Dairy and poultry sheds",
+          "text": "Moisture and animal waste attack steel. Choose a system built for damp, dirty air."
+        },
+        {
+          "name": "Grain stores and tanks",
+          "text": "Dust, moisture and stored goods call for a coating that suits the contents."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "title": "How Painting Is Done"
+    },
+    {
+      "type": "p",
+      "text": "Steel is cleaned first. The primer goes on soon after cleaning. Later coats follow in order, and each coat is left to dry as the paint maker requires. Coating thickness is checked against the specification. Bolted joints are left ready for site touch-up."
+    },
+    {
+      "type": "h2",
+      "title": "After Erection"
+    },
+    {
+      "type": "p",
+      "text": "Parts can be scratched in transport and lifting. Crews touch up damaged areas on site. A building also needs repainting after some years, which Steel Mind can do. See After Sale Services."
+    },
+    {
+      "type": "h2",
+      "title": "Colors"
+    },
+    {
+      "type": "p",
+      "text": "Tell the engineer your color choice at the design stage. Sheeting and trims can follow a color scheme that suits your brand."
+    }
+  ]
+}

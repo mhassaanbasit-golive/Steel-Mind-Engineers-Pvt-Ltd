@@ -1,0 +1,78 @@
+{
+  "page": 49,
+  "url": "/services/cleaning/",
+  "title": "Steel Surface Cleaning Before Painting | Steel Mind",
+  "description": "Clean steel holds paint longer. Steel Mind removes mill scale, rust, oil and weld spatter from every part before coating, for projects across Pakistan.",
+  "keyword": "steel surface preparation in Pakistan",
+  "support": [
+    "steel cleaning before painting",
+    "rust removal for steel structures",
+    "mill scale removal"
+  ],
+  "h1": "Steel Surface Cleaning in Pakistan: Preparing Steel for a Coating That Lasts",
+  "quickAnswer": "Cleaning is the step between fabrication and painting. Steel Mind removes mill scale, rust, oil, grease and weld spatter so that the coating bonds to bare steel and lasts longer.",
+  "alt": "Worker preparing a steel beam surface before painting at the Steel Mind factory.",
+  "related": [
+    "Painting",
+    "Fabrication",
+    "Steel Bridges"
+  ],
+  "faq": [
+    {
+      "q": "Why is cleaning needed if the steel is new?",
+      "a": "New steel carries mill scale and light rust. Paint on top of them peels early."
+    },
+    {
+      "q": "Is cleaning done again on site?",
+      "a": "Only where parts are damaged or welded on site. Those areas are cleaned before touch-up."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "Why Cleaning Comes First"
+    },
+    {
+      "type": "p",
+      "text": "Paint does not hold well on dirty steel. Mill scale, rust, oil and dust form a weak layer between the steel and the coating. The paint then lifts, blisters or peels. Good cleaning costs little compared with repainting a building."
+    },
+    {
+      "type": "h2",
+      "title": "What Is Removed"
+    },
+    {
+      "type": "bullets",
+      "bullets": [
+        "Mill scale, the hard grey layer that forms on new steel.",
+        "Rust, from storage and transport.",
+        "Oil and grease, from machines and handling.",
+        "Weld spatter and sharp edges, which prevent an even coat.",
+        "Dust and loose dirt."
+      ]
+    },
+    {
+      "type": "h2",
+      "title": "How the Method Is Chosen"
+    },
+    {
+      "type": "p",
+      "text": "The cleaning method follows the coating system. A building for a dry indoor use needs a different surface than a bridge, a tank or a dairy shed that faces moisture. The engineer sets the surface requirement when the coating system is chosen. See Painting."
+    },
+    {
+      "type": "h2",
+      "title": "When Cleaning Happens"
+    },
+    {
+      "type": "p",
+      "text": "Cleaning takes place in the factory after welding and before the first coat. Painting follows soon after, so that the clean steel does not rust again. Areas that are damaged in transport or erection are cleaned again before touch-up."
+    },
+    {
+      "type": "h2",
+      "title": "What You Can Check"
+    },
+    {
+      "type": "p",
+      "text": "Ask to see the parts before the primer coat. The steel should look clean, dry and free of loose rust, oil and spatter."
+    }
+  ]
+}

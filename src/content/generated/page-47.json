@@ -1,0 +1,81 @@
+{
+  "page": 47,
+  "url": "/services/detailing/",
+  "title": "Steel Detailing Services in Pakistan | Steel Mind",
+  "description": "Steel detailing turns approved designs into fabrication and erection drawings. Accurate drawings and cutting lists by Steel Mind in Pakistan.",
+  "keyword": "steel detailing services in Pakistan",
+  "support": [
+    "fabrication drawings Pakistan",
+    "steel shop drawings",
+    "erection drawings for steel buildings"
+  ],
+  "h1": "Steel Detailing Services in Pakistan: Drawings That the Factory and the Site Can Use",
+  "quickAnswer": "Detailing turns an approved design into drawings for every steel part. Steel Mind prepares fabrication drawings, cutting lists and erection drawings so that parts are made right and fit on site the first time.",
+  "alt": "Steel shop drawings and a connection plate on a detailing desk.",
+  "related": [
+    "Design",
+    "Fabrication",
+    "3D Concept"
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between design and detailing?",
+      "a": "Design sizes the structure. Detailing draws every part so it can be made and assembled."
+    },
+    {
+      "q": "Do I approve the detail drawings?",
+      "a": "Yes. Drawings are approved before steel is cut."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "What Detailing Is"
+    },
+    {
+      "type": "p",
+      "text": "Design decides what the building is. Detailing decides how every part is made. Each column, rafter, plate and bolt hole is drawn with exact size and position."
+    },
+    {
+      "type": "h2",
+      "title": "Drawings Produced"
+    },
+    {
+      "type": "defs",
+      "items": [
+        {
+          "name": "Fabrication drawings",
+          "text": "Show each part for the workshop."
+        },
+        {
+          "name": "Cutting lists",
+          "text": "Show the steel to be cut and the sizes."
+        },
+        {
+          "name": "Erection drawings",
+          "text": "Show where each part goes on site."
+        },
+        {
+          "name": "Anchor bolt plans",
+          "text": "Show your foundation contractor where to place the bolts."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "title": "Why Detailing Prevents Delays"
+    },
+    {
+      "type": "p",
+      "text": "A hole in the wrong place or a part that is a few millimeters short can stop a whole site. Careful detailing removes these errors before the steel is cut. The same model that produced your 3D view feeds the drawings."
+    },
+    {
+      "type": "h2",
+      "title": "Detailing for Your Own Design"
+    },
+    {
+      "type": "p",
+      "text": "If you or your consultant already have a design, Steel Mind can prepare the shop drawings from it."
+    }
+  ]
+}

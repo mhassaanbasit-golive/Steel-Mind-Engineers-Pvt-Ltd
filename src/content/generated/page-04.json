@@ -1,0 +1,60 @@
+{
+  "page": 4,
+  "url": "/about-us/mission/",
+  "title": "Mission | Steel Mind Engineers Pakistan",
+  "description": "The mission of Steel Mind Engineers: dependable steel fabrication with high quality, safety and efficiency, delivered by a skilled team in Pakistan.",
+  "keyword": "dependable steel fabrication in Pakistan",
+  "support": [
+    "quality steel structures Pakistan",
+    "safe steel construction",
+    "steel fabrication company mission"
+  ],
+  "h1": "Our Mission: Dependable Steel Fabrication With Quality, Safety and Efficiency",
+  "quickAnswer": "The mission of Steel Mind Engineers is to provide dependable fabrication and erection that meets each client's structural and operating needs, with quality, safety and efficiency.",
+  "alt": "Site supervisor checking a bolted steel connection on a steel frame.",
+  "related": [
+    "Vision",
+    "SME Policy",
+    "Services"
+  ],
+  "faq": [],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "The Mission in One Paragraph"
+    },
+    {
+      "type": "p",
+      "text": "Steel Mind Engineers provides dependable fabrication and erection that meets each client's structural and operating needs. It does this with a skilled team, controlled workshop practice and open communication from the contract stage to handover."
+    },
+    {
+      "type": "h2",
+      "title": "What Dependable Means to a Client"
+    },
+    {
+      "type": "p",
+      "text": "For a client, dependable means three things. The structure matches the drawings and the agreed specification. The work is finished within the schedule that was agreed. The company answers questions and corrects problems quickly. Steel Mind measures its own work against these three points."
+    },
+    {
+      "type": "h2",
+      "title": "Quality, Safety and Efficiency in Practice"
+    },
+    {
+      "type": "defs",
+      "items": [
+        {
+          "name": "Quality",
+          "text": "Material is checked on arrival, dimensions are checked after cutting and welds are inspected before painting."
+        },
+        {
+          "name": "Safety",
+          "text": "Workers use certified protective equipment and follow written site rules that are explained before work starts."
+        },
+        {
+          "name": "Efficiency",
+          "text": "Cutting plans reduce scrap, and parts are packed in erection order so that site crews do not lose time searching for steel."
+        }
+      ]
+    }
+  ]
+}

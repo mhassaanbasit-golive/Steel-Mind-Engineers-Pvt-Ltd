@@ -1,0 +1,55 @@
+{
+  "page": 5,
+  "url": "/about-us/core-values/",
+  "title": "Core Values | Steel Mind Engineers Pakistan",
+  "description": "Quality fabrication, continuous improvement, and safety and reliability: the three values that guide every Steel Mind Engineers project in Pakistan.",
+  "keyword": "quality steel fabrication in Pakistan",
+  "support": [
+    "safe steel erection in Pakistan",
+    "reliable steel contractor",
+    "continuous improvement in fabrication"
+  ],
+  "h1": "Our Core Values: Quality Fabrication, Continuous Improvement, and Safety and Reliability",
+  "quickAnswer": "Steel Mind Engineers works by three values: quality fabrication, continuous improvement, and safety and reliability. Each value shows in the inspection steps, the reviews and the site rules that apply to every project.",
+  "alt": "Close view of a clean weld bead on a steel plate with a measuring gauge.",
+  "related": [
+    "SME Policy",
+    "Committed To",
+    "Fabrication"
+  ],
+  "faq": [],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "Quality Fabrication"
+    },
+    {
+      "type": "p",
+      "text": "Steel Mind holds its cutting, welding and assembly to a standard that a client can inspect and measure. Accuracy in the workshop decides how fast and how cleanly a building goes together on site. A beam that is cut to the right length and drilled in the right place saves time for every crew that follows."
+    },
+    {
+      "type": "h2",
+      "title": "Continuous Improvement"
+    },
+    {
+      "type": "p",
+      "text": "After each project the team reviews what worked and what did not. Methods are adjusted, and the lessons are shared with the workshop and the site crews. The next structure is therefore built with the experience of the last one."
+    },
+    {
+      "type": "h2",
+      "title": "Safety and Reliability"
+    },
+    {
+      "type": "p",
+      "text": "Steel Mind protects its people with certified safety equipment, strict site rules and supervised procedures. It protects its clients by keeping the commitments it makes on schedule and specification. Both come from the same habit: planning the work before doing it."
+    },
+    {
+      "type": "h2",
+      "title": "How These Values Affect Your Project"
+    },
+    {
+      "type": "p",
+      "text": "You will see these values in practical ways. Drawings are approved before steel is cut. Inspection records follow the parts through the workshop. Site crews work from written plans. Questions are answered promptly. Each of these steps lowers the risk of delay, rework and accidents on your project."
+    }
+  ]
+}

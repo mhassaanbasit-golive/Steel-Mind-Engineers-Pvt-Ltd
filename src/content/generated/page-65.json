@@ -1,0 +1,132 @@
+{
+  "page": 65,
+  "url": "/clients/",
+  "title": "Our Clients | Steel Mind Engineers Pakistan",
+  "description": "Haier, Dravton Dairy, Latifia Dairy, Maria B, Imperial Denim and more. See the companies that have chosen Steel Mind for steel buildings in Pakistan.",
+  "keyword": "steel fabrication company clients in Pakistan",
+  "support": [
+    "steel contractor for manufacturers",
+    "steel sheds for dairy farms",
+    "PEB contractor for factories"
+  ],
+  "h1": "Our Clients: Companies That Have Built With Steel Mind in Pakistan",
+  "quickAnswer": "Steel Mind Engineers Pvt. Ltd. has worked for ten clients in manufacturing, dairy, apparel, steel and infrastructure, including Haier, Dravton Dairy, Latifia Dairy and Maria B. Several clients came back for more than one structure.",
+  "alt": "Steel buildings built by Steel Mind for clients across Pakistan.",
+  "related": [
+    "Our Projects",
+    "Committed To",
+    "After Sale Services"
+  ],
+  "faq": [
+    {
+      "q": "Who are the clients of Steel Mind?",
+      "a": "They include Haier, Dravton Dairy, Latifia Dairy, Maria B, Imperial Denim, Moiz Steel, Saif Engineers, Elite Stitching, MAB and Agha Waqar."
+    },
+    {
+      "q": "Which sectors does Steel Mind serve?",
+      "a": "Manufacturing, dairy and livestock, apparel and retail, steel and engineering, and infrastructure."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "Who Builds With Steel Mind"
+    },
+    {
+      "type": "p",
+      "text": "Steel Mind builds for manufacturers, dairy and livestock farms, apparel and retail brands, steel and engineering companies and infrastructure contractors. A client list shows who has trusted a contractor with real money and real deadlines, so each logo below belongs to a company that has worked with Steel Mind."
+    },
+    {
+      "type": "h2",
+      "title": "Client Logo Grid"
+    },
+    {
+      "type": "p",
+      "text": "Show 10 logos in a clean grid, four per row on desktop and two per row on mobile. Each logo links to its project page where one exists. Logos appear in grey and turn to full color on hover. Each client appears once, even when it has several projects."
+    },
+    {
+      "type": "table",
+      "headers": [
+        "No.",
+        "Client",
+        "Project pages"
+      ],
+      "rows": [
+        [
+          "1",
+          "Haier",
+          "Store Shed, Mezzanine Floor, Crane Shed, Crane and Mezzanine Shed"
+        ],
+        [
+          "2",
+          "Imperial Denim",
+          "None"
+        ],
+        [
+          "3",
+          "Moiz Steel",
+          "None"
+        ],
+        [
+          "4",
+          "Saif Engineers",
+          "None"
+        ],
+        [
+          "5",
+          "Dravton Dairy",
+          "Dairy Shed, Milking Parlour Shed, Feed Storage Shed, Rapid Exit Structure"
+        ],
+        [
+          "6",
+          "Latifia Dairy",
+          "Dairy Shed"
+        ],
+        [
+          "7",
+          "Maria B",
+          "Mezzanine Floor"
+        ],
+        [
+          "8",
+          "Elite Stitching",
+          "None"
+        ],
+        [
+          "9",
+          "MAB",
+          "None"
+        ],
+        [
+          "10",
+          "Agha Waqar",
+          "None"
+        ]
+      ]
+    },
+    {
+      "type": "h2",
+      "title": "Repeat Clients"
+    },
+    {
+      "type": "p",
+      "text": "Haier has had four structures built at Raiwind: a store shed, a mezzanine floor, a crane shed and a crane and mezzanine shed. Dravton Dairy has had four structures built at Chunian: a dairy shed, a milking parlour shed, a feed storage shed and a rapid exit structure. Repeat orders show that clients are satisfied with the work and with the way the team deals with them."
+    },
+    {
+      "type": "h2",
+      "title": "What Clients Receive"
+    },
+    {
+      "type": "p",
+      "text": "Every client receives one contract, one point of contact, a written schedule and support after handover. See Committed To and After Sale Services."
+    },
+    {
+      "type": "h2",
+      "title": "Become a Client"
+    },
+    {
+      "type": "p",
+      "text": "Send the use, size and location of your project. An engineer will read the details and reply."
+    }
+  ]
+}

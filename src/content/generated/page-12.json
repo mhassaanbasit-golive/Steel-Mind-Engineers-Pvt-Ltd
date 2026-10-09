@@ -1,0 +1,64 @@
+{
+  "page": 12,
+  "url": "/pre-engineered-buildings-pakistan/3d-concept/",
+  "title": "3D Concept Design for PEB Buildings | Steel Mind",
+  "description": "See your steel building in 3D before fabrication. Steel Mind prepares 3D models of pre-engineered buildings to confirm layout, size and fit.",
+  "keyword": "3D design for pre-engineered buildings",
+  "support": [
+    "3D steel building model",
+    "PEB design drawings Pakistan",
+    "steel structure 3D concept"
+  ],
+  "h1": "3D Concept Design: See Your Pre-Engineered Building Before It Is Built",
+  "quickAnswer": "A 3D concept is a three-dimensional model of your steel building that you review and approve before any steel is cut. It confirms height, layout, openings and clearances early, when changes cost very little.",
+  "alt": "3D model of a pre-engineered steel building with the roof cut away.",
+  "related": [
+    "Engineering Department",
+    "Detailing",
+    "Design"
+  ],
+  "faq": [
+    {
+      "q": "Can I change the design after seeing the model?",
+      "a": "Yes. Changes are easy before fabrication starts."
+    },
+    {
+      "q": "Does the 3D model show the crane and the mezzanine?",
+      "a": "Yes, when your building has them, they appear in the model with their positions and clearances."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "h2",
+      "title": "Why a 3D Model Helps"
+    },
+    {
+      "type": "p",
+      "text": "A flat drawing is hard to read for people who are not engineers. A 3D model shows the building as it will stand: the height, the roof slope, the door positions and the crane or mezzanine layout. You can check it with your own team before any steel is cut."
+    },
+    {
+      "type": "h2",
+      "title": "What the 3D Concept Shows"
+    },
+    {
+      "type": "p",
+      "text": "The model shows the full building shape, with frames, purlins and bracing. It shows the positions of doors, windows, skylights and vents. It shows the layout of cranes, mezzanine floors and interior equipment where they apply. It also shows the clearance for trucks, forklifts and machines."
+    },
+    {
+      "type": "h2",
+      "title": "How the 3D Stage Works"
+    },
+    {
+      "type": "p",
+      "text": "You send your layout, size and use. The engineer builds the 3D model of the structure. You review the model and ask for changes. After you approve the model, the engineers prepare the detail drawings. Changes at the 3D stage cost very little, while changes after fabrication cost much more. This is why Steel Mind asks for your approval before cutting starts."
+    },
+    {
+      "type": "h2",
+      "title": "From 3D Model to Fabrication"
+    },
+    {
+      "type": "p",
+      "text": "The approved model is the basis for the fabrication drawings. The same data feeds the cutting lists, so the factory makes exactly what you approved. Read more on the Engineering Department page and the Detailing page."
+    }
+  ]
+}
