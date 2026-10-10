@@ -15,32 +15,86 @@ import { Accordion } from "../components/ui/Accordion.tsx";
 import { QuoteBand } from "../components/ui/QuoteBand.tsx";
 import { useReducedMotion } from "../hooks/useReducedMotion.ts";
 
+const DESKTOP_VIDEO_ORIGINAL =
+  "https://res.cloudinary.com/cyfb9slf/video/upload/v1791664367/Main-homepage-Video_01.mp4.mov";
+const DESKTOP_VIDEO_HD =
+  "https://res.cloudinary.com/cyfb9slf/video/upload/f_mp4,vc_h264,w_1920,q_85/v1791664367/Main-homepage-Video_01.mp4.mov";
+const DESKTOP_POSTER =
+  "https://res.cloudinary.com/cyfb9slf/video/upload/so_0,f_jpg,q_90,w_1920/v1791664367/Main-homepage-Video_01.mp4.mov";
+
+const MOBILE_VIDEO_ORIGINAL =
+  "https://res.cloudinary.com/cyfb9slf/video/upload/v1791664502/15409488_2160_3840_60fps_1.mov";
+const MOBILE_VIDEO_HD =
+  "https://res.cloudinary.com/cyfb9slf/video/upload/f_mp4,vc_h264,w_1080,q_85/v1791664502/15409488_2160_3840_60fps_1.mov";
+const MOBILE_POSTER =
+  "https://res.cloudinary.com/cyfb9slf/video/upload/so_0,f_jpg,q_90,w_1080/v1791664502/15409488_2160_3840_60fps_1.mov";
+
 export const Home: React.FC = () => {
   const reducedMotion = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoLoaded, setVideoLoaded] = useState(false);
   const [industryOpen, setIndustryOpen] = useState<number>(0);
 
-  // Pause video when off screen
+  const [isMobile, setIsMobile] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 768;
+    }
+    return false;
+  });
+
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video || reducedMotion) return;
+    const mql = window.matchMedia("(max-width: 767px)");
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
+
+  // Autoplay and pause video when off screen
+  useEffect(() => {
+    if (reducedMotion) return;
+    const v = videoRef.current;
+    if (!v) return;
+
+    v.muted = true;
+    v.defaultMuted = true;
+    v.playsInline = true;
+
+    const tryPlay = () => {
+      const playPromise = v.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          const onInteract = () => {
+            v.play().catch(() => {});
+            window.removeEventListener("click", onInteract);
+            window.removeEventListener("touchstart", onInteract);
+            window.removeEventListener("scroll", onInteract);
+          };
+          window.addEventListener("click", onInteract, { once: true, passive: true });
+          window.addEventListener("touchstart", onInteract, { once: true, passive: true });
+          window.addEventListener("scroll", onInteract, { once: true, passive: true });
+        });
+      }
+    };
+
+    tryPlay();
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            video.play().catch(() => {});
+            v.play().catch(() => {});
           } else {
-            video.pause();
+            v.pause();
           }
         });
       },
       { threshold: 0.1 }
     );
 
-    observer.observe(video);
+    observer.observe(v);
+
     return () => observer.disconnect();
-  }, [reducedMotion]);
+  }, [isMobile, reducedMotion]);
 
   // Selected 4 projects
   const selectedProjectIds = [
@@ -159,19 +213,50 @@ export const Home: React.FC = () => {
           className="absolute inset-0 w-full h-full overflow-hidden"
           data-parallax="4"
         >
+          {/* Instant Poster Background - eliminates layout shift & blank flash */}
+          <img
+            src={isMobile ? MOBILE_POSTER : DESKTOP_POSTER}
+            alt="Steel Mind Engineers industrial facility"
+            className="absolute inset-0 w-full h-full object-cover object-center"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
+
+          {/* Single responsive video element */}
           <video
+            key={isMobile ? "mobile-video" : "desktop-video"}
             ref={videoRef}
-            autoPlay={!reducedMotion}
+            autoPlay
             muted
             loop
             playsInline
-            preload="metadata"
-            poster={videoPoster(A.video, 720)}
-            className="w-full h-full object-cover object-center"
+            preload="auto"
+            poster={isMobile ? MOBILE_POSTER : DESKTOP_POSTER}
+            onLoadedData={() => setVideoLoaded(true)}
+            onPlaying={() => setVideoLoaded(true)}
+            className={`relative w-full h-full object-cover object-center z-[1] transition-opacity duration-300 ${
+              videoLoaded ? "opacity-100" : "opacity-95"
+            }`}
           >
-            <source src={videoSrc(A.video, 720)} media="(max-width: 768px)" type="video/mp4" />
-            <source src={videoSrc(A.video, 1280)} media="(min-width: 769px)" type="video/mp4" />
-            <source src={A.video} type="video/mp4" />
+            {/* 1. Direct Original Uncompressed 4K Video (Zero Quality Compromise) */}
+            <source
+              src={isMobile ? MOBILE_VIDEO_ORIGINAL : DESKTOP_VIDEO_ORIGINAL}
+              type='video/mp4; codecs="hevc, hvc1"'
+            />
+            <source
+              src={isMobile ? MOBILE_VIDEO_ORIGINAL : DESKTOP_VIDEO_ORIGINAL}
+              type="video/quicktime"
+            />
+            <source
+              src={isMobile ? MOBILE_VIDEO_ORIGINAL : DESKTOP_VIDEO_ORIGINAL}
+              type="video/mp4"
+            />
+            {/* 2. Pristine 1080p Full HD AVC Fallback */}
+            <source
+              src={isMobile ? MOBILE_VIDEO_HD : DESKTOP_VIDEO_HD}
+              type="video/mp4"
+            />
           </video>
 
           {/* Hero Gradient Overlay */}
@@ -179,47 +264,47 @@ export const Home: React.FC = () => {
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                "linear-gradient(180deg, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.25) 35%, rgba(0,0,0,0.20) 55%, rgba(0,0,0,0.80) 100%)",
+                "linear-gradient(180deg, rgba(0,0,0,0.68) 0%, rgba(0,0,0,0.22) 35%, rgba(0,0,0,0.18) 55%, rgba(0,0,0,0.78) 100%)",
             }}
           />
         </div>
 
-        {/* Hero Content: Single block anchored bottom-left */}
+        {/* Hero Content: Single block anchored in the bottom-left corner */}
         <div
           className="absolute z-10 text-white"
           style={{
-            bottom: "calc(88px + env(safe-area-inset-bottom))",
+            bottom: "calc(56px + env(safe-area-inset-bottom))",
             left: "var(--pad-x)",
             right: "var(--pad-x)",
           }}
         >
-          {/* H1 */}
+          {/* H1: smaller on desktop as requested */}
           <h1
-            className="text-[20px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] text-white max-w-[260px] lg:max-w-[560px]"
+            className="text-[17px] md:text-[20px] lg:text-[22px] font-semibold leading-[1.2] tracking-[-0.01em] text-white max-w-[280px] md:max-w-[420px]"
             data-split=""
           >
             {pageData.h1}
           </h1>
 
-          {/* Supporting line: 16px gap below H1, 13px mobile / 15px desktop, white 90% opacity, clamp 3 lines mobile, max-w-[260px] mobile */}
+          {/* Supporting subheading: smaller on desktop as requested */}
           <p
-            className="mt-4 text-[13px] lg:text-[15px] leading-[1.5] text-white/90 line-clamp-3 max-w-[260px] lg:max-w-[480px]"
+            className="mt-3 text-[12px] md:text-[13px] lg:text-[14px] leading-[1.5] text-white/90 line-clamp-3 max-w-[280px] md:max-w-[420px]"
             data-fade-up=""
           >
             Steel Mind designs, fabricates and erects steel structures for industry, agriculture and commerce. One team handles the work from the first drawing to the final handover.
           </p>
 
-          {/* Buttons: 20px gap below supporting line, stack on mobile with 10px gap, side by side on desktop */}
+          {/* Buttons: Small sizes arranged in one line in bottom-left corner */}
           {SITE.heroShowButtons && (
             <div
-              className="mt-5 flex flex-col lg:flex-row gap-[10px] items-start"
+              className="mt-4 flex flex-row flex-wrap items-center gap-2"
               data-fade-up=""
             >
               <Button
                 size="sm"
                 variant="hero-white"
                 href="/contact-us/#quote"
-                className="w-[min(200px,60vw)] lg:w-auto"
+                className="w-auto min-w-[130px]"
               >
                 Request a Quote
               </Button>
@@ -227,7 +312,7 @@ export const Home: React.FC = () => {
                 size="sm"
                 variant="hero"
                 href="/projects/"
-                className="w-[min(200px,60vw)] lg:w-auto"
+                className="w-auto min-w-[130px]"
               >
                 View Our Projects
               </Button>

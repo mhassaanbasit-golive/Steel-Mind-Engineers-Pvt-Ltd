@@ -1,28 +1,30 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Home } from "./pages/Home.tsx";
-import { Hub } from "./pages/Hub.tsx";
-import { Info } from "./pages/Info.tsx";
-import { DiagramGallery } from "./pages/DiagramGallery.tsx";
-import { ProjectsIndex } from "./pages/ProjectsIndex.tsx";
-import { Project } from "./pages/Project.tsx";
-import { Clients } from "./pages/Clients.tsx";
-import { Contact } from "./pages/Contact.tsx";
-import { BlogIndex } from "./pages/BlogIndex.tsx";
-import { Article } from "./pages/Article.tsx";
-import { Profile } from "./pages/Profile.tsx";
-import { Sitemap } from "./pages/Sitemap.tsx";
-import { NotFound } from "./pages/NotFound.tsx";
 import { PageShell } from "./components/layout/PageShell.tsx";
 import { ALL_PAGES, ALL_ARTICLES, CONTENT_BY_URL } from "./content/index.ts";
 import { PROJECTS } from "./data/projects.ts";
 import { getTemplateForPage } from "./data/templates.ts";
 
+const Hub = lazy(() => import("./pages/Hub.tsx").then((m) => ({ default: m.Hub })));
+const Info = lazy(() => import("./pages/Info.tsx").then((m) => ({ default: m.Info })));
+const DiagramGallery = lazy(() => import("./pages/DiagramGallery.tsx").then((m) => ({ default: m.DiagramGallery })));
+const ProjectsIndex = lazy(() => import("./pages/ProjectsIndex.tsx").then((m) => ({ default: m.ProjectsIndex })));
+const Project = lazy(() => import("./pages/Project.tsx").then((m) => ({ default: m.Project })));
+const Clients = lazy(() => import("./pages/Clients.tsx").then((m) => ({ default: m.Clients })));
+const Contact = lazy(() => import("./pages/Contact.tsx").then((m) => ({ default: m.Contact })));
+const BlogIndex = lazy(() => import("./pages/BlogIndex.tsx").then((m) => ({ default: m.BlogIndex })));
+const Article = lazy(() => import("./pages/Article.tsx").then((m) => ({ default: m.Article })));
+const Profile = lazy(() => import("./pages/Profile.tsx").then((m) => ({ default: m.Profile })));
+const Sitemap = lazy(() => import("./pages/Sitemap.tsx").then((m) => ({ default: m.Sitemap })));
+const NotFound = lazy(() => import("./pages/NotFound.tsx").then((m) => ({ default: m.NotFound })));
+
 export const AppRoutes: React.FC = () => {
   const publishedProjects = PROJECTS.filter((p) => p.published);
 
   return (
-    <Routes>
+    <Suspense fallback={null}>
+      <Routes>
       {/* 1. Home */}
       <Route
         path="/"
@@ -174,5 +176,6 @@ export const AppRoutes: React.FC = () => {
         }
       />
     </Routes>
+    </Suspense>
   );
 };

@@ -1,39 +1,45 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { UI } from "../data/ui.ts";
+import { Button } from "../components/ui/Button.tsx";
 
 export const NotFound: React.FC = () => {
   return (
-    <div className="w-full min-h-[60vh] flex flex-col items-center justify-center text-center px-4 py-24">
-      <span className="text-[14px] uppercase font-semibold text-[var(--grey)] tracking-[0.12em] mb-3">
+    <div className="w-full min-h-[60vh] flex flex-col items-center justify-center text-center px-4 pt-[calc(var(--header-h)+48px)] pb-24 bg-white">
+      <span className="text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-2">
         404
       </span>
-      <h1 className="text-[32px] lg:text-[44px] font-bold text-[var(--ink)] mb-4">
+      <h1 className="text-[22px] lg:text-[38px] font-semibold text-[var(--ink)] leading-[1.15] mb-4">
         {UI.notFoundTitle}
       </h1>
-      <p className="text-[16px] text-[var(--grey)] max-w-[480px] mb-8">
+      <p className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)] max-w-[480px] mb-8">
         {UI.notFoundBody}
       </p>
 
-      <div className="flex flex-wrap items-center justify-center gap-4">
-        <Link
-          to="/"
-          className="px-6 py-3 bg-blue-glossy text-white text-[13px] uppercase font-semibold tracking-[0.05em] hover:brightness-110 transition-all"
+      <div className="flex flex-wrap items-center justify-center gap-2">
+        <Button
+          size="sm"
+          variant="primary"
+          href="/"
+          className="w-auto min-w-[130px]"
         >
           Homepage
-        </Link>
-        <Link
-          to="/services/"
-          className="px-6 py-3 border border-[var(--blue)] text-[var(--blue)] text-[13px] uppercase font-semibold tracking-[0.05em] hover:bg-blue-glossy hover:text-white transition-all"
+        </Button>
+        <Button
+          size="sm"
+          variant="secondary"
+          href="/services/"
+          className="w-auto min-w-[130px]"
         >
           Services
-        </Link>
-        <Link
-          to="/projects/"
-          className="px-6 py-3 border border-[var(--blue)] text-[var(--blue)] text-[13px] uppercase font-semibold tracking-[0.05em] hover:bg-blue-glossy hover:text-white transition-all"
+        </Button>
+        <Button
+          size="sm"
+          variant="secondary"
+          href="/projects/"
+          className="w-auto min-w-[130px]"
         >
           Our Projects
-        </Link>
+        </Button>
       </div>
     </div>
   );

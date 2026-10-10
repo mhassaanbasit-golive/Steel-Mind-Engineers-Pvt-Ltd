@@ -31,23 +31,15 @@ export const Button: React.FC<ButtonProps> = ({
   let baseStyle = "inline-flex items-center justify-center font-semibold transition-colors duration-300 rounded-none cursor-pointer text-center select-none ";
   
   if (variant === "primary") {
-    baseStyle += `bg-blue-glossy text-white hover:brightness-110 active:brightness-95 uppercase tracking-[0.06em] text-[11px] shadow-sm ${
-      isSm ? "px-[16px] py-[10px]" : "px-[24px] py-[12px] min-h-[44px]"
-    }`;
+    baseStyle += `bg-blue-glossy text-white hover:brightness-110 active:brightness-95 uppercase tracking-[0.08em] text-[10px] shadow-sm px-[16px] py-[9px] min-h-[36px] `;
   } else if (variant === "secondary") {
-    baseStyle += `bg-transparent border border-[var(--blue)] text-[var(--blue)] hover:bg-blue-glossy hover:text-white uppercase tracking-[0.06em] text-[11px] ${
-      isSm ? "px-[16px] py-[10px]" : "px-[24px] py-[12px] min-h-[44px]"
-    }`;
+    baseStyle += `bg-transparent border border-[var(--blue)] text-[var(--blue)] hover:bg-blue-glossy hover:text-white uppercase tracking-[0.08em] text-[10px] px-[16px] py-[9px] min-h-[36px] `;
   } else if (variant === "hero-white") {
-    baseStyle += `bg-white text-[var(--blue)] hover:bg-white/90 uppercase tracking-[0.06em] text-[11px] ${
-      isSm ? "px-[16px] py-[10px]" : "px-[24px] py-[12px] min-h-[44px]"
-    }`;
+    baseStyle += `bg-white text-[var(--blue)] hover:bg-white/90 uppercase tracking-[0.08em] text-[10px] px-[16px] py-[9px] min-h-[36px] `;
   } else if (variant === "hero") {
-    baseStyle += `bg-transparent border border-white text-white hover:bg-white hover:text-[var(--blue)] uppercase tracking-[0.06em] text-[11px] ${
-      isSm ? "px-[16px] py-[10px]" : "px-[24px] py-[12px] min-h-[44px]"
-    }`;
+    baseStyle += `bg-transparent border border-white text-white hover:bg-white hover:text-[var(--blue)] uppercase tracking-[0.08em] text-[10px] px-[16px] py-[9px] min-h-[36px] `;
   } else if (variant === "link") {
-    baseStyle = `relative inline-block text-[var(--blue)] font-semibold text-[14px] transition-colors duration-300 cursor-pointer group rounded-none min-h-[44px] leading-[44px] ${className}`;
+    baseStyle = `relative inline-block text-[var(--blue)] font-semibold text-[13px] transition-colors duration-300 cursor-pointer group rounded-none min-h-[36px] leading-[36px] ${className}`;
     const linkInner = (
       <>
         <span>{children}</span>

@@ -1,16 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ContentData, ContentBlock } from "../content/types.ts";
-import { Breadcrumb } from "../components/ui/Breadcrumb.tsx";
-import { QuickAnswer } from "../components/ui/QuickAnswer.tsx";
-import { SectionIndex } from "../components/ui/SectionIndex.tsx";
+import { HeroBand } from "../components/ui/HeroBand.tsx";
+import { Canvas } from "../components/ui/Canvas.tsx";
 import { Accordion } from "../components/ui/Accordion.tsx";
 import { RelatedPages } from "../components/ui/RelatedPages.tsx";
-import { QuoteBand } from "../components/ui/QuoteBand.tsx";
-import { DefList } from "../components/ui/DefList.tsx";
-import { Steps } from "../components/ui/Steps.tsx";
+import { CtaBand } from "../components/ui/CtaBand.tsx";
 import { poolImage } from "../data/pool.ts";
-import { UI } from "../data/ui.ts";
 import { NAV } from "../data/nav.ts";
 
 export interface InfoProps {
@@ -19,220 +15,332 @@ export interface InfoProps {
 }
 
 export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
-  const headerImg = poolImage(data.url, 0);
-  const bodyImg1 = poolImage(data.url, 1);
-  const bodyImg2 = poolImage(data.url, 2);
+  // Hero variant: Blue for About and Services, image for division children
+  const isBlueHero = data.url.startsWith("/about-us/") || data.url.startsWith("/services/");
+  const headerImg = isBlueHero ? undefined : poolImage(data.url, 0);
 
   // Group blocks by H2 sections
   const sections: Array<{
     h2Title: string;
-    blocks: ContentBlock[];
+    paragraphs: string[];
+    defs?: Array<{ term: string; desc: string }>;
+    steps?: Array<{ step: number; name: string; desc: string }>;
   }> = [];
 
-  let currentSection: { h2Title: string; blocks: ContentBlock[] } | null = null;
-  const introBlocks: ContentBlock[] = [];
+  let currentSection: {
+    h2Title: string;
+    paragraphs: string[];
+    defs?: Array<{ term: string; desc: string }>;
+    steps?: Array<{ step: number; name: string; desc: string }>;
+  } | null = null;
+
+  const introParagraphs: string[] = [];
 
   data.blocks.forEach((block: ContentBlock) => {
     if (block.type === "h2") {
       if (currentSection) sections.push(currentSection);
-      currentSection = { h2Title: block.title || "", blocks: [] };
-    } else {
+      currentSection = {
+        h2Title: block.title || "",
+        paragraphs: [],
+      };
+    } else if (block.type === "p" && block.text) {
       if (currentSection) {
-        currentSection.blocks.push(block);
+        currentSection.paragraphs.push(block.text);
       } else {
-        introBlocks.push(block);
+        introParagraphs.push(block.text);
+      }
+    } else if (block.type === "defs" && block.items) {
+      if (currentSection) {
+        currentSection.defs = block.items.map((it) => ({ term: it.name, desc: it.text }));
+      }
+    } else if (block.type === "steps" && block.items) {
+      if (currentSection) {
+        currentSection.steps = block.items.map((it, idx) => ({ step: idx + 1, name: it.name, desc: it.text }));
       }
     }
   });
   if (currentSection) sections.push(currentSection);
 
-  const h2IndexItems = sections.map((sec) => ({
-    id: sec.h2Title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-    title: sec.h2Title,
-  }));
+  // Separate Section 0 (Block B) from Remaining Sections (Block C)
+  const blockBSection = sections.length > 0 ? sections[0] : null;
+  const remainingSections = sections.length > 1 ? sections.slice(1) : [];
 
-  // Find previous and next pages within current NAV group
-  let prevPage: { label: string; url: string } | null = null;
+  // Mapped images
+  const infoImg = poolImage(data.url, 1);
+
+  // Breadcrumb items
+  const pathParts = data.url.split("/").filter(Boolean);
+  const parentName =
+    pathParts[0] === "about-us"
+      ? "About Us"
+      : pathParts[0] === "services"
+      ? "Services"
+      : "Pre-Engineered Buildings";
+
+  const parentUrl =
+    pathParts[0] === "about-us"
+      ? "/about-us/introduction/"
+      : pathParts[0] === "services"
+      ? "/services/"
+      : `/${pathParts[0]}/`;
+
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: parentName, href: parentUrl },
+    { label: data.h1.split(":")[0] || "Page" },
+  ];
+
+  // Find next page within current NAV group for Block E next row
   let nextPage: { label: string; url: string } | null = null;
-
   for (const item of NAV) {
     const list = item.children || (item.divisions ? item.divisions.flatMap((d) => d.children) : []);
     const idx = list.findIndex((c) => c.url === data.url);
-    if (idx !== -1) {
-      if (idx > 0) prevPage = list[idx - 1];
-      if (idx < list.length - 1) nextPage = list[idx + 1];
+    if (idx !== -1 && idx < list.length - 1) {
+      nextPage = list[idx + 1];
       break;
     }
   }
 
+  // Detect steps page (Factory Tour or One-Step Solution)
+  const isTimelinePage =
+    isStepsPage ||
+    data.url.includes("factory-tour") ||
+    data.url.includes("one-step-solution") ||
+    data.blocks.some((b) => b.type === "steps");
+
   return (
-    <div className="w-full">
-      {/* 1. Header Image */}
-      <section className="relative w-full h-[62svh] min-h-[420px] lg:h-[70vh] bg-[var(--ink)] overflow-hidden">
-        <div className="absolute inset-0 w-full h-full" data-parallax="4">
-          <img
-            src={headerImg}
-            alt={data.alt || data.h1}
-            className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-[#0A0A0A]/35" />
-        </div>
+    <div className="w-full bg-white">
+      {/* Block A — Hero Band */}
+      <HeroBand
+        variant={isBlueHero ? "blue" : "image"}
+        imageSrc={headerImg}
+        imageAlt={data.alt || data.h1}
+        breadcrumbItems={breadcrumbItems}
+        h1={data.h1}
+        subtitle={data.quickAnswer}
+      />
 
-        <div className="absolute inset-x-0 bottom-0 max-w-[1340px] mx-auto px-[var(--pad-x)] pb-10 z-10">
-          <Breadcrumb
-            items={[
-              { label: "Home", href: "/" },
-              { label: data.h1.split(":")[0] || "Page" },
-            ]}
-            theme="white"
-            className="mb-4"
-          />
-          <h1
-            className="text-[28px] lg:text-[56px] font-bold text-white leading-[1.1] tracking-[-0.02em] max-w-[800px]"
-            data-split=""
-          >
-            {data.h1}
-          </h1>
-        </div>
-      </section>
+      {/* Block B — Information Panel (First H2 + First 2 Paragraphs + Image) */}
+      {blockBSection && (
+        <section className="py-12 lg:py-20 bg-white border-b border-[var(--line)]">
+          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
+              {/* Left Column: First H2 and first two paragraphs */}
+              <div className="lg:col-span-6 space-y-4" data-reveal-group="">
+                <h2
+                  className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2]"
+                  data-split=""
+                >
+                  {blockBSection.h2Title}
+                </h2>
+                {blockBSection.paragraphs.slice(0, 2).map((p, idx) => (
+                  <p
+                    key={idx}
+                    className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)]"
+                    data-reveal=""
+                  >
+                    {p}
+                  </p>
+                ))}
+              </div>
 
-      {/* 2. Quick Answer (Floating Trigger + Drawer) */}
-      <QuickAnswer text={data.quickAnswer} h1={data.h1} related={data.related} />
+              {/* Right Column: Page image 4:3 */}
+              <div className="lg:col-span-6" data-reveal="">
+                <Canvas slot="info" ratio="4/3" src={infoImg} alt={blockBSection.h2Title} />
+              </div>
+            </div>
 
-      {/* 3. Sticky Section Index */}
-      <SectionIndex sections={h2IndexItems} />
+            {/* Any extra paragraphs or defs inside Block B section */}
+            {blockBSection.paragraphs.length > 2 && (
+              <div className="mt-8 space-y-4 max-w-[640px]">
+                {blockBSection.paragraphs.slice(2).map((p, idx) => (
+                  <p key={idx} className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)]">
+                    {p}
+                  </p>
+                ))}
+              </div>
+            )}
 
-      {/* Intro Blocks if any */}
-      {introBlocks.length > 0 && (
-        <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] py-8 space-y-4">
-          {introBlocks.map((b, i) => (
-            <p key={i} className="text-[16px] lg:text-[17px] leading-[1.65] text-[var(--grey)] max-w-[760px]">
-              {b.text}
-            </p>
-          ))}
-        </div>
+            {/* Block D — Numbered Feature Grid if defs in block B */}
+            {blockBSection.defs && blockBSection.defs.length > 0 && (
+              <div className="mt-12 pt-8 border-t border-[var(--line)]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {blockBSection.defs.map((item, idx) => {
+                    const numStr = String(idx + 1).padStart(2, "0");
+                    return (
+                      <div key={idx} className="p-2 bg-transparent" data-reveal="">
+                        <div className="w-6 h-[1px] bg-[var(--blue)] mb-4" />
+                        <div
+                          className="text-[40px] font-semibold leading-none mb-3 text-transparent select-none"
+                          style={{ WebkitTextStroke: "1px var(--blue)" }}
+                        >
+                          {numStr}
+                        </div>
+                        <h4 className="text-[15px] font-semibold text-[var(--ink)] leading-[1.25] mb-2">
+                          {item.term}
+                        </h4>
+                        <p className="text-[12px] leading-[1.6] text-[var(--grey)]">
+                          {item.desc}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
       )}
 
-      {/* 4. Sections Body with Alternating Backgrounds */}
-      <div className="w-full">
-        {sections.map((sec, secIdx) => {
-          const isOdd = secIdx % 2 === 0;
-          const bgClass = isOdd ? "bg-white" : "bg-[var(--offwhite)]";
-          const secId = sec.h2Title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      {/* Template T2s: Full-width Sequential Timeline for Steps Pages */}
+      {isTimelinePage && (
+        <section className="py-14 lg:py-20 bg-[var(--offwhite)] border-b border-[var(--line)]">
+          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
+            {sections
+              .flatMap((s) => s.steps || [])
+              .map((st, idx) => {
+                const numStr = String(st.step || idx + 1).padStart(2, "0");
+                const stepImg = poolImage(data.url, idx + 2);
+                const showImg = idx % 2 === 0;
+
+                return (
+                  <div key={idx} className="relative pl-16 pb-12 last:pb-0" data-reveal="">
+                    {/* Vertical line running down left of numbers */}
+                    <div className="absolute left-[31px] top-4 bottom-0 w-[1px] bg-[var(--line)]" />
+
+                    {/* Step number left 64px outlined blue */}
+                    <div
+                      className="absolute left-0 top-0 text-[36px] font-semibold leading-none text-transparent select-none"
+                      style={{ WebkitTextStroke: "1px var(--blue)" }}
+                    >
+                      {numStr}
+                    </div>
+
+                    <div className="space-y-3">
+                      <h3 className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] leading-[1.25]">
+                        {st.name}
+                      </h3>
+                      <p className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)]">
+                        {st.desc}
+                      </p>
+
+                      {/* Image alternating between pairs of steps */}
+                      {showImg && (
+                        <div className="pt-4 max-w-[440px]">
+                          <Canvas
+                            slot={`step-${idx + 1}`}
+                            ratio="4/3"
+                            src={stepImg}
+                            alt={st.name}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+        </section>
+      )}
+
+      {/* Block C — Alternating Image and Text Pairs for remaining H2 sections */}
+      {!isTimelinePage &&
+        remainingSections.map((sec, idx) => {
+          const isEven = idx % 2 === 0;
+          const bg = isEven ? "bg-[var(--offwhite)]" : "bg-white";
+          const sectionImg = poolImage(data.url, idx + 2);
 
           return (
-            <React.Fragment key={secIdx}>
-              <section id={secId} className={`py-14 lg:py-20 w-full ${bgClass} border-b border-[var(--line)]`}>
+            <React.Fragment key={idx}>
+              <div data-line="" className="w-full h-[1px] bg-[var(--line)]" />
+              <section className={`py-14 lg:py-20 w-full ${bg}`}>
                 <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-                    {/* Desktop 4/12 Left Column: H2 */}
-                    <div className="lg:col-span-4">
-                      <h2
-                        className="text-[26px] lg:text-[34px] font-semibold text-[var(--ink)] leading-[1.2] sticky top-[calc(var(--header-h)+64px)]"
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
+                    {/* Desktop layout: isEven ? Image Left (col 1-5), Text Right (col 7-12) : Text Left (col 1-6), Image Right (col 7-12) */}
+                    {/* Mobile layout: Image always on top (order-1), Text below (order-2) */}
+                    <div
+                      className={`order-1 ${
+                        isEven
+                          ? "lg:col-span-6 lg:order-1"
+                          : "lg:col-span-6 lg:order-2"
+                      }`}
+                      data-reveal=""
+                    >
+                      <Canvas
+                        slot={`pair-${idx + 1}`}
+                        ratio="4/3"
+                        src={sectionImg}
+                        alt={sec.h2Title}
+                      />
+                    </div>
+
+                    <div
+                      className={`order-2 space-y-4 max-w-[400px] ${
+                        isEven
+                          ? "lg:col-span-6 lg:order-2"
+                          : "lg:col-span-6 lg:order-1"
+                      }`}
+                      data-reveal-group=""
+                    >
+                      <h3
+                        className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] leading-[1.25]"
                         data-split=""
                       >
                         {sec.h2Title}
-                      </h2>
+                      </h3>
+                      {sec.paragraphs.map((p, pIdx) => (
+                        <p
+                          key={pIdx}
+                          className="text-[13px] leading-[1.6] text-[var(--grey)]"
+                          data-reveal=""
+                        >
+                          {p}
+                        </p>
+                      ))}
                     </div>
+                  </div>
 
-                    {/* Desktop 7/12 Right Column: Content */}
-                    <div className="lg:col-span-7 lg:col-start-6 space-y-6">
-                      {sec.blocks.map((block, bIdx) => {
-                        if (block.type === "p") {
+                  {/* Block D if section has defs */}
+                  {sec.defs && sec.defs.length > 0 && (
+                    <div className="mt-12 pt-8 border-t border-[var(--line)]">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {sec.defs.map((item, dIdx) => {
+                          const numStr = String(dIdx + 1).padStart(2, "0");
                           return (
-                            <p
-                              key={bIdx}
-                              className="text-[16px] lg:text-[17px] leading-[1.65] text-[var(--grey)] max-w-[600px]"
-                              data-reveal=""
-                            >
-                              {block.text}
-                            </p>
-                          );
-                        }
-                        if (block.type === "defs" && block.items) {
-                          return <DefList key={bIdx} items={block.items} />;
-                        }
-                        if (block.type === "steps" && block.items) {
-                          if (isStepsPage) {
-                            return (
-                              <div key={bIdx} className="space-y-8 my-6">
-                                {block.items.map((step: { name: string; text: string }, sIdx: number) => (
-                                  <div key={sIdx} className="flex items-start space-x-6" data-reveal="">
-                                    <span
-                                      className="text-[52px] font-bold leading-none text-transparent flex-shrink-0"
-                                      style={{ WebkitTextStroke: "1px var(--blue)" }}
-                                    >
-                                      {String(sIdx + 1).padStart(2, "0")}
-                                    </span>
-                                    <div>
-                                      <h3 className="text-[20px] font-semibold text-[var(--ink)] mb-2">
-                                        {step.name}
-                                      </h3>
-                                      <p className="text-[16px] leading-[1.6] text-[var(--grey)]">
-                                        {step.text}
-                                      </p>
-                                    </div>
-                                  </div>
-                                ))}
+                            <div key={dIdx} className="p-2 bg-transparent" data-reveal="">
+                              <div className="w-6 h-[1px] bg-[var(--blue)] mb-4" />
+                              <div
+                                className="text-[40px] font-semibold leading-none mb-3 text-transparent select-none"
+                                style={{ WebkitTextStroke: "1px var(--blue)" }}
+                              >
+                                {numStr}
                               </div>
-                            );
-                          }
-                          return <Steps key={bIdx} items={block.items} />;
-                        }
-                        if (block.type === "bullets" && block.bullets) {
-                          return (
-                            <div key={bIdx} className="space-y-3 py-2">
-                              {block.bullets.map((b: string, bulletIdx: number) => (
-                                <div key={bulletIdx} className="flex items-start space-x-3 text-[16px] text-[var(--grey)]">
-                                  <span className="w-1.5 h-1.5 bg-[var(--blue)] mt-2 flex-shrink-0" />
-                                  <span>{b}</span>
-                                </div>
-                              ))}
+                              <h4 className="text-[15px] font-semibold text-[var(--ink)] leading-[1.25] mb-2">
+                                {item.term}
+                              </h4>
+                              <p className="text-[12px] leading-[1.6] text-[var(--grey)]">
+                                {item.desc}
+                              </p>
                             </div>
                           );
-                        }
-                        return null;
-                      })}
+                        })}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </section>
-
-              {/* Image Rhythm: Full-bleed 16:9 after 2nd H2 */}
-              {secIdx === 1 && (
-                <div className="w-full aspect-[16/9] overflow-hidden" data-parallax="6">
-                  <img
-                    src={bodyImg1}
-                    alt={`${data.h1} feature`}
-                    className="w-full h-full object-cover object-center"
-                    loading="lazy"
-                  />
-                </div>
-              )}
-
-              {/* Inset Image after 5th H2 */}
-              {secIdx === 4 && (
-                <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] py-12">
-                  <div className="max-w-[800px] overflow-hidden aspect-[4/3] lg:aspect-[5/6]">
-                    <img
-                      src={bodyImg2}
-                      alt={`${data.h1} detail`}
-                      className="w-full h-full object-cover object-center"
-                      loading="lazy"
-                    />
-                  </div>
-                </div>
-              )}
             </React.Fragment>
           );
         })}
-      </div>
 
-      {/* 5. FAQ */}
+      {/* FAQ (Block E Divided List Rows) */}
       {data.faq && data.faq.length > 0 && (
-        <section className="py-16 bg-[var(--offwhite)] border-t border-[var(--line)]">
-          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-            <h2 className="text-[28px] lg:text-[38px] font-semibold text-[var(--ink)] mb-8" data-split="">
+        <section className="py-12 lg:py-16 bg-white border-b border-[var(--line)]">
+          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
+            <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-2">
+              Questions
+            </span>
+            <h2 className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2] mb-6">
               Frequently Asked Questions
             </h2>
             <Accordion items={data.faq} />
@@ -240,45 +348,43 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
         </section>
       )}
 
-      {/* 6. Related Pages */}
-      <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-        <RelatedPages related={data.related} />
-      </div>
-
-      {/* 7. Previous and Next Nav Row */}
-      {(prevPage || nextPage) && (
-        <div className="border-t border-[var(--line)] py-10 max-w-[1340px] mx-auto px-[var(--pad-x)]">
-          <div className="grid grid-cols-2 divide-x divide-[var(--line)]">
-            <div className="pr-6">
-              {prevPage && (
-                <Link to={prevPage.url} className="group block text-left">
-                  <span className="block text-[12px] uppercase font-semibold text-[var(--grey)] tracking-[0.08em] mb-1">
-                    {UI.previous}
-                  </span>
-                  <span className="text-[16px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors">
-                    {prevPage.label}
-                  </span>
-                </Link>
-              )}
-            </div>
-            <div className="pl-6 text-right">
-              {nextPage && (
-                <Link to={nextPage.url} className="group block text-right">
-                  <span className="block text-[12px] uppercase font-semibold text-[var(--grey)] tracking-[0.08em] mb-1">
-                    {UI.next}
-                  </span>
-                  <span className="text-[16px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors">
-                    {nextPage.label}
-                  </span>
-                </Link>
-              )}
-            </div>
+      {/* Related Pages (Block E) */}
+      {data.related && data.related.length > 0 && (
+        <section className="py-8 bg-white border-b border-[var(--line)]">
+          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
+            <RelatedPages related={data.related} />
           </div>
-        </div>
+        </section>
       )}
 
-      {/* 8. CTA Quote Band */}
-      <QuoteBand />
+      {/* Next Page Link (Block E Single Row) */}
+      {nextPage && (
+        <section className="py-4 bg-white border-b border-[var(--line)]">
+          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
+            <Link
+              to={nextPage.url}
+              className="group flex items-center justify-between py-4 text-[14px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors"
+            >
+              <div className="flex flex-col">
+                <span className="text-[10px] uppercase tracking-[0.1em] text-[var(--grey)]">Next Section</span>
+                <span>{nextPage.label}</span>
+              </div>
+              <svg
+                className="w-5 h-5 stroke-current transition-transform duration-300 group-hover:translate-x-1"
+                viewBox="0 0 24 24"
+                fill="none"
+                strokeWidth="1.5"
+              >
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </Link>
+          </div>
+        </section>
+      )}
+
+      {/* Block F — CTA Band */}
+      <CtaBand />
     </div>
   );
 };

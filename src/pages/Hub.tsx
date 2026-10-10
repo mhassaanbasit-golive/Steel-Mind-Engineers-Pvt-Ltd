@@ -1,18 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ContentData, ContentBlock } from "../content/types.ts";
-import { Breadcrumb } from "../components/ui/Breadcrumb.tsx";
-import { QuickAnswer } from "../components/ui/QuickAnswer.tsx";
-import { SectionIndex } from "../components/ui/SectionIndex.tsx";
+import { HeroBand } from "../components/ui/HeroBand.tsx";
+import { Canvas } from "../components/ui/Canvas.tsx";
 import { Accordion } from "../components/ui/Accordion.tsx";
 import { RelatedPages } from "../components/ui/RelatedPages.tsx";
-import { QuoteBand } from "../components/ui/QuoteBand.tsx";
-import { Img } from "../components/ui/Img.tsx";
-import { SwipeRow } from "../components/ui/SwipeRow.tsx";
-import { DefList } from "../components/ui/DefList.tsx";
-import { Steps } from "../components/ui/Steps.tsx";
+import { CtaBand } from "../components/ui/CtaBand.tsx";
 import { NAV } from "../data/nav.ts";
 import { poolImage } from "../data/pool.ts";
+import { CONTENT_BY_URL } from "../content/index.ts";
 
 export interface HubProps {
   data: ContentData;
@@ -20,173 +16,172 @@ export interface HubProps {
 
 export const Hub: React.FC<HubProps> = ({ data }) => {
   const headerImg = poolImage(data.url, 0);
+  const infoImg = poolImage(data.url, 1);
 
   // Find child pages from NAV
-  let childPages: Array<{ label: string; url: string; image: string }> = [];
+  let childPages: Array<{ label: string; url: string; desc: string }> = [];
   const foundNavItem = NAV.find((item) => item.url === data.url);
   if (foundNavItem?.children) {
-    childPages = foundNavItem.children.map((c, i) => ({
-      ...c,
-      image: poolImage(c.url, i + 1),
-    }));
+    childPages = foundNavItem.children.map((c) => {
+      const childData = CONTENT_BY_URL[c.url];
+      const qa = childData?.quickAnswer || "";
+      const firstSentence = qa ? qa.split(". ")[0].replace(/\.$/, "") + "." : "";
+      return {
+        label: c.label,
+        url: c.url,
+        desc: firstSentence,
+      };
+    });
   } else {
     // Check main divisions
     const mainDivs = NAV.find((item) => item.label === "Main Divisions");
     const matchedDiv = mainDivs?.divisions?.find((d) => d.url === data.url);
     if (matchedDiv?.children) {
-      childPages = matchedDiv.children.map((c, i) => ({
-        ...c,
-        image: poolImage(c.url, i + 1),
-      }));
+      childPages = matchedDiv.children.map((c) => {
+        const childData = CONTENT_BY_URL[c.url];
+        const qa = childData?.quickAnswer || "";
+        const firstSentence = qa ? qa.split(". ")[0].replace(/\.$/, "") + "." : "";
+        return {
+          label: c.label,
+          url: c.url,
+          desc: firstSentence,
+        };
+      });
     }
   }
 
-  // Extract H2 sections for SectionIndex
-  const h2Sections = data.blocks
-    .filter((b: ContentBlock) => b.type === "h2" && b.title)
-    .map((b: ContentBlock) => ({
-      id: (b.title || "").toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-      title: b.title || "",
-    }));
+  // Extract first H2 and its first two paragraphs for Block B
+  const firstH2Index = data.blocks.findIndex((b) => b.type === "h2");
+  let blockBTitle = data.h1;
+  let blockBParagraphs: string[] = [];
+
+  if (firstH2Index !== -1) {
+    const firstH2 = data.blocks[firstH2Index];
+    blockBTitle = firstH2.title || data.h1;
+    // Get paragraphs immediately following this H2
+    for (let i = firstH2Index + 1; i < data.blocks.length; i++) {
+      const b = data.blocks[i];
+      if (b.type === "h2") break;
+      if (b.type === "p" && b.text) {
+        blockBParagraphs.push(b.text);
+        if (blockBParagraphs.length >= 2) break;
+      }
+    }
+  }
+
+  // Fallback if no paragraphs under first H2
+  if (blockBParagraphs.length === 0) {
+    const pBlocks = data.blocks.filter((b) => b.type === "p" && b.text);
+    blockBParagraphs = pBlocks.slice(0, 2).map((b) => b.text || "");
+  }
 
   return (
-    <div className="w-full">
-      {/* 1. Full-Bleed Dark Header */}
-      <section className="relative w-full h-[62svh] min-h-[420px] lg:h-[70vh] bg-[var(--ink)] overflow-hidden">
-        <div className="absolute inset-0 w-full h-full" data-parallax="4">
-          <img
-            src={headerImg}
-            alt={data.alt || data.h1}
-            className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-[#0A0A0A]/35" />
-        </div>
+    <div className="w-full bg-white">
+      {/* Block A — Hero Band (Image) */}
+      <HeroBand
+        variant="image"
+        imageSrc={headerImg}
+        imageAlt={data.alt || data.h1}
+        breadcrumbItems={[
+          { label: "Home", href: "/" },
+          { label: data.h1.split(":")[0] || "Hub" },
+        ]}
+        h1={data.h1}
+        subtitle={data.quickAnswer}
+      />
 
-        <div className="absolute inset-x-0 bottom-0 max-w-[1340px] mx-auto px-[var(--pad-x)] pb-10 z-10">
-          <Breadcrumb
-            items={[
-              { label: "Home", href: "/" },
-              { label: data.h1.split(":")[0] || "Hub" },
-            ]}
-            theme="white"
-            className="mb-4"
-          />
-          <h1
-            className="text-[28px] lg:text-[56px] font-bold text-white leading-[1.1] tracking-[-0.02em] max-w-[800px]"
-            data-split=""
-          >
-            {data.h1}
-          </h1>
+      {/* Block B — Information Panel (Image + Facts) */}
+      <section className="py-12 lg:py-20 bg-white border-b border-[var(--line)]">
+        <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
+            {/* Left Column: First H2 and first two paragraphs */}
+            <div className="lg:col-span-6 space-y-4" data-reveal-group="">
+              <h2
+                className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2]"
+                data-split=""
+              >
+                {blockBTitle}
+              </h2>
+              {blockBParagraphs.map((p, idx) => (
+                <p
+                  key={idx}
+                  className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)]"
+                  data-reveal=""
+                >
+                  {p}
+                </p>
+              ))}
+            </div>
+
+            {/* Right Column: Page image 4:3 */}
+            <div className="lg:col-span-6" data-reveal="">
+              <Canvas slot="info" ratio="4/3" src={infoImg} alt={blockBTitle} />
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* 2. Quick Answer (Floating Trigger + Drawer) & Sticky Index */}
-      <QuickAnswer text={data.quickAnswer} h1={data.h1} related={data.related} />
-
-      <SectionIndex sections={h2Sections} />
-
-      {/* 3. Children Showcase Section */}
+      {/* Block D — Numbered Feature Grid of Child Pages */}
       {childPages.length > 0 && (
-        <section className="py-16 bg-[var(--offwhite)] border-b border-[var(--line)]">
+        <section className="py-14 lg:py-20 bg-[var(--offwhite)] border-b border-[var(--line)]">
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-            <h2 className="text-[28px] lg:text-[36px] font-semibold text-[var(--ink)] mb-8" data-split="">
-              Explore This Division
-            </h2>
+            <div className="mb-10 lg:mb-14">
+              <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-2">
+                Overview
+              </span>
+              <h2 className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2]">
+                Explore This Division
+              </h2>
+            </div>
 
-            <SwipeRow ariaLabel="Child Pages">
-              {childPages.map((child, idx) => (
-                <Link
-                  key={child.url}
-                  to={child.url}
-                  className="group block bg-white border border-[var(--line)] overflow-hidden"
-                  data-reveal=""
-                >
-                  <div className="aspect-[4/3] w-full overflow-hidden bg-neutral-100">
-                    <img
-                      src={child.image}
-                      alt={child.label}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="p-6 space-y-3">
-                    <h3 className="text-[20px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {childPages.map((child, idx) => {
+                const numStr = String(idx + 1).padStart(2, "0");
+                return (
+                  <Link
+                    key={child.url}
+                    to={child.url}
+                    className="group block p-2 bg-transparent transition-all"
+                    data-reveal=""
+                  >
+                    {/* Top line 24px wide blue */}
+                    <div className="w-6 h-[1px] bg-[var(--blue)] mb-4" />
+
+                    {/* Outlined number 40px weight 600 */}
+                    <div
+                      className="text-[40px] font-semibold leading-none mb-3 text-transparent select-none"
+                      style={{ WebkitTextStroke: "1px var(--blue)" }}
+                    >
+                      {numStr}
+                    </div>
+
+                    {/* Bold name 15px weight 600 */}
+                    <h3 className="text-[15px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors leading-[1.25] mb-2">
                       {child.label}
                     </h3>
-                    <div className="pt-2 flex items-center justify-end">
-                      <svg className="w-5 h-5 stroke-current text-[var(--blue)] transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
-                        <line x1="4" y1="12" x2="20" y2="12" />
-                        <polyline points="14 6 20 12 14 18" />
-                      </svg>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </SwipeRow>
+
+                    {/* Description 12px grey */}
+                    {child.desc && (
+                      <p className="text-[12px] leading-[1.6] text-[var(--grey)] line-clamp-3">
+                        {child.desc}
+                      </p>
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         </section>
       )}
 
-      {/* 4. Body Blocks */}
-      <div className="w-full">
-        {data.blocks.map((block: ContentBlock, idx: number) => {
-          const sectionId = block.title
-            ? block.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")
-            : undefined;
-
-          if (block.type === "h2") {
-            return (
-              <div key={idx} id={sectionId} className="pt-16 pb-4 max-w-[1340px] mx-auto px-[var(--pad-x)]">
-                <h2 className="text-[28px] lg:text-[38px] font-semibold text-[var(--ink)]" data-split="">
-                  {block.title}
-                </h2>
-              </div>
-            );
-          }
-          if (block.type === "p") {
-            return (
-              <div key={idx} className="py-3 max-w-[1340px] mx-auto px-[var(--pad-x)]">
-                <p className="text-[16px] lg:text-[17px] leading-[1.65] text-[var(--grey)] max-w-[760px]" data-reveal="">
-                  {block.text}
-                </p>
-              </div>
-            );
-          }
-          if (block.type === "defs" && block.items) {
-            return (
-              <div key={idx} className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-                <DefList items={block.items} />
-              </div>
-            );
-          }
-          if (block.type === "steps" && block.items) {
-            return (
-              <div key={idx} className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-                <Steps items={block.items} />
-              </div>
-            );
-          }
-          if (block.type === "bullets" && block.bullets) {
-            return (
-              <div key={idx} className="py-4 max-w-[1340px] mx-auto px-[var(--pad-x)] space-y-3">
-                {block.bullets.map((b: string, bIdx: number) => (
-                  <div key={bIdx} className="flex items-start space-x-3 text-[16px] text-[var(--grey)] leading-[1.6]" data-reveal="">
-                    <span className="w-1.5 h-1.5 bg-[var(--blue)] mt-2.5 flex-shrink-0" />
-                    <span>{b}</span>
-                  </div>
-                ))}
-              </div>
-            );
-          }
-          return null;
-        })}
-      </div>
-
-      {/* 5. FAQ */}
+      {/* FAQ (Block E Divided List Rows) */}
       {data.faq && data.faq.length > 0 && (
-        <section className="py-16 bg-[var(--offwhite)] border-t border-[var(--line)] mt-16">
-          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-            <h2 className="text-[28px] lg:text-[38px] font-semibold text-[var(--ink)] mb-8" data-split="">
+        <section className="py-12 lg:py-16 bg-white border-b border-[var(--line)]">
+          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
+            <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-2">
+              Questions
+            </span>
+            <h2 className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2] mb-6">
               Frequently Asked Questions
             </h2>
             <Accordion items={data.faq} />
@@ -194,13 +189,17 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
         </section>
       )}
 
-      {/* 6. Related Pages */}
-      <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-        <RelatedPages related={data.related} />
-      </div>
+      {/* Related Pages (Block E) */}
+      {data.related && data.related.length > 0 && (
+        <section className="py-8 bg-white border-b border-[var(--line)]">
+          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
+            <RelatedPages related={data.related} />
+          </div>
+        </section>
+      )}
 
-      {/* 7. CTA Quote Band */}
-      <QuoteBand />
+      {/* Block F — CTA Band */}
+      <CtaBand />
     </div>
   );
 };

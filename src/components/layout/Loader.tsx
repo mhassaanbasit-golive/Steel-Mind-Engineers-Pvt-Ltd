@@ -25,7 +25,7 @@ export const Loader: React.FC = () => {
       setPhraseIndex((prev) => (prev < PHRASES.length - 1 ? prev + 1 : prev));
     }, 550);
 
-    // Minimum 1.5s timer
+    // Quick splash dismissal so site is interactive in under 1 second
     const exitTimer = setTimeout(() => {
       setIsExiting(true);
       setTimeout(() => {
@@ -33,8 +33,8 @@ export const Loader: React.FC = () => {
         setMounted(false);
         startScroll();
         window.dispatchEvent(new CustomEvent("loader:done"));
-      }, 400);
-    }, 1800);
+      }, 200);
+    }, 280);
 
     return () => {
       clearInterval(phraseInterval);

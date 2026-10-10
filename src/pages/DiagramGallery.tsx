@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { ContentData, ContentBlock } from "../content/types.ts";
-import { Breadcrumb } from "../components/ui/Breadcrumb.tsx";
-import { QuickAnswer } from "../components/ui/QuickAnswer.tsx";
-import { SwipeRow } from "../components/ui/SwipeRow.tsx";
+import { HeroBand } from "../components/ui/HeroBand.tsx";
+import { Canvas } from "../components/ui/Canvas.tsx";
 import { FrameDiagram } from "../components/diagrams/FrameDiagram.tsx";
 import { CraneDiagram } from "../components/diagrams/CraneDiagram.tsx";
 import { Accordion } from "../components/ui/Accordion.tsx";
 import { RelatedPages } from "../components/ui/RelatedPages.tsx";
-import { QuoteBand } from "../components/ui/QuoteBand.tsx";
+import { CtaBand } from "../components/ui/CtaBand.tsx";
 import { poolImage } from "../data/pool.ts";
 
 export interface DiagramGalleryProps {
@@ -16,6 +15,7 @@ export interface DiagramGalleryProps {
 
 export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
   const headerImg = poolImage(data.url, 0);
+  const infoImg = poolImage(data.url, 1);
   const isCranePage = data.url.includes("crane");
 
   const [modalItem, setModalItem] = useState<{ name: string; text: string } | null>(null);
@@ -24,49 +24,88 @@ export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
   const defsBlock = data.blocks.find((b: ContentBlock) => b.type === "defs" && b.items);
   const items = defsBlock?.items || [];
 
-  return (
-    <div className="w-full">
-      {/* 1. Header */}
-      <section className="relative w-full h-[62svh] min-h-[420px] lg:h-[70vh] bg-[var(--ink)] overflow-hidden">
-        <div className="absolute inset-0 w-full h-full" data-parallax="4">
-          <img
-            src={headerImg}
-            alt={data.alt || data.h1}
-            className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-[#0A0A0A]/35" />
-        </div>
+  // Extract first H2 and first two paragraphs for Block B
+  const firstH2Index = data.blocks.findIndex((b) => b.type === "h2");
+  let blockBTitle = data.h1;
+  let blockBParagraphs: string[] = [];
 
-        <div className="absolute inset-x-0 bottom-0 max-w-[1340px] mx-auto px-[var(--pad-x)] pb-10 z-10">
-          <Breadcrumb
-            items={[
-              { label: "Home", href: "/" },
-              { label: data.h1.split(":")[0] || "Diagram Gallery" },
-            ]}
-            theme="white"
-            className="mb-4"
-          />
-          <h1
-            className="text-[28px] lg:text-[56px] font-bold text-white leading-[1.1] tracking-[-0.02em] max-w-[800px]"
-            data-split=""
-          >
-            {data.h1}
-          </h1>
+  if (firstH2Index !== -1) {
+    const firstH2 = data.blocks[firstH2Index];
+    blockBTitle = firstH2.title || data.h1;
+    for (let i = firstH2Index + 1; i < data.blocks.length; i++) {
+      const b = data.blocks[i];
+      if (b.type === "h2") break;
+      if (b.type === "p" && b.text) {
+        blockBParagraphs.push(b.text);
+        if (blockBParagraphs.length >= 2) break;
+      }
+    }
+  }
+
+  if (blockBParagraphs.length === 0) {
+    const pBlocks = data.blocks.filter((b) => b.type === "p" && b.text);
+    blockBParagraphs = pBlocks.slice(0, 2).map((b) => b.text || "");
+  }
+
+  return (
+    <div className="w-full bg-white">
+      {/* Block A — Hero Band (Image) */}
+      <HeroBand
+        variant="image"
+        imageSrc={headerImg}
+        imageAlt={data.alt || data.h1}
+        breadcrumbItems={[
+          { label: "Home", href: "/" },
+          { label: "Pre-Engineered Buildings", href: "/pre-engineered-buildings-pakistan/" },
+          { label: data.h1.split(":")[0] || "Diagram Gallery" },
+        ]}
+        h1={data.h1}
+        subtitle={data.quickAnswer}
+      />
+
+      {/* Block B — Information Panel */}
+      <section className="py-12 lg:py-20 bg-white border-b border-[var(--line)]">
+        <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
+            <div className="lg:col-span-6 space-y-4" data-reveal-group="">
+              <h2
+                className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2]"
+                data-split=""
+              >
+                {blockBTitle}
+              </h2>
+              {blockBParagraphs.map((p, idx) => (
+                <p
+                  key={idx}
+                  className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)]"
+                  data-reveal=""
+                >
+                  {p}
+                </p>
+              ))}
+            </div>
+
+            <div className="lg:col-span-6" data-reveal="">
+              <Canvas slot="info" ratio="4/3" src={infoImg} alt={blockBTitle} />
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* 2. Quick Answer (Floating Trigger + Drawer) */}
-      <QuickAnswer text={data.quickAnswer} h1={data.h1} related={data.related} />
-
-      {/* 3. Diagram Gallery SwipeRow */}
+      {/* Grid of Diagram Cards (3 columns desktop, 1 col mobile) */}
       {items.length > 0 && (
-        <section className="py-16 bg-[var(--offwhite)] border-y border-[var(--line)]">
+        <section className="py-14 lg:py-20 bg-[var(--offwhite)] border-b border-[var(--line)]">
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-            <h2 className="text-[28px] lg:text-[36px] font-semibold text-[var(--ink)] mb-8" data-split="">
-              {isCranePage ? "Crane Arrangements" : "Framing System Types"}
-            </h2>
+            <div className="mb-10 lg:mb-12">
+              <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-2">
+                Technical Diagrams
+              </span>
+              <h2 className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2]">
+                {isCranePage ? "Crane Arrangements" : "Framing System Types"}
+              </h2>
+            </div>
 
-            <SwipeRow ariaLabel="Diagrams Gallery">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {items.map((item: { name: string; text: string }, idx: number) => (
                 <div
                   key={idx}
@@ -74,30 +113,30 @@ export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
                   className="group bg-white border border-[var(--line)] p-4 flex flex-col cursor-pointer transition-colors hover:border-[var(--blue)]"
                   data-reveal=""
                 >
-                  <div className="w-full mb-4 overflow-hidden bg-[var(--offwhite)]">
+                  <div className="w-full aspect-[4/3] mb-4 overflow-hidden bg-[var(--offwhite)] flex items-center justify-center p-2">
                     {isCranePage ? (
                       <CraneDiagram type={item.name} />
                     ) : (
                       <FrameDiagram type={item.name} />
                     )}
                   </div>
-                  <h3 className="text-[18px] font-semibold text-[var(--ink)] mb-2 group-hover:text-[var(--blue)] transition-colors">
+                  <h3 className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] mb-2 group-hover:text-[var(--blue)] transition-colors leading-[1.25]">
                     {item.name}
                   </h3>
-                  <p className="text-[14px] leading-[1.6] text-[var(--grey)] line-clamp-3">
+                  <p className="text-[12px] leading-[1.6] text-[var(--grey)] line-clamp-3">
                     {item.text}
                   </p>
-                  <span className="mt-4 text-[13px] font-semibold text-[var(--blue)] inline-block">
+                  <span className="mt-4 text-[11px] font-semibold text-[var(--blue)] inline-block uppercase tracking-[0.05em]">
                     Enlarge diagram +
                   </span>
                 </div>
               ))}
-            </SwipeRow>
+            </div>
           </div>
         </section>
       )}
 
-      {/* Modal for enlarged diagram */}
+      {/* Lightbox for enlarged diagram */}
       {modalItem && (
         <div
           role="dialog"
@@ -117,7 +156,7 @@ export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
               </svg>
             </button>
 
-            <div className="w-full aspect-[4/3] bg-[var(--offwhite)]">
+            <div className="w-full aspect-[4/3] bg-[var(--offwhite)] flex items-center justify-center p-4">
               {isCranePage ? (
                 <CraneDiagram type={modalItem.name} />
               ) : (
@@ -125,11 +164,11 @@ export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
               )}
             </div>
 
-            <div className="space-y-3">
-              <h3 className="text-[22px] font-bold text-[var(--ink)]">
+            <div className="space-y-2">
+              <h3 className="text-[18px] lg:text-[22px] font-semibold text-[var(--ink)]">
                 {modalItem.name}
               </h3>
-              <p className="text-[16px] leading-[1.65] text-[var(--grey)]">
+              <p className="text-[13px] lg:text-[14px] leading-[1.6] text-[var(--grey)]">
                 {modalItem.text}
               </p>
             </div>
@@ -137,34 +176,14 @@ export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
         </div>
       )}
 
-      {/* 4. Other Blocks */}
-      <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] py-12 space-y-8">
-        {data.blocks
-          .filter((b: ContentBlock) => b.type !== "defs")
-          .map((b: ContentBlock, idx: number) => {
-            if (b.type === "h2") {
-              return (
-                <h2 key={idx} className="text-[26px] lg:text-[34px] font-semibold text-[var(--ink)] pt-8" data-split="">
-                  {b.title}
-                </h2>
-              );
-            }
-            if (b.type === "p") {
-              return (
-                <p key={idx} className="text-[16px] lg:text-[17px] leading-[1.65] text-[var(--grey)] max-w-[720px]">
-                  {b.text}
-                </p>
-              );
-            }
-            return null;
-          })}
-      </div>
-
-      {/* 5. FAQ */}
+      {/* FAQ (Block E) */}
       {data.faq && data.faq.length > 0 && (
-        <section className="py-16 bg-[var(--offwhite)] border-t border-[var(--line)]">
-          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-            <h2 className="text-[28px] lg:text-[38px] font-semibold text-[var(--ink)] mb-8" data-split="">
+        <section className="py-12 lg:py-16 bg-white border-b border-[var(--line)]">
+          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
+            <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-2">
+              Questions
+            </span>
+            <h2 className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2] mb-6">
               Frequently Asked Questions
             </h2>
             <Accordion items={data.faq} />
@@ -172,13 +191,17 @@ export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
         </section>
       )}
 
-      {/* 6. Related Pages */}
-      <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-        <RelatedPages related={data.related} />
-      </div>
+      {/* Related Pages (Block E) */}
+      {data.related && data.related.length > 0 && (
+        <section className="py-8 bg-white border-b border-[var(--line)]">
+          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
+            <RelatedPages related={data.related} />
+          </div>
+        </section>
+      )}
 
-      {/* 7. CTA Quote Band */}
-      <QuoteBand />
+      {/* Block F — CTA Band */}
+      <CtaBand />
     </div>
   );
 };

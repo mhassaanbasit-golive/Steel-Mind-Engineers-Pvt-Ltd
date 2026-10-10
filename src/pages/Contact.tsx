@@ -3,8 +3,7 @@ import pageData from "../content/generated/page-68.json";
 import { SITE } from "../data/site.ts";
 import { A } from "../data/assets.ts";
 import { UI } from "../data/ui.ts";
-import { Breadcrumb } from "../components/ui/Breadcrumb.tsx";
-import { QuickAnswer } from "../components/ui/QuickAnswer.tsx";
+import { HeroBand } from "../components/ui/HeroBand.tsx";
 import { Field } from "../components/ui/Field.tsx";
 import { Button } from "../components/ui/Button.tsx";
 import { Accordion } from "../components/ui/Accordion.tsx";
@@ -146,86 +145,67 @@ export const Contact: React.FC = () => {
   };
 
   return (
-    <div className="w-full">
-      {/* 1. Header */}
-      <section className="relative w-full h-[62svh] min-h-[420px] lg:h-[70vh] bg-[var(--ink)] overflow-hidden">
-        <div className="absolute inset-0 w-full h-full" data-parallax="4">
-          <img
-            src={A.team}
-            alt="Steel Mind Engineers factory entrance at Karol Ghati, Lahore."
-            className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-[#0A0A0A]/35" />
-        </div>
+    <div className="w-full bg-white">
+      {/* Block A — Hero Band (Image) */}
+      <HeroBand
+        variant="image"
+        imageSrc={A.team}
+        imageAlt="Steel Mind Engineers factory entrance at Karol Ghati, Lahore."
+        breadcrumbItems={[
+          { label: "Home", href: "/" },
+          { label: "Contact Us" },
+        ]}
+        h1={pageData.h1}
+        subtitle={pageData.quickAnswer}
+      />
 
-        <div className="absolute inset-x-0 bottom-0 max-w-[1340px] mx-auto px-[var(--pad-x)] pb-10 z-10">
-          <Breadcrumb
-            items={[
-              { label: "Home", href: "/" },
-              { label: "Contact Us" },
-            ]}
-            theme="white"
-            className="mb-4"
-          />
-          <h1
-            className="text-[28px] lg:text-[56px] font-bold text-white leading-[1.1] tracking-[-0.02em] max-w-[800px]"
-            data-split=""
-          >
-            {pageData.h1}
-          </h1>
-        </div>
-      </section>
-
-      {/* 2. Quick Answer (Floating Trigger + Drawer) */}
-      <QuickAnswer text={pageData.quickAnswer} h1={pageData.h1} related={pageData.related} />
-
-      {/* 3. Contact Cards (2x2 mobile, 4 cols desktop; offwhite, 24px padding) */}
-      <section className="py-12 max-w-[1340px] mx-auto px-[var(--pad-x)]">
+      {/* Contact Cards (2x2 mobile, 4 cols desktop; offwhite) */}
+      <section className="py-12 lg:py-16 max-w-[1340px] mx-auto px-[var(--pad-x)]">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-[var(--offwhite)] p-6 space-y-2" data-reveal="">
-            <span className="text-[12px] uppercase font-semibold text-[var(--grey)] tracking-[0.08em]">
+          <div className="bg-[var(--offwhite)] p-6 space-y-2 border border-[var(--line)]" data-reveal="">
+            <span className="text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
               Phone 1
             </span>
             <div>
               <a
                 href={`tel:${SITE.tel[0]}`}
-                className="text-[18px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors"
+                className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors leading-[1.25]"
               >
                 {SITE.phones[0]}
               </a>
             </div>
           </div>
 
-          <div className="bg-[var(--offwhite)] p-6 space-y-2" data-reveal="">
-            <span className="text-[12px] uppercase font-semibold text-[var(--grey)] tracking-[0.08em]">
+          <div className="bg-[var(--offwhite)] p-6 space-y-2 border border-[var(--line)]" data-reveal="">
+            <span className="text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
               Phone 2
             </span>
             <div>
               <a
                 href={`tel:${SITE.tel[1]}`}
-                className="text-[18px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors"
+                className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors leading-[1.25]"
               >
                 {SITE.phones[1]}
               </a>
             </div>
           </div>
 
-          <div className="bg-[var(--offwhite)] p-6 space-y-2" data-reveal="">
-            <span className="text-[12px] uppercase font-semibold text-[var(--grey)] tracking-[0.08em]">
+          <div className="bg-[var(--offwhite)] p-6 space-y-2 border border-[var(--line)]" data-reveal="">
+            <span className="text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
               Email
             </span>
             <div>
               <a
                 href={`mailto:${SITE.email}`}
-                className="text-[18px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors"
+                className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors leading-[1.25]"
               >
                 {SITE.email}
               </a>
             </div>
           </div>
 
-          <div className="bg-[var(--offwhite)] p-6 space-y-2" data-reveal="">
-            <span className="text-[12px] uppercase font-semibold text-[var(--grey)] tracking-[0.08em]">
+          <div className="bg-[var(--offwhite)] p-6 space-y-2 border border-[var(--line)]" data-reveal="">
+            <span className="text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
               WhatsApp
             </span>
             <div>
@@ -233,7 +213,7 @@ export const Contact: React.FC = () => {
                 href={SITE.whatsappMessage}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[18px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors"
+                className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors leading-[1.25]"
               >
                 Chat on WhatsApp
               </a>
@@ -244,10 +224,10 @@ export const Contact: React.FC = () => {
         {/* Addresses with Map Links */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10 pt-8 border-t border-[var(--line)]">
           <div className="space-y-2">
-            <span className="text-[12px] uppercase font-semibold text-[var(--grey)] tracking-[0.08em]">
+            <span className="text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
               Head Office
             </span>
-            <p className="text-[16px] text-[var(--ink)]">
+            <p className="text-[13px] lg:text-[15px] text-[var(--ink)] leading-[1.6]">
               <a
                 href={SITE.mapHeadOffice}
                 target="_blank"
@@ -260,10 +240,10 @@ export const Contact: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <span className="text-[12px] uppercase font-semibold text-[var(--grey)] tracking-[0.08em]">
+            <span className="text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
               Factory
             </span>
-            <p className="text-[16px] text-[var(--ink)]">
+            <p className="text-[13px] lg:text-[15px] text-[var(--ink)] leading-[1.6]">
               <a
                 href={SITE.mapFactory}
                 target="_blank"
@@ -277,13 +257,13 @@ export const Contact: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. Quote Form Section */}
-      <section id="quote" className="py-16 bg-[var(--offwhite)] border-y border-[var(--line)]">
+      {/* Quote Form Section */}
+      <section id="quote" className="py-12 lg:py-16 bg-[var(--offwhite)] border-y border-[var(--line)]">
         <div className="max-w-[800px] mx-auto px-[var(--pad-x)]">
-          <h2 className="text-[28px] lg:text-[38px] font-semibold text-[var(--ink)] mb-3" data-split="">
+          <h2 className="text-[18px] lg:text-[28px] font-semibold leading-[1.2] text-[var(--ink)] mb-3" data-split="">
             Request a Quote for Your Steel Building
           </h2>
-          <p className="text-[16px] text-[var(--grey)] mb-8">
+          <p className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)] mb-8 max-w-[560px]">
             Send the use, size and location of your project. An engineer will read each request and reply with questions and the next steps.
           </p>
 
@@ -292,10 +272,10 @@ export const Contact: React.FC = () => {
               <div className="w-12 h-12 bg-green-50 text-green-700 mx-auto flex items-center justify-center font-bold text-xl">
                 ✓
               </div>
-              <h3 className="text-[22px] font-semibold text-[var(--ink)]">
+              <h3 className="text-[18px] lg:text-[22px] font-semibold text-[var(--ink)]">
                 Thank You
               </h3>
-              <p className="text-[16px] text-[var(--grey)] max-w-[500px] mx-auto">
+              <p className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)] max-w-[500px] mx-auto">
                 {UI.formThanks}
               </p>
             </div>
@@ -435,23 +415,23 @@ export const Contact: React.FC = () => {
         </div>
       </section>
 
-      {/* 5. What to Include & Factory Visit Details */}
-      <section className="py-16 max-w-[1340px] mx-auto px-[var(--pad-x)] space-y-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div className="space-y-4" data-reveal="">
-            <h2 className="text-[22px] font-semibold text-[var(--ink)]">
+      {/* What to Include & Factory Visit Details */}
+      <section className="py-12 lg:py-16 max-w-[1340px] mx-auto px-[var(--pad-x)] space-y-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+          <div className="space-y-3" data-reveal="">
+            <h2 className="text-[18px] lg:text-[28px] font-semibold leading-[1.2] text-[var(--ink)]">
               What to Include
             </h2>
-            <p className="text-[16px] leading-[1.65] text-[var(--grey)]">
+            <p className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)]">
               The use of the building, the approximate width and length, the height, the city or site, and any crane, mezzanine or extension plan. A rough sketch or a photo is enough to start.
             </p>
           </div>
 
-          <div className="space-y-4" data-reveal="">
-            <h2 className="text-[22px] font-semibold text-[var(--ink)]">
+          <div className="space-y-3" data-reveal="">
+            <h2 className="text-[18px] lg:text-[28px] font-semibold leading-[1.2] text-[var(--ink)]">
               What Happens After You Send
             </h2>
-            <p className="text-[16px] leading-[1.65] text-[var(--grey)]">
+            <p className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)]">
               An engineer reads the request. The team replies with questions and the next steps. You receive a quote with a schedule, and a 3D concept follows once the scope is agreed.
             </p>
           </div>
@@ -459,30 +439,30 @@ export const Contact: React.FC = () => {
 
         <div className="border-t border-[var(--line)] pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h3 className="text-[18px] font-semibold text-[var(--ink)]">
+            <h3 className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] leading-[1.25]">
               Company Profile Document
             </h3>
-            <p className="text-[15px] text-[var(--grey)]">
+            <p className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)] mt-1">
               Download the 29-page company profile PDF to share with your team or consultant.
             </p>
           </div>
-          <a
+          <Button
+            size="sm"
+            variant="primary"
             href={SITE.profilePdf}
             target="_blank"
-            rel="noopener noreferrer"
-            style={{ backgroundImage: "var(--gradient-brand-horizontal)" }}
-            className="px-6 py-3 text-white hover:brightness-110 active:brightness-90 font-semibold text-[13px] uppercase tracking-[0.05em] transition-all whitespace-nowrap rounded-none border border-white/40"
+            className="w-fit min-w-[130px]"
           >
             {SITE.profileButton}
-          </a>
+          </Button>
         </div>
       </section>
 
-      {/* 6. FAQ */}
+      {/* FAQ */}
       {pageData.faq && (
-        <section className="py-16 bg-[var(--offwhite)] border-t border-[var(--line)]">
+        <section className="py-12 lg:py-16 bg-[var(--offwhite)] border-t border-[var(--line)]">
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-            <h2 className="text-[28px] lg:text-[38px] font-semibold text-[var(--ink)] mb-8" data-split="">
+            <h2 className="text-[18px] lg:text-[28px] font-semibold leading-[1.2] text-[var(--ink)] mb-6" data-split="">
               Frequently Asked Questions
             </h2>
             <Accordion items={pageData.faq} />

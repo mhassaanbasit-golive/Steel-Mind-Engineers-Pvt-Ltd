@@ -22,6 +22,7 @@ export const PageShell: React.FC<PageShellProps> = ({
   hasDarkHero = true,
 }) => {
   const location = useLocation();
+  const isHomepage = location.pathname === "/";
   const mainRef = useRef<HTMLElement>(null);
   const [chatOpened, setChatOpened] = useState(false);
 
@@ -37,6 +38,7 @@ export const PageShell: React.FC<PageShellProps> = ({
     let revertMotion: (() => void) | undefined;
     let r1: number;
     let r2: number;
+    let r3: number;
 
     r1 = requestAnimationFrame(() => {
       r2 = requestAnimationFrame(() => {
@@ -57,7 +59,7 @@ export const PageShell: React.FC<PageShellProps> = ({
     <div className="relative min-h-screen flex flex-col bg-white text-[var(--ink)] overflow-x-clip">
       <SkipLink />
       <Loader />
-      <Header hasDarkHero={hasDarkHero} />
+      <Header hasDarkHero={isHomepage} />
 
       <main id="main" ref={mainRef} className="flex-1 w-full flow-root m-0 p-0">
         {children}
