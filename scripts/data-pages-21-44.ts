@@ -5,11 +5,11 @@ export const pages21to44: ContentData[] = [
     page: 21,
     url: "/industrial-sheds-pakistan/",
     title: "Industrial Sheds in Pakistan | Steel Mind Engineers",
-    description: "Steel Mind builds factory, dairy, poultry, workshop and crane sheds across Pakistan. Wide-span steel sheds designed, fabricated and erected by one team.",
+    description: "Steel Mind Engineers builds factory, dairy, poultry, workshop and crane sheds across Pakistan. Wide-span steel sheds designed, fabricated and erected by one team.",
     keyword: "industrial sheds in Pakistan",
     support: ["steel shed construction in Pakistan", "factory shed manufacturer", "prefabricated steel sheds Pakistan"],
     h1: "Industrial Sheds in Pakistan: Steel Sheds for Production, Farming and Heavy Work",
-    quickAnswer: "An industrial shed is a large steel building that gives covered space for production, storage, animals or machines. Steel Mind designs the shed, makes the steel in Lahore and erects it on your site anywhere in Pakistan.",
+    quickAnswer: "An industrial shed is a large steel building that gives covered space for production, storage, animals or machines. Steel Mind Engineers designs the shed, makes the steel in Lahore and erects it on your site anywhere in Pakistan.",
     alt: "Aerial view of steel industrial sheds built in Pakistan.",
     related: ["Dairy Farm Sheds", "Crane Sheds", "Our Projects"],
     faq: [
@@ -18,37 +18,37 @@ export const pages21to44: ContentData[] = [
     ],
     blocks: [
       { type: "h2", title: "What an Industrial Shed Is" },
-      { type: "p", text: "An industrial shed is a large steel building with a simple roof and open or lightly closed walls. It gives covered space for production, storage, animals or machines. Steel Mind designs the shed for your use, makes the steel in its Lahore factory and erects it on your site." },
+      { type: "p", text: "An industrial shed is a large steel building with a simple roof and open or lightly closed walls. It gives covered space for production, storage, animals or machines. Steel Mind Engineers designs the shed for your use, makes the steel in its Lahore factory and erects it on your site." },
       { type: "h2", title: "Shed Types" },
-      { type: "p", text: "Factory Sheds are production halls and plants. Dairy Farm Sheds are covered housing for cattle. Poultry Sheds are controlled houses for birds. Workshop Sheds are repair and fabrication bays. Crane Sheds are sheds with overhead cranes. Steel Mind also builds feed storage sheds, milking parlour sheds, godown sheds, truck and loading sheds, parking sheds, boiler and generator sheds, and textile mill sheds." },
+      { type: "p", text: "Factory Sheds are production halls and plants. Dairy Farm Sheds are covered housing for cattle. Poultry Sheds are controlled houses for birds. Workshop Sheds are repair and fabrication bays. Crane Sheds are sheds with overhead cranes. Steel Mind Engineers also builds feed storage sheds, milking parlour sheds, godown sheds, truck and loading sheds, parking sheds, boiler and generator sheds, and textile mill sheds." },
       { type: "h2", title: "Why Steel for Sheds" },
-      { type: "p", text: "Steel sheds go up quickly, cover wide areas and can be extended. They also cost less to maintain than many other building types. Steel Mind uses the PEB system for most sheds." },
+      { type: "p", text: "Steel sheds go up quickly, cover wide areas and can be extended. They also cost less to maintain than many other building types. Steel Mind Engineers uses the PEB system for most sheds." },
       { type: "h2", title: "Proof From Real Projects" },
-      { type: "p", text: "Steel Mind built a 96,600 square foot crane shed for Haier at Raiwind and a 39,330 square foot dairy shed for Dravton Dairy at Chunian. It also built a 22,000 square foot dairy shed for Latifia Dairy at Kasur. See Our Projects." }
+      { type: "p", text: "Steel Mind Engineers built a 96,600 square foot crane shed for Haier at Raiwind and a 39,330 square foot dairy shed for Dravton Dairy at Chunian. It also built a 22,000 square foot dairy shed for Latifia Dairy at Kasur. See Our Projects." }
     ]
   },
   {
     page: 22,
     url: "/industrial-sheds-pakistan/factory-sheds/",
     title: "Factory Sheds in Pakistan | Steel Mind Engineers",
-    description: "Steel factory sheds with wide clear spans for production lines, machines and stores. Designed, fabricated and erected by Steel Mind in Pakistan.",
+    description: "Steel factory sheds with wide clear spans for production lines, machines and stores. Designed, fabricated and erected by Steel Mind Engineers in Pakistan.",
     keyword: "factory sheds in Pakistan",
     support: ["steel factory building Pakistan", "production hall construction", "industrial factory shed design"],
     h1: "Factory Sheds in Pakistan: Steel Buildings for Production Lines and Plants",
-    quickAnswer: "A factory shed is a steel building that holds your machines, people and material flow. Steel Mind designs it around your production layout with clear spans, the right height and good light and air.",
+    quickAnswer: "A factory shed is a steel building that holds your machines, people and material flow. Steel Mind Engineers designs it around your production layout with clear spans, the right height and good light and air.",
     alt: "Interior of a steel factory shed with wide clear span and skylights.",
     related: ["Pre-Engineered Buildings", "Crane System", "Our Clients"],
     faq: [
-      { q: "What size factory shed can Steel Mind build?", a: "Steel Mind has built sheds from a few thousand square feet to almost 100,000 square feet." },
+      { q: "What size factory shed can Steel Mind Engineers build?", a: "Steel Mind Engineers has built sheds from a few thousand square feet to almost 100,000 square feet." },
       { q: "Can the shed be built while the old one runs?", a: "Often yes. The engineer will plan access and safe working zones with you." }
     ],
     blocks: [
       { type: "h2", title: "What a Factory Shed Must Do" },
-      { type: "p", text: "A factory shed must hold your machines, your people and your material flow. It needs clear floor area, enough height, good light and good air. Steel Mind designs the shed around your production layout and not the other way round." },
+      { type: "p", text: "A factory shed must hold your machines, your people and your material flow. It needs clear floor area, enough height, good light and good air. Steel Mind Engineers designs the shed around your production layout and not the other way round." },
       { type: "h2", title: "Design Points for Factory Sheds" },
       { type: "p", text: "Clear span matters because fewer columns mean more freedom to place machines and move goods. Height should be set from the tallest machine and from any crane or conveyor. Heavy machines may need a stronger floor slab, so share machine weights early. Skylights and ventilators reduce heat and electricity use. The end wall should be planned so that bays can be added later." },
       { type: "h2", title: "Typical Users" },
-      { type: "p", text: "Textile and apparel plants, steel processors, packaging units, food plants and assembly lines use steel factory sheds. Clients of Steel Mind include Haier, Imperial Denim and Moiz Steel. For Haier, Steel Mind built a PEB store shed of 32,400 square feet at Raiwind, 30 feet high, 180 feet wide and 180 feet long." },
+      { type: "p", text: "Textile and apparel plants, steel processors, packaging units, food plants and assembly lines use steel factory sheds. Clients of Steel Mind Engineers include Haier, Imperial Denim and Moiz Steel. For Haier, Steel Mind Engineers built a PEB store shed of 32,400 square feet at Raiwind, 30 feet high, 180 feet wide and 180 feet long." },
       { type: "h2", title: "From Brief to Production" },
       { type: "p", text: "Send the machine list, the floor plan and the site details. The engineer prepares the layout and the 3D model. After you approve it, the factory fabricates the steel and the crews erect it. See One-Step Solution." }
     ]
@@ -61,7 +61,7 @@ export const pages21to44: ContentData[] = [
     keyword: "dairy farm sheds in Pakistan",
     support: ["cattle shed construction Pakistan", "steel dairy shed design", "livestock shed manufacturer"],
     h1: "Dairy Farm Sheds in Pakistan: Steel Cattle Housing Built for Heat and Airflow",
-    quickAnswer: "A good dairy shed gives shade, lets hot air leave and keeps the floor dry. Steel Mind has built dairy sheds of 39,330, 22,000 and 21,686 square feet for Dravton Dairy and Latifia Dairy.",
+    quickAnswer: "A good dairy shed gives shade, lets hot air leave and keeps the floor dry. Steel Mind Engineers has built dairy sheds of 39,330, 22,000 and 21,686 square feet for Dravton Dairy and Latifia Dairy.",
     alt: "Steel dairy farm shed with open sides and ridge ventilation in Punjab.",
     related: ["Poultry Sheds", "Grain and Wheat Warehouses", "Our Projects"],
     faq: [
@@ -70,13 +70,13 @@ export const pages21to44: ContentData[] = [
     ],
     blocks: [
       { type: "h2", title: "What Dairy Sheds Need" },
-      { type: "p", text: "Heat is the main problem for dairy animals in Pakistan. A good shed gives shade, lets hot air leave and keeps the floor dry. Steel Mind designs the roof, the sidewalls and the ridge to support these needs." },
+      { type: "p", text: "Heat is the main problem for dairy animals in Pakistan. A good shed gives shade, lets hot air leave and keeps the floor dry. Steel Mind Engineers designs the roof, the sidewalls and the ridge to support these needs." },
       { type: "h2", title: "Design Points for Dairy Sheds" },
       { type: "p", text: "A high roof and an open ridge let hot air rise and leave. Open or louvered sides allow cross-flow of air, and louvers protect from rain. Insulated roof sheets reduce the heat that reaches the animals. Floor slope and gutters keep manure and rain water away from the animals. The frame spacing should match the feed alleys, stalls and the milking area." },
       { type: "h2", title: "Experience" },
-      { type: "p", text: "Steel Mind built a PEB dairy shed of 39,330 square feet for Dravton Dairy at Chunian, 17 feet high, 115 feet wide and 342 feet long. It built a PEB dairy shed of 22,000 square feet for Latifia Dairy at Kasur, 17 feet high, 110 feet wide and 200 feet long. It also built a PEB milking parlour shed, a dairy feed storage shed and a rapid exit structure for Dravton Dairy. Taki Dairy is also a client. Many dairy clients return later to add feed storage, which is easy with bolted PEB frames." },
+      { type: "p", text: "Steel Mind Engineers built a PEB dairy shed of 39,330 square feet for Dravton Dairy at Chunian, 17 feet high, 115 feet wide and 342 feet long. It built a PEB dairy shed of 22,000 square feet for Latifia Dairy at Kasur, 17 feet high, 110 feet wide and 200 feet long. It also built a PEB milking parlour shed, a dairy feed storage shed and a rapid exit structure for Dravton Dairy. Taki Dairy is also a client. Many dairy clients return later to add feed storage, which is easy with bolted PEB frames." },
       { type: "h2", title: "Build in Phases" },
-      { type: "p", text: "A farm often grows over time. Steel Mind can build the first shed now and add bays later, as your herd grows." }
+      { type: "p", text: "A farm often grows over time. Steel Mind Engineers can build the first shed now and add bays later, as your herd grows." }
     ]
   },
   {
@@ -87,7 +87,7 @@ export const pages21to44: ContentData[] = [
     keyword: "poultry sheds in Pakistan",
     support: ["poultry farm shed construction", "controlled house steel structure", "insulated poultry shed"],
     h1: "Poultry Sheds in Pakistan: Steel Houses With Controlled Air and Temperature",
-    quickAnswer: "A poultry shed must hold a stable temperature and give steady ventilation. Steel Mind designs long, narrow steel houses with insulated roofs and frames that carry hanging equipment.",
+    quickAnswer: "A poultry shed must hold a stable temperature and give steady ventilation. Steel Mind Engineers designs long, narrow steel houses with insulated roofs and frames that carry hanging equipment.",
     alt: "Row of steel poultry sheds with insulated roofs on a farm in Pakistan.",
     related: ["Dairy Farm Sheds", "Sub Structures", "Accessories"],
     faq: [
@@ -111,7 +111,7 @@ export const pages21to44: ContentData[] = [
     keyword: "workshop sheds in Pakistan",
     support: ["steel workshop construction", "repair garage steel shed", "fabrication workshop building"],
     h1: "Workshop Sheds in Pakistan: Steel Buildings for Repair and Fabrication Work",
-    quickAnswer: "A workshop shed holds vehicles, machines and tools. It needs strong frames, large doors, good light and good ventilation. Steel Mind designs it around the largest vehicle or machine that must enter.",
+    quickAnswer: "A workshop shed holds vehicles, machines and tools. It needs strong frames, large doors, good light and good ventilation. Steel Mind Engineers designs it around the largest vehicle or machine that must enter.",
     alt: "Interior of a steel workshop shed with tool benches and a vehicle chassis.",
     related: ["Steel Doors and Gates", "Crane Sheds", "Accessories"],
     faq: [
@@ -131,11 +131,11 @@ export const pages21to44: ContentData[] = [
     page: 26,
     url: "/industrial-sheds-pakistan/crane-sheds/",
     title: "Crane Sheds in Pakistan | Steel Mind Engineers",
-    description: "Steel crane sheds built for heavy overhead cranes. Steel Mind built a 96,600 sq ft crane shed at Raiwind. See how crane sheds are designed.",
+    description: "Steel crane sheds built for heavy overhead cranes. Steel Mind Engineers built a 96,600 sq ft crane shed at Raiwind. See how crane sheds are designed.",
     keyword: "crane sheds in Pakistan",
     support: ["overhead crane shed construction", "heavy lifting shed steel", "crane bay steel building"],
     h1: "Crane Sheds in Pakistan: Steel Sheds Built for Heavy Overhead Cranes",
-    quickAnswer: "A crane shed is a steel building with overhead cranes on rails along its length. Steel Mind built a 96,600 square foot crane shed and a 97,888 square foot crane and mezzanine shed for Haier at Raiwind.",
+    quickAnswer: "A crane shed is a steel building with overhead cranes on rails along its length. Steel Mind Engineers built a 96,600 square foot crane shed and a 97,888 square foot crane and mezzanine shed for Haier at Raiwind.",
     alt: "Steel crane shed under construction with overhead crane rails.",
     related: ["Crane System", "Crane Gantry Structures", "Our Projects"],
     faq: [
@@ -146,7 +146,7 @@ export const pages21to44: ContentData[] = [
       { type: "h2", title: "What a Crane Shed Is" },
       { type: "p", text: "A crane shed is a steel building with overhead cranes running on rails along its length. Factories use them to move steel, machine parts, containers or finished goods. The whole structure is designed around the crane loads." },
       { type: "h2", title: "The Raiwind Crane Sheds" },
-      { type: "p", text: "Steel Mind built a pre-engineered crane shed of 96,600 square feet at Raiwind for Haier, 30 feet high, 184 feet wide and 525 feet long. It also built a PEB crane and mezzanine shed of 97,888 square feet, 33 feet high, 184 feet wide and 532 feet long. These projects show the scale Steel Mind can handle. Watch the project film on the Home page." },
+      { type: "p", text: "Steel Mind Engineers built a pre-engineered crane shed of 96,600 square feet at Raiwind for Haier, 30 feet high, 184 feet wide and 525 feet long. It also built a PEB crane and mezzanine shed of 97,888 square feet, 33 feet high, 184 feet wide and 532 feet long. These projects show the scale Steel Mind Engineers can handle. Watch the project film on the Home page." },
       { type: "h2", title: "Design Points for Crane Sheds" },
       { type: "p", text: "Crane capacity, span, lifting height and duty cycle set the size of columns and runway beams. Rails must be level and straight within tight limits, and the factory cuts and drills them to drawing. Crane columns carry large loads, so the foundation is designed with the steel. Crane stops, access ladders and walkways are placed in the design." },
       { type: "h2", title: "Learn More" },
@@ -157,31 +157,31 @@ export const pages21to44: ContentData[] = [
     page: 27,
     url: "/steel-warehouses-pakistan/",
     title: "Steel Warehouses in Pakistan | Steel Mind Engineers",
-    description: "Steel Mind builds storage, logistics, cold storage, grain and dock warehouses in Pakistan. Wide spans, fast build time and full engineering support.",
+    description: "Steel Mind Engineers builds storage, logistics, cold storage, grain and dock warehouses in Pakistan. Wide spans, fast build time and full engineering support.",
     keyword: "steel warehouses in Pakistan",
     support: ["steel warehouse construction in Pakistan", "warehouse builders Pakistan", "prefabricated warehouse Pakistan"],
     h1: "Steel Warehouses in Pakistan: Wide-Span Storage and Logistics Buildings",
-    quickAnswer: "A steel warehouse gives you open floor area for racks, pallets and trucks. Steel Mind designs it for your goods and handling method, makes the steel in Lahore and erects it on your site in Pakistan.",
+    quickAnswer: "A steel warehouse gives you open floor area for racks, pallets and trucks. Steel Mind Engineers designs it for your goods and handling method, makes the steel in Lahore and erects it on your site in Pakistan.",
     alt: "Steel warehouse with loading bays and parked trucks in Pakistan.",
     related: ["Storage Warehouses", "Logistics Warehouses", "PEB Advantages"],
     faq: [
       { q: "How tall can a warehouse be?", a: "The engineer sets the height from your racking and handling plan." },
-      { q: "Can Steel Mind build a warehouse on a small plot?", a: "Yes. The frame can fit the plot shape, and a mezzanine can add floor area." }
+      { q: "Can Steel Mind Engineers build a warehouse on a small plot?", a: "Yes. The frame can fit the plot shape, and a mezzanine can add floor area." }
     ],
     blocks: [
-      { type: "h2", title: "What Steel Mind Builds" },
-      { type: "p", text: "A steel warehouse gives you open floor area for racks, pallets, trucks and machines. Steel Mind designs the building for your goods and your handling method, makes the steel in Lahore and erects it on your site." },
+      { type: "h2", title: "What Steel Mind Engineers Builds" },
+      { type: "p", text: "A steel warehouse gives you open floor area for racks, pallets, trucks and machines. Steel Mind Engineers designs the building for your goods and your handling method, makes the steel in Lahore and erects it on your site." },
       { type: "h2", title: "Warehouse Types" },
-      { type: "p", text: "Storage Warehouses hold general stock and raw material. Logistics Warehouses serve high-turnover distribution hubs. Cold Storage Warehouses are insulated stores for temperature control. Grain and Wheat Warehouses give dry, ventilated bulk storage. Warehouses with Loading Docks have truck access built into the design. Steel Mind also builds bonded, food, chemical, pharmaceutical, retail and multi-storey warehouses, and warehouse extensions." },
+      { type: "p", text: "Storage Warehouses hold general stock and raw material. Logistics Warehouses serve high-turnover distribution hubs. Cold Storage Warehouses are insulated stores for temperature control. Grain and Wheat Warehouses give dry, ventilated bulk storage. Warehouses with Loading Docks have truck access built into the design. Steel Mind Engineers also builds bonded, food, chemical, pharmaceutical, retail and multi-storey warehouses, and warehouse extensions." },
       { type: "h2", title: "Why Steel Works for Warehouses" },
-      { type: "p", text: "Few columns give flexible racking. Quick construction lets you start storing sooner. Bolted frames allow extension when your stock grows. Steel Mind built a 32,400 square foot PEB store shed for Haier at Raiwind, 30 feet high, 180 feet wide and 180 feet long. See also PEB Advantages." }
+      { type: "p", text: "Few columns give flexible racking. Quick construction lets you start storing sooner. Bolted frames allow extension when your stock grows. Steel Mind Engineers built a 32,400 square foot PEB store shed for Haier at Raiwind, 30 feet high, 180 feet wide and 180 feet long. See also PEB Advantages." }
     ]
   },
   {
     page: 28,
     url: "/steel-warehouses-pakistan/storage-warehouses/",
-    title: "Storage Warehouse Construction in Pakistan | Steel Mind",
-    description: "Steel storage warehouses with clear spans, strong floors and good ventilation for stock and raw material. Built by Steel Mind in Pakistan.",
+    title: "Storage Warehouse Construction in Pakistan | Steel Mind Engineers",
+    description: "Steel storage warehouses with clear spans, strong floors and good ventilation for stock and raw material. Built by Steel Mind Engineers in Pakistan.",
     keyword: "storage warehouse construction in Pakistan",
     support: ["steel storage building Pakistan", "industrial storage shed", "warehouse for raw material"],
     h1: "Storage Warehouses in Pakistan: Steel Buildings for Stock and Raw Material",
@@ -204,7 +204,7 @@ export const pages21to44: ContentData[] = [
   {
     page: 29,
     url: "/steel-warehouses-pakistan/logistics-warehouses/",
-    title: "Logistics Warehouses in Pakistan | Steel Mind",
+    title: "Logistics Warehouses in Pakistan | Steel Mind Engineers",
     description: "Steel logistics warehouses with wide aisles, dock access and room to grow. Designed for fast loading and high stock turnover in Pakistan.",
     keyword: "logistics warehouses in Pakistan",
     support: ["distribution center construction Pakistan", "steel logistics building", "warehouse for trucks and cargo"],
@@ -228,12 +228,12 @@ export const pages21to44: ContentData[] = [
   {
     page: 30,
     url: "/steel-warehouses-pakistan/cold-storage-warehouses/",
-    title: "Cold Storage Warehouse Construction Pakistan | Steel Mind",
+    title: "Cold Storage Warehouse Construction Pakistan | Steel Mind Engineers",
     description: "Steel structures for cold storage in Pakistan. Insulated panels, sealed joints and strong frames that carry refrigeration equipment.",
     keyword: "cold storage warehouse construction in Pakistan",
     support: ["steel cold store building", "insulated panel warehouse", "refrigerated warehouse structure"],
     h1: "Cold Storage Warehouses in Pakistan: Steel Frames for Insulated Stores",
-    quickAnswer: "A cold store keeps goods at a set temperature, so the building must stop heat from entering. Steel Mind supplies the steel frame and the supports for insulated roof and wall panels.",
+    quickAnswer: "A cold store keeps goods at a set temperature, so the building must stop heat from entering. Steel Mind Engineers supplies the steel frame and the supports for insulated roof and wall panels.",
     alt: "Steel-framed cold storage warehouse with insulated panels in Pakistan.",
     related: ["Sub Structures", "Warehouses with Loading Docks", "Dairy Farm Sheds"],
     faq: [
@@ -243,8 +243,8 @@ export const pages21to44: ContentData[] = [
     blocks: [
       { type: "h2", title: "What Cold Storage Needs" },
       { type: "p", text: "A cold store keeps goods at a set temperature. The building must stop heat from entering. Gaps, thin walls or leaks make the cooling system work harder and cost more to run." },
-      { type: "h2", title: "What Steel Mind Provides" },
-      { type: "p", text: "Steel Mind supplies the steel frame, the roof and wall structure, and the supports for insulated panels. The refrigeration plant is installed by the cooling specialist you choose, and Steel Mind coordinates the loads and openings with that specialist." },
+      { type: "h2", title: "What Steel Mind Engineers Provides" },
+      { type: "p", text: "Steel Mind Engineers supplies the steel frame, the roof and wall structure, and the supports for insulated panels. The refrigeration plant is installed by the cooling specialist you choose, and Steel Mind Engineers coordinates the loads and openings with that specialist." },
       { type: "h2", title: "Design Points" },
       { type: "p", text: "Thick insulated panels with sealed joints reduce heat gain. Frame connections are detailed to avoid heat paths where possible. The roof and frames carry condensers, ducts and hanging evaporators. The floor needs insulation, and the doors must seal tightly. Vapor barriers and good detailing prevent water inside the walls." },
       { type: "h2", title: "Who Uses Cold Storage" },
@@ -254,8 +254,8 @@ export const pages21to44: ContentData[] = [
   {
     page: 31,
     url: "/steel-warehouses-pakistan/grain-and-wheat-warehouses/",
-    title: "Grain and Wheat Warehouses in Pakistan | Steel Mind",
-    description: "Steel grain and wheat warehouses that stay dry and ventilated. Designed for bulk loads and truck access by Steel Mind in Pakistan.",
+    title: "Grain and Wheat Warehouses in Pakistan | Steel Mind Engineers",
+    description: "Steel grain and wheat warehouses that stay dry and ventilated. Designed for bulk loads and truck access by Steel Mind Engineers in Pakistan.",
     keyword: "wheat storage warehouse in Pakistan",
     support: ["grain storage shed construction", "steel grain warehouse", "bulk storage building"],
     h1: "Grain and Wheat Warehouses in Pakistan: Dry, Ventilated Steel Storage",
@@ -278,12 +278,12 @@ export const pages21to44: ContentData[] = [
   {
     page: 32,
     url: "/steel-warehouses-pakistan/warehouses-with-loading-docks/",
-    title: "Warehouses with Loading Docks in Pakistan | Steel Mind",
-    description: "Steel warehouses with loading docks and truck bays. Faster loading and safer handling, built by Steel Mind in Pakistan.",
+    title: "Warehouses with Loading Docks in Pakistan | Steel Mind Engineers",
+    description: "Steel warehouses with loading docks and truck bays. Faster loading and safer handling, built by Steel Mind Engineers in Pakistan.",
     keyword: "warehouse with loading docks in Pakistan",
     support: ["loading dock construction", "truck bay warehouse", "dock canopy steel"],
     h1: "Warehouses With Loading Docks in Pakistan: Truck Access Built Into the Steel Frame",
-    quickAnswer: "A good loading dock lets a truck back in, load quickly and leave. Steel Mind designs the dock height, canopy, doors and frame spacing together so loading is fast, dry and safe.",
+    quickAnswer: "A good loading dock lets a truck back in, load quickly and leave. Steel Mind Engineers designs the dock height, canopy, doors and frame spacing together so loading is fast, dry and safe.",
     alt: "Loading dock with steel canopy and truck bays on a steel warehouse.",
     related: ["Steel Doors and Gates", "Accessories", "Our Projects"],
     faq: [
@@ -302,38 +302,38 @@ export const pages21to44: ContentData[] = [
   {
     page: 33,
     url: "/structural-steel-fabrication-pakistan/",
-    title: "Structural Steel Fabrication in Pakistan | Steel Mind",
-    description: "Steel Mind fabricates columns, beams, trusses, mezzanine floors, bridges and crane gantries to drawing. Quality-checked steel for projects across Pakistan.",
+    title: "Structural Steel Fabrication in Pakistan | Steel Mind Engineers",
+    description: "Steel Mind Engineers fabricates columns, beams, trusses, mezzanine floors, bridges and crane gantries to drawing. Quality-checked steel for projects across Pakistan.",
     keyword: "structural steel fabrication in Pakistan",
     support: ["structural steel fabricators Pakistan", "steel frame fabrication", "steel structure contractor"],
     h1: "Structural Steel Fabrication in Pakistan: Columns, Beams, Trusses and Complete Frames",
-    quickAnswer: "Structural steel fabrication is the making of load-carrying steel parts from plates and sections. The parts are cut, drilled, welded and painted in a workshop, then bolted or welded together on site. Steel Mind fabricates to your drawings or to drawings prepared by its own engineers.",
+    quickAnswer: "Structural steel fabrication is the making of load-carrying steel parts from plates and sections. The parts are cut, drilled, welded and painted in a workshop, then bolted or welded together on site. Steel Mind Engineers fabricates to your drawings or to drawings prepared by its own engineers.",
     alt: "Structural steel frame of columns and beams being bolted on site in Pakistan.",
     related: ["Fabrication", "Columns and Beams", "One-Step Solution"],
     faq: [
-      { q: "Can Steel Mind fabricate from my drawings?", a: "Yes. Send the drawings and the engineer will review them and quote." },
-      { q: "Does Steel Mind erect the steel as well?", a: "Yes. Its own crews erect the structure on site." }
+      { q: "Can Steel Mind Engineers fabricate from my drawings?", a: "Yes. Send the drawings and the engineer will review them and quote." },
+      { q: "Does Steel Mind Engineers erect the steel as well?", a: "Yes. Its own crews erect the structure on site." }
     ],
     blocks: [
       { type: "h2", title: "What Structural Steel Fabrication Means" },
-      { type: "p", text: "Structural steel fabrication is the making of load-carrying steel parts from plates and sections. The parts are cut, drilled, welded and painted in a workshop, then bolted or welded together on site. Steel Mind fabricates to your drawings or to drawings prepared by its own engineers." },
-      { type: "h2", title: "What Steel Mind Fabricates" },
+      { type: "p", text: "Structural steel fabrication is the making of load-carrying steel parts from plates and sections. The parts are cut, drilled, welded and painted in a workshop, then bolted or welded together on site. Steel Mind Engineers fabricates to your drawings or to drawings prepared by its own engineers." },
+      { type: "h2", title: "What Steel Mind Engineers Fabricates" },
       { type: "p", text: "Columns and Beams form the main frame of a building. Trusses are light, long-span roof members. Mezzanine Floors add extra floors inside buildings. Steel Bridges include footbridges and plant bridges. Crane Gantry Structures support outdoor cranes." },
       { type: "h2", title: "How Quality Is Controlled" },
       { type: "p", text: "Material is checked on arrival, dimensions are checked after cutting and welds are inspected before painting. Read the SME Policy and the Fabrication page." },
       { type: "h2", title: "Fabrication Only or Full Turnkey" },
-      { type: "p", text: "You can buy fabricated steel only, or you can ask Steel Mind to design, fabricate and erect the whole structure. See One-Step Solution." }
+      { type: "p", text: "You can buy fabricated steel only, or you can ask Steel Mind Engineers to design, fabricate and erect the whole structure. See One-Step Solution." }
     ]
   },
   {
     page: 34,
     url: "/structural-steel-fabrication-pakistan/columns-and-beams/",
-    title: "Steel Columns and Beams Fabrication Pakistan | Steel Mind",
-    description: "Fabrication of steel columns and beams for factories, warehouses and buildings in Pakistan. Cut, drilled and welded to drawing by Steel Mind.",
+    title: "Steel Columns and Beams Fabrication Pakistan | Steel Mind Engineers",
+    description: "Fabrication of steel columns and beams for factories, warehouses and buildings in Pakistan. Cut, drilled and welded to drawing by Steel Mind Engineers.",
     keyword: "steel columns and beams fabrication in Pakistan",
     support: ["structural steel beams Pakistan", "steel column fabrication", "built-up steel sections"],
     h1: "Steel Columns and Beams Fabrication in Pakistan: The Main Frame of Your Building",
-    quickAnswer: "Columns carry loads down to the foundation, and beams carry loads across openings. Steel Mind fabricates both from rolled and built-up sections, cut and welded to drawing and checked before painting.",
+    quickAnswer: "Columns carry loads down to the foundation, and beams carry loads across openings. Steel Mind Engineers fabricates both from rolled and built-up sections, cut and welded to drawing and checked before painting.",
     alt: "Fabricated steel columns and beams with primer coat, ready for dispatch.",
     related: ["Primary Framing System", "Trusses", "Erection"],
     faq: [
@@ -349,21 +349,21 @@ export const pages21to44: ContentData[] = [
         { name: "Built-up sections", text: "Plates welded into I-shaped members of any depth and thickness, giving an efficient shape for each load." },
         { name: "Box sections", text: "Hollow members for heavy loads or where appearance matters." }
       ]},
-      { type: "h2", title: "How Steel Mind Fabricates" },
+      { type: "h2", title: "How Steel Mind Engineers Fabricates" },
       { type: "p", text: "The team checks the plates and sections on arrival, cuts them to the sizes on the drawing, drills or punches bolt holes, fits and welds the parts, and inspects the welds and dimensions. The parts are then cleaned and painted, marked and packed in erection order. See Painting." },
       { type: "h2", title: "Accuracy Matters" },
-      { type: "p", text: "A hole in the wrong place or a beam that is 10 mm short can delay a whole site. Steel Mind checks dimensions after cutting so that parts fit the first time." }
+      { type: "p", text: "A hole in the wrong place or a beam that is 10 mm short can delay a whole site. Steel Mind Engineers checks dimensions after cutting so that parts fit the first time." }
     ]
   },
   {
     page: 35,
     url: "/structural-steel-fabrication-pakistan/trusses/",
-    title: "Steel Roof Trusses Fabrication in Pakistan | Steel Mind",
-    description: "Steel trusses for roofs, sheds and long-span buildings in Pakistan. Light, strong and made to your span and load by Steel Mind.",
+    title: "Steel Roof Trusses Fabrication in Pakistan | Steel Mind Engineers",
+    description: "Steel trusses for roofs, sheds and long-span buildings in Pakistan. Light, strong and made to your span and load by Steel Mind Engineers.",
     keyword: "steel roof trusses in Pakistan",
     support: ["steel truss fabrication", "truss roof shed Pakistan", "long span steel truss"],
     h1: "Steel Roof Trusses in Pakistan: Light, Strong Members for Long Spans",
-    quickAnswer: "A truss is a frame of straight members arranged in triangles, so it spans long distances with little steel. Steel Mind fabricates pitched, parallel-chord and space trusses for roofs and sheds.",
+    quickAnswer: "A truss is a frame of straight members arranged in triangles, so it spans long distances with little steel. Steel Mind Engineers fabricates pitched, parallel-chord and space trusses for roofs and sheds.",
     alt: "Steel truss roof of an open industrial shed in Pakistan.",
     related: ["Industrial Sheds", "Columns and Beams", "Erection"],
     faq: [
@@ -380,18 +380,18 @@ export const pages21to44: ContentData[] = [
       { type: "h2", title: "Tubes or Angles" },
       { type: "p", text: "Trusses can use steel tubes or angle sections. Tubes look clean and resist weather well. Angles are easy to connect and often cost less. The engineer will recommend one based on span, load and budget." },
       { type: "h2", title: "Delivery and Erection" },
-      { type: "p", text: "Long trusses are made in parts, delivered on trucks and joined on site. Steel Mind plans the splice points so that each part can travel and be lifted safely." }
+      { type: "p", text: "Long trusses are made in parts, delivered on trucks and joined on site. Steel Mind Engineers plans the splice points so that each part can travel and be lifted safely." }
     ]
   },
   {
     page: 36,
     url: "/structural-steel-fabrication-pakistan/mezzanine-floors/",
-    title: "Steel Mezzanine Floors in Pakistan | Steel Mind",
+    title: "Steel Mezzanine Floors in Pakistan | Steel Mind Engineers",
     description: "Fabrication and erection of steel mezzanine floors for factories, stores and showrooms in Pakistan. Built to your load and layout.",
     keyword: "steel mezzanine floors in Pakistan",
     support: ["mezzanine floor fabrication", "industrial mezzanine Pakistan", "steel platform floor"],
     h1: "Steel Mezzanine Floors in Pakistan: Fabricated and Erected to Your Load",
-    quickAnswer: "A steel mezzanine floor adds usable area inside an existing or new building. Steel Mind designs, fabricates and erects the columns, beams, deck and stairs. It built a 32,400 square foot floor for Haier and a 7,020 square foot floor for Maria B.",
+    quickAnswer: "A steel mezzanine floor adds usable area inside an existing or new building. Steel Mind Engineers designs, fabricates and erects the columns, beams, deck and stairs. It built a 32,400 square foot floor for Haier and a 7,020 square foot floor for Maria B.",
     alt: "Large steel mezzanine floor inside a factory in Pakistan.",
     related: ["Storage Warehouses", "Factory Sheds", "Our Projects"],
     faq: [
@@ -403,10 +403,10 @@ export const pages21to44: ContentData[] = [
       { type: "p", text: "This page covers mezzanine floors as stand-alone steel work, for existing buildings, for concrete buildings and for new buildings of any type. For mezzanines inside a new PEB, see Mezzanine System." },
       { type: "h2", title: "Where Mezzanines Help" },
       { type: "p", text: "A mezzanine adds floor area without a new building. Factories use them for offices and light assembly. Warehouses use them for small-item picking. Showrooms use them for display and meetings." },
-      { type: "h2", title: "What Steel Mind Provides" },
-      { type: "p", text: "Steel Mind designs the columns, beams and deck, fabricates them in Lahore and erects the floor on site. It can also add the staircase, the handrails and the access gate. See Steel Stairs." },
+      { type: "h2", title: "What Steel Mind Engineers Provides" },
+      { type: "p", text: "Steel Mind Engineers designs the columns, beams and deck, fabricates them in Lahore and erects the floor on site. It can also add the staircase, the handrails and the access gate. See Steel Stairs." },
       { type: "h2", title: "Project Reference" },
-      { type: "p", text: "Steel Mind built a mezzanine floor of 32,400 square feet for Haier at Raiwind, 12 feet high, 180 feet wide and 180 feet long. It also built a PEB mezzanine floor of 7,020 square feet for Maria B in Lahore, 12 feet high, 90 feet wide and 78 feet long." },
+      { type: "p", text: "Steel Mind Engineers built a mezzanine floor of 32,400 square feet for Haier at Raiwind, 12 feet high, 180 feet wide and 180 feet long. It also built a PEB mezzanine floor of 7,020 square feet for Maria B in Lahore, 12 feet high, 90 feet wide and 78 feet long." },
       { type: "h2", title: "What to Send for a Quote" },
       { type: "p", text: "Send the floor area, the height between floors, the use and the heaviest load. Send a sketch of the existing building if there is one." }
     ]
@@ -414,12 +414,12 @@ export const pages21to44: ContentData[] = [
   {
     page: 37,
     url: "/structural-steel-fabrication-pakistan/steel-bridges/",
-    title: "Steel Bridge Fabrication in Pakistan | Steel Mind",
-    description: "Steel footbridges, plant bridges and pipe racks fabricated by Steel Mind in Pakistan. Designed for load, span and long service life.",
+    title: "Steel Bridge Fabrication in Pakistan | Steel Mind Engineers",
+    description: "Steel footbridges, plant bridges and pipe racks fabricated by Steel Mind Engineers in Pakistan. Designed for load, span and long service life.",
     keyword: "steel bridge fabrication in Pakistan",
     support: ["steel footbridge Pakistan", "pedestrian steel bridge", "steel girder bridge fabrication"],
     h1: "Steel Bridge Fabrication in Pakistan: Footbridges, Plant Bridges and Girder Spans",
-    quickAnswer: "Steel bridges are light, strong and quick to install. Steel Mind fabricated and erected a 150-foot water requirement bridge for M/S Yascon at Petaro Cantt, Sindh.",
+    quickAnswer: "Steel bridges are light, strong and quick to install. Steel Mind Engineers fabricated and erected a 150-foot water requirement bridge for M/S Yascon at Petaro Cantt, Sindh.",
     alt: "Steel pedestrian footbridge over a canal in Pakistan.",
     related: ["Columns and Beams", "Our Clients", "Erection"],
     faq: [
@@ -429,23 +429,23 @@ export const pages21to44: ContentData[] = [
     blocks: [
       { type: "h2", title: "Why Steel for Bridges" },
       { type: "p", text: "Steel bridges are light, strong and quick to install. The parts are made in a factory and lifted into place, which reduces road closures and site work." },
-      { type: "h2", title: "What Steel Mind Fabricates" },
+      { type: "h2", title: "What Steel Mind Engineers Fabricates" },
       { type: "p", text: "Pedestrian footbridges span roads, canals and drains. Plant and conveyor bridges are steel walkways and supports between buildings. Girder bridges use steel girders with a deck for light vehicle or equipment loads." },
       { type: "h2", title: "Design Points" },
       { type: "p", text: "The span and width set the depth of the girders. Choose the load from the people, vehicles or equipment that will use the bridge. Bridges stay outdoors, so the coating system matters. See Painting. The crane size and the lift plan must also fit the site." },
       { type: "h2", title: "Project Reference" },
-      { type: "p", text: "Steel Mind built a water requirement bridge for M/S Yascon at Petaro Cantt, Sindh. The bridge is 150 feet long, 6 feet wide and 30 feet high, with an area of 900 square feet." }
+      { type: "p", text: "Steel Mind Engineers built a water requirement bridge for M/S Yascon at Petaro Cantt, Sindh. The bridge is 150 feet long, 6 feet wide and 30 feet high, with an area of 900 square feet." }
     ]
   },
   {
     page: 38,
     url: "/structural-steel-fabrication-pakistan/crane-gantry-structures/",
-    title: "Crane Gantry Structures in Pakistan | Steel Mind",
-    description: "Steel gantry structures for outdoor and yard cranes in Pakistan. Strong legs, accurate rails and safe access, fabricated by Steel Mind.",
+    title: "Crane Gantry Structures in Pakistan | Steel Mind Engineers",
+    description: "Steel gantry structures for outdoor and yard cranes in Pakistan. Strong legs, accurate rails and safe access, fabricated by Steel Mind Engineers.",
     keyword: "crane gantry structures in Pakistan",
     support: ["steel gantry fabrication", "outdoor crane structure", "gantry crane runway"],
     h1: "Crane Gantry Structures in Pakistan: Steel Supports for Outdoor and Yard Cranes",
-    quickAnswer: "A gantry is a steel structure that holds crane rails in an open yard with no building around it. Steel Mind fabricates the legs, runway beams, bracing and access for outdoor cranes.",
+    quickAnswer: "A gantry is a steel structure that holds crane rails in an open yard with no building around it. Steel Mind Engineers fabricates the legs, runway beams, bracing and access for outdoor cranes.",
     alt: "Outdoor steel crane gantry structure in a material yard.",
     related: ["Crane System", "Crane Sheds", "Painting"],
     faq: [
@@ -458,7 +458,7 @@ export const pages21to44: ContentData[] = [
       { type: "h2", title: "Parts of a Gantry" },
       { type: "p", text: "The legs are vertical steel supports on foundations. The runway beams hold the crane rail. Bracing resists sideways and braking loads. Ladders and walkways allow inspection." },
       { type: "h2", title: "Design Points" },
-      { type: "p", text: "Crane capacity, span, lift and travel distance set the size of the structure. An open gantry takes direct wind, so the design includes wind load. Rails must be straight and level, and Steel Mind checks this during fabrication and on site. Outdoor steel also needs a strong coating system." },
+      { type: "p", text: "Crane capacity, span, lift and travel distance set the size of the structure. An open gantry takes direct wind, so the design includes wind load. Rails must be straight and level, and Steel Mind Engineers checks this during fabrication and on site. Outdoor steel also needs a strong coating system." },
       { type: "h2", title: "Gantry or Crane Shed?" },
       { type: "p", text: "Choose a gantry for open yards. Choose a crane shed when the goods or the crane must be covered. See Crane Sheds." }
     ]
@@ -466,22 +466,22 @@ export const pages21to44: ContentData[] = [
   {
     page: 39,
     url: "/custom-steel-fabrication-pakistan/",
-    title: "Custom Steel Fabrication in Pakistan | Steel Mind",
-    description: "Steel Mind fabricates machine frames, tanks, hoppers, doors, gates and stairs to your drawings. Custom steel work from one factory in Lahore.",
+    title: "Custom Steel Fabrication in Pakistan | Steel Mind Engineers",
+    description: "Steel Mind Engineers fabricates machine frames, tanks, hoppers, doors, gates and stairs to your drawings. Custom steel work from one factory in Lahore.",
     keyword: "custom steel fabrication in Pakistan",
     support: ["custom metal fabrication Pakistan", "steel fabrication workshop Pakistan", "made-to-order steel products"],
     h1: "Custom Steel Fabrication in Pakistan: Steel Products Made to Your Drawing",
     quickAnswer: "Custom steel fabrication means making a steel item to your own design and size. Steel Mind Engineers Pvt. Ltd. fabricates machine frames, tanks, hoppers, doors, gates and stairs from your drawing or sketch.",
-    alt: "Custom steel machine frame being fabricated in the Steel Mind workshop in Lahore.",
+    alt: "Custom steel machine frame being fabricated in the Steel Mind Engineers workshop in Lahore.",
     related: ["Fabrication", "Structural Steel Fabrication", "Factory Tour"],
     faq: [
       { q: "What do I need to send for a quote?", a: "Send a drawing or a sketch with dimensions, the quantity and the place of use. Photos help but a drawing is better." },
-      { q: "Can Steel Mind copy an existing part?", a: "Yes. If you supply the part or a drawing, an engineer will measure it and prepare a drawing for your approval." }
+      { q: "Can Steel Mind Engineers copy an existing part?", a: "Yes. If you supply the part or a drawing, an engineer will measure it and prepare a drawing for your approval." }
     ],
     blocks: [
       { type: "h2", title: "What Custom Fabrication Means" },
-      { type: "p", text: "Custom fabrication is the making of a steel item to your own design. It is not a stock product. You provide a drawing or a clear sketch with dimensions, and Steel Mind fabricates the item in its Lahore factory." },
-      { type: "h2", title: "What Steel Mind Makes" },
+      { type: "p", text: "Custom fabrication is the making of a steel item to your own design. It is not a stock product. You provide a drawing or a clear sketch with dimensions, and Steel Mind Engineers fabricates the item in its Lahore factory." },
+      { type: "h2", title: "What Steel Mind Engineers Makes" },
       { type: "defs", items: [
         { name: "Machine Frames", text: "Bases and supports for equipment." },
         { name: "Storage Tanks", text: "Welded steel tanks for liquids and bulk goods." },
@@ -490,7 +490,7 @@ export const pages21to44: ContentData[] = [
         { name: "Steel Stairs", text: "Staircases, platforms, ladders and handrails." }
       ]},
       { type: "h2", title: "How an Order Works" },
-      { type: "p", text: "You send the drawing or sketch with dimensions and quantity. An engineer reviews it and asks questions. You receive a quote and a drawing for approval. The factory fabricates and paints the item. Steel Mind then delivers it and, if needed, installs it." },
+      { type: "p", text: "You send the drawing or sketch with dimensions and quantity. An engineer reviews it and asks questions. You receive a quote and a drawing for approval. The factory fabricates and paints the item. Steel Mind Engineers then delivers it and, if needed, installs it." },
       { type: "h2", title: "One Factory for Small and Large Jobs" },
       { type: "p", text: "The same factory that fabricates a building frame also makes single custom items. Both receive the same checks: material on arrival, dimensions after cutting and welds before painting." }
     ]
@@ -498,16 +498,16 @@ export const pages21to44: ContentData[] = [
   {
     page: 40,
     url: "/custom-steel-fabrication-pakistan/machine-frames/",
-    title: "Machine Frame Fabrication in Pakistan | Steel Mind",
-    description: "Steel machine frames and equipment bases fabricated to drawing in Pakistan. Strong, flat and accurate frames made by Steel Mind in Lahore.",
+    title: "Machine Frame Fabrication in Pakistan | Steel Mind Engineers",
+    description: "Steel machine frames and equipment bases fabricated to drawing in Pakistan. Strong, flat and accurate frames made by Steel Mind Engineers in Lahore.",
     keyword: "machine frame fabrication in Pakistan",
     support: ["steel equipment base Pakistan", "custom machine frame", "industrial machine support structure"],
     h1: "Machine Frame Fabrication in Pakistan: Strong, Flat Supports for Your Equipment",
-    quickAnswer: "A machine frame holds equipment in the right position and carries its weight and vibration. Steel Mind fabricates machine frames to your drawing, with flat mounting surfaces and welds that are inspected before painting.",
+    quickAnswer: "A machine frame holds equipment in the right position and carries its weight and vibration. Steel Mind Engineers fabricates machine frames to your drawing, with flat mounting surfaces and welds that are inspected before painting.",
     alt: "Custom steel machine frame with mounting plates and gussets.",
     related: ["Storage Tanks", "Fabrication", "Factory Tour"],
     faq: [
-      { q: "Can Steel Mind fabricate a frame from a photo?", a: "An engineer needs measurements. A photo helps, but a drawing or a sample part is better." },
+      { q: "Can Steel Mind Engineers fabricate a frame from a photo?", a: "An engineer needs measurements. A photo helps, but a drawing or a sample part is better." },
       { q: "Does the frame arrive painted?", a: "Yes. Frames leave the factory with the coating chosen for the working environment." }
     ],
     blocks: [
@@ -524,12 +524,12 @@ export const pages21to44: ContentData[] = [
   {
     page: 41,
     url: "/custom-steel-fabrication-pakistan/storage-tanks/",
-    title: "Steel Storage Tank Fabrication in Pakistan | Steel Mind",
-    description: "Steel storage tanks for water, oil and bulk goods, fabricated to drawing in Pakistan. Welded, inspected and painted by Steel Mind.",
+    title: "Steel Storage Tank Fabrication in Pakistan | Steel Mind Engineers",
+    description: "Steel storage tanks for water, oil and bulk goods, fabricated to drawing in Pakistan. Welded, inspected and painted by Steel Mind Engineers.",
     keyword: "steel storage tank fabrication in Pakistan",
     support: ["steel water tank Pakistan", "industrial storage tank", "welded steel tank"],
     h1: "Steel Storage Tank Fabrication in Pakistan: Welded Tanks Made to Your Size",
-    quickAnswer: "A steel storage tank is a welded container for liquids or bulk goods. Steel Mind fabricates tanks to your size, with inspected welds, openings in the right places and a coating suited to the contents.",
+    quickAnswer: "A steel storage tank is a welded container for liquids or bulk goods. Steel Mind Engineers fabricates tanks to your size, with inspected welds, openings in the right places and a coating suited to the contents.",
     alt: "Welded cylindrical steel storage tank on a concrete base.",
     related: ["Hoppers and Bins", "Painting", "Dairy Farm Sheds"],
     faq: [
@@ -537,8 +537,8 @@ export const pages21to44: ContentData[] = [
       { q: "Can the tank be delivered in parts?", a: "Large tanks can be made in sections, transported and joined on site." }
     ],
     blocks: [
-      { type: "h2", title: "What Tanks Steel Mind Fabricates" },
-      { type: "p", text: "Steel Mind fabricates welded steel tanks for water, oil, feed and other bulk goods. The size, shape and plate thickness follow your drawing and the nature of the contents." },
+      { type: "h2", title: "What Tanks Steel Mind Engineers Fabricates" },
+      { type: "p", text: "Steel Mind Engineers fabricates welded steel tanks for water, oil, feed and other bulk goods. The size, shape and plate thickness follow your drawing and the nature of the contents." },
       { type: "h2", title: "Design Points" },
       { type: "p", text: "The stored material decides the steel grade, the plate thickness and the coating. Round tanks use less steel, while rectangular tanks fit tight spaces. Tank welds must be tight and clean, so they are inspected before painting. The drawing places manholes, pipe connections, vents and ladders. The foundation must carry the full weight of the filled tank. Inside and outside coatings protect against rust and against the stored product." },
       { type: "h2", title: "Typical Users" },
@@ -548,17 +548,17 @@ export const pages21to44: ContentData[] = [
   {
     page: 42,
     url: "/custom-steel-fabrication-pakistan/hoppers-and-bins/",
-    title: "Steel Hoppers and Bins Fabrication Pakistan | Steel Mind",
-    description: "Steel hoppers and bins for grain, feed, cement and bulk material, fabricated to drawing in Pakistan. Smooth flow and strong welds by Steel Mind.",
+    title: "Steel Hoppers and Bins Fabrication Pakistan | Steel Mind Engineers",
+    description: "Steel hoppers and bins for grain, feed, cement and bulk material, fabricated to drawing in Pakistan. Smooth flow and strong welds by Steel Mind Engineers.",
     keyword: "steel hoppers and bins in Pakistan",
     support: ["feed hopper fabrication", "bulk material hopper", "grain bin steel Pakistan"],
     h1: "Steel Hoppers and Bins in Pakistan: Fabricated for Smooth Bulk Material Flow",
-    quickAnswer: "A bin holds bulk material, and a hopper is a bin with a sloped bottom that guides the material to an outlet. Steel Mind fabricates hoppers and bins with the right slope, wall strength and support frame.",
+    quickAnswer: "A bin holds bulk material, and a hopper is a bin with a sloped bottom that guides the material to an outlet. Steel Mind Engineers fabricates hoppers and bins with the right slope, wall strength and support frame.",
     alt: "Row of steel hoppers on a support frame at a feed mill.",
     related: ["Grain and Wheat Warehouses", "Storage Tanks", "Steel Stairs"],
     faq: [
       { q: "What does the engineer need to design a hopper?", a: "The material type, its weight per cubic meter, the capacity and the outlet height you need." },
-      { q: "Can Steel Mind install the bin?", a: "Yes. Steel Mind can erect the bin and its support frame on your site." }
+      { q: "Can Steel Mind Engineers install the bin?", a: "Yes. Steel Mind Engineers can erect the bin and its support frame on your site." }
     ],
     blocks: [
       { type: "h2", title: "What Hoppers and Bins Do" },
@@ -572,16 +572,16 @@ export const pages21to44: ContentData[] = [
   {
     page: 43,
     url: "/custom-steel-fabrication-pakistan/steel-doors-and-gates/",
-    title: "Steel Doors and Gates in Pakistan | Steel Mind",
-    description: "Sliding, hinged and rolling steel doors and gates for factories, farms and warehouses in Pakistan. Made to your size by Steel Mind.",
+    title: "Steel Doors and Gates in Pakistan | Steel Mind Engineers",
+    description: "Sliding, hinged and rolling steel doors and gates for factories, farms and warehouses in Pakistan. Made to your size by Steel Mind Engineers.",
     keyword: "steel doors and gates in Pakistan",
     support: ["industrial sliding gate Pakistan", "factory steel gate", "warehouse steel door"],
     h1: "Steel Doors and Gates in Pakistan: Strong Entrances for Factories, Farms and Warehouses",
-    quickAnswer: "Steel Mind fabricates sliding gates, hinged gates, rolling doors and personnel doors to your opening size. They are built with strong frames, suitable hardware and a coating that resists rust.",
+    quickAnswer: "Steel Mind Engineers fabricates sliding gates, hinged gates, rolling doors and personnel doors to your opening size. They are built with strong frames, suitable hardware and a coating that resists rust.",
     alt: "Wide steel sliding gate at a factory entrance in Pakistan.",
     related: ["Warehouses with Loading Docks", "Workshop Sheds", "Contact Us"],
     faq: [
-      { q: "Can Steel Mind make doors for an existing building?", a: "Yes. An engineer will measure the opening on site." },
+      { q: "Can Steel Mind Engineers make doors for an existing building?", a: "Yes. An engineer will measure the opening on site." },
       { q: "Which door suits a loading dock?", a: "A rolling or sectional door usually suits a dock best." }
     ],
     blocks: [
@@ -601,12 +601,12 @@ export const pages21to44: ContentData[] = [
   {
     page: 44,
     url: "/custom-steel-fabrication-pakistan/steel-stairs/",
-    title: "Steel Stairs Fabrication in Pakistan | Steel Mind",
+    title: "Steel Stairs Fabrication in Pakistan | Steel Mind Engineers",
     description: "Steel staircases, platforms, ladders and handrails for factories, warehouses and plants in Pakistan. Safe, strong and made to your layout.",
     keyword: "steel stairs fabrication in Pakistan",
     support: ["industrial staircase Pakistan", "steel platform and handrail", "mezzanine staircase"],
     h1: "Steel Stairs Fabrication in Pakistan: Safe Access for Plants, Warehouses and Mezzanines",
-    quickAnswer: "Steel Mind fabricates straight, switchback and spiral stairs, ladders, platforms and walkways. Each is designed for people and carried goods, with handrails, toe plates and non-slip treads.",
+    quickAnswer: "Steel Mind Engineers fabricates straight, switchback and spiral stairs, ladders, platforms and walkways. Each is designed for people and carried goods, with handrails, toe plates and non-slip treads.",
     alt: "Steel switchback staircase with handrails leading to a mezzanine.",
     related: ["Mezzanine Floors", "Mezzanine System", "Storage Tanks"],
     faq: [
@@ -625,7 +625,7 @@ export const pages21to44: ContentData[] = [
       { type: "h2", title: "Design Points" },
       { type: "p", text: "Comfortable rise and tread reduce accidents. The stair must carry people and the goods they carry. Handrails and toe plates prevent falls and dropped items. Chequered plate or grating gives grip. Stairs are bolted or welded to the floor and to the upper level." },
       { type: "h2", title: "Safety" },
-      { type: "p", text: "Steel Mind designs stairs for safe daily use and for emergency exit. Outdoor stairs receive a stronger coating." }
+      { type: "p", text: "Steel Mind Engineers designs stairs for safe daily use and for emergency exit. Outdoor stairs receive a stronger coating." }
     ]
   }
 ];

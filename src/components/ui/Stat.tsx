@@ -28,7 +28,7 @@ export const Stat: React.FC<StatProps> = ({
       />
       <span
         ref={numberRef}
-        className="text-[44px] lg:text-[56px] font-bold leading-none text-[var(--ink)] tracking-tight mb-2"
+        className="text-[40px] lg:text-[64px] font-bold leading-none text-[var(--blue)] tracking-tight mb-2 font-sans"
       >
         0{suffix}
       </span>

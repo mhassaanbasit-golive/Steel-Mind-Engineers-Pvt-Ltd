@@ -125,7 +125,7 @@ export const articles1to12: ContentData[] = [
   {
     article: 1,
     url: "/blog/what-is-a-pre-engineered-building/",
-    title: "What Is a Pre-Engineered Building in Pakistan? | Steel Mind",
+    title: "What Is a Pre-Engineered Building in Pakistan? | Steel Mind Engineers",
     description: "Learn what a pre-engineered building is, how a PEB is made and where Pakistani owners use it. A plain guide from Steel Mind Engineers.",
     keyword: "what is a pre-engineered building in Pakistan",
     support: ["PEB buildings in Pakistan", "pre-engineered steel structures", "PEB construction process", "PEB manufacturer in Pakistan"],
@@ -148,13 +148,13 @@ export const articles1to12: ContentData[] = [
       { type: "h2", title: "How a PEB Is Made in the Factory" },
       { type: "p", text: "The PEB construction process moves most of the work from your site to a factory. Plates and sections are checked when they arrive and then cut to the sizes on the cutting list. Bolt holes are drilled in the exact positions. Welders join flanges and web plates into built-up columns and rafters, and supervisors inspect the welds. The parts are cleaned, coated and marked, and then packed in erection order. Work inside a factory does not stop for rain or heat, and quality checks happen in one place where engineers can see them. This is the main reason pre-engineered steel structures arrive on site ready to assemble." },
       { type: "h2", title: "How a PEB Is Erected on Site" },
-      { type: "p", text: "While the factory makes the steel, your foundation contractor builds the foundation from the anchor bolt plan. This overlap saves weeks. When the steel arrives, the erection crew checks the anchor bolts and levels, lifts the columns and rafters with a crane, and bolts them together. Bracing, purlins and girts follow, and then the roof and wall sheets, doors and accessories. Bolts are tightened to the specified torque, and frames are checked for plumb and level. Because parts are made to the drawing, crews do not cut or rework steel on site. Steel Mind crews work from the same drawings that the workshop used." },
+      { type: "p", text: "While the factory makes the steel, your foundation contractor builds the foundation from the anchor bolt plan. This overlap saves weeks. When the steel arrives, the erection crew checks the anchor bolts and levels, lifts the columns and rafters with a crane, and bolts them together. Bracing, purlins and girts follow, and then the roof and wall sheets, doors and accessories. Bolts are tightened to the specified torque, and frames are checked for plumb and level. Because parts are made to the drawing, crews do not cut or rework steel on site. Steel Mind Engineers crews work from the same drawings that the workshop used." },
       { type: "h2", title: "Where Pakistani Owners Use PEB Buildings" },
-      { type: "p", text: "PEB buildings in Pakistan suit any use that needs a large floor with few columns. Factories and production halls use them for machines and assembly lines. Warehouses and logistics hubs use them for racks, pallets and trucks. Dairy and poultry farms use them for animal housing and feed stores. Workshops, showrooms, cold stores and crane buildings also use the system. Steel Mind built a 32,400 square foot store shed and a 96,600 square foot crane shed for Haier at Raiwind, and a 39,330 square foot dairy shed for Dravton Dairy at Chunian. These projects show how far the method scales." },
+      { type: "p", text: "PEB buildings in Pakistan suit any use that needs a large floor with few columns. Factories and production halls use them for machines and assembly lines. Warehouses and logistics hubs use them for racks, pallets and trucks. Dairy and poultry farms use them for animal housing and feed stores. Workshops, showrooms, cold stores and crane buildings also use the system. Steel Mind Engineers built a 32,400 square foot store shed and a 96,600 square foot crane shed for Haier at Raiwind, and a 39,330 square foot dairy shed for Dravton Dairy at Chunian. These projects show how far the method scales." },
       { type: "h2", title: "What Makes a PEB Different From a Normal Steel Shed" },
       { type: "p", text: "A simple steel shed is often built from standard sections chosen by a fabricator on site. A PEB is designed as a complete system. Each frame is sized for the exact loads of your building, so steel is thick where forces are high and light where they are low. This saves weight and cost. The connections, the bracing and the sheeting all come from the same design, so the parts fit together the first time. It also means a PEB can be extended later with extra bays, because the frames were planned as repeating units." },
       { type: "h2", title: "What to Ask Before You Order" },
-      { type: "p", text: "Ask the PEB manufacturer in Pakistan five questions. Who designs the frames, and can you see the 3D model before fabrication? Which parts are in the scope, from anchor bolts to accessories? How is the steel coated, and for what environment? Who erects the building, and what safety rules apply? What support is available after handover? A reliable company answers each question in writing. Steel Mind answers them under one contract, from the first drawing to the final handover, so you deal with one team." },
+      { type: "p", text: "Ask the PEB manufacturer in Pakistan five questions. Who designs the frames, and can you see the 3D model before fabrication? Which parts are in the scope, from anchor bolts to accessories? How is the steel coated, and for what environment? Who erects the building, and what safety rules apply? What support is available after handover? A reliable company answers each question in writing. Steel Mind Engineers answers them under one contract, from the first drawing to the final handover, so you deal with one team." },
       { type: "h2", title: "Common Mistakes to Avoid" },
       { type: "p", text: "The first mistake is giving the engineer wrong or missing data, which leads to a weak or costly design. The second is forgetting a crane or mezzanine that arrives later, because the frame must be designed for it from the start. The third is a foundation that does not match the steel, which delays erection. The fourth is choosing on price alone without checking the scope and the coating. Send a complete brief, share your future plans and review the anchor bolt plan with your foundation contractor." }
     ]
@@ -162,7 +162,7 @@ export const articles1to12: ContentData[] = [
   {
     article: 2,
     url: "/blog/peb-vs-concrete-construction-pakistan/",
-    title: "PEB vs Concrete Building in Pakistan: Time and Cost | Steel Mind",
+    title: "PEB vs Concrete Building in Pakistan: Time and Cost | Steel Mind Engineers",
     description: "Compare a PEB with a concrete building in Pakistan on build time, site work, change and extension. See when each one is the better choice.",
     keyword: "PEB vs concrete building Pakistan",
     support: ["advantages of pre-engineered buildings", "steel vs RCC factory building", "fast construction steel building", "benefits of steel buildings"],
@@ -179,25 +179,25 @@ export const articles1to12: ContentData[] = [
       { type: "h2", title: "Why Owners Compare the Two" },
       { type: "p", text: "When a business plans a new factory, warehouse or shed, the first question is often whether to build in steel or in concrete. Both systems work, and both have a long record in Pakistan. The difference is in how the building is made. A concrete building is cast on site, layer by layer, and depends on curing time and weather. A PEB is designed in advance, made in a factory and assembled on site. The comparison of PEB vs concrete building Pakistan owners make is therefore a comparison of two ways of working, and each has strengths." },
       { type: "h2", title: "Build Time" },
-      { type: "p", text: "Time is the largest difference. In a PEB project, the factory fabricates the steel while your foundation contractor builds the foundation. The two jobs run at the same time. When the steel arrives, erection is mostly bolting. In a concrete building, the work follows a sequence on site: formwork, steel bars, casting, curing, then the next level. Each step waits for the one before it. This is why fast construction steel buildings are popular with owners who need production or storage to start early. Steel Mind gives a written schedule before work starts, and the schedule shows design approval, fabrication, delivery and erection." },
+      { type: "p", text: "Time is the largest difference. In a PEB project, the factory fabricates the steel while your foundation contractor builds the foundation. The two jobs run at the same time. When the steel arrives, erection is mostly bolting. In a concrete building, the work follows a sequence on site: formwork, steel bars, casting, curing, then the next level. Each step waits for the one before it. This is why fast construction steel buildings are popular with owners who need production or storage to start early. Steel Mind Engineers gives a written schedule before work starts, and the schedule shows design approval, fabrication, delivery and erection." },
       { type: "h2", title: "Site Work and Weather" },
       { type: "p", text: "Concrete work on site depends on weather, labor on site and curing conditions. Heavy rain in the monsoon or extreme summer heat can slow casting and affect quality. A PEB moves most of the work indoors, to the factory, where parts are cut, welded and coated under cover. On site, the main jobs are the foundation and the erection. The site stays cleaner, and fewer trades work at the same time. This also helps safety, because crews follow written lifting plans and site rules." },
       { type: "h2", title: "Span and Open Floor" },
-      { type: "p", text: "Wide, open floors are the strength of steel. A PEB frame can span a large width with no inner columns. This gives you free space for machines, racks, vehicles or animals. Steel Mind built crane sheds of 96,600 and 97,888 square feet for Haier at Raiwind, each 184 feet wide. A concrete building can reach wide spans too, but it needs deep beams or many columns, which cost space and money. For buildings where a clear floor matters, the advantages of pre-engineered buildings are clear." },
+      { type: "p", text: "Wide, open floors are the strength of steel. A PEB frame can span a large width with no inner columns. This gives you free space for machines, racks, vehicles or animals. Steel Mind Engineers built crane sheds of 96,600 and 97,888 square feet for Haier at Raiwind, each 184 feet wide. A concrete building can reach wide spans too, but it needs deep beams or many columns, which cost space and money. For buildings where a clear floor matters, the advantages of pre-engineered buildings are clear." },
       { type: "h2", title: "Cost" },
       { type: "p", text: "Cost depends on size, location, loads, coating and finish, so no honest company can give one number for all buildings. A PEB uses steel efficiently, because each frame is sized for its own loads, and the quantity of steel is known early. Fewer surprises appear during construction. A faster build also means earlier use of the building, which has its own value. Concrete may cost less for small buildings or for buildings that need thick walls anyway. Ask every contractor for a written scope, so you compare like with like." },
       { type: "h2", title: "Change and Extension" },
       { type: "p", text: "Businesses grow. A PEB is bolted together, so you can add bays at the end of the building or build a new shed beside the first. Dairy clients such as Dravton Dairy have added sheds, a milking parlour and a feed store at the same site over time. Changing a concrete building is slower, because you must cut into the structure and cast new parts. If you expect growth, steel gives you an easier path." },
       { type: "h2", title: "Maintenance and Life" },
-      { type: "p", text: "Steel needs a good coating and regular care. In humid or dusty places, such as dairy sheds and grain stores, the coating system matters a great deal. With correct cleaning, painting and inspection, a steel building serves for decades. Concrete needs care too, for cracks, damp and reinforcement protection. Steel Mind offers repainting, repairs and extensions through its After Sale Services page, so you have support after handover." },
+      { type: "p", text: "Steel needs a good coating and regular care. In humid or dusty places, such as dairy sheds and grain stores, the coating system matters a great deal. With correct cleaning, painting and inspection, a steel building serves for decades. Concrete needs care too, for cracks, damp and reinforcement protection. Steel Mind Engineers offers repainting, repairs and extensions through its After Sale Services page, so you have support after handover." },
       { type: "h2", title: "When Concrete or a Mixed Design Is Better" },
-      { type: "p", text: "A PEB is not always the best answer. Very small buildings may not gain from the system. Buildings that need heavy walls for fire resistance, blast protection or high security often need concrete or masonry walls. Many projects use both: a concrete foundation, plinth or wall with a steel frame and roof above it. An honest engineer will tell you if a PEB does not fit your project, and Steel Mind does so." }
+      { type: "p", text: "A PEB is not always the best answer. Very small buildings may not gain from the system. Buildings that need heavy walls for fire resistance, blast protection or high security often need concrete or masonry walls. Many projects use both: a concrete foundation, plinth or wall with a steel frame and roof above it. An honest engineer will tell you if a PEB does not fit your project, and Steel Mind Engineers does so." }
     ]
   },
   {
     article: 3,
     url: "/blog/how-long-to-build-peb-pakistan/",
-    title: "PEB Construction Time in Pakistan: What to Expect | Steel Mind",
+    title: "PEB Construction Time in Pakistan: What to Expect | Steel Mind Engineers",
     description: "How long does a PEB take? See the stages from design to erection and why factory work and foundation work run at the same time.",
     keyword: "PEB construction time Pakistan",
     support: ["how long to build a steel building", "steel building schedule", "PEB project timeline", "fast construction steel building"],
@@ -212,7 +212,7 @@ export const articles1to12: ContentData[] = [
     ],
     blocks: [
       { type: "h2", title: "Why There Is No Single Answer" },
-      { type: "p", text: "Owners often ask for a number of weeks before they have shared a drawing. A fair answer cannot come first, because a 5,000 square foot shed and a 97,888 square foot crane and mezzanine shed are very different jobs. PEB construction time in Pakistan depends on the size, the complexity, the loads, the foundation and the access to the site. What a good contractor can give you is a clear list of stages, a written schedule and an early warning if something moves. Steel Mind follows this approach on every project." },
+      { type: "p", text: "Owners often ask for a number of weeks before they have shared a drawing. A fair answer cannot come first, because a 5,000 square foot shed and a 97,888 square foot crane and mezzanine shed are very different jobs. PEB construction time in Pakistan depends on the size, the complexity, the loads, the foundation and the access to the site. What a good contractor can give you is a clear list of stages, a written schedule and an early warning if something moves. Steel Mind Engineers follows this approach on every project." },
       { type: "h2", title: "Stage 1: Requirement Review" },
       { type: "p", text: "The project starts when you send the use, size and location of your building. An engineer reads the details, asks questions and confirms the scope. The more complete your brief, the faster this stage goes. Send the width, length, height, openings, loads and any crane, mezzanine or extension plan. A rough sketch or a photo of the site is enough to begin. Delays at this stage usually come from missing data, not from the work itself." },
       { type: "h2", title: "Stage 2: Design and 3D Approval" },
@@ -222,7 +222,7 @@ export const articles1to12: ContentData[] = [
       { type: "h2", title: "Stage 4: Fabrication and Foundation at the Same Time" },
       { type: "p", text: "This is where the time is saved. The factory cuts, drills, welds and coats the steel, while your contractor builds the foundation on site. In a concrete building, these jobs would follow one another. In a steel building schedule, they overlap. The factory in Lahore has cutting machines, welding units and material-handling systems, which allows the team to run several projects without losing control of quality or schedule." },
       { type: "h2", title: "Stage 5: Painting, Packing and Delivery" },
-      { type: "p", text: "Parts are cleaned and coated, marked and packed in erection order. Trucks then carry them to your site. Delivery time depends on the distance and the size of the load. Steel Mind has delivered to more than ten cities, including projects in Punjab and Sindh. Packing in erection order means site crews find each part quickly." },
+      { type: "p", text: "Parts are cleaned and coated, marked and packed in erection order. Trucks then carry them to your site. Delivery time depends on the distance and the size of the load. Steel Mind Engineers has delivered to more than ten cities, including projects in Punjab and Sindh. Packing in erection order means site crews find each part quickly." },
       { type: "h2", title: "Stage 6: Erection and Handover" },
       { type: "p", text: "Crews check the foundation, lift the frames, bolt them and fit the bracing, purlins, girts and sheets. Doors and accessories follow. Because parts are made to the drawing, no cutting or reworking is needed on site. Bolts are tightened to the specified torque, and the building is checked with you before handover. Erection speed depends on the size, the crane access and the weather." },
       { type: "h2", title: "What Can Slow a Project Down" },
@@ -232,7 +232,7 @@ export const articles1to12: ContentData[] = [
   {
     article: 4,
     url: "/blog/data-needed-to-quote-steel-building/",
-    title: "What an Engineer Needs to Quote a Steel Building | Steel Mind",
+    title: "What an Engineer Needs to Quote a Steel Building | Steel Mind Engineers",
     description: "Width, length, eave height, roof slope, loads, location and openings: the data you send to get an accurate steel building quote in Pakistan.",
     keyword: "steel building quotation requirements",
     support: ["steel building dimensions", "bay spacing PEB", "eave height and roof slope", "PEB design parameters"],
@@ -257,7 +257,7 @@ export const articles1to12: ContentData[] = [
       { type: "h2", title: "Loads" },
       { type: "p", text: "Loads are the forces the building must carry. They include the dead load, which is the weight of the structure, the live load on the roof, the wind and any special loads. Special loads include solar panels, hanging equipment, fans, cooling pads and cranes. Tell the engineer about every item that will hang from or stand on the structure, including items that will come years later. A frame designed for a crane can take one later, but a frame that was not designed for one cannot do so safely." },
       { type: "h2", title: "Location" },
-      { type: "p", text: "The site decides wind speed and rain intensity. Give the city and, if possible, the exact site. Pakistan has coastal, plain, desert and mountain areas, and each has its own conditions. Location also affects delivery, crane access and the coating system, because humid or dusty places need a stronger coating. Steel Mind has served more than ten cities, and the engineer sets the design loads from your site data." },
+      { type: "p", text: "The site decides wind speed and rain intensity. Give the city and, if possible, the exact site. Pakistan has coastal, plain, desert and mountain areas, and each has its own conditions. Location also affects delivery, crane access and the coating system, because humid or dusty places need a stronger coating. Steel Mind Engineers has served more than ten cities, and the engineer sets the design loads from your site data." },
       { type: "h2", title: "Openings and Extras" },
       { type: "p", text: "List the number, size and position of doors, windows and loading docks. Measure door openings from the largest vehicle or machine that must pass. Then list the extras: skylights, ventilators, insulation, a mezzanine, stairs, canopies and any future extension. Many accessories can be added later, but the frame must be ready for them. Mention extensions early so the end wall can be designed for extra bays." },
       { type: "h2", title: "If You Do Not Have All the Data" },
@@ -267,12 +267,12 @@ export const articles1to12: ContentData[] = [
   {
     article: 5,
     url: "/blog/dairy-shed-design-pakistan-heat/",
-    title: "Dairy Shed Design in Pakistan: Roof, Ridge, Airflow | Steel Mind",
+    title: "Dairy Shed Design in Pakistan: Roof, Ridge, Airflow | Steel Mind Engineers",
     description: "Plan a steel dairy shed for Pakistan's heat: roof height, open ridge, louvers, floor slope and frame spacing, with real Dravton Dairy and Latifia Dairy examples.",
     keyword: "dairy shed design in Pakistan",
     support: ["cattle shed construction in Pakistan", "steel dairy shed", "livestock shed manufacturer", "dairy farm shed roof and ventilation"],
     h1: "How to Plan a Dairy Shed for Pakistan's Heat: Roof, Ridge and Airflow",
-    quickAnswer: "A good dairy shed in Pakistan gives shade, lets hot air leave and keeps the floor dry. Plan a high roof, an open ridge, open or louvered sides, an insulated roof where needed and a floor that drains. Steel Mind has built dairy sheds of 39,330, 22,000 and 21,686 square feet for Dravton Dairy and Latifia Dairy.",
+    quickAnswer: "A good dairy shed in Pakistan gives shade, lets hot air leave and keeps the floor dry. Plan a high roof, an open ridge, open or louvered sides, an insulated roof where needed and a floor that drains. Steel Mind Engineers has built dairy sheds of 39,330, 22,000 and 21,686 square feet for Dravton Dairy and Latifia Dairy.",
     alt: "Dairy shed design for heat in Pakistan",
     related: ["Dairy Farm Sheds", "Dravton Dairy dairy shed", "Latifia Dairy shed"],
     faq: [
@@ -282,9 +282,9 @@ export const articles1to12: ContentData[] = [
     ],
     blocks: [
       { type: "h2", title: "Why Heat Is the Main Problem" },
-      { type: "p", text: "Heat is the first problem for dairy animals in Pakistan. Summer temperatures are high, the air can be humid, and animals standing under a low or poorly ventilated roof suffer. A well-planned dairy shed design in Pakistan therefore starts with shade and moving air, and not with the number of animals. Cattle shed construction in Pakistan also has to deal with monsoon rain, dust and the daily washing of floors. A steel dairy shed can handle all of these if the roof, the sides and the floor are designed together. Steel Mind designs each shed around the animals' comfort and the farm's daily routine." },
+      { type: "p", text: "Heat is the first problem for dairy animals in Pakistan. Summer temperatures are high, the air can be humid, and animals standing under a low or poorly ventilated roof suffer. A well-planned dairy shed design in Pakistan therefore starts with shade and moving air, and not with the number of animals. Cattle shed construction in Pakistan also has to deal with monsoon rain, dust and the daily washing of floors. A steel dairy shed can handle all of these if the roof, the sides and the floor are designed together. Steel Mind Engineers designs each shed around the animals' comfort and the farm's daily routine." },
       { type: "h2", title: "Roof Height and Roof Shape" },
-      { type: "p", text: "A high roof gives hot air room to rise above the animals. The eave height should leave enough space for the animals, for feed carts and for loaders, and the ridge should sit higher still. Steel Mind built the Dravton Dairy and Latifia Dairy sheds at 17 feet high. A pitched roof, which slopes to both sides, sheds rain quickly and creates a ridge along the top. That ridge is where you place the opening described next. If your farm uses insulated roof sheets, the roof also keeps the sun's heat away from the animals below." },
+      { type: "p", text: "A high roof gives hot air room to rise above the animals. The eave height should leave enough space for the animals, for feed carts and for loaders, and the ridge should sit higher still. Steel Mind Engineers built the Dravton Dairy and Latifia Dairy sheds at 17 feet high. A pitched roof, which slopes to both sides, sheds rain quickly and creates a ridge along the top. That ridge is where you place the opening described next. If your farm uses insulated roof sheets, the roof also keeps the sun's heat away from the animals below." },
       { type: "h2", title: "The Open Ridge" },
       { type: "p", text: "Hot air is lighter than cool air, so it rises and collects under the roof. An open ridge, which is a continuous gap along the top of the roof with a cover above it, lets this air leave without any power. Fresh air enters from the sides to replace it. This simple stack effect works all day without electricity or fans. A ridge opening needs a cover so that rain does not enter, and the engineer designs that cover as part of the frame. Ridge ventilators and turbo vents can be added in sheds where more air movement is needed." },
       { type: "h2", title: "Open and Louvered Sides" },
@@ -292,22 +292,22 @@ export const articles1to12: ContentData[] = [
       { type: "h2", title: "Floors, Slope and Gutters" },
       { type: "p", text: "A dairy shed must stay dry. Floor slope and gutters carry manure, urine and wash water away from the animals, and a good roof gutter system moves rain away from the walls. Plan the drainage with your civil contractor before the steel is made, because the columns, the plinths and the floor level must agree. A wet, dirty floor raises the risk of infection and lameness and makes cleaning harder. Good drainage also protects the steel itself, because standing water at the column bases causes rust." },
       { type: "h2", title: "Frame Spacing and Layout" },
-      { type: "p", text: "The frame spacing should match the feed alleys, the stalls and the milking area. If the frames are placed to suit the layout, columns do not block feeding lines or animal movement. A clear span, with no columns inside the width, gives the most freedom, while a multi-span shed places columns along the length of the middle. Steel Mind built a PEB dairy shed for Dravton Dairy at Chunian that is 115 feet wide and 342 feet long, and a PEB dairy shed for Latifia Dairy at Kasur that is 110 feet wide and 200 feet long. Both are examples of a layout planned around the farm." },
+      { type: "p", text: "The frame spacing should match the feed alleys, the stalls and the milking area. If the frames are placed to suit the layout, columns do not block feeding lines or animal movement. A clear span, with no columns inside the width, gives the most freedom, while a multi-span shed places columns along the length of the middle. Steel Mind Engineers built a PEB dairy shed for Dravton Dairy at Chunian that is 115 feet wide and 342 feet long, and a PEB dairy shed for Latifia Dairy at Kasur that is 110 feet wide and 200 feet long. Both are examples of a layout planned around the farm." },
       { type: "h2", title: "The Milking Parlour and the Feed Store" },
-      { type: "p", text: "A dairy farm is more than a cattle shed. The milking parlour is the place where the farm works every day, so it needs shade, clear floor space and good air. The feed store needs a tight roof, good sheet laps and ridge vents, because wet feed spoils fast. Steel Mind built a 21,686 square foot milking parlour shed, an 8,000 square foot feed storage shed and a rapid exit structure for Dravton Dairy at Chunian. Planning these buildings together saves money, because the same engineer can place the roads, the drains and the doors in one layout." },
+      { type: "p", text: "A dairy farm is more than a cattle shed. The milking parlour is the place where the farm works every day, so it needs shade, clear floor space and good air. The feed store needs a tight roof, good sheet laps and ridge vents, because wet feed spoils fast. Steel Mind Engineers built a 21,686 square foot milking parlour shed, an 8,000 square foot feed storage shed and a rapid exit structure for Dravton Dairy at Chunian. Planning these buildings together saves money, because the same engineer can place the roads, the drains and the doors in one layout." },
       { type: "h2", title: "Build in Phases as the Herd Grows" },
-      { type: "p", text: "A farm often grows over time, and steel makes growth easy. Bolted PEB frames allow extra bays at the end of a shed or a new shed beside the first. Dravton Dairy is an example: the farm has had four structures built at Chunian. When you plan the first shed, tell the engineer where the next one will stand, so that the end wall, the access road and the drains can be ready for it. Steel Mind can also coat the steel for damp, dirty air, which protects the frame for many years." }
+      { type: "p", text: "A farm often grows over time, and steel makes growth easy. Bolted PEB frames allow extra bays at the end of a shed or a new shed beside the first. Dravton Dairy is an example: the farm has had four structures built at Chunian. When you plan the first shed, tell the engineer where the next one will stand, so that the end wall, the access road and the drains can be ready for it. Steel Mind Engineers can also coat the steel for damp, dirty air, which protects the frame for many years." }
     ]
   },
   {
     article: 6,
     url: "/blog/poultry-shed-roof-insulated-panels/",
-    title: "Insulated Poultry Shed in Pakistan: Roof Guide | Steel Mind",
+    title: "Insulated Poultry Shed in Pakistan: Roof Guide | Steel Mind Engineers",
     description: "Why insulated roof panels help poultry sheds in Pakistan. Learn about heat, ventilation openings, equipment loads and long steel frames for poultry houses.",
     keyword: "insulated poultry shed in Pakistan",
     support: ["poultry farm shed construction", "controlled house steel structure", "poultry shed ventilation design", "steel poultry house"],
     h1: "Poultry Shed Roofs in Pakistan: Why Insulated Panels Help Your Birds and Your Costs",
-    quickAnswer: "An insulated poultry shed keeps the inside cooler in summer and warmer in winter, so the ventilation system has less work to do. Insulated roof panels, planned fan openings and a frame that carries hanging equipment are the three things to design first. Steel Mind designs long, narrow steel houses for this use.",
+    quickAnswer: "An insulated poultry shed keeps the inside cooler in summer and warmer in winter, so the ventilation system has less work to do. Insulated roof panels, planned fan openings and a frame that carries hanging equipment are the three things to design first. Steel Mind Engineers designs long, narrow steel houses for this use.",
     alt: "Insulated poultry shed roof in Pakistan",
     related: ["Poultry Sheds", "Sub Structures", "Accessories"],
     faq: [
@@ -319,11 +319,11 @@ export const articles1to12: ContentData[] = [
       { type: "h2", title: "What Poultry Birds Need From a Building" },
       { type: "p", text: "Birds are sensitive to heat, damp and bad air. A poultry farm shed must hold a steady temperature and give steady ventilation, day and night. In Pakistan, the summer sun heats a bare metal roof quickly, and that heat passes straight to the birds. A controlled house steel structure solves this with a roof that stops heat, openings that move air and a frame strong enough for all the equipment. When these three parts are planned together, the house is easier to run and the birds are under less stress." },
       { type: "h2", title: "Why the Roof Matters Most" },
-      { type: "p", text: "The roof receives the sun for most of the day, so it is the main source of heat in the shed. An insulated poultry shed in Pakistan uses insulated roof panels or sheets with a layer of insulation, which slows the heat that passes through. In winter the same layer keeps warmth inside. A cooler inside means fans and cooling pads work less, and the bill for power can fall. Steel Mind supplies insulated panels with the building and fits them with the frame, so the roof and the structure match." },
+      { type: "p", text: "The roof receives the sun for most of the day, so it is the main source of heat in the shed. An insulated poultry shed in Pakistan uses insulated roof panels or sheets with a layer of insulation, which slows the heat that passes through. In winter the same layer keeps warmth inside. A cooler inside means fans and cooling pads work less, and the bill for power can fall. Steel Mind Engineers supplies insulated panels with the building and fits them with the frame, so the roof and the structure match." },
       { type: "h2", title: "Ventilation Openings From the Start" },
       { type: "p", text: "Poultry shed ventilation design is part of the building design and not an extra. Fan openings at one end and air inlets along the sides must be placed in the frame drawings from the beginning, because cutting openings later can weaken sheets and frames. The position of fans, inlets and cooling pads decides how air flows over the birds. Tell the engineer which system you plan to use, whether tunnel ventilation or another method, and share the equipment maker's drawings if you have them." },
       { type: "h2", title: "Equipment Loads on the Frame" },
-      { type: "p", text: "A poultry house carries more than its own weight. Feeders, drinker lines, fans, cooling pads and lights hang from the roof members or stand along the walls. These loads must be in the design from the start. Steel Mind checks the frames for equipment loads on the roof members, so nothing is overloaded. If you plan to add equipment later, say so at the quote stage, because the frame can be sized to take it." },
+      { type: "p", text: "A poultry house carries more than its own weight. Feeders, drinker lines, fans, cooling pads and lights hang from the roof members or stand along the walls. These loads must be in the design from the start. Steel Mind Engineers checks the frames for equipment loads on the roof members, so nothing is overloaded. If you plan to add equipment later, say so at the quote stage, because the frame can be sized to take it." },
       { type: "h2", title: "Long, Narrow Shape and Regular Bays" },
       { type: "p", text: "Poultry houses are long and narrow, and steel frames with regular bays suit this shape. The width keeps air moving across the birds, and the length gives the space you need. Frames repeat along the length at an even spacing, which makes the building quick to erect and simple to extend. A clear-span frame leaves the floor free of columns, which makes it easy to place equipment and to clean between batches." },
       { type: "h2", title: "Smooth Surfaces and Cleaning" },
@@ -337,7 +337,7 @@ export const articles1to12: ContentData[] = [
   {
     article: 7,
     url: "/blog/factory-shed-checklist-pakistan/",
-    title: "Factory Shed Construction Checklist in Pakistan | Steel Mind",
+    title: "Factory Shed Construction Checklist in Pakistan | Steel Mind Engineers",
     description: "Ten questions to answer before you build a steel factory shed in Pakistan: layout, machines, span, height, crane, floor, light, doors and future bays.",
     keyword: "factory shed construction checklist",
     support: ["steel factory building Pakistan", "production hall construction", "industrial factory shed design", "PEB factory shed"],
@@ -346,17 +346,17 @@ export const articles1to12: ContentData[] = [
     alt: "Factory shed construction checklist in Pakistan",
     related: ["Factory Sheds", "Crane System", "Request a Quote"],
     faq: [
-      { q: "What size factory shed can Steel Mind build?", a: "Steel Mind has built sheds from a few thousand square feet to almost 100,000 square feet." },
+      { q: "What size factory shed can Steel Mind Engineers build?", a: "Steel Mind Engineers has built sheds from a few thousand square feet to almost 100,000 square feet." },
       { q: "Can the shed be built while the old one runs?", a: "Often yes. The engineer plans access and safe working zones with you." },
       { q: "What should I send for a quote?", a: "Send the machine list, the floor plan, the site details and your future plans." }
     ],
     blocks: [
       { type: "h2", title: "Why a Checklist Helps" },
-      { type: "p", text: "A factory shed must hold your machines, your people and your material flow. If you plan the shed around a production layout, the building supports the work. If the shed is planned first and the machines are fitted later, the plant loses space and time. This factory shed construction checklist gives you ten questions to answer with your production team before you speak to a steel building company. Steel Mind designs the shed around your layout and not the other way round, and a complete brief makes that possible." },
+      { type: "p", text: "A factory shed must hold your machines, your people and your material flow. If you plan the shed around a production layout, the building supports the work. If the shed is planned first and the machines are fitted later, the plant loses space and time. This factory shed construction checklist gives you ten questions to answer with your production team before you speak to a steel building company. Steel Mind Engineers designs the shed around your layout and not the other way round, and a complete brief makes that possible." },
       { type: "h2", title: "Question 1: What Will the Plant Make?" },
       { type: "p", text: "Start with the use. Textile and apparel plants, steel processors, packaging units, food plants and assembly lines all use steel factory buildings in Pakistan, and each has different needs. Heat, noise, fumes, wet processes and clean areas change the design of walls, roof and ventilation. Write a short description of each process and the order in which material moves through the building." },
       { type: "h2", title: "Question 2: Which Machines Will Stand Inside?" },
-      { type: "p", text: "List every large machine with its size and weight. Heavy machines may need a stronger floor slab and special foundations, and some cause vibration. Machine positions also decide where columns can stand. Share the machine list early, because moving a column later is expensive. For Haier at Raiwind, Steel Mind built a 32,400 square foot PEB store shed, 30 feet high, 180 feet wide and 180 feet long, an example of a large open floor for flexible use." },
+      { type: "p", text: "List every large machine with its size and weight. Heavy machines may need a stronger floor slab and special foundations, and some cause vibration. Machine positions also decide where columns can stand. Share the machine list early, because moving a column later is expensive. For Haier at Raiwind, Steel Mind Engineers built a 32,400 square foot PEB store shed, 30 feet high, 180 feet wide and 180 feet long, an example of a large open floor for flexible use." },
       { type: "h2", title: "Question 3: How Wide and How Long?" },
       { type: "p", text: "Width sets the span of the frame, and length sets the number of bays. A clear span means fewer columns and more freedom to place machines and move goods. A multi-span building places columns inside and uses less steel per rafter. Choose by asking how important a column-free floor is to your layout. The engineer can compare both options for you." },
       { type: "h2", title: "Question 4: How High Should the Shed Be?" },
@@ -376,12 +376,12 @@ export const articles1to12: ContentData[] = [
   {
     article: 8,
     url: "/blog/crane-shed-basics-pakistan/",
-    title: "Crane Shed Design in Pakistan: Capacity and Span | Steel Mind",
+    title: "Crane Shed Design in Pakistan: Capacity and Span | Steel Mind Engineers",
     description: "Learn how overhead crane loads change a steel building. Crane capacity, span, runway beams and rails, with the Haier crane sheds at Raiwind as the example.",
     keyword: "crane shed design in Pakistan",
     support: ["overhead crane shed construction", "EOT crane building", "crane runway beams", "heavy lifting shed steel"],
     h1: "Crane Shed Basics in Pakistan: Capacity, Span and Runway Beams Explained",
-    quickAnswer: "A crane shed is a steel building designed around its overhead cranes. The crane capacity, span, lifting height and working frequency set the size of the columns, the runway beams and the foundation. Steel Mind built crane sheds of 96,600 and 97,888 square feet for Haier at Raiwind.",
+    quickAnswer: "A crane shed is a steel building designed around its overhead cranes. The crane capacity, span, lifting height and working frequency set the size of the columns, the runway beams and the foundation. Steel Mind Engineers built crane sheds of 96,600 and 97,888 square feet for Haier at Raiwind.",
     alt: "Crane shed design in Pakistan",
     related: ["Crane Sheds", "Crane System", "Haier crane shed"],
     faq: [
@@ -393,13 +393,13 @@ export const articles1to12: ContentData[] = [
       { type: "h2", title: "What a Crane Shed Is" },
       { type: "p", text: "A crane shed is a steel building with overhead cranes running on rails along its length. Factories use them to move steel, machine parts, containers and finished goods. In crane shed design in Pakistan, the crane is not an add-on. The whole structure is designed around the crane loads, because a moving load of many tons places forces on the columns, the beams and the foundation that an ordinary shed never meets. For this reason a building that was not designed for a crane cannot safely carry one." },
       { type: "h2", title: "The Raiwind Crane Sheds" },
-      { type: "p", text: "Steel Mind built a pre-engineered crane shed of 96,600 square feet for Haier at Raiwind, 30 feet high, 184 feet wide and 525 feet long. It also built a PEB crane and mezzanine shed of 97,888 square feet for Haier, 33 feet high, 184 feet wide and 532 feet long. These projects show the scale of overhead crane shed construction that one team can handle, from the first drawing to handover, under one contract." },
+      { type: "p", text: "Steel Mind Engineers built a pre-engineered crane shed of 96,600 square feet for Haier at Raiwind, 30 feet high, 184 feet wide and 525 feet long. It also built a PEB crane and mezzanine shed of 97,888 square feet for Haier, 33 feet high, 184 feet wide and 532 feet long. These projects show the scale of overhead crane shed construction that one team can handle, from the first drawing to handover, under one contract." },
       { type: "h2", title: "The Four Numbers That Set the Design" },
       { type: "p", text: "Four numbers matter most. The crane capacity is the heaviest load the crane lifts. The crane span is the distance between the crane rails. The lifting height is how high the hook must rise, which sets the clear height of the building. The working frequency tells how often the crane runs, and a busy crane places more fatigue on the structure. Give these four numbers to the engineer, and ask the crane maker for the wheel loads, because the frame is designed from them." },
       { type: "h2", title: "Crane Arrangements" },
       { type: "p", text: "The crane type changes the building. A jib crane serves a circle around a column or wall, and a monorail crane moves loads along one fixed track. A semi-gantry crane runs on a rail on the building column at one end and on a floor-mounted leg at the other. A top-running crane, also called an EOT crane, runs on rails above crane beams across the width and gives the widest coverage and the highest capacity. An underhung crane hangs from the roof structure and suits lighter loads. Each arrangement is shown on the Crane System page." },
       { type: "h2", title: "Crane Columns and Runway Beams" },
-      { type: "p", text: "The crane columns carry the runway beams through brackets or a stepped section. The runway beams hold the crane rails, and they must be strong, level and straight. Crane runway beams take loads from moving wheels, from braking and from sideways forces, so they are heavier than ordinary beams. Extra bracing resists the sideways and braking forces. Steel Mind fabricates the crane columns and beams in its Lahore factory and checks the dimensions before they are painted." },
+      { type: "p", text: "The crane columns carry the runway beams through brackets or a stepped section. The runway beams hold the crane rails, and they must be strong, level and straight. Crane runway beams take loads from moving wheels, from braking and from sideways forces, so they are heavier than ordinary beams. Extra bracing resists the sideways and braking forces. Steel Mind Engineers fabricates the crane columns and beams in its Lahore factory and checks the dimensions before they are painted." },
       { type: "h2", title: "Rails, Alignment and Accuracy" },
       { type: "p", text: "Rails must be level and straight within tight limits, or the crane wears quickly and runs badly. The factory cuts and drills the beams to the drawing, and the crew checks the alignment on site during erection. Accuracy at this stage saves years of repair. If the foundation is out of level, the engineer answers the same day, because the steel and the foundation must agree." },
       { type: "h2", title: "Foundations and Safety Fittings" },
@@ -411,7 +411,7 @@ export const articles1to12: ContentData[] = [
   {
     article: 9,
     url: "/blog/warehouse-height-for-racking-pakistan/",
-    title: "Warehouse Height for Racking in Pakistan | Steel Mind",
+    title: "Warehouse Height for Racking in Pakistan | Steel Mind Engineers",
     description: "How to set the eave height of a steel warehouse from your racks, forklifts, lights and sprinklers. A plain guide for storage warehouse construction in Pakistan.",
     keyword: "warehouse height for racking",
     support: ["storage warehouse construction in Pakistan", "steel storage building Pakistan", "industrial storage shed", "pallet racking warehouse design"],
@@ -422,7 +422,7 @@ export const articles1to12: ContentData[] = [
     faq: [
       { q: "How tall can a warehouse be?", a: "The engineer sets the height from your racking and handling plan." },
       { q: "Can I raise the height later?", a: "It is very hard. Settle the height before steel is made." },
-      { q: "Can Steel Mind build on a small plot?", a: "Yes. The frame can fit the plot shape, and a mezzanine can add floor area." }
+      { q: "Can Steel Mind Engineers build on a small plot?", a: "Yes. The frame can fit the plot shape, and a mezzanine can add floor area." }
     ],
     blocks: [
       { type: "h2", title: "Why Height Is the Decision You Cannot Undo" },
@@ -440,14 +440,14 @@ export const articles1to12: ContentData[] = [
       { type: "h2", title: "Doors and Truck Access" },
       { type: "p", text: "Put doors where trucks and forklifts enter, and size them from the largest vehicle. Sliding or rolling doors suit most warehouses, and sectional roll-up doors suit loading docks. Leave enough yard space for trucks to turn and back in. A door that is too low for the tallest truck or too narrow for the widest load causes daily delays. Measure twice and tell the engineer the largest vehicle." },
       { type: "h2", title: "Add Floor Area Without a Bigger Plot" },
-      { type: "p", text: "If your plot is small, a mezzanine can give a second level for small items, picking or an office. Steel Mind built a 32,400 square foot mezzanine floor for Haier at Raiwind and a 7,020 square foot mezzanine for Maria B in Lahore. A mezzanine uses the empty height above the ground floor, but it needs enough clear height for both levels. Include it in the first brief, so the frame and the height can be set for it." }
+      { type: "p", text: "If your plot is small, a mezzanine can give a second level for small items, picking or an office. Steel Mind Engineers built a 32,400 square foot mezzanine floor for Haier at Raiwind and a 7,020 square foot mezzanine for Maria B in Lahore. A mezzanine uses the empty height above the ground floor, but it needs enough clear height for both levels. Include it in the first brief, so the frame and the height can be set for it." }
     ]
   },
   {
     article: 10,
     url: "/blog/loading-dock-design-pakistan/",
-    title: "Loading Dock Design in Pakistan: Height and Canopy | Steel Mind",
-    description: "Plan a loading dock for a steel warehouse in Pakistan: dock height, canopy, door count, yard depth and truck safety. Practical tips from Steel Mind engineers.",
+    title: "Loading Dock Design in Pakistan: Height and Canopy | Steel Mind Engineers",
+    description: "Plan a loading dock for a steel warehouse in Pakistan: dock height, canopy, door count, yard depth and truck safety. Practical tips from Steel Mind Engineers engineers.",
     keyword: "loading dock design in Pakistan",
     support: ["loading dock construction", "truck bay warehouse", "dock canopy steel", "warehouse with loading docks"],
     h1: "Loading Dock Design in Pakistan: Dock Height, Canopy and Yard Depth",
@@ -461,15 +461,15 @@ export const articles1to12: ContentData[] = [
     ],
     blocks: [
       { type: "h2", title: "Why Dock Design Matters" },
-      { type: "p", text: "Slow loading wastes time and money. Every minute a truck waits at a dock is a minute of lost work for the driver, the loaders and the goods inside. A good loading dock design in Pakistan keeps the goods dry, the workers safe and the trucks moving. Loading dock construction is not only a door in a wall. It is a small system made of a floor level, a door, a canopy, a yard and a set of safety fittings, and each part depends on the others. Steel Mind designs these parts together with the warehouse frame, so the dock fits the building from the start." },
+      { type: "p", text: "Slow loading wastes time and money. Every minute a truck waits at a dock is a minute of lost work for the driver, the loaders and the goods inside. A good loading dock design in Pakistan keeps the goods dry, the workers safe and the trucks moving. Loading dock construction is not only a door in a wall. It is a small system made of a floor level, a door, a canopy, a yard and a set of safety fittings, and each part depends on the others. Steel Mind Engineers designs these parts together with the warehouse frame, so the dock fits the building from the start." },
       { type: "h2", title: "Dock Height From Your Fleet" },
       { type: "p", text: "The dock floor should match the truck bed height, so that forklifts and carts can move goods straight in and out. Trucks differ in height, so the engineer sets the floor level from your fleet and from the trucks you expect to use. If you load both high and low trucks, ask about levelers or ramps that bridge the difference. Tell the engineer which vehicles come to your site, including small pickups and large trailers, because the dock height is decided once the slab is cast." },
       { type: "h2", title: "The Steel Canopy" },
-      { type: "p", text: "A steel canopy projects from the building over the dock doors. It shelters trucks, workers and goods from sun and rain, which matters during the monsoon and the summer heat. A canopy also keeps the dock floor dry, which cuts slips. The depth of the canopy should cover the truck bed while the truck is at the dock. Dock canopy steel is designed with the frame, so the columns, the beams and the gutters all agree. Steel Mind fabricates and erects canopies in its Lahore factory and on site." },
+      { type: "p", text: "A steel canopy projects from the building over the dock doors. It shelters trucks, workers and goods from sun and rain, which matters during the monsoon and the summer heat. A canopy also keeps the dock floor dry, which cuts slips. The depth of the canopy should cover the truck bed while the truck is at the dock. Dock canopy steel is designed with the frame, so the columns, the beams and the gutters all agree. Steel Mind Engineers fabricates and erects canopies in its Lahore factory and on site." },
       { type: "h2", title: "How Many Doors Do You Need?" },
       { type: "p", text: "Choose the number of doors from the count of trucks you load at the same time, and not from the total trucks per day. If four trucks wait together at peak hours, plan at least four bays. Add one more if you want a spare for a breakdown or for a special load. A truck bay warehouse works best when the number of doors suits the peak, because a shortage creates queues in the yard. Tell the engineer how many trucks you expect each day and at which hours." },
       { type: "h2", title: "Door Types for Docks" },
-      { type: "p", text: "Sectional roll-up doors suit most docks, because they rise overhead and leave the opening clear. Insulated versions help cold stores keep their temperature. Rolling shutters and sliding doors can serve smaller openings. The door size should suit the truck body, with a little clearance on each side. See the Steel Doors and Gates page and the Accessories page for the types Steel Mind supplies and fits." },
+      { type: "p", text: "Sectional roll-up doors suit most docks, because they rise overhead and leave the opening clear. Insulated versions help cold stores keep their temperature. Rolling shutters and sliding doors can serve smaller openings. The door size should suit the truck body, with a little clearance on each side. See the Steel Doors and Gates page and the Accessories page for the types Steel Mind Engineers supplies and fits." },
       { type: "h2", title: "Yard Depth and Truck Movement" },
       { type: "p", text: "Allow enough yard depth for trucks to turn and back in. Trucks need space to swing, and a tight yard leads to damaged doors and walls. As a rule, the longer the truck, the deeper the yard. Place the dock doors on one or two long sides of the building, and keep the entrance road wide enough for two-way traffic if needed. Mark parking and waiting areas, so trucks do not block the way." },
       { type: "h2", title: "Frame Spacing and Door Spacing" },
@@ -481,7 +481,7 @@ export const articles1to12: ContentData[] = [
   {
     article: 11,
     url: "/blog/cold-storage-steel-frame-pakistan/",
-    title: "Cold Storage Building in Pakistan: Steel Frame Guide | Steel Mind",
+    title: "Cold Storage Building in Pakistan: Steel Frame Guide | Steel Mind Engineers",
     description: "What a steel frame must do for a cold store in Pakistan: panel supports, sealed joints, equipment loads, floors and doors. Plan your cold storage building.",
     keyword: "cold storage building in Pakistan",
     support: ["steel cold store building", "insulated panel warehouse", "refrigerated warehouse structure", "cold storage warehouse construction Pakistan"],
@@ -492,19 +492,19 @@ export const articles1to12: ContentData[] = [
     faq: [
       { q: "Can the steel frame carry refrigeration units?", a: "Yes. The engineer designs the frame for these loads." },
       { q: "What temperature range can the store hold?", a: "That depends on the panels and the cooling system. Tell the engineer your target temperature." },
-      { q: "Does Steel Mind install the refrigeration plant?", a: "No. The cooling specialist you choose installs it, and Steel Mind coordinates the loads and openings." }
+      { q: "Does Steel Mind Engineers install the refrigeration plant?", a: "No. The cooling specialist you choose installs it, and Steel Mind Engineers coordinates the loads and openings." }
     ],
     blocks: [
       { type: "h2", title: "What a Cold Store Needs" },
       { type: "p", text: "A cold store keeps goods at a set temperature, whether for fruit, vegetables, dairy, meat or medicines. In Pakistan's heat, every gap in the building lets warm air in, and the cooling system works harder and costs more to run. A cold storage building in Pakistan therefore needs a tight envelope: thick insulated panels, sealed joints, well-fitted doors and a floor that does not carry heat from the ground. The steel frame is the skeleton behind all of this, and it must be designed with the cold store in mind and not as an ordinary shed." },
       { type: "h2", title: "What the Steel Frame Does" },
-      { type: "p", text: "In a steel cold store building, the frame holds up everything else. It carries the roof and wall panels, the doors, the lights and the heavy refrigeration equipment. It also provides the structure for the loading area and canopy. The frame must be strong enough for these loads and accurate enough that panels fit tightly. Steel Mind supplies the steel frame, the roof and wall structure and the supports for insulated panels, and coordinates the loads and openings with the cooling specialist you choose." },
+      { type: "p", text: "In a steel cold store building, the frame holds up everything else. It carries the roof and wall panels, the doors, the lights and the heavy refrigeration equipment. It also provides the structure for the loading area and canopy. The frame must be strong enough for these loads and accurate enough that panels fit tightly. Steel Mind Engineers supplies the steel frame, the roof and wall structure and the supports for insulated panels, and coordinates the loads and openings with the cooling specialist you choose." },
       { type: "h2", title: "Insulated Panels and Sealed Joints" },
       { type: "p", text: "Insulated panel warehouse walls and roofs use panels with an insulating core. Thicker panels reduce heat gain, and sealed joints keep warm air and moisture out. The panel supports must be straight and accurately placed, because gaps appear where the supports are uneven. The target temperature decides the panel thickness, so tell the engineer how cold the store must be. A store for chilled goods needs a different panel from a store for frozen goods." },
       { type: "h2", title: "Avoiding Heat Paths in the Steel" },
       { type: "p", text: "Steel conducts heat well. If a steel member runs from outside to inside without a break, it carries heat into the cold room. Frame connections are detailed to avoid such heat paths where possible, and panels are fixed so that the steel stays outside the insulated envelope where the design allows. Good detailing at the base, at the eaves and around openings helps the refrigeration system run efficiently. This is one reason to speak to the steel engineer before the panels are ordered." },
       { type: "h2", title: "Refrigeration Equipment Loads" },
-      { type: "p", text: "Condensers, ducts, pipes and evaporators are heavy, and they hang from or stand on the roof and the frames. The roof and frames must carry these loads without sagging. The refrigeration plant is installed by the specialist you choose, and Steel Mind coordinates the loads and the openings with that specialist. Share the equipment drawings early. A change in equipment late in the project can mean strengthening the frame." },
+      { type: "p", text: "Condensers, ducts, pipes and evaporators are heavy, and they hang from or stand on the roof and the frames. The roof and frames must carry these loads without sagging. The refrigeration plant is installed by the specialist you choose, and Steel Mind Engineers coordinates the loads and the openings with that specialist. Share the equipment drawings early. A change in equipment late in the project can mean strengthening the frame." },
       { type: "h2", title: "Floors, Doors and Vapor Barriers" },
       { type: "p", text: "The floor of a cold store needs insulation, because cold flows into the ground. Doors must seal tightly and open quickly, since each opening lets warm air in. Insulated sectional doors and PU-filled doors suit cold rooms. Vapor barriers and good detailing prevent water from forming inside the walls, which damages insulation and steel. Ask your cooling specialist to review the details of the floor and the doors." },
       { type: "h2", title: "Loading Areas and Canopies" },
@@ -516,7 +516,7 @@ export const articles1to12: ContentData[] = [
   {
     article: 12,
     url: "/blog/wheat-storage-steel-warehouse-pakistan/",
-    title: "Wheat Storage Warehouse Design in Pakistan | Steel Mind",
+    title: "Wheat Storage Warehouse Design in Pakistan | Steel Mind Engineers",
     description: "Keep wheat dry and ventilated in a steel warehouse. Learn about roof tightness, sealed floors, wall load from grain and ventilation in Pakistan.",
     keyword: "wheat storage warehouse design",
     support: ["grain storage shed construction", "steel grain warehouse", "bulk storage building", "wheat warehouse in Pakistan"],
@@ -533,7 +533,7 @@ export const articles1to12: ContentData[] = [
       { type: "h2", title: "Why Grain Storage Is Different" },
       { type: "p", text: "Grain is a living product. Moisture causes mold, insects and heat inside the pile, and a small leak can spoil a large amount of wheat. Wheat storage warehouse design in Pakistan therefore has to protect the grain from rain, ground damp and humid air, while keeping it cool. Grain also pushes sideways on the walls, which ordinary warehouses never face. A steel grain warehouse built for this use is designed around these facts and not as a general store." },
       { type: "h2", title: "A Roof That Does Not Leak" },
-      { type: "p", text: "A leak-free roof is the first protection. Good sheet laps, correct fixings and sealed trims keep rain out, and gutters carry water away from the walls. Poorly sealed ridges and eaves are common weak points, so the design includes flashings and trims at those places. Steel Mind fits sheets with sealing washers and closes the gaps at the ridge, the eaves and the corners. Tell the engineer about the rain in your area, so the roof slope and the gutters suit it." },
+      { type: "p", text: "A leak-free roof is the first protection. Good sheet laps, correct fixings and sealed trims keep rain out, and gutters carry water away from the walls. Poorly sealed ridges and eaves are common weak points, so the design includes flashings and trims at those places. Steel Mind Engineers fits sheets with sealing washers and closes the gaps at the ridge, the eaves and the corners. Tell the engineer about the rain in your area, so the roof slope and the gutters suit it." },
       { type: "h2", title: "A Raised, Sealed Floor" },
       { type: "p", text: "Moisture rises from the ground into stored grain. A raised, sealed floor limits this damp, and a good floor slab with a moisture barrier helps. Your civil contractor builds the floor, and the steel engineer coordinates the column bases and the wall base details with it. Ask for a floor that is smooth and easy to sweep, because dust and spilled grain attract insects." },
       { type: "h2", title: "Ventilation That Keeps Air Moving" },
@@ -541,11 +541,11 @@ export const articles1to12: ContentData[] = [
       { type: "h2", title: "Walls That Resist the Push of Grain" },
       { type: "p", text: "Stored grain pushes on the walls, and the force grows with the height of the pile. The wall frames, girts and bracing are designed for this load, and in some stores a lower part of the wall is made of concrete or reinforced panels. Tell the engineer the height of the pile and the type of grain, so the walls are sized correctly. A wall that was designed only for wind may bulge under grain." },
       { type: "h2", title: "Doors, Driveways and Handling" },
-      { type: "p", text: "Wide doors and driveways allow trucks and loaders to enter. Place doors where the loading and unloading flow needs them. If you move grain with conveyors, hoppers or bins, tell the engineer, because they hang from or stand beside the frame. Steel Mind also fabricates steel hoppers and bins, and a grain store can combine a warehouse with bins for bulk flow. See the Hoppers and Bins page." },
+      { type: "p", text: "Wide doors and driveways allow trucks and loaders to enter. Place doors where the loading and unloading flow needs them. If you move grain with conveyors, hoppers or bins, tell the engineer, because they hang from or stand beside the frame. Steel Mind Engineers also fabricates steel hoppers and bins, and a grain store can combine a warehouse with bins for bulk flow. See the Hoppers and Bins page." },
       { type: "h2", title: "Protecting Steel From Grain Dust and Moisture" },
-      { type: "p", text: "Grain dust and moisture can attack steel. A good coating extends the life of the frame, and the coating system should suit the damp, dusty air inside. Steel Mind cleans and paints each part in the factory and touches up damaged areas on site. See the Painting page for coating systems. Regular inspection and repainting keep the building sound for decades." },
+      { type: "p", text: "Grain dust and moisture can attack steel. A good coating extends the life of the frame, and the coating system should suit the damp, dusty air inside. Steel Mind Engineers cleans and paints each part in the factory and touches up damaged areas on site. See the Painting page for coating systems. Regular inspection and repainting keep the building sound for decades." },
       { type: "h2", title: "Why Steel Works for Grain Warehouses" },
-      { type: "p", text: "A steel grain warehouse is quick to build, which matters before the harvest and procurement seasons. Large clear spans give you the volume you need without inner columns, and bolted frames allow extra bays when your storage needs grow. Steel Mind designs the building from your capacity and your handling method and erects it on your site." }
+      { type: "p", text: "A steel grain warehouse is quick to build, which matters before the harvest and procurement seasons. Large clear spans give you the volume you need without inner columns, and bolted frames allow extra bays when your storage needs grow. Steel Mind Engineers designs the building from your capacity and your handling method and erects it on your site." }
     ]
   }
 ];

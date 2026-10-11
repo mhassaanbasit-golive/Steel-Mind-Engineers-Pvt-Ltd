@@ -35,9 +35,11 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
     (b: ContentBlock) => b.title === "What This Project Shows"
   );
 
-  const img1 = project.images[0];
-  const img2 = project.images[1] || project.images[0];
-  const img3 = project.images[2] || project.images[0];
+  const mainImage = project.images.find((img) => /main[-_]?image/i.test(img)) || project.images[0];
+  const otherImages = project.images.filter((img) => img !== mainImage);
+  const img1 = mainImage;
+  const img2 = otherImages[0] || mainImage;
+  const img3 = otherImages[1] || mainImage;
 
   return (
     <div className="w-full bg-white">

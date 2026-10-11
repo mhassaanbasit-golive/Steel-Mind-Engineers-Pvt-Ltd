@@ -4,7 +4,7 @@ export const pages1to20: ContentData[] = [
   {
     page: 1,
     url: "/",
-    title: "PEB & Steel Fabrication Company in Pakistan | Steel Mind",
+    title: "PEB & Steel Fabrication Company in Pakistan | Steel Mind Engineers",
     description: "Steel Mind Engineers designs, fabricates and erects pre-engineered buildings, steel warehouses and industrial sheds across Pakistan. Request a quote.",
     keyword: "pre engineered buildings in Pakistan",
     support: ["steel fabrication company in Pakistan", "industrial sheds in Pakistan", "steel warehouse construction in Pakistan"],
@@ -18,12 +18,12 @@ export const pages1to20: ContentData[] = [
         a: "A pre-engineered building is a steel structure whose frames, purlins and sheeting are designed in advance and made in a factory to exact dimensions. Site work is then mostly assembly. Because fabrication and foundation work run at the same time, the building is finished much sooner than a concrete building of the same size."
       },
       {
-        q: "Which cities in Pakistan does Steel Mind serve?",
-        a: "Steel Mind has served more than ten cities. The factory is in Lahore, and erection crews travel to the project site, whether it is an industrial estate, a farm or an urban plot."
+        q: "Which cities in Pakistan does Steel Mind Engineers serve?",
+        a: "Steel Mind Engineers has served more than ten cities. The factory is in Lahore, and erection crews travel to the project site, whether it is an industrial estate, a farm or an urban plot."
       },
       {
-        q: "What does Steel Mind build?",
-        a: "Steel Mind builds pre-engineered buildings, structural steel frames, industrial sheds, steel warehouses, mezzanine floors, crane buildings, steel bridges and custom steel items."
+        q: "What does Steel Mind Engineers build?",
+        a: "Steel Mind Engineers builds pre-engineered buildings, structural steel frames, industrial sheds, steel warehouses, mezzanine floors, crane buildings, steel bridges and custom steel items."
       },
       {
         q: "How do I request a quote?",
@@ -34,11 +34,11 @@ export const pages1to20: ContentData[] = [
       {
         type: "p",
         title: "Line under the hero",
-        text: "Steel Mind builds turnkey steel structures in Pakistan, from engineering and fabrication to erection."
+        text: "Steel Mind Engineers builds turnkey steel structures in Pakistan, from engineering and fabrication to erection."
       },
       {
         type: "h2",
-        title: "About Steel Mind"
+        title: "About Steel Mind Engineers"
       },
       {
         type: "p",
@@ -109,11 +109,11 @@ export const pages1to20: ContentData[] = [
     related: ["Factory Tour", "Company Profile", "Our Projects"],
     faq: [],
     blocks: [
-      { type: "h2", title: "Who Steel Mind Is" },
+      { type: "h2", title: "Who Steel Mind Engineers Is" },
       { type: "p", text: "Steel Mind Engineers Pvt. Ltd. designs, fabricates and erects steel structures for industrial and commercial use in Pakistan. The company's tagline is \"Where Steel Meets Intelligence.\" In practice it means that every beam is planned, checked and coordinated before it enters the workshop." },
       { type: "p", text: "Clients include factories, dairy and livestock farms, retail and apparel brands, steel processors and infrastructure agencies. In more than eight years the company has delivered over thirty projects in more than ten cities and fabricated over a thousand tons of steel. The projects range from a 484 square foot milking-parlour exit structure to a crane-and-mezzanine shed of 97,888 square feet." },
-      { type: "h2", title: "What Steel Mind Does" },
-      { type: "p", text: "Steel Mind covers the full life of a steel project. Engineers prepare the design and the fabrication drawings. The factory cuts, welds and assembles the steel. Crews paint it, deliver it and erect it on your site. After handover, the team stays available for repairs, additions and extensions." },
+      { type: "h2", title: "What Steel Mind Engineers Does" },
+      { type: "p", text: "Steel Mind Engineers covers the full life of a steel project. Engineers prepare the design and the fabrication drawings. The factory cuts, welds and assembles the steel. Crews paint it, deliver it and erect it on your site. After handover, the team stays available for repairs, additions and extensions." },
       { type: "h2", title: "How the Team Is Organized" },
       { type: "p", text: "Four groups share responsibility for each structure. Engineers handle design and detailing. The workshop team handles fabrication and quality checks. Site crews handle erection and safety. Project coordinators handle schedules, material flow and communication with you." }
     ]
@@ -134,7 +134,7 @@ export const pages1to20: ContentData[] = [
       { type: "h2", title: "What the Vision Means" },
       { type: "p", text: "Steel Mind Engineers wants to be the company that Pakistani industry trusts for steel fabrication and engineering. The aim is simple. Clients should be able to hand over a project and expect it to be built correctly, on schedule and to the agreed specification." },
       { type: "h2", title: "Why Long-Term Partnerships Matter" },
-      { type: "p", text: "A steel building stays in service for decades, and its owner will need repairs, additions and extensions during that time. A contractor that builds well and remains available is more useful than one that disappears after handover. For this reason Steel Mind plans each project as the start of a relationship and not as a single sale." },
+      { type: "p", text: "A steel building stays in service for decades, and its owner will need repairs, additions and extensions during that time. A contractor that builds well and remains available is more useful than one that disappears after handover. For this reason Steel Mind Engineers plans each project as the start of a relationship and not as a single sale." },
       { type: "h2", title: "How the Vision Shows in Daily Work" },
       { type: "p", text: "The vision appears in small, checkable actions. Drawings are reviewed before cutting. Welds are inspected before painting. Site crews follow written lifting plans. Clients receive clear answers when they call. These habits build the record that long-term partnerships depend on." }
     ]
@@ -155,7 +155,7 @@ export const pages1to20: ContentData[] = [
       { type: "h2", title: "The Mission in One Paragraph" },
       { type: "p", text: "Steel Mind Engineers provides dependable fabrication and erection that meets each client's structural and operating needs. It does this with a skilled team, controlled workshop practice and open communication from the contract stage to handover." },
       { type: "h2", title: "What Dependable Means to a Client" },
-      { type: "p", text: "For a client, dependable means three things. The structure matches the drawings and the agreed specification. The work is finished within the schedule that was agreed. The company answers questions and corrects problems quickly. Steel Mind measures its own work against these three points." },
+      { type: "p", text: "For a client, dependable means three things. The structure matches the drawings and the agreed specification. The work is finished within the schedule that was agreed. The company answers questions and corrects problems quickly. Steel Mind Engineers measures its own work against these three points." },
       { type: "h2", title: "Quality, Safety and Efficiency in Practice" },
       { type: "defs", items: [
         { name: "Quality", text: "Material is checked on arrival, dimensions are checked after cutting and welds are inspected before painting." },
@@ -178,11 +178,11 @@ export const pages1to20: ContentData[] = [
     faq: [],
     blocks: [
       { type: "h2", title: "Quality Fabrication" },
-      { type: "p", text: "Steel Mind holds its cutting, welding and assembly to a standard that a client can inspect and measure. Accuracy in the workshop decides how fast and how cleanly a building goes together on site. A beam that is cut to the right length and drilled in the right place saves time for every crew that follows." },
+      { type: "p", text: "Steel Mind Engineers holds its cutting, welding and assembly to a standard that a client can inspect and measure. Accuracy in the workshop decides how fast and how cleanly a building goes together on site. A beam that is cut to the right length and drilled in the right place saves time for every crew that follows." },
       { type: "h2", title: "Continuous Improvement" },
       { type: "p", text: "After each project the team reviews what worked and what did not. Methods are adjusted, and the lessons are shared with the workshop and the site crews. The next structure is therefore built with the experience of the last one." },
       { type: "h2", title: "Safety and Reliability" },
-      { type: "p", text: "Steel Mind protects its people with certified safety equipment, strict site rules and supervised procedures. It protects its clients by keeping the commitments it makes on schedule and specification. Both come from the same habit: planning the work before doing it." },
+      { type: "p", text: "Steel Mind Engineers protects its people with certified safety equipment, strict site rules and supervised procedures. It protects its clients by keeping the commitments it makes on schedule and specification. Both come from the same habit: planning the work before doing it." },
       { type: "h2", title: "How These Values Affect Your Project" },
       { type: "p", text: "You will see these values in practical ways. Drawings are approved before steel is cut. Inspection records follow the parts through the workshop. Site crews work from written plans. Questions are answered promptly. Each of these steps lowers the risk of delay, rework and accidents on your project." }
     ]
@@ -190,7 +190,7 @@ export const pages1to20: ContentData[] = [
   {
     page: 6,
     url: "/about-us/sme-policy/",
-    title: "SME Policy: Quality, Safety & Environment | Steel Mind",
+    title: "SME Policy: Quality, Safety & Environment | Steel Mind Engineers",
     description: "The Steel Mind Engineers SME Policy sets the standards for quality control, workplace safety and environmental care in steel fabrication in Pakistan.",
     keyword: "steel fabrication quality control in Pakistan",
     support: ["safe steel erection in Pakistan", "steel fabrication safety standards", "environmentally responsible steel fabrication"],
@@ -200,16 +200,16 @@ export const pages1to20: ContentData[] = [
     related: ["Our Core Values", "Committed To", "Erection"],
     faq: [],
     blocks: [
-      { type: "h2", title: "Why Steel Mind Has This Policy" },
+      { type: "h2", title: "Why Steel Mind Engineers Has This Policy" },
       { type: "p", text: "In steel construction, one poorly welded joint or one unsupervised lift can injure people and cost a client years of investment. The way a company manages quality, health, safety and the environment therefore affects the quality of its structures. The SME Policy sets the rules for the workshop, the site crews and the company's dealings with clients and suppliers." },
       { type: "h2", title: "Quality Management" },
-      { type: "p", text: "Steel Mind inspects material when it arrives, checks dimensions after cutting, examines welds before assembly and checks alignment during erection. When a result falls short of the specification, the correction is recorded." },
+      { type: "p", text: "Steel Mind Engineers inspects material when it arrives, checks dimensions after cutting, examines welds before assembly and checks alignment during erection. When a result falls short of the specification, the correction is recorded." },
       { type: "h2", title: "Health and Safety" },
       { type: "p", text: "Every employee is trained before working on site. Workers wear certified protective equipment and follow written site rules. Risk reviews take place regularly so that hazards are removed instead of tolerated." },
       { type: "h2", title: "Environmental Care" },
       { type: "p", text: "Cutting layouts are planned to reduce scrap, and offcuts are sent for recycling. Welding fumes and paint overspray are controlled. Working methods are chosen to limit noise, dust and waste at the workshop and on client premises." },
       { type: "h2", title: "Legal Compliance" },
-      { type: "p", text: "Steel Mind follows the quality, environmental and workplace safety rules that apply to its operations. It keeps the records needed to show that compliance to clients and authorities." },
+      { type: "p", text: "Steel Mind Engineers follows the quality, environmental and workplace safety rules that apply to its operations. It keeps the records needed to show that compliance to clients and authorities." },
       { type: "h2", title: "Improvement and Responsibility" },
       { type: "p", text: "Feedback from clients, supervisors and workers is collected after each project and turned into changes in procedure. Management is responsible for applying the policy. Every employee has the right and the duty to stop work that looks unsafe and to report it." }
     ]
@@ -227,10 +227,10 @@ export const pages1to20: ContentData[] = [
     related: ["SME Policy", "Our Core Values", "Our Projects"],
     faq: [],
     blocks: [
-      { type: "h2", title: "What Steel Mind Commits To" },
+      { type: "h2", title: "What Steel Mind Engineers Commits To" },
       { type: "p", text: "Steel Mind Engineers is a reliable steel contractor in Pakistan because it makes specific promises and keeps them. A promise that cannot be checked has no value to a client. For this reason each commitment below can be measured on your project." },
       { type: "h2", title: "Commitment 1: The Steel Matches the Drawing" },
-      { type: "p", text: "Every structure is built to approved drawings. Steel Mind checks material on arrival, checks dimensions after cutting and checks alignment during erection. If a part does not match the drawing, the team corrects it and records the correction." },
+      { type: "p", text: "Every structure is built to approved drawings. Steel Mind Engineers checks material on arrival, checks dimensions after cutting and checks alignment during erection. If a part does not match the drawing, the team corrects it and records the correction." },
       { type: "h2", title: "Commitment 2: A Schedule You Can Plan Around" },
       { type: "p", text: "You receive a written schedule before work starts. The schedule shows design approval, fabrication, delivery and erection. If a delay is likely, the project coordinator tells you early and explains the cause and the new date." },
       { type: "h2", title: "Commitment 3: Safe Work on Every Site" },
@@ -238,7 +238,7 @@ export const pages1to20: ContentData[] = [
       { type: "h2", title: "Commitment 4: One Point of Contact" },
       { type: "p", text: "You deal with one project coordinator from contract to handover. The coordinator can reach the design engineer, the workshop and the site supervisor. You do not need to repeat your question to three departments." },
       { type: "h2", title: "Commitment 5: Support After Handover" },
-      { type: "p", text: "Steel buildings need repairs, additions and extensions over the years. Steel Mind stays available for these jobs. See the After Sale Services page for the details." },
+      { type: "p", text: "Steel buildings need repairs, additions and extensions over the years. Steel Mind Engineers stays available for these jobs. See the After Sale Services page for the details." },
       { type: "h2", title: "How to Check These Commitments" },
       { type: "p", text: "Ask for the inspection records, the written schedule and the lifting plan before your project starts. A reliable contractor can show all three." }
     ]
@@ -250,18 +250,18 @@ export const pages1to20: ContentData[] = [
     description: "Tour the Steel Mind Engineers fabrication factory at Karol Ghati, Lahore: cutting, welding, assembly, painting and dispatch of steel structures.",
     keyword: "steel fabrication factory in Lahore",
     support: ["steel fabrication workshop Pakistan", "PEB factory in Pakistan", "steel structure manufacturing facility"],
-    h1: "Factory Tour: Inside the Steel Mind Fabrication Factory in Lahore",
-    quickAnswer: "The Steel Mind factory is at Karol Ghati, Lahore. Steel moves through five stages: material yard, cutting, fitting and welding, cleaning and painting, and packing and dispatch.",
-    alt: "Fabrication area of the Steel Mind factory in Karol Ghati, Lahore, with steel columns and an overhead crane.",
+    h1: "Factory Tour: Inside the Steel Mind Engineers Fabrication Factory in Lahore",
+    quickAnswer: "The Steel Mind Engineers factory is at Karol Ghati, Lahore. Steel moves through five stages: material yard, cutting, fitting and welding, cleaning and painting, and packing and dispatch.",
+    alt: "Fabrication area of the Steel Mind Engineers factory in Karol Ghati, Lahore, with steel columns and an overhead crane.",
     related: ["Fabrication", "Introduction", "Pre-Engineered Buildings"],
     faq: [
-      { q: "Where is the Steel Mind factory?", a: "The factory is at Karol Ghati, Lahore, Punjab 54000." },
+      { q: "Where is the Steel Mind Engineers factory?", a: "The factory is at Karol Ghati, Lahore, Punjab 54000." },
       { q: "Can I visit before I sign a contract?", a: "Yes. Call to book a visit and an engineer will take you through the factory." },
-      { q: "Does Steel Mind fabricate outside Lahore?", a: "The fabrication is done in Lahore. The steel is then delivered and erected at project sites across Pakistan." }
+      { q: "Does Steel Mind Engineers fabricate outside Lahore?", a: "The fabrication is done in Lahore. The steel is then delivered and erected at project sites across Pakistan." }
     ],
     blocks: [
       { type: "h2", title: "Where the Factory Is" },
-      { type: "p", text: "The Steel Mind factory is at Karol Ghati, Lahore, Punjab 54000. All fabrication for projects across Pakistan starts here. The head office is at 35-D Commercial, DHA EME Sector, Lahore." },
+      { type: "p", text: "The Steel Mind Engineers factory is at Karol Ghati, Lahore, Punjab 54000. All fabrication for projects across Pakistan starts here. The head office is at 35-D Commercial, DHA EME Sector, Lahore." },
       { type: "h2", title: "What You Will See on the Tour" },
       { type: "p", text: "A steel part moves through the factory in a fixed order. The sections below follow that order." },
       {
@@ -275,7 +275,7 @@ export const pages1to20: ContentData[] = [
         ]
       },
       { type: "h2", title: "Why the Factory Matters to Your Project" },
-      { type: "p", text: "A factory with its own cutting, welding and handling equipment lets Steel Mind run several projects at the same time. Work happens indoors and does not depend on weather. Quality checks take place at one location where the engineers can visit. Parts arrive on site ready to assemble." },
+      { type: "p", text: "A factory with its own cutting, welding and handling equipment lets Steel Mind Engineers run several projects at the same time. Work happens indoors and does not depend on weather. Quality checks take place at one location where the engineers can visit. Parts arrive on site ready to assemble." },
       { type: "h2", title: "Visit the Factory" },
       { type: "p", text: "Clients are welcome to visit by appointment. Call +92 300 4253966 or +92 307 7077549, or send a message from the Contact Us page." }
     ]
@@ -283,26 +283,26 @@ export const pages1to20: ContentData[] = [
   {
     page: 9,
     url: "/pre-engineered-buildings-pakistan/",
-    title: "Pre-Engineered Buildings in Pakistan | Steel Mind",
-    description: "Steel Mind designs, fabricates and erects pre-engineered buildings in Pakistan. Explore PEB design, framing, cranes, mezzanines and accessories.",
+    title: "Pre-Engineered Buildings in Pakistan | Steel Mind Engineers",
+    description: "Steel Mind Engineers designs, fabricates and erects pre-engineered buildings in Pakistan. Explore PEB design, framing, cranes, mezzanines and accessories.",
     keyword: "pre-engineered buildings in Pakistan",
     support: ["PEB manufacturer in Pakistan", "PEB structures Pakistan", "steel building manufacturers in Pakistan"],
     h1: "Pre-Engineered Buildings in Pakistan: Designed, Fabricated and Erected by One Team",
-    quickAnswer: "A pre-engineered building (PEB) is a steel building whose parts are designed in advance and made in a factory. Steel Mind designs, fabricates and erects PEBs in Pakistan under one contract.",
-    alt: "Aerial view of a pre-engineered steel building built by Steel Mind in Pakistan.",
+    quickAnswer: "A pre-engineered building (PEB) is a steel building whose parts are designed in advance and made in a factory. Steel Mind Engineers designs, fabricates and erects PEBs in Pakistan under one contract.",
+    alt: "Aerial view of a pre-engineered steel building built by Steel Mind Engineers in Pakistan.",
     related: ["PEB Overview", "Advantages", "Our Projects"],
     faq: [
       { q: "What is the difference between a PEB and a normal steel building?", a: "A PEB is designed as a complete system. Each frame is sized for the exact loads of your building, so the steel is used where it is needed and not where it is not." },
-      { q: "How big can a PEB be?", a: "Clear-span frames can cover wide spans without inner columns. Steel Mind has built a PEB shed of 97,888 square feet." },
+      { q: "How big can a PEB be?", a: "Clear-span frames can cover wide spans without inner columns. Steel Mind Engineers has built a PEB shed of 97,888 square feet." },
       { q: "Can a PEB be extended later?", a: "Yes. A PEB is bolted together, so bays can be added at the end of the building." }
     ],
     blocks: [
-      { type: "h2", title: "What Steel Mind Offers in PEB" },
-      { type: "p", text: "A pre-engineered building, or PEB, is a steel building whose parts are designed in advance and made in a factory. Steel Mind handles the design, the fabrication and the erection. You get one contract for the whole building, and one team answers your questions from the first sketch to the last bolt." },
+      { type: "h2", title: "What Steel Mind Engineers Offers in PEB" },
+      { type: "p", text: "A pre-engineered building, or PEB, is a steel building whose parts are designed in advance and made in a factory. Steel Mind Engineers handles the design, the fabrication and the erection. You get one contract for the whole building, and one team answers your questions from the first sketch to the last bolt." },
       { type: "h2", title: "Explore the PEB Section" },
       { type: "p", text: "Each page in this section explains one part of a PEB project. You can read them in order or go straight to the topic you need. PEB Overview explains what a PEB is and where it is used. Advantages compares speed, cost, span and flexibility. 3D Concept shows how you see the building before it is made. One-Step Solution explains the single-contract process. Engineering Department describes how the design is done. Primary Framing System covers columns and rafters. Basic Parameters lists the data needed to start a design. Sub Structures covers purlins, girts, bracing and add-on structures such as canopies. Crane System explains buildings with overhead cranes. Mezzanine System explains extra floors inside the building. Accessories covers skylights, ventilators, doors and insulation." },
       { type: "h2", title: "Projects Built With This System" },
-      { type: "p", text: "Steel Mind built a 96,600 square foot PEB crane shed for Haier at Raiwind, a 97,888 square foot crane and mezzanine shed for Haier, and a 39,330 square foot PEB dairy shed for Dravton Dairy at Chunian. See every project on the Our Projects page." }
+      { type: "p", text: "Steel Mind Engineers built a 96,600 square foot PEB crane shed for Haier at Raiwind, a 97,888 square foot crane and mezzanine shed for Haier, and a 39,330 square foot PEB dairy shed for Dravton Dairy at Chunian. See every project on the Our Projects page." }
     ]
   },
   {
@@ -329,14 +329,14 @@ export const pages1to20: ContentData[] = [
       { type: "p", text: "You give the use, size, location and load needs. Engineers design the frames and prepare drawings. The factory cuts, welds, paints and packs the parts. Trucks deliver the parts to your site. Crews bolt the parts together and fit the sheets. Foundation work on site runs at the same time as the factory work, and this overlap saves weeks." },
       { type: "h2", title: "Where PEBs Are Used" },
       { type: "p", text: "PEBs suit factories, warehouses, dairy and poultry farms, workshops, showrooms, sports halls, cold stores, hangars and crane buildings. They work well wherever you need a large open floor with few columns." },
-      { type: "h2", title: "What Steel Mind Provides" },
-      { type: "p", text: "Steel Mind offers the full PEB service: design, detailing, fabrication, painting, delivery and erection. The largest PEB projects include a 96,600 square foot crane shed and a 97,888 square foot crane and mezzanine shed for Haier at Raiwind. Read how the work fits together on the One-Step Solution page." }
+      { type: "h2", title: "What Steel Mind Engineers Provides" },
+      { type: "p", text: "Steel Mind Engineers offers the full PEB service: design, detailing, fabrication, painting, delivery and erection. The largest PEB projects include a 96,600 square foot crane shed and a 97,888 square foot crane and mezzanine shed for Haier at Raiwind. Read how the work fits together on the One-Step Solution page." }
     ]
   },
   {
     page: 11,
     url: "/pre-engineered-buildings-pakistan/advantages/",
-    title: "Advantages of Pre-Engineered Buildings | Steel Mind",
+    title: "Advantages of Pre-Engineered Buildings | Steel Mind Engineers",
     description: "Faster build time, lower weight, wide clear spans and easy extension. See the main advantages of pre-engineered buildings in Pakistan.",
     keyword: "advantages of pre-engineered buildings",
     support: ["PEB vs conventional construction", "benefits of steel buildings", "fast construction steel building"],
@@ -367,8 +367,8 @@ export const pages1to20: ContentData[] = [
   {
     page: 12,
     url: "/pre-engineered-buildings-pakistan/3d-concept/",
-    title: "3D Concept Design for PEB Buildings | Steel Mind",
-    description: "See your steel building in 3D before fabrication. Steel Mind prepares 3D models of pre-engineered buildings to confirm layout, size and fit.",
+    title: "3D Concept Design for PEB Buildings | Steel Mind Engineers",
+    description: "See your steel building in 3D before fabrication. Steel Mind Engineers prepares 3D models of pre-engineered buildings to confirm layout, size and fit.",
     keyword: "3D design for pre-engineered buildings",
     support: ["3D steel building model", "PEB design drawings Pakistan", "steel structure 3D concept"],
     h1: "3D Concept Design: See Your Pre-Engineered Building Before It Is Built",
@@ -385,7 +385,7 @@ export const pages1to20: ContentData[] = [
       { type: "h2", title: "What the 3D Concept Shows" },
       { type: "p", text: "The model shows the full building shape, with frames, purlins and bracing. It shows the positions of doors, windows, skylights and vents. It shows the layout of cranes, mezzanine floors and interior equipment where they apply. It also shows the clearance for trucks, forklifts and machines." },
       { type: "h2", title: "How the 3D Stage Works" },
-      { type: "p", text: "You send your layout, size and use. The engineer builds the 3D model of the structure. You review the model and ask for changes. After you approve the model, the engineers prepare the detail drawings. Changes at the 3D stage cost very little, while changes after fabrication cost much more. This is why Steel Mind asks for your approval before cutting starts." },
+      { type: "p", text: "You send your layout, size and use. The engineer builds the 3D model of the structure. You review the model and ask for changes. After you approve the model, the engineers prepare the detail drawings. Changes at the 3D stage cost very little, while changes after fabrication cost much more. This is why Steel Mind Engineers asks for your approval before cutting starts." },
       { type: "h2", title: "From 3D Model to Fabrication" },
       { type: "p", text: "The approved model is the basis for the fabrication drawings. The same data feeds the cutting lists, so the factory makes exactly what you approved. Read more on the Engineering Department page and the Detailing page." }
     ]
@@ -393,8 +393,8 @@ export const pages1to20: ContentData[] = [
   {
     page: 13,
     url: "/pre-engineered-buildings-pakistan/one-step-solution/",
-    title: "Turnkey Steel Building Solution in Pakistan | Steel Mind",
-    description: "One contract from design to handover. Steel Mind handles engineering, fabrication, painting, delivery and erection of PEB projects in Pakistan.",
+    title: "Turnkey Steel Building Solution in Pakistan | Steel Mind Engineers",
+    description: "One contract from design to handover. Steel Mind Engineers handles engineering, fabrication, painting, delivery and erection of PEB projects in Pakistan.",
     keyword: "turnkey steel building solution in Pakistan",
     support: ["turnkey PEB contractor", "design and build steel structures Pakistan", "single contractor steel construction"],
     h1: "One-Step Solution: A Turnkey Steel Building From Design to Handover",
@@ -403,11 +403,11 @@ export const pages1to20: ContentData[] = [
     related: ["Services", "Erection", "Engineering Department"],
     faq: [
       { q: "Who is my contact during the project?", a: "A project coordinator is your single point of contact from contract to handover." },
-      { q: "Can I buy only fabrication?", a: "Yes. Steel Mind also supplies fabricated steel to your drawings. See Custom Steel Fabrication." }
+      { q: "Can I buy only fabrication?", a: "Yes. Steel Mind Engineers also supplies fabricated steel to your drawings. See Custom Steel Fabrication." }
     ],
     blocks: [
       { type: "h2", title: "What One-Step Means" },
-      { type: "p", text: "Many steel projects use a separate designer, a separate fabricator and a separate erection contractor. When something goes wrong, each one blames the other. Steel Mind does all of the work with one team, so you have one contract and one person to call." },
+      { type: "p", text: "Many steel projects use a separate designer, a separate fabricator and a separate erection contractor. When something goes wrong, each one blames the other. Steel Mind Engineers does all of the work with one team, so you have one contract and one person to call." },
       { type: "h2", title: "The Steps in One Contract" },
       {
         type: "steps",
@@ -431,17 +431,17 @@ export const pages1to20: ContentData[] = [
   {
     page: 14,
     url: "/pre-engineered-buildings-pakistan/engineering-department/",
-    title: "PEB Engineering and Design Team in Pakistan | Steel Mind",
-    description: "The Steel Mind engineering department designs PEB frames, prepares fabrication drawings and checks every structure before steel is cut.",
+    title: "PEB Engineering and Design Team in Pakistan | Steel Mind Engineers",
+    description: "The Steel Mind Engineers engineering department designs PEB frames, prepares fabrication drawings and checks every structure before steel is cut.",
     keyword: "PEB design and engineering in Pakistan",
     support: ["steel structure design engineers Pakistan", "PEB fabrication drawings", "structural steel detailing"],
     h1: "Engineering Department: PEB Design and Detailing in Pakistan",
-    quickAnswer: "The Steel Mind engineering department turns your requirement into a safe, buildable steel design, prepares the drawings used by the factory and the site crews, and checks each design before release.",
-    alt: "Engineers reviewing a 3D model of a steel building in the Steel Mind design office.",
+    quickAnswer: "The Steel Mind Engineers engineering department turns your requirement into a safe, buildable steel design, prepares the drawings used by the factory and the site crews, and checks each design before release.",
+    alt: "Engineers reviewing a 3D model of a steel building in the Steel Mind Engineers design office.",
     related: ["Primary Framing System", "Basic Parameters", "Design"],
     faq: [
       { q: "Who checks the design?", a: "A second engineer checks each design before drawings are released to the factory." },
-      { q: "Do I need my own structural engineer?", a: "You may use your own consultant. Steel Mind coordinates with consultants and works to their approved requirements." }
+      { q: "Do I need my own structural engineer?", a: "You may use your own consultant. Steel Mind Engineers coordinates with consultants and works to their approved requirements." }
     ],
     blocks: [
       { type: "h2", title: "What the Engineering Department Does" },
@@ -466,12 +466,12 @@ export const pages1to20: ContentData[] = [
   {
     page: 15,
     url: "/pre-engineered-buildings-pakistan/primary-framing-system/",
-    title: "PEB Primary Framing: Columns and Rafters | Steel Mind",
+    title: "PEB Primary Framing: Columns and Rafters | Steel Mind Engineers",
     description: "Compare PEB primary framing systems: clear span, lean-to, mono slope, multi-gable and multi-span frames, and choose the right steel frame.",
     keyword: "PEB primary framing system",
     support: ["steel portal frame Pakistan", "clear span frame", "multi span PEB frame"],
     h1: "Primary Framing System: Columns and Rafters of a Pre-Engineered Building",
-    quickAnswer: "The primary frame is the steel skeleton of a PEB. It is made of columns and rafters that carry every load to the foundation. Steel Mind designs ten frame types, from clear-span to multi-span and roof systems.",
+    quickAnswer: "The primary frame is the steel skeleton of a PEB. It is made of columns and rafters that carry every load to the foundation. Steel Mind Engineers designs ten frame types, from clear-span to multi-span and roof systems.",
     alt: "Diagram of the ten primary framing systems used in pre-engineered buildings.",
     related: ["Basic Parameters", "Columns and Beams", "Crane System"],
     faq: [
@@ -508,7 +508,7 @@ export const pages1to20: ContentData[] = [
   {
     page: 16,
     url: "/pre-engineered-buildings-pakistan/basic-parameters/",
-    title: "PEB Design Parameters: Span, Height, Load | Steel Mind",
+    title: "PEB Design Parameters: Span, Height, Load | Steel Mind Engineers",
     description: "The data an engineer needs to design your steel building: width, length, eave height, roof slope, loads, bay spacing and site location.",
     keyword: "PEB design parameters",
     support: ["steel building dimensions", "bay spacing PEB", "eave height and roof slope"],
@@ -547,7 +547,7 @@ export const pages1to20: ContentData[] = [
   {
     page: 17,
     url: "/pre-engineered-buildings-pakistan/sub-structures/",
-    title: "PEB Sub Structures: Purlins, Canopy, Fascia | Steel Mind",
+    title: "PEB Sub Structures: Purlins, Canopy, Fascia | Steel Mind Engineers",
     description: "Purlins, girts, bracing, canopies, fascia, roof monitors, platforms and stairs: the sub structures that complete a pre-engineered building.",
     keyword: "PEB sub structures",
     support: ["PEB purlins and girts", "steel canopy and fascia", "roof monitor for steel building"],
@@ -593,12 +593,12 @@ export const pages1to20: ContentData[] = [
   {
     page: 18,
     url: "/pre-engineered-buildings-pakistan/crane-system/",
-    title: "Crane Buildings and Crane Systems in PEB | Steel Mind",
+    title: "Crane Buildings and Crane Systems in PEB | Steel Mind Engineers",
     description: "Steel buildings designed for overhead cranes. Learn how crane loads, runway beams and column brackets are built into a PEB in Pakistan.",
     keyword: "PEB with overhead crane in Pakistan",
     support: ["crane shed construction Pakistan", "EOT crane building", "crane runway beams"],
     h1: "Crane System: Pre-Engineered Buildings Designed for Overhead Cranes",
-    quickAnswer: "A PEB that carries an overhead crane needs stronger columns, accurate runway beams and extra bracing, all designed from the start. Steel Mind built crane sheds of 96,600 and 97,888 square feet for Haier at Raiwind.",
+    quickAnswer: "A PEB that carries an overhead crane needs stronger columns, accurate runway beams and extra bracing, all designed from the start. Steel Mind Engineers built crane sheds of 96,600 and 97,888 square feet for Haier at Raiwind.",
     alt: "Crane arrangements for pre-engineered buildings: jib, semi-gantry, top-running and underhung.",
     related: ["Crane Sheds", "Crane Gantry Structures", "Our Projects"],
     faq: [
@@ -624,18 +624,18 @@ export const pages1to20: ContentData[] = [
       { type: "h2", title: "Data the Engineer Needs" },
       { type: "p", text: "Give the crane capacity, the crane span, the lifting height, the number of cranes and how often they work. The crane maker can provide the wheel loads." },
       { type: "h2", title: "Experience" },
-      { type: "p", text: "Steel Mind built a PEB crane shed of 96,600 square feet for Haier at Raiwind, with a height of 30 feet, a width of 184 feet and a length of 525 feet. It also built a PEB crane and mezzanine shed of 97,888 square feet for Haier, 33 feet high, 184 feet wide and 532 feet long. See the Crane Sheds page and the project pages." }
+      { type: "p", text: "Steel Mind Engineers built a PEB crane shed of 96,600 square feet for Haier at Raiwind, with a height of 30 feet, a width of 184 feet and a length of 525 feet. It also built a PEB crane and mezzanine shed of 97,888 square feet for Haier, 33 feet high, 184 feet wide and 532 feet long. See the Crane Sheds page and the project pages." }
     ]
   },
   {
     page: 19,
     url: "/pre-engineered-buildings-pakistan/mezzanine-system/",
-    title: "PEB Mezzanine Floor System in Pakistan | Steel Mind",
-    description: "Add floor area inside your steel building with a mezzanine. Steel Mind designs and builds mezzanine floors for factories and warehouses in Pakistan.",
+    title: "PEB Mezzanine Floor System in Pakistan | Steel Mind Engineers",
+    description: "Add floor area inside your steel building with a mezzanine. Steel Mind Engineers designs and builds mezzanine floors for factories and warehouses in Pakistan.",
     keyword: "mezzanine floor in Pakistan",
     support: ["steel mezzanine system", "mezzanine floor for warehouse", "industrial mezzanine floor"],
     h1: "Mezzanine System: More Floor Area Inside Your Steel Building",
-    quickAnswer: "A mezzanine is an extra steel floor built inside a building. It adds usable area for offices, storage or production without enlarging the building footprint. Steel Mind built a 32,400 square foot mezzanine for Haier and a 7,020 square foot mezzanine for Maria B.",
+    quickAnswer: "A mezzanine is an extra steel floor built inside a building. It adds usable area for offices, storage or production without enlarging the building footprint. Steel Mind Engineers built a 32,400 square foot mezzanine for Haier and a 7,020 square foot mezzanine for Maria B.",
     alt: "Steel mezzanine floor with staircase and handrails inside a warehouse.",
     related: ["Mezzanine Floors", "Steel Stairs", "Storage Warehouses"],
     faq: [
@@ -652,13 +652,13 @@ export const pages1to20: ContentData[] = [
       { type: "h2", title: "Benefits" },
       { type: "p", text: "A mezzanine adds usable floor area at a lower cost per square foot than a new building. Steel mezzanines are quick to install and can be extended or moved." },
       { type: "h2", title: "Experience" },
-      { type: "p", text: "Steel Mind built a mezzanine floor of 32,400 square feet for Haier at Raiwind, 12 feet high, 180 feet wide and 180 feet long. It built a PEB mezzanine floor of 7,020 square feet for Maria B in Lahore, 12 feet high, 90 feet wide and 78 feet long. It also built a combined crane and mezzanine shed of 97,888 square feet. See the Mezzanine Floors page for stand-alone mezzanine work." }
+      { type: "p", text: "Steel Mind Engineers built a mezzanine floor of 32,400 square feet for Haier at Raiwind, 12 feet high, 180 feet wide and 180 feet long. It built a PEB mezzanine floor of 7,020 square feet for Maria B in Lahore, 12 feet high, 90 feet wide and 78 feet long. It also built a combined crane and mezzanine shed of 97,888 square feet. See the Mezzanine Floors page for stand-alone mezzanine work." }
     ]
   },
   {
     page: 20,
     url: "/pre-engineered-buildings-pakistan/accessories/",
-    title: "PEB Accessories: Skylights, Vents, Doors | Steel Mind",
+    title: "PEB Accessories: Skylights, Vents, Doors | Steel Mind Engineers",
     description: "Skylights, ventilators, louvers, insulation, doors, ladders and walkways for pre-engineered buildings. Choose the accessories your building needs.",
     keyword: "PEB accessories in Pakistan",
     support: ["steel building skylights", "roof ventilators Pakistan", "insulation for steel buildings"],
@@ -672,7 +672,7 @@ export const pages1to20: ContentData[] = [
     ],
     blocks: [
       { type: "h2", title: "Why Accessories Matter" },
-      { type: "p", text: "The frame and the sheets make a building. The accessories make it comfortable, safe and usable. Steel Mind supplies and fits them with the building, so each item is ordered at the right stage and carries the same finish as the rest of the structure." },
+      { type: "p", text: "The frame and the sheets make a building. The accessories make it comfortable, safe and usable. Steel Mind Engineers supplies and fits them with the building, so each item is ordered at the right stage and carries the same finish as the rest of the structure." },
       { type: "h2", title: "Insulation" },
       {
         type: "defs",

@@ -35,7 +35,7 @@ export const Footer: React.FC = () => {
             </div>
 
             <p className="text-[11px] leading-[1.6] text-white/65 max-w-[240px]">
-              Steel Mind designs, fabricates and erects steel structures for industry, agriculture and commerce.
+              Steel Mind Engineers designs, fabricates and erects steel structures for industry, agriculture and commerce.
             </p>
 
             <div className="text-[10px] uppercase tracking-[0.14em] text-white font-medium">

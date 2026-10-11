@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --blue: #22488F;
-  --blue-dark: #1A2B68;
-  --blue-glass: rgba(34, 72, 143, 0.85);
-  --blue-bright: #285AA1;
-  --blue-glossy: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.03) 45%, rgba(0, 0, 0, 0.02) 55%, rgba(0, 0, 0, 0.14) 100%), linear-gradient(155deg, #2A54A2 0%, #22488F 48%, #192C69 100%);
-  --blue-glass-glossy: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(0, 0, 0, 0.08) 100%), linear-gradient(180deg, rgba(42, 84, 162, 0.94) 0%, rgba(34, 72, 143, 0.90) 52%, rgba(25, 44, 105, 0.94) 100%);
-  --blue-btn-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.03) 48%, rgba(0, 0, 0, 0.06) 100%), linear-gradient(180deg, #2A54A2 0%, #22488F 58%, #1A2B68 100%);
+  --blue: #1E3A8A;
+  --blue-dark: #162D6E;
+  --blue-deep: #101F4E;
+  --blue-glass: rgba(30, 58, 138, 0.85);
+  --blue-bright: #2563EB;
+  --blue-glossy: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.03) 45%, rgba(0, 0, 0, 0.02) 55%, rgba(0, 0, 0, 0.14) 100%), linear-gradient(155deg, #1E3A8A 0%, #162D6E 48%, #101F4E 100%);
+  --blue-glass-glossy: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(0, 0, 0, 0.08) 100%), linear-gradient(180deg, rgba(30, 58, 138, 0.94) 0%, #1E3A8A 52%, #101F4E 100%);
+  --blue-btn-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.03) 48%, rgba(0, 0, 0, 0.06) 100%), linear-gradient(180deg, #1E3A8A 0%, #162D6E 58%, #101F4E 100%);
   --white: #FFFFFF;
   --offwhite: #F4F5F7;
   --ink: #0A0A0A;
@@ -35,10 +36,11 @@
 }
 
 @theme {
-  --color-blue: #22488F;
-  --color-blue-dark: #1A2B68;
-  --color-blue-glass: rgba(34, 72, 143, 0.85);
-  --color-blue-bright: #285AA1;
+  --color-blue: #1E3A8A;
+  --color-blue-dark: #162D6E;
+  --color-blue-deep: #101F4E;
+  --color-blue-glass: rgba(30, 58, 138, 0.85);
+  --color-blue-bright: #2563EB;
   --color-offwhite: #F4F5F7;
   --color-ink: #0A0A0A;
   --color-grey: #6B7280;
@@ -137,25 +139,17 @@ html.lenis, html.lenis body {
   color: white;
 }
 
-/* Initial state for motion attributes before animations or when js-ready */
-html.js-ready [data-reveal],
-html.js-ready [data-fade-up] {
-  opacity: 0;
-  transform: translateY(30px);
-}
+/* Content must never stay hidden with CSS before JS runs */
+/* Initial state is managed strictly with JS in motion library */
 
-html.js-ready [data-split] {
-  visibility: hidden;
-}
-
-/* V4 Typography Scale */
+/* V4 Typography Scale - Reduced */
 .hero-h1 {
-  font-size: 18px;
+  font-size: 22px;
   line-height: 1.15;
 }
 @media (min-width: 1024px) {
   .hero-h1 {
-    font-size: 28px;
+    font-size: 36px;
   }
 }
 
@@ -165,7 +159,7 @@ html.js-ready [data-split] {
 }
 @media (min-width: 1024px) {
   .inner-h1 {
-    font-size: 38px;
+    font-size: 40px;
   }
 }
 
@@ -175,7 +169,7 @@ html.js-ready [data-split] {
 }
 @media (min-width: 1024px) {
   .heading-h2 {
-    font-size: 28px;
+    font-size: 30px;
   }
 }
 
@@ -191,11 +185,13 @@ html.js-ready [data-split] {
 
 .body-text {
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.65;
+  max-width: 520px;
 }
 @media (min-width: 1024px) {
   .body-text {
-    font-size: 15px;
+    font-size: 14px;
+    max-width: 600px;
   }
 }
 
@@ -207,20 +203,28 @@ html.js-ready [data-split] {
 }
 
 .faq-q {
-  font-size: 14px;
+  font-size: 13px;
 }
 @media (min-width: 1024px) {
   .faq-q {
-    font-size: 16px;
+    font-size: 15px;
   }
 }
 
 .chip-label {
-  font-size: 11px;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.metric-num {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--blue);
+  line-height: 1;
 }
 @media (min-width: 1024px) {
-  .chip-label {
-    font-size: 12px;
+  .metric-num {
+    font-size: 64px;
   }
 }
 

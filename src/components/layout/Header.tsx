@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { SITE } from "../../data/site.ts";
 import { useScrollState } from "../../hooks/useScrollState.ts";
 import { DesktopNav } from "./DesktopNav.tsx";
@@ -9,30 +9,24 @@ export interface HeaderProps {
   hasDarkHero?: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({ hasDarkHero = true }) => {
+export const Header: React.FC<HeaderProps> = () => {
+  const location = useLocation();
+  const isHomepage = location.pathname === "/";
   const { scrolled } = useScrollState(80);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // If page does NOT have dark hero, keep scrolled blue style from top
-  const isBlueState = !hasDarkHero || scrolled;
+  // On homepage: transparent for first 80px, then solid Royal Blue.
+  // On every inner page: solid Royal Blue at all times.
+  const isSolidBlue = !isHomepage || scrolled;
 
   return (
     <>
       <header
-        style={
-          isBlueState
-            ? {
-                background: "var(--blue-glass-glossy)",
-                boxShadow:
-                  "inset 0 1px 0 rgba(255,255,255,0.18), 0 8px 24px -4px rgba(10,20,50,0.28)",
-              }
-            : undefined
-        }
-        className={`fixed top-0 inset-x-0 z-[100] transition-[background,box-shadow,border-color,backdrop-filter] duration-400 ease-out ${
-          isBlueState
-            ? "backdrop-blur-[18px] backdrop-saturate-[180%] [-webkit-backdrop-filter:blur(18px)_saturate(180%)] border-b border-white/[0.18]"
-            : "bg-transparent border-b border-transparent"
-        }`}
+        style={{
+          backgroundColor: isSolidBlue ? "var(--blue)" : "transparent",
+          borderColor: isSolidBlue ? "rgba(255, 255, 255, 0.12)" : "transparent",
+        }}
+        className="fixed top-0 inset-x-0 z-[100] transition-[background-color,border-color] duration-300 ease border-b text-white"
       >
         <div className="max-w-[1340px] mx-auto h-[64px] lg:h-[88px] px-5 lg:px-10 flex items-center justify-between">
           {/* Brand Lockup */}

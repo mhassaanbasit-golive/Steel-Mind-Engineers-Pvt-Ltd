@@ -28,7 +28,7 @@ export const Clients: React.FC = () => {
       <HeroBand
         variant="image"
         imageSrc={A.team}
-        imageAlt="Steel buildings built by Steel Mind for clients across Pakistan."
+        imageAlt="Steel buildings built by Steel Mind Engineers for clients across Pakistan."
         breadcrumbItems={[
           { label: "Home", href: "/" },
           { label: "Our Clients" },
@@ -46,13 +46,13 @@ export const Clients: React.FC = () => {
                 className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2]"
                 data-split=""
               >
-                Who Builds With Steel Mind
+                Who Builds With Steel Mind Engineers
               </h2>
               <p
                 className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)]"
                 data-reveal=""
               >
-                Steel Mind builds for manufacturers, dairy and livestock farms, apparel and retail brands, steel and engineering companies and infrastructure contractors. A client list shows who has trusted a contractor with real money and real deadlines, so each logo below belongs to a company that has worked with Steel Mind.
+                Steel Mind Engineers builds for manufacturers, dairy and livestock farms, apparel and retail brands, steel and engineering companies and infrastructure contractors. A client list shows who has trusted a contractor with real money and real deadlines, so each logo below belongs to a company that has worked with Steel Mind Engineers.
               </p>
               <p
                 className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)]"
@@ -63,7 +63,7 @@ export const Clients: React.FC = () => {
             </div>
 
             <div className="lg:col-span-6" data-reveal="">
-              <Canvas slot="clients-info" ratio="4/3" src={A.about} alt="Who Builds With Steel Mind" />
+              <Canvas slot="clients-info" ratio="4/3" src={A.about} alt="Who Builds With Steel Mind Engineers" />
             </div>
           </div>
         </div>

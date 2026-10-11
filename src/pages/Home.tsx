@@ -271,20 +271,20 @@ export const Home: React.FC = () => {
             right: "var(--pad-x)",
           }}
         >
-          {/* H1: smaller on desktop as requested */}
+          {/* H1 */}
           <h1
-            className="text-[17px] md:text-[20px] lg:text-[22px] font-semibold leading-[1.2] tracking-[-0.01em] text-white max-w-[280px] md:max-w-[420px]"
+            className="text-[22px] lg:text-[36px] font-semibold leading-[1.15] tracking-[-0.01em] text-white max-w-[900px]"
             data-split=""
           >
-            {pageData.h1}
+            Turnkey provider from design and fabrication to installation for Pre-Engineered Steel Buildings, Steel Structures and Industrial Sheds along with Custom Steel Fabrication across Pakistan.
           </h1>
 
-          {/* Supporting subheading: smaller on desktop as requested */}
+          {/* Supporting line */}
           <p
-            className="mt-3 text-[12px] md:text-[13px] lg:text-[14px] leading-[1.5] text-white/90 line-clamp-3 max-w-[280px] md:max-w-[420px]"
+            className="mt-3 text-[14px] lg:text-[16px] leading-[1.65] text-white/85 max-w-[560px]"
             data-fade-up=""
           >
-            Steel Mind designs, fabricates and erects steel structures for industry, agriculture and commerce. One team handles the work from the first drawing to the final handover.
+            Steel Mind Engineers Pvt. Ltd. handles every steel project from the first drawing to the final handover. Design, fabrication, delivery and erection for factories, warehouses, farms and commercial buildings across Pakistan.
           </p>
 
           {/* Buttons: Small sizes arranged in one line in bottom-left corner */}
@@ -334,15 +334,15 @@ export const Home: React.FC = () => {
             className="text-[18px] lg:text-[22px] font-medium leading-[1.3] text-[var(--ink)] max-w-[520px] mx-auto text-center"
             data-split=""
           >
-            Steel Mind builds turnkey steel structures in Pakistan, from engineering and fabrication to erection.
+            Steel Mind Engineers builds turnkey steel structures in Pakistan, from engineering and fabrication to erection.
           </p>
         </div>
       </section>
 
-      {/* 3. About Steel Mind (Offwhite) */}
+      {/* 3. About Steel Mind Engineers (Offwhite) */}
       <Section
         bg="offwhite"
-        title="About Steel Mind"
+        title="About Steel Mind Engineers"
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
           <div className="lg:col-span-5 space-y-6" data-reveal-group="">
@@ -538,19 +538,18 @@ export const Home: React.FC = () => {
         {/* Desktop View: image left (5 cols), text right (7 cols), gap 32px */}
         <div className="hidden lg:block max-w-[1340px] mx-auto px-[var(--pad-x)] py-16 lg:py-20">
           <div className="grid grid-cols-12 gap-8 items-center">
-            <div className="col-span-5 overflow-hidden">
-              <Img
+            <div className="col-span-5 flex items-center justify-center">
+              <img
                 src={A.team}
                 alt="Steel Mind Engineers fabrication team in front of the factory building in Lahore."
-                ratio="4/5"
-                className="w-full"
+                className="w-full h-auto object-contain block"
               />
             </div>
             <div className="col-span-7 space-y-4">
-              <h2 className="text-[20px] lg:text-[32px] font-semibold text-[var(--ink)] leading-[1.2]" data-split="">
+              <h2 className="text-[18px] lg:text-[30px] font-semibold text-[var(--ink)] leading-[1.2]" data-split="">
                 How the Team Is Organized
               </h2>
-              <p className="text-[14px] lg:text-[15px] text-[var(--grey)] leading-[1.6] max-w-[520px]" data-reveal="">
+              <p className="text-[13px] lg:text-[14px] text-[var(--grey)] leading-[1.65] max-w-[520px]" data-reveal="">
                 Four groups share responsibility for each structure. Engineers handle design and detailing. The workshop team handles fabrication and quality checks. Site crews handle erection and safety. Project coordinators handle schedules, material flow and communication with you.
               </p>
             </div>
@@ -560,19 +559,18 @@ export const Home: React.FC = () => {
         {/* Mobile View: Bordered offwhite card */}
         <div className="lg:hidden px-[var(--pad-x)] py-12">
           <div className="border border-[var(--line)] bg-[var(--offwhite)] p-5 flex flex-col gap-4">
-            <div className="overflow-hidden">
-              <Img
+            <div className="w-full">
+              <img
                 src={A.team}
                 alt="Steel Mind Engineers fabrication team in front of the factory building in Lahore."
-                ratio="4/5"
-                className="w-full"
+                className="w-full h-auto object-contain block"
               />
             </div>
             <div>
-              <h3 className="text-[16px] font-semibold text-[var(--ink)] mb-2 leading-[1.25]">
+              <h3 className="text-[15px] font-semibold text-[var(--ink)] mb-2 leading-[1.25]">
                 How the Team Is Organized
               </h3>
-              <p className="text-[14px] text-[var(--grey)] leading-[1.6]">
+              <p className="text-[13px] text-[var(--grey)] leading-[1.65]">
                 Four groups share responsibility for each structure. Engineers handle design and detailing. The workshop team handles fabrication and quality checks. Site crews handle erection and safety. Project coordinators handle schedules, material flow and communication with you.
               </p>
             </div>

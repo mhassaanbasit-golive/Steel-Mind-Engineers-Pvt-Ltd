@@ -61,8 +61,14 @@ export const PageShell: React.FC<PageShellProps> = ({
       <Loader />
       <Header hasDarkHero={isHomepage} />
 
-      <main id="main" ref={mainRef} className="flex-1 w-full flow-root m-0 p-0">
-        {children}
+      <main
+        id="main"
+        ref={mainRef}
+        className="flex-1 w-full flow-root m-0 p-0"
+      >
+        <div key={location.pathname} className="w-full">
+          {children}
+        </div>
       </main>
 
       <Footer />

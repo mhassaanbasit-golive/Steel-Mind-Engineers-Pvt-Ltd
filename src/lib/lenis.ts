@@ -7,8 +7,8 @@ if (typeof window !== "undefined") {
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!prefersReduced) {
     lenis = new Lenis({
-      lerp: 0.075,
-      wheelMultiplier: 0.85,
+      lerp: 0.05,
+      wheelMultiplier: 0.7,
       smoothWheel: true,
       syncTouch: false,
       touchMultiplier: 1,

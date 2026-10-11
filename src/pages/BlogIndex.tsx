@@ -44,7 +44,7 @@ export const BlogIndex: React.FC = () => {
       <HeroBand
         variant="image"
         imageSrc={A.team}
-        imageAlt="Steel drawings, hard hat and tablet on an engineer's desk at Steel Mind."
+        imageAlt="Steel drawings, hard hat and tablet on an engineer's desk at Steel Mind Engineers."
         breadcrumbItems={[
           { label: "Home", href: "/" },
           { label: "Blogs" },

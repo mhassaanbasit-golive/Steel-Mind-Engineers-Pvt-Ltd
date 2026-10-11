@@ -1,6 +1,6 @@
 export const SITE = {
   name: "Steel Mind Engineers Pvt. Ltd.",
-  short: "Steel Mind",
+  short: "Steel Mind Engineers",
   header: { title: "Steel Mind Engineers", sub: "Pvt Ltd" },
   tagline: "Where Steel Meets Intelligence",
   domain: "https://www.steelmind.pk",

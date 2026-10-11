@@ -86,7 +86,7 @@ export const FloatingTools: React.FC = () => {
           {/* Call Phone 1 */}
           <a
             href={`tel:${SITE.tel[0]}`}
-            aria-label="Call Steel Mind"
+            aria-label="Call Steel Mind Engineers"
             onClick={() => showLabelTemporarily(SITE.phones[0])}
             className="w-11 h-11 bg-white border border-[var(--blue)] text-[var(--blue)] flex items-center justify-center hover:bg-[var(--blue)] hover:text-white transition-colors cursor-pointer rounded-none"
           >
@@ -98,7 +98,7 @@ export const FloatingTools: React.FC = () => {
           {/* Email */}
           <a
             href={`mailto:${SITE.email}`}
-            aria-label="Email Steel Mind"
+            aria-label="Email Steel Mind Engineers"
             onClick={() => showLabelTemporarily(SITE.email)}
             className="w-11 h-11 bg-white border border-[var(--blue)] text-[var(--blue)] flex items-center justify-center hover:bg-[var(--blue)] hover:text-white transition-colors cursor-pointer rounded-none"
           >

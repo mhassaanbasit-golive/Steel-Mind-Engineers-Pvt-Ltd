@@ -1,11 +1,12 @@
 import React, { Suspense, lazy } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { Home } from "./pages/Home.tsx";
 import { PageShell } from "./components/layout/PageShell.tsx";
 import { ALL_PAGES, ALL_ARTICLES, CONTENT_BY_URL } from "./content/index.ts";
 import { PROJECTS } from "./data/projects.ts";
 import { getTemplateForPage } from "./data/templates.ts";
 
+const AboutUs = lazy(() => import("./pages/AboutUs.tsx").then((m) => ({ default: m.AboutUs })));
 const Hub = lazy(() => import("./pages/Hub.tsx").then((m) => ({ default: m.Hub })));
 const Info = lazy(() => import("./pages/Info.tsx").then((m) => ({ default: m.Info })));
 const DiagramGallery = lazy(() => import("./pages/DiagramGallery.tsx").then((m) => ({ default: m.DiagramGallery })));
@@ -34,6 +35,23 @@ export const AppRoutes: React.FC = () => {
           </PageShell>
         }
       />
+
+      {/* About Us (Single merged page) */}
+      <Route
+        path="/about-us/"
+        element={
+          <PageShell hasDarkHero={false}>
+            <AboutUs />
+          </PageShell>
+        }
+      />
+      <Route path="/about-us/introduction/" element={<Navigate to="/about-us/#introduction" replace />} />
+      <Route path="/about-us/vision/" element={<Navigate to="/about-us/#vision" replace />} />
+      <Route path="/about-us/mission/" element={<Navigate to="/about-us/#mission" replace />} />
+      <Route path="/about-us/core-values/" element={<Navigate to="/about-us/#core-values" replace />} />
+      <Route path="/about-us/sme-policy/" element={<Navigate to="/about-us/#sme-policy" replace />} />
+      <Route path="/about-us/committed-to/" element={<Navigate to="/about-us/#committed-to" replace />} />
+      <Route path="/about-us/factory-tour/" element={<Navigate to="/about-us/#factory-tour" replace />} />
 
       {/* 2. Projects Hub */}
       <Route
@@ -137,6 +155,7 @@ export const AppRoutes: React.FC = () => {
           page.url === "/contact-us/" ||
           page.url === "/blog/" ||
           page.url === "/company-profile/" ||
+          page.url.startsWith("/about-us/") ||
           page.url.startsWith("/projects/") // Projects handled above
         ) {
           return null;

@@ -1,59 +1,47 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
-import { useReducedMotion } from "../../hooks/useReducedMotion.ts";
 import { scrollToTop } from "../../lib/lenis.ts";
+import { gsap } from "../../lib/gsap.ts";
+import { useReducedMotion } from "../../hooks/useReducedMotion.ts";
 
 export const RouteTransition: React.FC = () => {
   const location = useLocation();
+  const prevPathRef = useRef(location.pathname);
   const reducedMotion = useReducedMotion();
-  const [active, setActive] = useState(false);
-  const [prevPathname, setPrevPathname] = useState(location.pathname);
 
   useEffect(() => {
-    // Skip if only hash changed or same path
-    if (location.pathname === prevPathname) return;
-    setPrevPathname(location.pathname);
+    if (location.pathname === prevPathRef.current) return;
+    prevPathRef.current = location.pathname;
 
-    if (reducedMotion) {
+    const mainEl = document.getElementById("main");
+    if (reducedMotion || !mainEl) {
       scrollToTop();
       return;
     }
 
-    setActive(true);
+    // Fade outgoing page to opacity: 0 over 0.2s, scroll to top,
+    // then fade incoming page from opacity: 0, y: 12 to opacity: 1, y: 0 over 0.4s using cubic-bezier(0.23, 1, 0.32, 1)
+    gsap.to(mainEl, {
+      opacity: 0,
+      duration: 0.2,
+      ease: "power2.out",
+      onComplete: () => {
+        scrollToTop();
+        gsap.fromTo(
+          mainEl,
+          { opacity: 0, y: 12 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.4,
+            ease: "cubic-bezier(0.23, 1, 0.32, 1)",
+            clearProps: "transform,opacity",
+          }
+        );
+      },
+    });
+  }, [location.pathname, reducedMotion]);
 
-    const scrollTimer = setTimeout(() => {
-      scrollToTop();
-    }, 300);
-
-    const doneTimer = setTimeout(() => {
-      setActive(false);
-    }, 600);
-
-    return () => {
-      clearTimeout(scrollTimer);
-      clearTimeout(doneTimer);
-    };
-  }, [location.pathname, prevPathname, reducedMotion]);
-
-  if (!active) return null;
-
-  return (
-    <div
-      aria-hidden="true"
-      className="fixed inset-0 z-[500] bg-[#0A0A0A] flex items-center justify-center pointer-events-none transition-opacity duration-300"
-    >
-      <div className="flex items-center space-x-3">
-        {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className="w-2 h-2 rounded-full bg-white animate-pulse"
-            style={{
-              animationDelay: `${i * 150}ms`,
-              animationDuration: "900ms",
-            }}
-          />
-        ))}
-      </div>
-    </div>
-  );
+  // No blocking overlay or dots
+  return null;
 };

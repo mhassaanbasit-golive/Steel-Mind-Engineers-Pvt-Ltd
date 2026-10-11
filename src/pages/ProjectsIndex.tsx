@@ -18,7 +18,7 @@ export const ProjectsIndex: React.FC = () => {
       <HeroBand
         variant="image"
         imageSrc={A.project.haierCraneMezzanine[0]}
-        imageAlt="Finished steel crane shed built by Steel Mind in Pakistan."
+        imageAlt="Finished steel crane shed built by Steel Mind Engineers in Pakistan."
         breadcrumbItems={[
           { label: "Home", href: "/" },
           { label: "Our Projects" },

@@ -25,16 +25,7 @@ export interface NavItem {
 export const NAV: NavItem[] = [
   {
     label: "About Us",
-    url: "/about-us/introduction/",
-    children: [
-      { label: "Introduction", url: "/about-us/introduction/" },
-      { label: "Vision", url: "/about-us/vision/" },
-      { label: "Mission", url: "/about-us/mission/" },
-      { label: "Our Core Values", url: "/about-us/core-values/" },
-      { label: "SME Policy", url: "/about-us/sme-policy/" },
-      { label: "Committed To", url: "/about-us/committed-to/" },
-      { label: "Factory Tour", url: "/about-us/factory-tour/" },
-    ],
+    url: "/about-us/",
   },
   {
     label: "Main Divisions",
