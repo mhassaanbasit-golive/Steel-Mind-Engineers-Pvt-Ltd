@@ -5,8 +5,8 @@ import { Canvas } from "../components/ui/Canvas.tsx";
 import { FrameDiagram } from "../components/diagrams/FrameDiagram.tsx";
 import { CraneDiagram } from "../components/diagrams/CraneDiagram.tsx";
 import { Accordion } from "../components/ui/Accordion.tsx";
-import { RelatedPages } from "../components/ui/RelatedPages.tsx";
-import { CtaBand } from "../components/ui/CtaBand.tsx";
+import { NextBand } from "../components/ui/NextBand.tsx";
+import { NAV } from "../data/nav.ts";
 import { poolImage } from "../data/pool.ts";
 
 export interface DiagramGalleryProps {
@@ -23,6 +23,17 @@ export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
   // Find defs block which contains the diagram items
   const defsBlock = data.blocks.find((b: ContentBlock) => b.type === "defs" && b.items);
   const items = defsBlock?.items || [];
+
+  let nextPage: { label: string; url: string } | null = null;
+  for (const item of NAV) {
+    const list = item.children || (item.divisions ? item.divisions.flatMap((d) => d.children) : []);
+    const idx = list.findIndex((c) => c.url === data.url);
+    if (idx !== -1 && idx < list.length - 1) {
+      nextPage = list[idx + 1];
+      break;
+    }
+  }
+  const nextPageToUse = nextPage || { label: "Our Projects", url: "/projects/" };
 
   // Extract first H2 and first two paragraphs for Block B
   const firstH2Index = data.blocks.findIndex((b) => b.type === "h2");
@@ -190,17 +201,11 @@ export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
         </section>
       )}
 
-      {/* Related Pages (Block E) */}
-      {data.related && data.related.length > 0 && (
-        <section className="py-8 bg-white border-b border-[var(--line)]">
-          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
-            <RelatedPages related={data.related} />
-          </div>
-        </section>
-      )}
-
-      {/* Block F — CTA Band */}
-      <CtaBand />
+      {/* Next Band */}
+      <NextBand
+        nextUrl={nextPageToUse.url}
+        nextTitle={nextPageToUse.label}
+      />
     </div>
   );
 };

@@ -3,7 +3,7 @@ import pageData from "../content/generated/page-66.json";
 import { SITE } from "../data/site.ts";
 import { HeroBand } from "../components/ui/HeroBand.tsx";
 import { Button } from "../components/ui/Button.tsx";
-import { RelatedPages } from "../components/ui/RelatedPages.tsx";
+import { NextBand } from "../components/ui/NextBand.tsx";
 
 export const Profile: React.FC = () => {
   return (
@@ -37,9 +37,14 @@ export const Profile: React.FC = () => {
             {SITE.profileButton}
           </Button>
         </div>
-
-        <RelatedPages related={pageData.related} />
       </div>
+
+      {/* Next Band */}
+      <NextBand
+        heading="Explore Our Factory and Capabilities"
+        nextUrl="/about-us/"
+        nextTitle="About Us"
+      />
     </div>
   );
 };

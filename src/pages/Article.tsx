@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { ContentData, ContentBlock } from "../content/types.ts";
 import { HeroBand } from "../components/ui/HeroBand.tsx";
 import { Accordion } from "../components/ui/Accordion.tsx";
-import { RelatedPages } from "../components/ui/RelatedPages.tsx";
-import { QuoteBand } from "../components/ui/QuoteBand.tsx";
+import { NextBand } from "../components/ui/NextBand.tsx";
 import { poolImage } from "../data/pool.ts";
 import { UI } from "../data/ui.ts";
 import blogCards from "../content/generated/blog-cards.json";
@@ -110,44 +109,19 @@ export const Article: React.FC<ArticleProps> = ({ data }) => {
         </section>
       )}
 
-      {/* Related Pages */}
-      <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-        <RelatedPages related={data.related} />
-      </div>
-
-      {/* CTA Band */}
-      <QuoteBand />
-
-      {/* Previous and Next Article Links */}
-      {(prevArticle || nextArticle) && (
-        <div className="border-t border-[var(--line)] py-8 max-w-[1340px] mx-auto px-[var(--pad-x)]">
-          <div className="grid grid-cols-2 divide-x divide-[var(--line)]">
-            <div className="pr-4 lg:pr-6">
-              {prevArticle && (
-                <Link to={prevArticle.url} className="group block text-left">
-                  <span className="block text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-1">
-                    {UI.previous}
-                  </span>
-                  <span className="text-[12px] lg:text-[13px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors line-clamp-2 leading-[1.3]">
-                    {prevArticle.title}
-                  </span>
-                </Link>
-              )}
-            </div>
-            <div className="pl-4 lg:pl-6 text-right">
-              {nextArticle && (
-                <Link to={nextArticle.url} className="group block text-right">
-                  <span className="block text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-1">
-                    {UI.next}
-                  </span>
-                  <span className="text-[12px] lg:text-[13px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors line-clamp-2 leading-[1.3]">
-                    {nextArticle.title}
-                  </span>
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
+      {/* Next Band */}
+      {nextArticle ? (
+        <NextBand
+          heading={`Next Article: ${nextArticle.title}`}
+          nextUrl={nextArticle.url}
+          nextTitle={nextArticle.title}
+        />
+      ) : (
+        <NextBand
+          heading="Explore All Articles"
+          nextUrl="/blog/"
+          nextTitle="All Articles"
+        />
       )}
     </div>
   );

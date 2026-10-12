@@ -6,7 +6,7 @@ import { A } from "../data/assets.ts";
 import { UI } from "../data/ui.ts";
 import { HeroBand } from "../components/ui/HeroBand.tsx";
 import { Accordion } from "../components/ui/Accordion.tsx";
-import { QuoteBand } from "../components/ui/QuoteBand.tsx";
+import { NextBand } from "../components/ui/NextBand.tsx";
 import { poolImage } from "../data/pool.ts";
 
 const CATEGORIES = [
@@ -158,8 +158,12 @@ export const BlogIndex: React.FC = () => {
         </section>
       )}
 
-      {/* CTA Band */}
-      <QuoteBand />
+      {/* Next Band */}
+      <NextBand
+        heading="Discuss Your Project With Our Engineers"
+        nextUrl="/contact-us/"
+        nextTitle="Contact Us"
+      />
     </div>
   );
 };

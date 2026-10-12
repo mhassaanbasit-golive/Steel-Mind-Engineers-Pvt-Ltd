@@ -1,7 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { A } from "../../data/assets.ts";
 import { SITE } from "../../data/site.ts";
-import { Button } from "./Button.tsx";
 
 export interface QuoteBandProps {
   title?: string;
@@ -17,53 +17,46 @@ export const QuoteBand: React.FC<QuoteBandProps> = ({
   return (
     <section
       style={{ backgroundColor: "var(--blue)" }}
-      className={`relative w-full aspect-[16/9] lg:aspect-[21/9] overflow-hidden text-white bg-[var(--blue)] flex items-center justify-center ${className}`}
+      className={`relative w-full overflow-hidden text-white bg-[var(--blue)] py-14 lg:py-20 flex items-center justify-center ${className}`}
     >
-      {/* The image itself: position: absolute; inset: 0; object-fit: cover; object-position: center; z-index: 0 */}
+      {/* Background Image: A.quote with luminosity blend and low opacity */}
       <img
         src={A.quote}
-        alt="Steel building background"
+        alt="Steel Mind Engineers fabrication facility"
         style={{
           position: "absolute",
           inset: 0,
+          width: "100%",
+          height: "100%",
           objectFit: "cover",
           objectPosition: "center",
           zIndex: 0,
+          opacity: 0.22,
+          mixBlendMode: "luminosity",
         }}
         className="absolute inset-0 w-full h-full object-cover object-center z-0 pointer-events-none"
         loading="lazy"
       />
 
-      {/* Layer 1 — Royal Blue tint: position: absolute; inset: 0; background: rgba(30, 58, 138, 0.55); z-index: 1 */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: "rgba(30, 58, 138, 0.55)",
-          zIndex: 1,
-        }}
-      />
-
-      {/* Layer 2 — bottom readability gradient: position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.10) 45%, rgba(0,0,0,0) 100%); z-index: 2 */}
+      {/* Layer 1 — Deep Royal Blue Gradient Overlay (Zero black, 100% brand Royal Blue) */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           position: "absolute",
           inset: 0,
           background:
-            "linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.10) 45%, rgba(0,0,0,0) 100%)",
-          zIndex: 2,
+            "linear-gradient(180deg, rgba(30, 58, 138, 0.88) 0%, rgba(22, 45, 110, 0.92) 50%, rgba(16, 31, 78, 0.96) 100%)",
+          zIndex: 1,
         }}
       />
 
-      {/* The text and buttons inside the band: position: relative; z-index: 3 */}
+      {/* Content Container */}
       <div
         style={{ position: "relative", zIndex: 3 }}
-        className="relative z-[3] max-w-[1340px] mx-auto px-[var(--pad-x)] py-6 text-center flex flex-col items-center"
+        className="relative z-[3] max-w-[1340px] mx-auto px-[var(--pad-x)] text-center flex flex-col items-center py-2"
       >
         <h2
-          className="text-[16px] lg:text-[24px] font-semibold leading-[1.2] tracking-[-0.015em] text-white max-w-[800px] mb-3"
+          className="text-[20px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] text-white max-w-[800px] mb-3"
           data-split=""
         >
           {title}
@@ -77,26 +70,34 @@ export const QuoteBand: React.FC<QuoteBandProps> = ({
         </p>
 
         <div
-          className="flex flex-row flex-wrap items-center justify-center gap-2.5 w-full sm:w-auto"
+          className="flex flex-row flex-wrap items-center justify-center gap-3 w-full sm:w-auto"
           data-fade-up=""
         >
-          <Button
-            size="sm"
-            variant="hero-white"
-            href="/contact-us/#quote"
-            className="w-auto min-w-[130px]"
+          {/* Request a Quote: Solid White button with Royal Blue text */}
+          <Link
+            to="/contact-us/#quote"
+            style={{
+              background: "#FFFFFF",
+              color: "var(--blue)",
+              borderColor: "#FFFFFF",
+            }}
+            className="inline-flex items-center justify-center font-semibold text-[10px] uppercase tracking-[0.08em] px-4 py-2.5 min-h-[36px] border border-white bg-white text-[var(--blue)] hover:bg-white/90 transition-all duration-300 rounded-none cursor-pointer select-none text-center"
           >
-            {SITE.cta.primary}
-          </Button>
+            Request a Quote
+          </Link>
 
-          <Button
-            size="sm"
-            variant="hero"
+          {/* Talk to an Expert: Transparent button with White border and White text */}
+          <a
             href={`tel:${SITE.tel[0]}`}
-            className="w-auto min-w-[130px]"
+            style={{
+              background: "transparent",
+              color: "#FFFFFF",
+              borderColor: "#FFFFFF",
+            }}
+            className="inline-flex items-center justify-center font-semibold text-[10px] uppercase tracking-[0.08em] px-4 py-2.5 min-h-[36px] border border-white bg-transparent text-white hover:bg-white hover:text-[var(--blue)] transition-all duration-300 rounded-none cursor-pointer select-none text-center"
           >
-            {SITE.cta.secondary}
-          </Button>
+            Talk to an Expert
+          </a>
         </div>
       </div>
     </section>

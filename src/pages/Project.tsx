@@ -5,8 +5,7 @@ import { ProjectData, PROJECTS } from "../data/projects.ts";
 import { HeroBand } from "../components/ui/HeroBand.tsx";
 import { Canvas } from "../components/ui/Canvas.tsx";
 import { Accordion } from "../components/ui/Accordion.tsx";
-import { RelatedPages } from "../components/ui/RelatedPages.tsx";
-import { CtaBand } from "../components/ui/CtaBand.tsx";
+import { NextBand } from "../components/ui/NextBand.tsx";
 import { Lightbox } from "../components/ui/Lightbox.tsx";
 import { UI } from "../data/ui.ts";
 
@@ -307,43 +306,14 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
         </section>
       )}
 
-      {/* Related Pages (Block E) */}
-      {data.related && data.related.length > 0 && (
-        <section className="py-8 bg-white border-b border-[var(--line)]">
-          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
-            <RelatedPages related={data.related} />
-          </div>
-        </section>
-      )}
-
-      {/* Next Project (Block E Single Row) */}
+      {/* Next Band */}
       {nextProject && (
-        <section className="py-4 bg-white border-b border-[var(--line)]">
-          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
-            <Link
-              to={`/projects/${nextProject.slug}/`}
-              className="group flex items-center justify-between py-4 text-[12px] lg:text-[13px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors"
-            >
-              <div className="flex flex-col">
-                <span className="text-[9px] uppercase tracking-[0.1em] text-[var(--grey)]">Next Project</span>
-                <span>{nextProject.title}</span>
-              </div>
-              <svg
-                className="w-5 h-5 stroke-current transition-transform duration-300 group-hover:translate-x-1"
-                viewBox="0 0 24 24"
-                fill="none"
-                strokeWidth="1.5"
-              >
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </Link>
-          </div>
-        </section>
+        <NextBand
+          heading={`Next Project: ${nextProject.title}`}
+          nextUrl={`/projects/${nextProject.slug}/`}
+          nextTitle={nextProject.title}
+        />
       )}
-
-      {/* Block F — CTA Band */}
-      <CtaBand />
     </div>
   );
 };

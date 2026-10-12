@@ -7,7 +7,7 @@ import { HeroBand } from "../components/ui/HeroBand.tsx";
 import { Field } from "../components/ui/Field.tsx";
 import { Button } from "../components/ui/Button.tsx";
 import { Accordion } from "../components/ui/Accordion.tsx";
-import { RelatedPages } from "../components/ui/RelatedPages.tsx";
+import { NextBand } from "../components/ui/NextBand.tsx";
 
 const PROJECT_TYPE_OPTIONS = [
   { value: "pre-engineered building", label: "Pre-Engineered Building" },
@@ -480,10 +480,12 @@ export const Contact: React.FC = () => {
         </section>
       )}
 
-      {/* 7. Related */}
-      <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-        <RelatedPages related={pageData.related} />
-      </div>
+      {/* Next Band */}
+      <NextBand
+        heading="Learn About Steel Mind Engineers"
+        nextUrl="/about-us/"
+        nextTitle="About Us"
+      />
     </div>
   );
 };

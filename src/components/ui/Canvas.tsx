@@ -1,5 +1,7 @@
 import React from "react";
 import { Img } from "./Img.tsx";
+import { A } from "../../data/assets.ts";
+import { POOLS } from "../../data/pool.ts";
 
 export interface CanvasProps {
   slot: string;
@@ -10,6 +12,56 @@ export interface CanvasProps {
   className?: string;
 }
 
+// Map known canvas slot patterns to high-fidelity photography
+function resolveSlotImage(slot: string): string | undefined {
+  if (!slot) return undefined;
+
+  // Hub Hero Slots
+  if (slot === "peb.hero") return A.division.peb;
+  if (slot === "sheds.hero") return A.division.sheds;
+  if (slot === "warehouses.hero") return A.division.warehouses;
+  if (slot === "structural.hero") return A.division.structural;
+  if (slot === "custom.hero") return A.division.custom;
+
+  // PEB Chapters (peb.chapter.1 through 11)
+  if (slot.startsWith("peb.chapter.")) {
+    const num = parseInt(slot.replace("peb.chapter.", ""), 10);
+    const pool = POOLS.peb;
+    return pool[(num - 1) % pool.length];
+  }
+
+  // Division Child Cards (e.g. sheds.child.factory-sheds, warehouses.child.cold-storage, etc.)
+  if (slot.startsWith("sheds.child.")) {
+    const pool = POOLS.sheds;
+    const hash = slot.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    return pool[hash % pool.length];
+  }
+  if (slot.startsWith("warehouses.child.")) {
+    const pool = POOLS.warehouses;
+    const hash = slot.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    return pool[hash % pool.length];
+  }
+  if (slot.startsWith("structural.child.")) {
+    const pool = POOLS.structural;
+    const hash = slot.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    return pool[hash % pool.length];
+  }
+  if (slot.startsWith("custom.child.")) {
+    const pool = POOLS.custom;
+    const hash = slot.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    return pool[hash % pool.length];
+  }
+
+  // About us slots
+  if (slot.startsWith("about.")) {
+    const pool = POOLS.aboutUs;
+    const hash = slot.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    return pool[hash % pool.length];
+  }
+
+  return undefined;
+}
+
 export const Canvas: React.FC<CanvasProps> = ({
   slot,
   ratio = "4/3",
@@ -18,7 +70,9 @@ export const Canvas: React.FC<CanvasProps> = ({
   label,
   className = "",
 }) => {
-  if (src) {
+  const resolvedSrc = src || resolveSlotImage(slot);
+
+  if (resolvedSrc) {
     return (
       <div
         data-slot={slot}
@@ -26,7 +80,7 @@ export const Canvas: React.FC<CanvasProps> = ({
         data-canvas-ratio={ratio}
         className={`w-full overflow-hidden ${className}`}
       >
-        <Img src={src} alt={alt} ratio={ratio as any} className="w-full h-full object-cover" />
+        <Img src={resolvedSrc} alt={alt || label || slot} ratio={ratio as any} className="w-full h-full object-cover" />
       </div>
     );
   }

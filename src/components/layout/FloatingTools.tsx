@@ -18,12 +18,14 @@ import {
   MessageSquareMoreIconHandle,
 } from "../icons/message-square-more.tsx";
 import { LinkedinIcon, LinkedinIconHandle } from "../icons/linkedin.tsx";
+import { useScrollState } from "../../hooks/useScrollState.ts";
 
 export const FloatingTools: React.FC = () => {
   const [dialOpen, setDialOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const [copiedLabel, setCopiedLabel] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { isScrolling } = useScrollState();
 
   const botMessageRef = useRef<BotMessageSquareHandle>(null);
   const layoutGridRef = useRef<LayoutGridIconHandle>(null);
@@ -32,9 +34,10 @@ export const FloatingTools: React.FC = () => {
   const emailRef = useRef<MessageSquareMoreIconHandle>(null);
   const linkedinRef = useRef<LinkedinIconHandle>(null);
 
-  // 6.2: On homepage load, all floating icons (chat launcher + dial) play their entrance animation once, 0.5s after the loader ends.
+  // Play animation on load, site:ready, plus idle loop every 4s
   useEffect(() => {
     let triggered = false;
+    let idleInterval: NodeJS.Timeout | undefined;
 
     const triggerEntrance = () => {
       if (triggered) return;
@@ -46,19 +49,42 @@ export const FloatingTools: React.FC = () => {
           layoutGridRef.current?.startAnimation();
         }, 50);
       });
+
+      // Loop while idle every 4 seconds
+      idleInterval = setInterval(() => {
+        botMessageRef.current?.startAnimation();
+      }, 4000);
     };
 
     const handleLoaderDone = () => {
-      setTimeout(triggerEntrance, 500);
+      setTimeout(triggerEntrance, 300);
     };
 
+    window.addEventListener("site:ready", triggerEntrance);
     window.addEventListener("loader:done", handleLoaderDone);
-    const fallbackTimer = setTimeout(triggerEntrance, 2600);
+    const fallbackTimer = setTimeout(triggerEntrance, 2000);
 
     return () => {
+      window.removeEventListener("site:ready", triggerEntrance);
       window.removeEventListener("loader:done", handleLoaderDone);
       clearTimeout(fallbackTimer);
+      if (idleInterval) clearInterval(idleInterval);
     };
+  }, []);
+
+  // Animate bot icon during scroll
+  useEffect(() => {
+    let lastScrollAnim = 0;
+    const handleScroll = () => {
+      const now = Date.now();
+      if (now - lastScrollAnim > 600) {
+        lastScrollAnim = now;
+        botMessageRef.current?.startAnimation();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // 6.2: On opening any section that contains an animated icon (dial open), the icon plays its animation once.
@@ -202,24 +228,47 @@ export const FloatingTools: React.FC = () => {
         />
       </button>
 
-      {/* AI Chat Launcher — bot-message-square, 24px icon inside 52px circle, Royal Blue bg, white icon */}
-      <button
-        type="button"
-        onClick={handleOpenChat}
-        onMouseEnter={() => botMessageRef.current?.startAnimation()}
-        aria-label="Open AI Assistant Chat"
-        style={{
-          backgroundColor: "var(--blue)",
-          boxShadow: "0 6px 18px var(--blue-glow)",
-        }}
-        className="w-[52px] h-[52px] rounded-full text-white flex items-center justify-center hover:bg-[var(--blue-dark)] active:scale-95 transition-all cursor-pointer"
-      >
-        <BotMessageSquareIcon
-          ref={botMessageRef}
-          size={24}
-          className="text-white"
+      {/* AI Chat Launcher with soft white glow and scroll animation */}
+      <div className="relative flex items-center justify-center">
+        {/* Soft white glow aura */}
+        <div
+          aria-hidden="true"
+          className={`absolute inset-0 -m-2 rounded-full pointer-events-none transition-all duration-300 ease-out blur-md ${
+            isScrolling
+              ? "scale-125 opacity-95 bg-white/50"
+              : "scale-100 opacity-70 bg-white/35"
+          }`}
+          style={{
+            boxShadow: isScrolling
+              ? "0 0 28px 10px rgba(255, 255, 255, 0.7)"
+              : "0 0 20px 6px rgba(255, 255, 255, 0.45)",
+          }}
         />
-      </button>
+
+        <button
+          type="button"
+          onClick={handleOpenChat}
+          onMouseEnter={() => botMessageRef.current?.startAnimation()}
+          aria-label="Open AI Assistant Chat"
+          style={{
+            backgroundColor: "var(--blue)",
+            boxShadow: isScrolling
+              ? "0 0 24px 6px rgba(255, 255, 255, 0.6), 0 8px 24px rgba(0, 0, 0, 0.35)"
+              : "0 0 16px 3px rgba(255, 255, 255, 0.35), 0 6px 18px var(--blue-glow)",
+          }}
+          className={`relative z-10 w-[52px] h-[52px] rounded-full text-white flex items-center justify-center hover:bg-[var(--blue-dark)] active:scale-95 cursor-pointer transition-all duration-300 ease-out ${
+            isScrolling
+              ? "-translate-y-2 scale-110 rotate-[-4deg] animate-[chatScrollBob_0.8s_ease-in-out_infinite]"
+              : ""
+          }`}
+        >
+          <BotMessageSquareIcon
+            ref={botMessageRef}
+            size={24}
+            className="text-white"
+          />
+        </button>
+      </div>
 
       <style>{`
         @keyframes fadeInUp {

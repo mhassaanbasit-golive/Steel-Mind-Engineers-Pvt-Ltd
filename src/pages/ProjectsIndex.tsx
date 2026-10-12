@@ -4,8 +4,7 @@ import pageData from "../content/generated/page-53.json";
 import { PROJECTS } from "../data/projects.ts";
 import { HeroBand } from "../components/ui/HeroBand.tsx";
 import { Accordion } from "../components/ui/Accordion.tsx";
-import { RelatedPages } from "../components/ui/RelatedPages.tsx";
-import { QuoteBand } from "../components/ui/QuoteBand.tsx";
+import { NextBand } from "../components/ui/NextBand.tsx";
 import { Button } from "../components/ui/Button.tsx";
 import { A } from "../data/assets.ts";
 
@@ -178,13 +177,12 @@ export const ProjectsIndex: React.FC = () => {
         </section>
       )}
 
-      {/* Related Pages */}
-      <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-        <RelatedPages related={pageData.related} />
-      </div>
-
-      {/* CTA Band */}
-      <QuoteBand />
+      {/* Next Band */}
+      <NextBand
+        heading="See the Companies We Build For"
+        nextUrl="/clients/"
+        nextTitle="Our Clients"
+      />
     </div>
   );
 };

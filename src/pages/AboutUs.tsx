@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { SITE } from "../data/site.ts";
 import { Canvas } from "../components/ui/Canvas.tsx";
 import { Button } from "../components/ui/Button.tsx";
+import { NextBand } from "../components/ui/NextBand.tsx";
 import { lenis } from "../lib/lenis.ts";
 import { gsap } from "../lib/gsap.ts";
 import { useReducedMotion } from "../hooks/useReducedMotion.ts";
@@ -695,6 +696,13 @@ export const AboutUs: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Next Band */}
+      <NextBand
+        heading="Explore Pre-Engineered Steel Buildings"
+        nextUrl="/pre-engineered-buildings-pakistan/"
+        nextTitle="Pre-Engineered Buildings"
+      />
     </div>
   );
 };

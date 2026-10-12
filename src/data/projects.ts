@@ -31,7 +31,11 @@ export const PROJECTS: ProjectData[] = [
     width: "182 ft",
     length: "532 ft",
     area: 97888,
-    images: A.project.haierCraneMezzanine,
+    images: [
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401784/Haier-Injection-Modling-Structure-Fabrication-Main-Image.png",
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401788/Haier-Injection-Modling-Structure-Fabrication-Second-Image.png",
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401787/Haier-Injection-Modling-Structure-Fabrication-Third-Image.png",
+    ],
     published: true,
   },
   {
@@ -47,7 +51,11 @@ export const PROJECTS: ProjectData[] = [
     width: "115 ft",
     length: "342 ft",
     area: 39330,
-    images: A.project.dravtonDairyShed,
+    images: [
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401780/Dravton-Dairy-Shed-Main-image.png",
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401788/Dravton-Dairy-shed-Second-image.png",
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401786/Dravton-Dairy-shed-third-image.png",
+    ],
     published: true,
   },
   {
@@ -63,7 +71,11 @@ export const PROJECTS: ProjectData[] = [
     width: null,
     length: null,
     area: 21686,
-    images: A.project.milkingParlour,
+    images: [
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401783/Dravton-Dairy-Miking-parlour-shed-main-image.png",
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401784/Dravton-Dairy-Milking-parlour-shed-second-image.png",
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401782/Dravton-Dairy-Milking-parlour-shed-Third-image.png",
+    ],
     published: true,
   },
   {
@@ -79,7 +91,10 @@ export const PROJECTS: ProjectData[] = [
     width: "90 ft",
     length: "78 ft",
     area: 7020,
-    images: A.project.mariaB,
+    images: [
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401787/Maria-B-Mezzanine-Floor-Main-Image.png",
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401787/Maria-B-Mezzanine-Floor-Second-image.png",
+    ],
     published: true,
   },
   {
@@ -95,7 +110,11 @@ export const PROJECTS: ProjectData[] = [
     width: "22 ft",
     length: "22 ft",
     area: 484,
-    images: A.project.rapidExit,
+    images: [
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401794/Milking-Parlour-Rapid-Exit-Structure-Main-Image.png",
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401790/Milking-Parlour-Rapid-Exit-Structure-Second-Image.png",
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401791/Milking-Parlour-Rapid-Exit-Structure-Third-Image.png",
+    ],
     published: true,
   },
   {
@@ -111,7 +130,11 @@ export const PROJECTS: ProjectData[] = [
     width: "6 ft",
     length: "150 ft",
     area: 900,
-    images: A.project.bridge,
+    images: [
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401792/Water-Requirement-Bridge-Main-Image.png",
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401795/Water-Requirement-Bridge-Second-Image.png",
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401796/Water-Requirement-Bridge-Third-Image.png",
+    ],
     published: true,
   },
   // Unpublished projects (no photos - kept in projects.ts with published: false per Section 4.9 & 8.3)

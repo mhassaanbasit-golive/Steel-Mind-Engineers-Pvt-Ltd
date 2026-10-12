@@ -126,11 +126,13 @@ export const Home: React.FC = () => {
     return () => observer.disconnect();
   }, [isMobile, reducedMotion]);
 
-  // Selected 4 projects
+  // Selected projects (Dravton 1st-3rd, Maria B 4th, Haier 5th, Bridge 6th)
   const selectedProjectIds = [
-    "haier-crane-mezzanine",
     "dravton-dairy-shed",
+    "dravton-milking-parlour",
+    "rapid-exit",
     "maria-b-mezzanine",
+    "haier-crane-mezzanine",
     "yascon-bridge",
   ];
   const selectedProjects = selectedProjectIds
@@ -596,31 +598,47 @@ export const Home: React.FC = () => {
         <SwipeRow ariaLabel="Selected Projects">
           {selectedProjects.map((p) => {
             if (!p) return null;
+            const mainImg = p.images.find((img) => /main-image/i.test(img)) || p.images[0];
             return (
               <Link
                 key={p.id}
                 to={`/projects/${p.slug}/`}
-                className="group block bg-transparent"
+                className="group flex flex-col h-full bg-transparent"
                 data-reveal=""
               >
-                <div className="overflow-hidden mb-3">
+                <div className="overflow-hidden mb-3 bg-[#F3F4F6]">
                   <div className="transition-transform duration-500 group-hover:scale-[1.03]">
                     <Img
-                      src={p.images[0]}
+                      src={mainImg}
                       alt={p.title}
                       ratio="16/9"
+                      objectFit="contain"
                     />
                   </div>
                 </div>
-                <div className="space-y-1 mt-3">
-                  <div className="text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
-                    {p.client} · {p.location}
-                  </div>
-                  <h3 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors line-clamp-1 leading-[1.25]">
+                <div className="flex-1 flex flex-col justify-between">
+                  <h3 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors line-clamp-1 leading-[1.25] mb-3">
                     {p.title}
                   </h3>
-                  <div className="text-[12px] lg:text-[13px] font-semibold text-[var(--blue)]">
-                    {p.area.toLocaleString()} sq ft
+                  <div>
+                    <span
+                      className="inline-flex items-center justify-center font-semibold text-white uppercase transition-colors duration-300 group-hover:bg-[var(--blue-dark)]"
+                      style={{
+                        background: "var(--blue)",
+                        color: "#FFFFFF",
+                        fontSize: "10px",
+                        fontWeight: 600,
+                        letterSpacing: "0.08em",
+                        textTransform: "uppercase",
+                        padding: "8px 14px",
+                        height: "34px",
+                        borderRadius: 0,
+                        lineHeight: 1,
+                        transition: "background 0.3s ease",
+                      }}
+                    >
+                      View Project
+                    </span>
                   </div>
                 </div>
               </Link>

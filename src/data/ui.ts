@@ -1,6 +1,5 @@
 export const UI = {
   quickAnswer: "Quick answer",
-  relatedPages: "Related pages",
   previous: "Previous",
   next: "Next",
   menu: "Menu",

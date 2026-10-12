@@ -5,8 +5,7 @@ import { A } from "../data/assets.ts";
 import { HeroBand } from "../components/ui/HeroBand.tsx";
 import { Canvas } from "../components/ui/Canvas.tsx";
 import { Accordion } from "../components/ui/Accordion.tsx";
-import { RelatedPages } from "../components/ui/RelatedPages.tsx";
-import { CtaBand } from "../components/ui/CtaBand.tsx";
+import { NextBand } from "../components/ui/NextBand.tsx";
 
 const CLIENT_NAMES = [
   "Haier",
@@ -183,17 +182,12 @@ export const Clients: React.FC = () => {
         </section>
       )}
 
-      {/* Related Pages (Block E) */}
-      {pageData.related && pageData.related.length > 0 && (
-        <section className="py-8 bg-white border-b border-[var(--line)]">
-          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
-            <RelatedPages related={pageData.related} />
-          </div>
-        </section>
-      )}
-
-      {/* Block F — CTA Band */}
-      <CtaBand />
+      {/* Next Band */}
+      <NextBand
+        heading="Explore Our Completed Projects"
+        nextUrl="/projects/"
+        nextTitle="Our Projects"
+      />
     </div>
   );
 };

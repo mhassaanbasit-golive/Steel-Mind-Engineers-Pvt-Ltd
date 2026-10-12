@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { NAV } from "../data/nav.ts";
 import { HeroBand } from "../components/ui/HeroBand.tsx";
+import { NextBand } from "../components/ui/NextBand.tsx";
 import blogCards from "../content/generated/blog-cards.json";
 import { PROJECTS } from "../data/projects.ts";
 
@@ -112,6 +113,13 @@ export const Sitemap: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Next Band */}
+      <NextBand
+        heading="Discuss Your Project With Our Engineers"
+        nextUrl="/contact-us/"
+        nextTitle="Contact Us"
+      />
     </div>
   );
 };

@@ -4,8 +4,7 @@ import { ContentData, ContentBlock } from "../content/types.ts";
 import { HeroBand } from "../components/ui/HeroBand.tsx";
 import { Canvas } from "../components/ui/Canvas.tsx";
 import { Accordion } from "../components/ui/Accordion.tsx";
-import { RelatedPages } from "../components/ui/RelatedPages.tsx";
-import { CtaBand } from "../components/ui/CtaBand.tsx";
+import { NextBand } from "../components/ui/NextBand.tsx";
 import { poolImage } from "../data/pool.ts";
 import { NAV } from "../data/nav.ts";
 
@@ -90,7 +89,7 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
     { label: data.h1.split(":")[0] || "Page" },
   ];
 
-  // Find next page within current NAV group for Block E next row
+  // Find next page within current NAV group or next division
   let nextPage: { label: string; url: string } | null = null;
   for (const item of NAV) {
     const list = item.children || (item.divisions ? item.divisions.flatMap((d) => d.children) : []);
@@ -100,6 +99,11 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
       break;
     }
   }
+
+  const nextPageToUse = nextPage || {
+    label: "Our Projects",
+    url: "/projects/",
+  };
 
   // Detect steps page (Factory Tour or One-Step Solution)
   const isTimelinePage =
@@ -375,43 +379,11 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
         </section>
       )}
 
-      {/* Related Pages (Block E) */}
-      {data.related && data.related.length > 0 && (
-        <section className="py-8 bg-white border-b border-[var(--line)]">
-          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
-            <RelatedPages related={data.related} />
-          </div>
-        </section>
-      )}
-
-      {/* Next Page Link (Block E Single Row) */}
-      {nextPage && (
-        <section className="py-4 bg-white border-b border-[var(--line)]">
-          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
-            <Link
-              to={nextPage.url}
-              className="group flex items-center justify-between py-4 text-[12px] lg:text-[13px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors"
-            >
-              <div className="flex flex-col">
-                <span className="text-[9px] uppercase tracking-[0.1em] text-[var(--grey)]">Next Section</span>
-                <span>{nextPage.label}</span>
-              </div>
-              <svg
-                className="w-5 h-5 stroke-current transition-transform duration-300 group-hover:translate-x-1"
-                viewBox="0 0 24 24"
-                fill="none"
-                strokeWidth="1.5"
-              >
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </Link>
-          </div>
-        </section>
-      )}
-
-      {/* Block F — CTA Band */}
-      <CtaBand />
+      {/* Next Band */}
+      <NextBand
+        nextUrl={nextPageToUse.url}
+        nextTitle={nextPageToUse.label}
+      />
     </div>
   );
 };

@@ -45,7 +45,13 @@ export const Loader: React.FC = () => {
 
   useEffect(() => {
     if (!mounted || prefersReduced) {
+      document.documentElement.classList.remove("site-loading");
+      const preloader = document.getElementById("initial-preloader");
+      if (preloader) {
+        preloader.remove();
+      }
       window.dispatchEvent(new CustomEvent("loader:done"));
+      window.dispatchEvent(new Event("site:ready"));
       return;
     }
 
@@ -68,7 +74,13 @@ export const Loader: React.FC = () => {
       setMounted(false);
       startScroll();
       document.body.style.overflow = "";
+      document.documentElement.classList.remove("site-loading");
+      const preloader = document.getElementById("initial-preloader");
+      if (preloader) {
+        preloader.remove();
+      }
       window.dispatchEvent(new CustomEvent("loader:done"));
+      window.dispatchEvent(new Event("site:ready"));
     };
 
     // Hard fallback: never longer than 2.5s

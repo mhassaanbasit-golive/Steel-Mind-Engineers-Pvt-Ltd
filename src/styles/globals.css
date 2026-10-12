@@ -19,9 +19,8 @@
   --line: #E5E5E5;
   --error: #B42318;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
-  --ease-framer: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
   --header-h: 64px;
   --pad-x: 20px;
   --section-y: 80px;
@@ -54,6 +53,16 @@
 *, *::before, *::after {
   box-sizing: border-box;
   font-family: 'Inter', system-ui, sans-serif !important;
+}
+
+html.site-loading body {
+  visibility: hidden;
+  overflow: hidden;
+}
+
+html.site-loading #root {
+  visibility: hidden;
+  opacity: 0;
 }
 
 html, body {
@@ -109,6 +118,19 @@ body::-webkit-scrollbar {
   to {
     transform: translateX(0);
   }
+}
+
+@keyframes blueGlowPulse {
+  0%, 100% {
+    box-shadow: 0 4px 14px var(--blue-glow);
+  }
+  50% {
+    box-shadow: 0 8px 24px rgba(30, 58, 138, 0.6);
+  }
+}
+
+.animate-blue-glow {
+  animation: blueGlowPulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 html {
@@ -248,6 +270,84 @@ html.lenis, html.lenis body {
   justify-content: center;
 }
 
+/* Royal Blue Glossy Next Band */
+.next-band {
+  background: var(--blue);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(0, 0, 0, 0.07) 100%);
+  padding: 96px 20px;
+  color: #FFFFFF;
+  position: relative;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .next-band {
+    padding: 120px 40px;
+  }
+}
+
+.next-band-inner {
+  max-width: 1340px;
+  margin: 0 auto;
+}
+
+.next-band-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 20px;
+}
+
+.next-band-heading {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: #FFFFFF;
+  margin-bottom: 24px;
+  max-width: 900px;
+}
+
+@media (min-width: 1024px) {
+  .next-band-heading {
+    font-size: 40px;
+  }
+}
+
+.next-band-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFFFFF;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+@media (min-width: 1024px) {
+  .next-band-link {
+    font-size: 16px;
+  }
+}
+
+.next-band-link:hover {
+  opacity: 0.85;
+}
+
+.next-band-arrow {
+  display: inline-block;
+  font-size: 18px;
+  line-height: 1;
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.next-band-link:hover .next-band-arrow {
+  transform: translateX(6px);
+}
+
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 .marquee-track {
@@ -272,9 +372,8 @@ html.lenis, html.lenis body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *:not(.marquee-track):not(.marquee-track-reverse) {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
