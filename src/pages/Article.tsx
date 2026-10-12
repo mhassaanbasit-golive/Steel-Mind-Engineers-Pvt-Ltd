@@ -19,10 +19,17 @@ export const Article: React.FC<ArticleProps> = ({ data }) => {
 
   // Reading progress bar
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      if (total > 0) {
-        setScrollProgress(Math.min(1, Math.max(0, window.scrollY / total)));
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const total = document.documentElement.scrollHeight - window.innerHeight;
+          if (total > 0) {
+            setScrollProgress(Math.min(1, Math.max(0, window.scrollY / total)));
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
@@ -38,11 +45,12 @@ export const Article: React.FC<ArticleProps> = ({ data }) => {
   return (
     <div className="w-full bg-white">
       {/* Reading Progress Bar fixed at bottom of header */}
-      <div className="fixed top-[var(--header-h)] inset-x-0 h-[2px] bg-transparent z-[110] pointer-events-none">
+      <div className="fixed top-[var(--header-h)] inset-x-0 h-[2.5px] bg-[var(--line)]/40 z-[110] pointer-events-none">
         <div
           className="h-full origin-left transition-transform duration-75 bg-[var(--blue)]"
           style={{
             transform: `scaleX(${scrollProgress})`,
+            transformOrigin: "left center",
           }}
         />
       </div>

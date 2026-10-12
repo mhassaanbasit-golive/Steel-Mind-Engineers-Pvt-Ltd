@@ -24,6 +24,10 @@
     }
   ],
   "functions": {
-    "api/*.ts": { "memory": 512, "maxDuration": 15 }
+    "api/*.ts": {
+      "memory": 512,
+      "maxDuration": 15,
+      "includeFiles": "api/_knowledge.json"
+    }
   }
 }

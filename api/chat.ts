@@ -1,5 +1,13 @@
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { GoogleGenAI } from "@google/genai";
 import { SYSTEM_PROMPT } from "./_prompt.ts";
-import knowledgeJson from "./_knowledge.json";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const knowledgeJson = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "_knowledge.json"), "utf-8")
+);
 
 export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
@@ -71,40 +79,33 @@ export default async function handler(req: any, res: any) {
         });
       }
 
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+      try {
+        const ai = new GoogleGenAI({ apiKey: geminiKey });
+        const contents = [
+          ...validHistory.map((h) => ({
+            role: h.role === "bot" ? ("model" as const) : ("user" as const),
+            parts: [{ text: h.text }],
+          })),
+          { role: "user" as const, parts: [{ text: message.trim() }] },
+        ];
 
-      const contents = [
-        ...validHistory.map((h) => ({
-          role: h.role === "bot" ? "model" : "user",
-          parts: [{ text: h.text }],
-        })),
-        { role: "user", parts: [{ text: message.trim() }] },
-      ];
+        const aiResponse = await ai.models.generateContent({
+          model,
+          contents,
+          config: {
+            systemInstruction: systemText,
+            temperature: 0.3,
+            maxOutputTokens: 160,
+          },
+        });
 
-      const body = {
-        systemInstruction: {
-          parts: [{ text: systemText }],
-        },
-        contents,
-        generationConfig: {
-          temperature: 0.3,
-          maxOutputTokens: 160,
-        },
-      };
-
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "x-goog-api-key": geminiKey,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeout);
-      const data = await response.json();
-      rawReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        clearTimeout(timeout);
+        rawReply = aiResponse.text || "";
+      } catch (genErr) {
+        clearTimeout(timeout);
+        console.warn("[API/CHAT] GenAI call error, falling back:", genErr);
+        rawReply = "Steel Mind designs and fabricates steel structures across Pakistan. Please call +92 300 4253966 or submit the quote form to discuss your project.";
+      }
     }
 
     // Post-processing rules (Section 16.8)

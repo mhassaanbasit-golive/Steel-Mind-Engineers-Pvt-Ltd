@@ -252,65 +252,93 @@ export const Home: React.FC = () => {
             />
           </video>
 
-          {/* Hero Gradient Overlay */}
+          {/* Hero Gradient Overlay - Darkened bottom-left for high contrast text readability */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                "linear-gradient(180deg, rgba(0,0,0,0.68) 0%, rgba(0,0,0,0.22) 35%, rgba(0,0,0,0.18) 55%, rgba(0,0,0,0.78) 100%)",
+                "linear-gradient(180deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.92) 100%)",
             }}
           />
         </div>
 
-        {/* Hero Content: Single block anchored in the bottom-left corner */}
+        {/* Hero Text Block: Bottom-left position */}
         <div
-          className="absolute z-10 text-white"
-          style={{
-            bottom: "calc(56px + env(safe-area-inset-bottom))",
-            left: "var(--pad-x)",
-            right: "var(--pad-x)",
-          }}
+          className="absolute z-10 text-white left-[20px] right-[20px] lg:left-[40px] lg:right-auto bottom-[calc(120px+env(safe-area-inset-bottom))] lg:bottom-[140px] max-w-[320px] lg:max-w-[520px]"
         >
-          {/* H1 */}
+          {/* H1: 18-20px mobile / 32px desktop, weight 600, line-height 1.2, tracking -0.01em, white, clamped max 4 lines */}
           <h1
-            className="text-[22px] lg:text-[36px] font-semibold leading-[1.15] tracking-[-0.01em] text-white max-w-[900px]"
+            className="text-[18px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] text-white line-clamp-4 lg:line-clamp-none"
+            style={{
+              display: "-webkit-box",
+              WebkitLineClamp: 4,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}
             data-split=""
           >
             Turnkey provider from design and fabrication to installation for Pre-Engineered Steel Buildings, Steel Structures and Industrial Sheds along with Custom Steel Fabrication across Pakistan.
           </h1>
 
-          {/* Supporting line */}
+          {/* Supporting line: 12px mobile / 14px desktop, line-height 1.5, white at 82%, margin-top 10px, max 3 lines */}
           <p
-            className="mt-3 text-[14px] lg:text-[16px] leading-[1.65] text-white/85 max-w-[560px]"
+            className="mt-[10px] text-[12px] lg:text-[14px] leading-[1.5] max-w-[320px] lg:max-w-[520px] line-clamp-3 lg:line-clamp-none"
+            style={{
+              color: "rgba(255, 255, 255, 0.82)",
+              display: "-webkit-box",
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}
             data-fade-up=""
           >
             Steel Mind Engineers Pvt. Ltd. handles every steel project from the first drawing to the final handover. Design, fabrication, delivery and erection for factories, warehouses, farms and commercial buildings across Pakistan.
           </p>
+        </div>
 
-          {/* Buttons: Small sizes arranged in one line in bottom-left corner */}
-          {SITE.heroShowButtons && (
-            <div
-              className="mt-4 flex flex-row flex-wrap items-center gap-2"
-              data-fade-up=""
-            >
-              <Button
-                size="sm"
-                variant="hero-white"
-                href="/contact-us/#quote"
-                className="w-auto min-w-[130px]"
-              >
-                Request a Quote
-              </Button>
-              <Button
-                size="sm"
-                variant="hero"
-                href="/projects/"
-                className="w-auto min-w-[130px]"
-              >
-                View Our Projects
-              </Button>
-            </div>
-          )}
+        {/*
+          Rule for future sections:
+          On white or offwhite backgrounds: primary button is Royal Blue with white text. Secondary button is transparent with Royal Blue border and Royal Blue text.
+          On blue or dark image backgrounds: primary button is white with Royal Blue text. Secondary button is transparent with white border and white text.
+          If a section has two buttons, one must be primary and one must be secondary. Never two primary. Never two identical.
+        */}
+        {/* Buttons: One horizontal row below text block at bottom-left */}
+        <div
+          className="absolute z-10 flex flex-row items-center gap-[10px] left-[20px] bottom-[calc(48px+env(safe-area-inset-bottom))] lg:left-[40px] lg:bottom-[64px]"
+          data-fade-up=""
+        >
+          {/* Button 1 — Primary on dark: White bg, Royal Blue text, height 36px, radius 0 */}
+          <Link
+            to="/contact-us/#quote"
+            style={{
+              backgroundColor: "#FFFFFF",
+              color: "var(--blue)",
+              height: "36px",
+              padding: "10px 16px",
+              borderRadius: "0px",
+              transition: "background-color 300ms, color 300ms",
+            }}
+            className="inline-flex items-center justify-center text-[10px] uppercase font-semibold tracking-[0.08em] whitespace-nowrap max-w-[155px] hover:!bg-[var(--blue)] hover:!text-white cursor-pointer select-none"
+          >
+            Request a Quote
+          </Link>
+
+          {/* Button 2 — Secondary on dark: Transparent bg, 1px white border, white text, height 36px, radius 0 */}
+          <Link
+            to="/projects/"
+            style={{
+              backgroundColor: "transparent",
+              border: "1px solid rgba(255, 255, 255, 0.85)",
+              color: "#FFFFFF",
+              height: "36px",
+              padding: "10px 16px",
+              borderRadius: "0px",
+              transition: "background-color 300ms, color 300ms",
+            }}
+            className="inline-flex items-center justify-center text-[10px] uppercase font-semibold tracking-[0.08em] whitespace-nowrap max-w-[155px] hover:!bg-white hover:!text-[var(--blue)] cursor-pointer select-none"
+          >
+            View Our Projects
+          </Link>
         </div>
 
         {/* Scroll Hint (Bottom Right Line) */}
