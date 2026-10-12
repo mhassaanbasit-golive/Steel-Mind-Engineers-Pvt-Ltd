@@ -83,8 +83,8 @@ export const QuickAnswer: React.FC<QuickAnswerProps> = ({
         onClick={() => setIsOpen(true)}
         aria-label="Quick answer"
         title="Quick answer"
-        style={{ backgroundImage: "var(--gradient-brand-horizontal)" }}
-        className={`fixed left-4 bottom-[calc(88px+env(safe-area-inset-bottom))] z-[90] w-11 h-11 text-white flex items-center justify-center cursor-pointer shadow-md hover:brightness-110 active:brightness-90 transition-all duration-300 rounded-none group border border-white/40 ${
+        style={{ backgroundColor: "var(--blue)" }}
+        className={`fixed left-4 bottom-[calc(88px+env(safe-area-inset-bottom))] z-[90] w-11 h-11 bg-[var(--blue)] text-white flex items-center justify-center cursor-pointer shadow-md hover:bg-[var(--blue-dark)] transition-all duration-300 rounded-none group border border-white/40 ${
           btnVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 pointer-events-none"
         }`}
       >
@@ -96,14 +96,14 @@ export const QuickAnswer: React.FC<QuickAnswerProps> = ({
         </svg>
 
         {/* Hover label */}
-        <span className="hidden group-hover:block absolute left-[52px] bg-[var(--ink)] text-white text-[11px] uppercase tracking-[0.08em] px-2.5 py-1 whitespace-nowrap pointer-events-none">
+        <span className="hidden group-hover:block absolute left-[52px] bg-[var(--blue)] text-white text-[9px] uppercase tracking-[0.08em] px-2.5 py-1 whitespace-nowrap pointer-events-none">
           Quick answer
         </span>
       </button>
 
       {/* Backdrop overlay */}
       <div
-        className={`fixed inset-0 bg-black/40 z-[140] transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-[var(--blue)]/40 z-[140] transition-opacity duration-300 ${
           isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setIsOpen(false)}
@@ -130,7 +130,7 @@ export const QuickAnswer: React.FC<QuickAnswerProps> = ({
         <div>
           {/* Top Bar: Label on left, Close cross top-right */}
           <div className="flex items-start justify-between pb-4 border-b border-[var(--line)]">
-            <span className="block text-[11px] uppercase font-semibold text-[var(--blue)] tracking-[0.08em]">
+            <span className="block text-[9px] uppercase font-semibold text-[var(--blue)] tracking-[0.08em]">
               {topicName}
             </span>
 
@@ -147,9 +147,9 @@ export const QuickAnswer: React.FC<QuickAnswerProps> = ({
             </button>
           </div>
 
-          {/* Quick Answer Body: 14px, ink, weight 500, line-height 1.6 */}
+          {/* Quick Answer Body: 12px mobile / 13px desktop */}
           <div className="py-6">
-            <p className="quick-answer text-[14px] font-medium leading-[1.6] text-[var(--ink)]">
+            <p className="quick-answer text-[12px] lg:text-[13px] font-medium leading-[1.65] text-[var(--ink)]">
               {text}
             </p>
           </div>
@@ -157,10 +157,10 @@ export const QuickAnswer: React.FC<QuickAnswerProps> = ({
           {/* Related pages mini list if present */}
           {related && related.length > 0 && (
             <div className="pt-4 border-t border-[var(--line)]">
-              <span className="block text-[11px] uppercase font-semibold text-[var(--grey)] tracking-[0.08em] mb-3">
+              <span className="block text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.08em] mb-3">
                 Related Pages
               </span>
-              <ul className="space-y-2 text-[14px]">
+              <ul className="space-y-2 text-[12px] lg:text-[13px]">
                 {related.map((item, idx) => {
                   if (typeof item === "string") {
                     return (

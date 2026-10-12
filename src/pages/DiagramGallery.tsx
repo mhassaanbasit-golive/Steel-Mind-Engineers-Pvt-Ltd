@@ -63,13 +63,16 @@ export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
         subtitle={data.quickAnswer}
       />
 
-      {/* Block B — Information Panel */}
-      <section className="py-12 lg:py-20 bg-white border-b border-[var(--line)]">
+      {/* Block B — Information Panel (Royal Blue alternating with White) */}
+      <section
+        style={{ backgroundColor: "var(--blue)" }}
+        className="py-12 lg:py-20 bg-[var(--blue)] text-white"
+      >
         <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
             <div className="lg:col-span-6 space-y-4" data-reveal-group="">
               <h2
-                className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2]"
+                className="text-[16px] lg:text-[24px] font-semibold text-white leading-[1.2]"
                 data-split=""
               >
                 {blockBTitle}
@@ -77,7 +80,7 @@ export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
               {blockBParagraphs.map((p, idx) => (
                 <p
                   key={idx}
-                  className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)]"
+                  className="text-[12px] lg:text-[13px] leading-[1.65] text-white/85"
                   data-reveal=""
                 >
                   {p}
@@ -92,41 +95,39 @@ export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
         </div>
       </section>
 
-      {/* Grid of Diagram Cards (3 columns desktop, 1 col mobile) */}
+      {/* Grid of Diagrams (Full-bleed White section with 1px --line dividers, no white cards on offwhite) */}
       {items.length > 0 && (
-        <section className="py-14 lg:py-20 bg-[var(--offwhite)] border-b border-[var(--line)]">
+        <section className="py-14 lg:py-20 bg-white border-b border-[var(--line)]">
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
             <div className="mb-10 lg:mb-12">
-              <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-2">
-                Technical Diagrams
-              </span>
-              <h2 className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2]">
+              {/* 2.3: Eyebrow "Technical Diagrams" removed */}
+              <h2 className="text-[16px] lg:text-[24px] font-semibold text-[var(--ink)] leading-[1.2]">
                 {isCranePage ? "Crane Arrangements" : "Framing System Types"}
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-[var(--line)]">
               {items.map((item: { name: string; text: string }, idx: number) => (
                 <div
                   key={idx}
                   onClick={() => setModalItem(item)}
-                  className="group bg-white border border-[var(--line)] p-4 flex flex-col cursor-pointer transition-colors hover:border-[var(--blue)]"
+                  className="group bg-white border-r border-b border-[var(--line)] p-6 flex flex-col cursor-pointer transition-colors"
                   data-reveal=""
                 >
-                  <div className="w-full aspect-[4/3] mb-4 overflow-hidden bg-[var(--offwhite)] flex items-center justify-center p-2">
+                  <div className="w-full aspect-[4/3] mb-4 overflow-hidden bg-white flex items-center justify-center p-2">
                     {isCranePage ? (
                       <CraneDiagram type={item.name} />
                     ) : (
                       <FrameDiagram type={item.name} />
                     )}
                   </div>
-                  <h3 className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] mb-2 group-hover:text-[var(--blue)] transition-colors leading-[1.25]">
+                  <h3 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] mb-2 group-hover:text-[var(--blue)] transition-colors leading-[1.25]">
                     {item.name}
                   </h3>
-                  <p className="text-[12px] leading-[1.6] text-[var(--grey)] line-clamp-3">
+                  <p className="text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)] line-clamp-3">
                     {item.text}
                   </p>
-                  <span className="mt-4 text-[11px] font-semibold text-[var(--blue)] inline-block uppercase tracking-[0.05em]">
+                  <span className="mt-4 text-[10px] font-semibold text-[var(--blue)] inline-block uppercase tracking-[0.06em]">
                     Enlarge diagram +
                   </span>
                 </div>
@@ -136,12 +137,12 @@ export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
         </section>
       )}
 
-      {/* Lightbox for enlarged diagram */}
+      {/* Lightbox for enlarged diagram (1.3: Royal Blue backdrop, no black) */}
       {modalItem && (
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-[350] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6"
+          className="fixed inset-0 z-[350] bg-[var(--blue)]/90 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6"
         >
           <div className="bg-white max-w-[720px] w-full p-6 sm:p-8 space-y-6 relative border border-[var(--line)]">
             <button
@@ -156,7 +157,7 @@ export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
               </svg>
             </button>
 
-            <div className="w-full aspect-[4/3] bg-[var(--offwhite)] flex items-center justify-center p-4">
+            <div className="w-full aspect-[4/3] bg-white flex items-center justify-center p-4">
               {isCranePage ? (
                 <CraneDiagram type={modalItem.name} />
               ) : (
@@ -165,10 +166,10 @@ export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
             </div>
 
             <div className="space-y-2">
-              <h3 className="text-[18px] lg:text-[22px] font-semibold text-[var(--ink)]">
+              <h3 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)]">
                 {modalItem.name}
               </h3>
-              <p className="text-[13px] lg:text-[14px] leading-[1.6] text-[var(--grey)]">
+              <p className="text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)]">
                 {modalItem.text}
               </p>
             </div>
@@ -180,10 +181,8 @@ export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
       {data.faq && data.faq.length > 0 && (
         <section className="py-12 lg:py-16 bg-white border-b border-[var(--line)]">
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
-            <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-2">
-              Questions
-            </span>
-            <h2 className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2] mb-6">
+            {/* 2.3: Eyebrow "Questions" removed */}
+            <h2 className="text-[16px] lg:text-[24px] font-semibold text-[var(--ink)] leading-[1.2] mb-6">
               Frequently Asked Questions
             </h2>
             <Accordion items={data.faq} />

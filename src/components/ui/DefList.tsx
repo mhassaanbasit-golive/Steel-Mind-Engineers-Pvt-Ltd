@@ -24,10 +24,10 @@ export const DefList: React.FC<DefListProps> = ({ items, className = "" }) => {
           className="py-5 lg:py-6 grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-8 items-baseline"
           data-reveal=""
         >
-          <dt className="lg:col-span-4 text-[17px] font-semibold text-[var(--ink)]">
+          <dt className="lg:col-span-4 text-[14px] lg:text-[17px] font-semibold text-[var(--ink)]">
             {item.name}
           </dt>
-          <dd className="lg:col-span-8 text-[16px] leading-[1.65] text-[var(--grey)]">
+          <dd className="lg:col-span-8 text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)]">
             {item.text}
           </dd>
         </div>

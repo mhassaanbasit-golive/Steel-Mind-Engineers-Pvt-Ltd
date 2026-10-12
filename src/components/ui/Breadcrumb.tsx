@@ -20,7 +20,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   const isWhite = theme === "white";
 
   return (
-    <nav aria-label="Breadcrumb" className={`text-[11px] uppercase tracking-[0.1em] flex items-center space-x-2 ${className}`}>
+    <nav aria-label="Breadcrumb" className={`text-[9px] uppercase tracking-[0.1em] flex items-center space-x-2 ${className}`}>
       {items.map((item, idx) => {
         const isLast = idx === items.length - 1;
         return (

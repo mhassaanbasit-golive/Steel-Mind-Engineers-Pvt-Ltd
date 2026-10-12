@@ -35,10 +35,10 @@ export const Header: React.FC<HeaderProps> = () => {
             className="flex flex-col text-left group select-none cursor-pointer"
             aria-label="Steel Mind Engineers Homepage"
           >
-            <span className="font-semibold text-[16px] lg:text-[18px] text-white tracking-[-0.01em] leading-tight">
+            <span className="font-semibold text-[15px] lg:text-[17px] text-white tracking-[-0.01em] leading-tight">
               {SITE.header.title}
             </span>
-            <span className="text-[10px] uppercase font-semibold text-white/70 tracking-[0.18em] mt-0.5">
+            <span className="text-[9px] uppercase font-semibold text-white/70 tracking-[0.18em] mt-0.5">
               {SITE.header.sub}
             </span>
           </Link>

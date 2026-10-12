@@ -60,15 +60,15 @@ export const Accordion: React.FC<AccordionProps> = ({
               onClick={() => toggle(idx)}
               className="w-full py-6 flex items-center justify-between text-left cursor-pointer transition-colors hover:text-[var(--blue)] focus-visible:outline-none"
             >
-              <span className="text-[17px] font-semibold text-[var(--ink)] pr-6 group-hover:text-[var(--blue)] transition-colors">
+              <span className="text-[12px] lg:text-[14px] font-semibold text-[var(--ink)] pr-6 group-hover:text-[var(--blue)] transition-colors">
                 {item.q}
               </span>
 
               {/* Plus/Minus icon made with two 1px lines */}
               <span className="relative flex-shrink-0 w-4 h-4 flex items-center justify-center">
-                <span className="absolute w-4 h-[1.5px] bg-[var(--ink)] group-hover:bg-[var(--blue)] transition-colors" />
+                <span className="absolute w-4 h-[1.5px] bg-[var(--blue)] transition-colors" />
                 <span
-                  className={`absolute h-4 w-[1.5px] bg-[var(--ink)] group-hover:bg-[var(--blue)] transition-transform duration-300 ${
+                  className={`absolute h-4 w-[1.5px] bg-[var(--blue)] transition-transform duration-300 ${
                     isOpen ? "scale-y-0" : "scale-y-100"
                   }`}
                 />
@@ -85,7 +85,7 @@ export const Accordion: React.FC<AccordionProps> = ({
               }}
               className="h-0 overflow-hidden"
             >
-              <div className="pb-6 text-[15px] lg:text-[16px] leading-[1.6] text-[var(--grey)] max-w-[520px]">
+              <div className="pb-6 text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)] max-w-[520px]">
                 {item.a}
               </div>
             </div>

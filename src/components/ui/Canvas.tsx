@@ -57,13 +57,13 @@ export const Canvas: React.FC<CanvasProps> = ({
       data-canvas-ratio={ratio}
       aria-hidden="true"
       style={appliedRatioClass ? undefined : hasHeightOverride ? undefined : { aspectRatio: ratio }}
-      className={`w-full border border-dashed border-[var(--line)] bg-[var(--offwhite)] flex flex-col items-center justify-center p-3 text-center select-none ${appliedRatioClass} ${className}`}
+      className={`w-full border border-dashed border-[var(--line)] bg-white flex flex-col items-center justify-center p-3 text-center select-none ${appliedRatioClass} ${className}`}
     >
       <div className="flex flex-col items-center justify-center space-y-0.5">
-        <span className="text-[11px] uppercase tracking-[0.1em] text-[var(--grey)] font-medium break-all px-1">
+        <span className="text-[9px] uppercase tracking-[0.1em] text-[var(--grey)] font-medium break-all px-1">
           {label || slot}
         </span>
-        <span className="text-[10px] uppercase tracking-[0.08em] text-[var(--grey)]/70">
+        <span className="text-[9px] uppercase tracking-[0.08em] text-[var(--grey)]/70">
           {ratio}
         </span>
       </div>

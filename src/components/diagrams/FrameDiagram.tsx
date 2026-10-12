@@ -155,7 +155,7 @@ export const FrameDiagram: React.FC<FrameDiagramProps> = ({ type, className = ""
       role="img"
       aria-label={type}
       viewBox="0 0 320 240"
-      className={`w-full aspect-[4/3] bg-[var(--offwhite)] ${className}`}
+      className={`w-full aspect-[4/3] bg-white ${className}`}
     >
       {/* Ground Line at y=200 */}
       <line x1="16" y1="200" x2="304" y2="200" stroke="var(--grey)" strokeWidth="1" />

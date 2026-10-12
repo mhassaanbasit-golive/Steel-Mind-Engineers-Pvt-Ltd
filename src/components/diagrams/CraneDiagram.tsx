@@ -14,7 +14,7 @@ export const CraneDiagram: React.FC<CraneDiagramProps> = ({ type, className = ""
       return (
         <>
           {/* Base Frame */}
-          <path d="M 48 200 L 48 120 L 160 76 L 272 120 L 272 200" stroke="#486581" strokeWidth="3" strokeLinecap="square" fill="none" />
+          <path d="M 48 200 L 48 120 L 160 76 L 272 120 L 272 200" stroke="var(--blue)" strokeWidth="3" strokeLinecap="square" fill="none" />
           {/* Horizontal Jib 60px from column with hook */}
           <line x1="48" y1="130" x2="108" y2="130" stroke="var(--ink)" strokeWidth="3" />
           <line x1="108" y1="130" x2="108" y2="145" stroke="var(--ink)" strokeWidth="1.5" />
@@ -31,7 +31,7 @@ export const CraneDiagram: React.FC<CraneDiagramProps> = ({ type, className = ""
       return (
         <>
           {/* Base Frame */}
-          <path d="M 48 200 L 48 120 L 160 76 L 272 120 L 272 200" stroke="#486581" strokeWidth="3" strokeLinecap="square" fill="none" />
+          <path d="M 48 200 L 48 120 L 160 76 L 272 120 L 272 200" stroke="var(--blue)" strokeWidth="3" strokeLinecap="square" fill="none" />
           {/* Crane beam y=132 from 48 to 224, Leg (224,132) -> (224,200) */}
           <line x1="48" y1="132" x2="224" y2="132" stroke="var(--ink)" strokeWidth="3" />
           <line x1="224" y1="132" x2="224" y2="200" stroke="var(--ink)" strokeWidth="3" />
@@ -47,10 +47,10 @@ export const CraneDiagram: React.FC<CraneDiagramProps> = ({ type, className = ""
       return (
         <>
           {/* Two-bay frame */}
-          <line x1="40" y1="200" x2="40" y2="124" stroke="#486581" strokeWidth="3" />
-          <line x1="160" y1="200" x2="160" y2="124" stroke="#486581" strokeWidth="2" />
-          <line x1="280" y1="200" x2="280" y2="124" stroke="#486581" strokeWidth="3" />
-          <path d="M 40 124 L 100 84 L 160 124 L 220 84 L 280 124" stroke="#486581" strokeWidth="3" fill="none" />
+          <line x1="40" y1="200" x2="40" y2="124" stroke="var(--blue)" strokeWidth="3" />
+          <line x1="160" y1="200" x2="160" y2="124" stroke="var(--blue)" strokeWidth="2" />
+          <line x1="280" y1="200" x2="280" y2="124" stroke="var(--blue)" strokeWidth="3" />
+          <path d="M 40 124 L 100 84 L 160 124 L 220 84 L 280 124" stroke="var(--blue)" strokeWidth="3" fill="none" />
           {/* Two bridge beams y=130 */}
           <line x1="40" y1="130" x2="160" y2="130" stroke="var(--ink)" strokeWidth="3" />
           <line x1="160" y1="130" x2="280" y2="130" stroke="var(--ink)" strokeWidth="3" />
@@ -68,7 +68,7 @@ export const CraneDiagram: React.FC<CraneDiagramProps> = ({ type, className = ""
       return (
         <>
           {/* Base Frame */}
-          <path d="M 48 200 L 48 120 L 160 76 L 272 120 L 272 200" stroke="#486581" strokeWidth="3" strokeLinecap="square" fill="none" />
+          <path d="M 48 200 L 48 120 L 160 76 L 272 120 L 272 200" stroke="var(--blue)" strokeWidth="3" strokeLinecap="square" fill="none" />
           {/* Short verticals hung from rafters */}
           <line x1="100" y1="98" x2="100" y2="104" stroke="var(--ink)" strokeWidth="2" />
           <line x1="220" y1="98" x2="220" y2="104" stroke="var(--ink)" strokeWidth="2" />
@@ -85,7 +85,7 @@ export const CraneDiagram: React.FC<CraneDiagramProps> = ({ type, className = ""
     return (
       <>
         {/* Base Frame */}
-        <path d="M 48 200 L 48 120 L 160 76 L 272 120 L 272 200" stroke="#486581" strokeWidth="3" strokeLinecap="square" fill="none" />
+        <path d="M 48 200 L 48 120 L 160 76 L 272 120 L 272 200" stroke="var(--blue)" strokeWidth="3" strokeLinecap="square" fill="none" />
         {/* Crane brackets on both columns at y=136 (10px horizontals) */}
         <line x1="48" y1="136" x2="58" y2="136" stroke="var(--ink)" strokeWidth="2.5" />
         <line x1="262" y1="136" x2="272" y2="136" stroke="var(--ink)" strokeWidth="2.5" />
@@ -103,7 +103,7 @@ export const CraneDiagram: React.FC<CraneDiagramProps> = ({ type, className = ""
       role="img"
       aria-label={type}
       viewBox="0 0 320 240"
-      className={`w-full aspect-[4/3] bg-[var(--offwhite)] ${className}`}
+      className={`w-full aspect-[4/3] bg-white ${className}`}
     >
       {/* Ground Line */}
       <line x1="16" y1="200" x2="304" y2="200" stroke="var(--grey)" strokeWidth="1" />

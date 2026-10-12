@@ -4,7 +4,7 @@ import { SITE } from "../data/site.ts";
 import { Canvas } from "../components/ui/Canvas.tsx";
 import { Button } from "../components/ui/Button.tsx";
 import { lenis } from "../lib/lenis.ts";
-import { gsap, ScrollTrigger } from "../lib/gsap.ts";
+import { gsap } from "../lib/gsap.ts";
 import { useReducedMotion } from "../hooks/useReducedMotion.ts";
 
 // Content Files for Pages 2 through 8
@@ -78,7 +78,6 @@ export const AboutUs: React.FC = () => {
             const idx = SECTIONS.findIndex((s) => s.id === entry.target.id);
             if (idx !== -1) {
               setActiveSectionIndex(idx);
-              // Rail is visible from Introduction (0) through Committed To (5), hides at Factory Tour (6)
               if (idx >= 0 && idx < 6) {
                 setRailVisible(true);
               } else {
@@ -113,56 +112,6 @@ export const AboutUs: React.FC = () => {
       }
     }
   };
-
-  // ZONE C: GSAP ScrollTrigger Card Stacking
-  const cardStackContainerRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (reducedMotion || isMobile) return;
-
-    const ctx = gsap.context(() => {
-      const card1 = document.getElementById("core-values");
-      const card2 = document.getElementById("sme-policy");
-      const card3 = document.getElementById("committed-to");
-
-      if (card1 && card2 && card3) {
-        // Pin Card 1 until Card 2 reaches top
-        ScrollTrigger.create({
-          trigger: card1,
-          start: "top top+=80",
-          endTrigger: card2,
-          end: "top top+=80",
-          pin: true,
-          pinSpacing: false,
-          scrub: 1,
-          animation: gsap.to(card1, {
-            scale: 0.96,
-            opacity: 0.4,
-            y: -20,
-            ease: "power2.out",
-          }),
-        });
-
-        // Pin Card 2 until Card 3 reaches top
-        ScrollTrigger.create({
-          trigger: card2,
-          start: "top top+=80",
-          endTrigger: card3,
-          end: "top top+=80",
-          pin: true,
-          pinSpacing: false,
-          scrub: 1,
-          animation: gsap.to(card2, {
-            scale: 0.96,
-            opacity: 0.4,
-            y: -20,
-            ease: "power2.out",
-          }),
-        });
-      }
-    }, cardStackContainerRef);
-
-    return () => ctx.revert();
-  }, [reducedMotion, isMobile]);
 
   // Factory Tour timeline line animation via scaleY scrub
   const timelineLineRef = useRef<HTMLDivElement>(null);
@@ -295,17 +244,15 @@ export const AboutUs: React.FC = () => {
             : "opacity-0 !duration-400"
         }`}
       >
-        {/* Current Section Number & Name */}
         <div className="flex flex-col items-center text-center select-none min-h-[42px] mb-4">
-          <span className="text-[11px] font-mono font-semibold uppercase tracking-[0.1em] text-[var(--blue)] tabular-nums transition-opacity duration-400">
+          <span className="text-[9px] font-mono font-semibold uppercase tracking-[0.1em] text-[var(--blue)] tabular-nums transition-opacity duration-400">
             {SECTIONS[activeSectionIndex]?.num || "01"}
           </span>
-          <span className="text-[11px] font-medium text-[var(--ink)] max-w-[120px] leading-tight mt-0.5 whitespace-nowrap transition-opacity duration-400">
+          <span className="text-[9px] uppercase font-medium text-[var(--ink)] max-w-[120px] leading-tight mt-0.5 whitespace-nowrap transition-opacity duration-400">
             {SECTIONS[activeSectionIndex]?.label || "Introduction"}
           </span>
         </div>
 
-        {/* 7 Dots spaced 32px apart */}
         <div className="flex flex-col items-center space-y-8">
           {SECTIONS.map((sec, idx) => {
             const isActive = idx === activeSectionIndex;
@@ -339,126 +286,105 @@ export const AboutUs: React.FC = () => {
       {/* ========================================================= */}
       {/* ZONE B — STICKY IMAGE COLUMN (INTRODUCTION, VISION, MISSION) */}
       {/* ========================================================= */}
-      <section className="w-full bg-white py-[72px] lg:py-[112px]">
+      <section className="w-full bg-white pt-[calc(var(--header-h)+32px)] pb-[72px] lg:pb-[112px]">
         <div className="max-w-[1340px] mx-auto px-5 lg:px-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
             {/* Left Column Scrolls */}
             <div className="w-full">
-              {/* --- 1. INTRODUCTION BLOCK --- */}
+              {/* --- 1. INTRODUCTION BLOCK (2.3: Eyebrow "INTRODUCTION" removed) --- */}
               <div id="introduction" className="w-full">
-                {/* On Mobile: Image on top */}
                 {isMobile && (
                   <div className="mb-8">
                     <Canvas slot="about.introduction.main" ratio="4/5" />
                   </div>
                 )}
 
-                <span className="block text-[10px] uppercase font-semibold text-[var(--blue)] tracking-[0.14em]">
-                  INTRODUCTION
-                </span>
-
-                <h1 className="text-[24px] lg:text-[56px] font-bold uppercase tracking-[-0.02em] text-[var(--ink)] leading-tight mt-3">
+                <h1 className="text-[20px] lg:text-[32px] font-semibold tracking-[-0.015em] text-[var(--ink)] leading-[1.15]">
                   {page2.h1}
                 </h1>
 
-                {/* 40px Royal Blue Line */}
                 <div className="w-[40px] h-[1px] bg-[var(--blue)] mt-4" />
 
-                <p className="text-[16px] lg:text-[18px] text-[var(--ink)] font-medium max-w-[520px] mt-6 leading-snug">
+                <p className="text-[12px] lg:text-[13px] text-[var(--ink)] font-medium max-w-[520px] mt-5 leading-[1.65]">
                   {page2.quickAnswer}
                 </p>
 
-                <div className="mt-6 space-y-4 text-[14px] lg:text-[15px] leading-[1.65] text-[var(--grey)] max-w-[520px]">
+                <div className="mt-4 space-y-4 text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)] max-w-[520px]">
                   <p>{p2Paragraph1}</p>
                   <p>{p2Paragraph2}</p>
                 </div>
 
                 <div className="mt-8 flex flex-wrap items-center gap-3">
                   <Button
-                    variant="ghost"
+                    variant="secondary"
                     href={SITE.profilePdf}
                     target="_blank"
-                    className="border border-[var(--ink)] text-[var(--ink)] hover:bg-[var(--blue)] hover:border-[var(--blue)] hover:text-white"
                   >
                     Download Company Profile
                   </Button>
 
                   <Link
                     to="/contact-us/"
-                    className="text-[13px] font-semibold text-[var(--blue)] hover:underline inline-flex items-center gap-1.5 ml-3"
+                    className="text-[10px] uppercase tracking-[0.06em] font-semibold text-[var(--blue)] hover:underline inline-flex items-center gap-1.5 ml-3"
                   >
                     Get in Touch &rarr;
                   </Link>
                 </div>
               </div>
 
-              {/* Section Divider inside left column */}
               <div className="w-[40px] h-[1px] bg-[var(--line)] my-12" />
 
-              {/* --- 2. VISION BLOCK (spacing 96px above) --- */}
-              <div id="vision" className="w-full pt-12 lg:pt-24">
-                {/* On Mobile: Image on top */}
+              {/* --- 2. VISION BLOCK (2.3: Eyebrow "VISION" removed) --- */}
+              <div id="vision" className="w-full pt-12 lg:pt-20">
                 {isMobile && (
                   <div className="mb-8">
                     <Canvas slot="about.vision.hero" ratio="4/5" />
                   </div>
                 )}
 
-                <span className="block text-[10px] uppercase font-semibold text-[var(--blue)] tracking-[0.14em]">
-                  VISION
-                </span>
-
-                <h2 className="text-[24px] lg:text-[56px] font-bold uppercase tracking-[-0.02em] text-[var(--ink)] leading-tight mt-3">
+                <h2 className="text-[16px] lg:text-[24px] font-semibold tracking-[-0.015em] text-[var(--ink)] leading-[1.2]">
                   {page3.h1}
                 </h2>
 
-                {/* 40px Royal Blue Line */}
                 <div className="w-[40px] h-[1px] bg-[var(--blue)] mt-4" />
 
-                <p className="text-[16px] lg:text-[18px] text-[var(--ink)] font-medium max-w-[520px] mt-6 leading-snug">
+                <p className="text-[12px] lg:text-[13px] text-[var(--ink)] font-medium max-w-[520px] mt-5 leading-[1.65]">
                   {page3.quickAnswer}
                 </p>
 
-                <div className="mt-6 space-y-4 text-[14px] lg:text-[15px] leading-[1.65] text-[var(--grey)] max-w-[520px]">
+                <div className="mt-4 space-y-4 text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)] max-w-[520px]">
                   {p3Paragraphs.map((pText, i) => (
                     <p key={i}>{pText}</p>
                   ))}
                 </div>
               </div>
 
-              {/* Section Divider inside left column */}
               <div className="w-[40px] h-[1px] bg-[var(--line)] my-12" />
 
-              {/* --- 3. MISSION BLOCK (spacing 96px above) --- */}
-              <div id="mission" className="w-full pt-12 lg:pt-24">
-                <span className="block text-[10px] uppercase font-semibold text-[var(--blue)] tracking-[0.14em]">
-                  MISSION
-                </span>
-
-                <h2 className="text-[24px] lg:text-[56px] font-bold uppercase tracking-[-0.02em] text-[var(--ink)] leading-tight mt-3">
+              {/* --- 3. MISSION BLOCK (2.3: Eyebrow "MISSION" removed) --- */}
+              <div id="mission" className="w-full pt-12 lg:pt-20">
+                <h2 className="text-[16px] lg:text-[24px] font-semibold tracking-[-0.015em] text-[var(--ink)] leading-[1.2]">
                   {page4.h1}
                 </h2>
 
-                {/* 40px Royal Blue Line */}
                 <div className="w-[40px] h-[1px] bg-[var(--blue)] mt-4" />
 
-                <p className="text-[16px] lg:text-[18px] text-[var(--ink)] font-medium max-w-[520px] mt-6 leading-snug">
+                <p className="text-[12px] lg:text-[13px] text-[var(--ink)] font-medium max-w-[520px] mt-5 leading-[1.65]">
                   {page4.quickAnswer}
                 </p>
 
-                {/* 3 items stacked vertically, gap 32px */}
-                <div className="mt-10 space-y-8">
+                <div className="mt-8 space-y-6">
                   {p4Defs.map((def: any, idx: number) => {
                     const numStr = String(idx + 1).padStart(2, "0");
                     return (
-                      <div key={def.name} className="space-y-1.5">
-                        <div className="text-[16px] font-bold text-[var(--blue)] font-mono leading-none">
+                      <div key={def.name} className="space-y-1">
+                        <div className="text-[12px] font-bold text-[var(--blue)] font-mono leading-none">
                           {numStr}
                         </div>
-                        <h3 className="text-[15px] font-semibold text-[var(--ink)] leading-tight">
+                        <h3 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] leading-tight">
                           {def.name}
                         </h3>
-                        <p className="text-[13px] text-[var(--grey)] leading-[1.65] max-w-[480px]">
+                        <p className="text-[12px] lg:text-[13px] text-[var(--grey)] leading-[1.65] max-w-[480px]">
                           {def.text}
                         </p>
                       </div>
@@ -470,8 +396,7 @@ export const AboutUs: React.FC = () => {
 
             {/* Right Column: Sticky Shared Container (Desktop Only) */}
             {!isMobile && (
-              <div className="hidden lg:block sticky top-[96px] h-[calc(100vh-192px)] w-full overflow-hidden border border-[var(--line)] bg-[var(--offwhite)]">
-                {/* Layer 0: Introduction */}
+              <div className="hidden lg:block sticky top-[96px] h-[calc(100vh-192px)] w-full overflow-hidden border border-[var(--line)] bg-white">
                 <div
                   style={{
                     transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)",
@@ -489,7 +414,6 @@ export const AboutUs: React.FC = () => {
                   />
                 </div>
 
-                {/* Layer 1: Vision */}
                 <div
                   style={{
                     transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)",
@@ -507,7 +431,6 @@ export const AboutUs: React.FC = () => {
                   />
                 </div>
 
-                {/* Layer 2: Mission (reuses about.introduction.main with top crop) */}
                 <div
                   style={{
                     transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)",
@@ -524,13 +447,13 @@ export const AboutUs: React.FC = () => {
                     data-canvas-slot="about.introduction.main"
                     data-canvas-ratio="4/5"
                     aria-hidden="true"
-                    className="w-full h-full border border-dashed border-[var(--line)] bg-[var(--offwhite)] flex flex-col items-center justify-center p-3 text-center select-none"
+                    className="w-full h-full border border-dashed border-[var(--line)] bg-white flex flex-col items-center justify-center p-3 text-center select-none"
                   >
                     <div className="flex flex-col items-center justify-center space-y-0.5">
-                      <span className="text-[11px] uppercase tracking-[0.1em] text-[var(--grey)] font-medium break-all px-1">
+                      <span className="text-[9px] uppercase tracking-[0.1em] text-[var(--grey)] font-medium break-all px-1">
                         about.introduction.main (cropped top)
                       </span>
-                      <span className="text-[10px] uppercase tracking-[0.08em] text-[var(--grey)]/70">
+                      <span className="text-[9px] uppercase tracking-[0.08em] text-[var(--grey)]/70">
                         4/5
                       </span>
                     </div>
@@ -543,168 +466,143 @@ export const AboutUs: React.FC = () => {
       </section>
 
       {/* ========================================================= */}
-      {/* ZONE C — CARD STACK (CORE VALUES, SME POLICY, COMMITTED TO) */}
+      {/* ZONE C — FULL-BLEED ALTERNATING SECTIONS (NO WHITE CARDS ON OFFWHITE) */}
       {/* ========================================================= */}
+      {/* 1. CORE VALUES (Royal Blue section with white text) */}
       <section
-        ref={cardStackContainerRef}
-        className="w-full bg-[var(--offwhite)] py-[72px] lg:py-[112px]"
+        id="core-values"
+        style={{ backgroundColor: "var(--blue)" }}
+        className="w-full bg-[var(--blue)] text-white py-[72px] lg:py-[112px]"
       >
         <div className="max-w-[1340px] mx-auto px-5 lg:px-10">
-          <div className="flex flex-col space-y-0">
-            {/* --- CARD 1: CORE VALUES --- */}
-            <div
-              id="core-values"
-              style={{
-                transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)",
-              }}
-              className="w-full min-h-[70vh] lg:min-h-[80vh] p-10 lg:p-16 bg-white border border-[var(--line)] rounded-none relative z-10"
-            >
-              <span className="block text-[10px] uppercase font-semibold text-[var(--blue)] tracking-[0.14em]">
-                OUR CORE VALUES
-              </span>
+          {/* 2.3: Eyebrow "OUR CORE VALUES" removed */}
+          <h2 className="text-[16px] lg:text-[24px] font-semibold tracking-[-0.015em] text-white leading-[1.2]">
+            {page5.h1}
+          </h2>
 
-              <h2 className="text-[24px] lg:text-[56px] font-bold uppercase tracking-[-0.02em] text-[var(--ink)] leading-tight mt-3">
-                {page5.h1}
-              </h2>
+          <div className="w-[40px] h-[1px] bg-white/40 mt-4" />
 
-              <div className="w-[40px] h-[1px] bg-[var(--blue)] mt-4" />
+          <p className="text-[12px] lg:text-[13px] text-white/90 font-medium max-w-[560px] mt-5 leading-[1.65]">
+            {page5.quickAnswer}
+          </p>
 
-              <p className="text-[16px] lg:text-[18px] text-[var(--ink)] font-medium max-w-[560px] mt-6 leading-snug">
-                {page5.quickAnswer}
-              </p>
-
-              {/* 2x2 Grid Desktop / Stacked Mobile */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 mt-12">
-                {p5Cards.map((card) => (
-                  <div key={card.num} className="flex flex-col">
-                    <div className="w-[40px] h-[1px] bg-[var(--blue)] mb-3" />
-                    <div className="text-[28px] lg:text-[40px] font-bold text-[var(--blue)] font-sans leading-none">
-                      {card.num}
-                    </div>
-                    <div className="w-full h-[1px] bg-[var(--line)] mt-4" />
-                    <h3 className="text-[16px] font-semibold text-[var(--ink)] mt-4 leading-snug">
-                      {card.title}
-                    </h3>
-                    <p className="text-[13px] text-[var(--grey)] leading-[1.65] max-w-[360px] mt-2">
-                      {card.desc}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* --- CARD 2: SME POLICY --- */}
-            <div
-              id="sme-policy"
-              style={{
-                transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)",
-              }}
-              className="w-full min-h-[70vh] lg:min-h-[80vh] p-10 lg:p-16 bg-white border border-[var(--line)] rounded-none relative z-20"
-            >
-              <span className="block text-[10px] uppercase font-semibold text-[var(--blue)] tracking-[0.14em]">
-                SME POLICY
-              </span>
-
-              <h2 className="text-[24px] lg:text-[56px] font-bold uppercase tracking-[-0.02em] text-[var(--ink)] leading-tight mt-3">
-                {page6.h1}
-              </h2>
-
-              <div className="w-[40px] h-[1px] bg-[var(--blue)] mt-4" />
-
-              <p className="text-[16px] lg:text-[18px] text-[var(--ink)] font-medium max-w-[560px] mt-6 leading-snug">
-                {page6.quickAnswer}
-              </p>
-
-              {/* Five Horizontal Strips */}
-              <div className="divide-y divide-[var(--line)] border-y border-[var(--line)] mt-12">
-                {p6Strips.map((strip) => (
-                  <div
-                    key={strip.num}
-                    className="grid grid-cols-1 lg:grid-cols-[64px_1fr_1.8fr] gap-4 lg:gap-8 py-6 px-3 transition-colors duration-300 hover:bg-[var(--offwhite)] cursor-pointer items-baseline"
-                  >
-                    <div className="text-[28px] lg:text-[40px] font-bold text-[var(--blue)] font-sans leading-none">
-                      {strip.num}
-                    </div>
-                    <h3 className="text-[16px] font-semibold text-[var(--ink)] leading-snug">
-                      {strip.title}
-                    </h3>
-                    <p className="text-[13px] text-[var(--grey)] leading-[1.65] max-w-[520px]">
-                      {strip.desc}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* --- CARD 3: COMMITTED TO --- */}
-            <div
-              id="committed-to"
-              style={{
-                transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)",
-              }}
-              className="w-full min-h-[70vh] lg:min-h-[80vh] p-10 lg:p-16 bg-white border border-[var(--line)] rounded-none relative z-30"
-            >
-              <span className="block text-[10px] uppercase font-semibold text-[var(--blue)] tracking-[0.14em]">
-                COMMITTED TO
-              </span>
-
-              <h2 className="text-[24px] lg:text-[56px] font-bold uppercase tracking-[-0.02em] text-[var(--ink)] leading-tight mt-3">
-                {page7.h1}
-              </h2>
-
-              <div className="w-[40px] h-[1px] bg-[var(--blue)] mt-4" />
-
-              <p className="text-[16px] lg:text-[18px] text-[var(--ink)] font-medium max-w-[560px] mt-6 leading-snug">
-                {page7.quickAnswer}
-              </p>
-
-              {/* Desktop: Horizontal Timeline */}
-              <div className="hidden lg:block mt-16 relative">
-                {/* 1px Royal Blue Line across the top */}
-                <div className="absolute top-[3px] left-0 right-0 h-[1px] bg-[var(--blue)] z-0" />
-
-                <div className="grid grid-cols-5 gap-6 relative z-10">
-                  {p7Commitments.map((com) => (
-                    <div key={com.num} className="pt-6">
-                      {/* Evenly Spaced Dot */}
-                      <div className="w-[7px] h-[7px] rounded-full bg-[var(--blue)] -mt-[28px] mb-6" />
-
-                      <div className="text-[28px] lg:text-[40px] font-bold text-[var(--blue)] font-sans leading-none">
-                        {com.num}
-                      </div>
-                      <h3 className="text-[16px] font-semibold text-[var(--ink)] leading-snug max-w-[220px] mt-2">
-                        {com.title}
-                      </h3>
-                      <p className="text-[13px] text-[var(--grey)] leading-[1.65] max-w-[220px] mt-2">
-                        {com.desc}
-                      </p>
-                    </div>
-                  ))}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 mt-12">
+            {p5Cards.map((card) => (
+              <div key={card.num} className="flex flex-col">
+                <div className="w-[40px] h-[1px] bg-white/40 mb-3" />
+                <div className="text-[32px] lg:text-[48px] font-bold text-white font-sans leading-none">
+                  {card.num}
                 </div>
+                <div className="w-full h-[1px] bg-white/20 mt-4" />
+                <h3 className="text-[14px] lg:text-[17px] font-semibold text-white mt-4 leading-snug">
+                  {card.title}
+                </h3>
+                <p className="text-[12px] lg:text-[13px] text-white/80 leading-[1.65] max-w-[360px] mt-2">
+                  {card.desc}
+                </p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-              {/* Mobile: Vertical Timeline */}
-              <div className="block lg:hidden mt-12 relative pl-8 space-y-8">
-                {/* Vertical Royal Blue line 2px wide on the left */}
-                <div className="absolute left-[4px] top-1 bottom-1 w-[2px] bg-[var(--blue)]" />
+      {/* 2. SME POLICY (Full-bleed White section with 1px --line dividers, no cards) */}
+      <section
+        id="sme-policy"
+        className="w-full bg-white text-[var(--ink)] py-[72px] lg:py-[112px]"
+      >
+        <div className="max-w-[1340px] mx-auto px-5 lg:px-10">
+          {/* 2.3: Eyebrow "SME POLICY" removed */}
+          <h2 className="text-[16px] lg:text-[24px] font-semibold tracking-[-0.015em] text-[var(--ink)] leading-[1.2]">
+            {page6.h1}
+          </h2>
 
-                {p7Commitments.map((com) => (
-                  <div key={com.num} className="relative">
-                    {/* 10px Dot */}
-                    <div className="absolute -left-[32px] top-1 w-[10px] h-[10px] rounded-full bg-[var(--blue)]" />
-                    <div className="text-[28px] font-bold text-[var(--blue)] font-sans leading-none">
-                      {com.num}
-                    </div>
-                    <h3 className="text-[16px] font-semibold text-[var(--ink)] leading-snug mt-1">
-                      {com.title}
-                    </h3>
-                    <p className="text-[13px] text-[var(--grey)] leading-[1.65] mt-1">
-                      {com.desc}
-                    </p>
+          <div className="w-[40px] h-[1px] bg-[var(--blue)] mt-4" />
+
+          <p className="text-[12px] lg:text-[13px] text-[var(--ink)] font-medium max-w-[560px] mt-5 leading-[1.65]">
+            {page6.quickAnswer}
+          </p>
+
+          <div className="divide-y divide-[var(--line)] border-y border-[var(--line)] mt-12">
+            {p6Strips.map((strip) => (
+              <div
+                key={strip.num}
+                className="grid grid-cols-1 lg:grid-cols-[64px_1fr_1.8fr] gap-4 lg:gap-8 py-6 px-3 items-baseline"
+              >
+                <div className="text-[32px] lg:text-[48px] font-bold text-[var(--blue)] font-sans leading-none">
+                  {strip.num}
+                </div>
+                <h3 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] leading-snug">
+                  {strip.title}
+                </h3>
+                <p className="text-[12px] lg:text-[13px] text-[var(--grey)] leading-[1.65] max-w-[520px]">
+                  {strip.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3. COMMITTED TO (Royal Blue section with white text) */}
+      <section
+        id="committed-to"
+        style={{ backgroundColor: "var(--blue)" }}
+        className="w-full bg-[var(--blue)] text-white py-[72px] lg:py-[112px]"
+      >
+        <div className="max-w-[1340px] mx-auto px-5 lg:px-10">
+          {/* 2.3: Eyebrow "COMMITTED TO" removed */}
+          <h2 className="text-[16px] lg:text-[24px] font-semibold tracking-[-0.015em] text-white leading-[1.2]">
+            {page7.h1}
+          </h2>
+
+          <div className="w-[40px] h-[1px] bg-white/40 mt-4" />
+
+          <p className="text-[12px] lg:text-[13px] text-white/90 font-medium max-w-[560px] mt-5 leading-[1.65]">
+            {page7.quickAnswer}
+          </p>
+
+          {/* Desktop: Horizontal Timeline */}
+          <div className="hidden lg:block mt-16 relative">
+            <div className="absolute top-[3px] left-0 right-0 h-[1px] bg-white/30 z-0" />
+
+            <div className="grid grid-cols-5 gap-6 relative z-10">
+              {p7Commitments.map((com) => (
+                <div key={com.num} className="pt-6">
+                  <div className="w-[7px] h-[7px] rounded-full bg-white -mt-[28px] mb-6" />
+
+                  <div className="text-[32px] lg:text-[48px] font-bold text-white font-sans leading-none">
+                    {com.num}
                   </div>
-                ))}
-              </div>
+                  <h3 className="text-[14px] lg:text-[17px] font-semibold text-white leading-snug max-w-[220px] mt-2">
+                    {com.title}
+                  </h3>
+                  <p className="text-[12px] lg:text-[13px] text-white/80 leading-[1.65] max-w-[220px] mt-2">
+                    {com.desc}
+                  </p>
+                </div>
+              ))}
             </div>
+          </div>
+
+          {/* Mobile: Vertical Timeline */}
+          <div className="block lg:hidden mt-12 relative pl-8 space-y-8">
+            <div className="absolute left-[4px] top-1 bottom-1 w-[2px] bg-white/40" />
+
+            {p7Commitments.map((com) => (
+              <div key={com.num} className="relative">
+                <div className="absolute -left-[32px] top-1 w-[10px] h-[10px] rounded-full bg-white" />
+                <div className="text-[32px] font-bold text-white font-sans leading-none">
+                  {com.num}
+                </div>
+                <h3 className="text-[14px] font-semibold text-white leading-snug mt-1">
+                  {com.title}
+                </h3>
+                <p className="text-[12px] text-white/80 leading-[1.65] mt-1">
+                  {com.desc}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -713,8 +611,7 @@ export const AboutUs: React.FC = () => {
       {/* ZONE D — FULL-BLEED FACTORY TOUR */}
       {/* ========================================================= */}
       <section id="factory-tour" className="w-full bg-white">
-        {/* 1. Full-Bleed Hero: Fixed Height 60vh mobile / 70vh desktop */}
-        <div className="relative w-full h-[60vh] lg:h-[70vh] flex items-end overflow-hidden">
+        <div className="relative w-full h-[60vh] lg:h-[70vh] flex items-end overflow-hidden bg-[var(--blue)]">
           <div className="absolute inset-0 w-full h-full">
             <Canvas
               slot="about.factory.hero"
@@ -723,46 +620,38 @@ export const AboutUs: React.FC = () => {
             />
           </div>
 
-          {/* Bottom-Only Gradient Overlay */}
           <div
             style={{
               background:
-                "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.20) 45%, rgba(0,0,0,0) 100%)",
+                "linear-gradient(to top, rgba(16,31,78,0.85) 0%, rgba(16,31,78,0.35) 50%, rgba(16,31,78,0.10) 100%)",
             }}
             className="absolute inset-0 pointer-events-none"
           />
 
-          {/* Text Bottom-Left: 40px padding mobile / 64px desktop */}
           <div className="relative z-10 w-full max-w-[1340px] mx-auto p-10 lg:p-16">
             <div className="max-w-[900px] text-left">
-              <span className="block text-[10px] uppercase font-semibold text-white/70 tracking-[0.14em] mb-2">
-                FACTORY TOUR
-              </span>
-
-              <h2 className="text-[26px] lg:text-[56px] font-bold text-white uppercase tracking-[-0.02em] leading-tight">
+              {/* 2.3: Eyebrow "FACTORY TOUR" removed */}
+              <h2 className="text-[16px] lg:text-[24px] font-semibold text-white tracking-[-0.015em] leading-[1.2]">
                 {page8.h1}
               </h2>
 
-              <p className="text-[14px] lg:text-[16px] text-white/85 max-w-[560px] mt-5 leading-normal">
+              <p className="text-[12px] lg:text-[13px] text-white/85 max-w-[560px] mt-4 leading-[1.65]">
                 {page8.quickAnswer}
               </p>
             </div>
           </div>
         </div>
 
-        {/* 2. Intro Line: White Background, Padding 72px mobile / 112px desktop */}
         <div className="w-full bg-white py-[72px] lg:py-[112px]">
           <div className="max-w-[1340px] mx-auto px-5 lg:px-10">
-            <p className="text-[14px] lg:text-[15px] leading-[1.65] text-[var(--grey)] max-w-[640px]">
+            <p className="text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)] max-w-[640px]">
               {p8WhereFactoryText}
             </p>
 
-            {/* 3. Vertical Timeline with Steps */}
             <div
               ref={timelineContainerRef}
               className="relative mt-16 pl-12 lg:pl-16 space-y-10"
             >
-              {/* Vertical Royal Blue Line 1px wide down left, scaleY scrub */}
               <div
                 ref={timelineLineRef}
                 className="absolute left-[15px] lg:left-[19px] top-2 bottom-6 w-[1px] bg-[var(--blue)] origin-top"
@@ -774,17 +663,15 @@ export const AboutUs: React.FC = () => {
 
                 return (
                   <div key={step.name} className="relative">
-                    {/* Fixed 40px Number Column on Left */}
-                    <div className="absolute -left-[48px] lg:-left-[64px] top-0 text-[18px] font-bold text-[var(--blue)] font-mono leading-none bg-white pr-2">
+                    <div className="absolute -left-[48px] lg:-left-[64px] top-0 text-[14px] lg:text-[17px] font-bold text-[var(--blue)] font-mono leading-none bg-white pr-2">
                       {stepNum}
                     </div>
 
-                    {/* Right Column: Name, Description & Canvas 4/3 */}
                     <div className="space-y-2">
-                      <h3 className="text-[16px] font-semibold text-[var(--ink)] leading-snug">
+                      <h3 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] leading-snug">
                         {step.name}
                       </h3>
-                      <p className="text-[13px] text-[var(--grey)] leading-[1.65] max-w-[480px]">
+                      <p className="text-[12px] lg:text-[13px] text-[var(--grey)] leading-[1.65] max-w-[480px]">
                         {step.text}
                       </p>
 
@@ -797,12 +684,10 @@ export const AboutUs: React.FC = () => {
               })}
             </div>
 
-            {/* 4. Closing: "Book a Factory Visit" ghost button to /contact-us/, Centered */}
             <div className="mt-16 text-center">
               <Button
-                variant="ghost"
+                variant="secondary"
                 href="/contact-us/"
-                className="border border-[var(--ink)] text-[var(--ink)] hover:bg-[var(--blue)] hover:border-[var(--blue)] hover:text-white"
               >
                 Book a Factory Visit
               </Button>

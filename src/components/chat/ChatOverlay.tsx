@@ -176,8 +176,8 @@ export const ChatOverlay: React.FC = () => {
           )}
         </button>
 
-        {/* Lockup Text (Inter 600, 18px, ink) */}
-        <div className="text-center font-semibold text-[18px] text-[var(--ink)] tracking-tight">
+        {/* Lockup Text */}
+        <div className="text-center font-semibold text-[14px] lg:text-[17px] text-[var(--ink)] tracking-tight">
           Steel Mind Engineers
         </div>
 

@@ -1,16 +1,51 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { SITE } from "../../data/site.ts";
 import { A } from "../../data/assets.ts";
+import { FacebookIcon, FacebookIconHandle } from "../icons/facebook.tsx";
+import { InstagramIcon, InstagramIconHandle } from "../icons/instagram.tsx";
+import { TiktokIcon, TiktokIconHandle } from "../icons/tiktok.tsx";
+import { LinkedinIcon, LinkedinIconHandle } from "../icons/linkedin.tsx";
 
 export const Footer: React.FC = () => {
+  const footerRef = useRef<HTMLElement>(null);
+  const facebookRef = useRef<FacebookIconHandle>(null);
+  const instagramRef = useRef<InstagramIconHandle>(null);
+  const tiktokRef = useRef<TiktokIconHandle>(null);
+  const linkedinRef = useRef<LinkedinIconHandle>(null);
+
+  useEffect(() => {
+    const el = footerRef.current;
+    if (!el) return;
+
+    let hasPlayed = false;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasPlayed) {
+            hasPlayed = true;
+            facebookRef.current?.startAnimation();
+            instagramRef.current?.startAnimation();
+            tiktokRef.current?.startAnimation();
+            linkedinRef.current?.startAnimation();
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <footer
+      ref={footerRef}
       style={{
-        background: "var(--blue-glossy)",
-        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12)",
+        backgroundColor: "var(--blue)",
       }}
-      className="text-white pt-16 lg:pt-24 pb-6 lg:pb-8 border-t border-white/12"
+      className="text-white pt-16 lg:pt-24 pb-6 lg:pb-8 border-t border-white/15"
     >
       <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
         {/* 4-Column Grid: Desktop 1.3fr 1fr 1fr 1fr, Mobile 1 col gap-10 */}
@@ -34,70 +69,62 @@ export const Footer: React.FC = () => {
               </span>
             </div>
 
-            <p className="text-[11px] leading-[1.6] text-white/65 max-w-[240px]">
+            <p className="text-[12px] lg:text-[13px] leading-[1.6] text-white/75 max-w-[240px]">
               Steel Mind Engineers designs, fabricates and erects steel structures for industry, agriculture and commerce.
             </p>
 
-            <div className="text-[10px] uppercase tracking-[0.14em] text-white font-medium">
+            <div className="text-[9px] uppercase tracking-[0.14em] text-white font-medium">
               {SITE.tagline}
             </div>
 
-            {/* Social Icons Row (16px thin line, white, gap 12px) */}
-            <div className="flex items-center space-x-3 pt-1 text-white">
+            {/* Social Icons Row (20px animated icons, no background, white only) */}
+            <div className="flex items-center space-x-4 pt-1 text-white">
               <a
                 href={SITE.social.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
-                className="hover:opacity-75 transition-opacity"
+                onMouseEnter={() => facebookRef.current?.startAnimation()}
+                className="text-white bg-transparent hover:opacity-80 transition-opacity inline-flex items-center justify-center"
               >
-                <svg className="w-4 h-4 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
-                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-                </svg>
+                <FacebookIcon ref={facebookRef} size={20} className="text-white" />
               </a>
               <a
                 href={SITE.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className="hover:opacity-75 transition-opacity"
+                onMouseEnter={() => instagramRef.current?.startAnimation()}
+                className="text-white bg-transparent hover:opacity-80 transition-opacity inline-flex items-center justify-center"
               >
-                <svg className="w-4 h-4 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
-                  <rect x="2" y="2" width="20" height="20" rx="0" />
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                </svg>
+                <InstagramIcon ref={instagramRef} size={20} className="text-white" />
               </a>
               <a
                 href={SITE.social.tiktok}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="TikTok"
-                className="hover:opacity-75 transition-opacity"
+                onMouseEnter={() => tiktokRef.current?.startAnimation()}
+                className="text-white bg-transparent hover:opacity-80 transition-opacity inline-flex items-center justify-center"
               >
-                <svg className="w-4 h-4 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
-                  <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
-                </svg>
+                <TiktokIcon ref={tiktokRef} size={20} className="text-white" />
               </a>
               <a
                 href={SITE.social.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
-                className="hover:opacity-75 transition-opacity"
+                onMouseEnter={() => linkedinRef.current?.startAnimation()}
+                className="text-white bg-transparent hover:opacity-80 transition-opacity inline-flex items-center justify-center"
               >
-                <svg className="w-4 h-4 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
-                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                  <rect x="2" y="9" width="4" height="12" />
-                  <circle cx="4" cy="4" r="2" />
-                </svg>
+                <LinkedinIcon ref={linkedinRef} size={20} className="text-white" />
               </a>
             </div>
           </div>
 
           {/* Column 2 — Company */}
           <div className="space-y-4">
-            <span className="block text-[10px] uppercase font-semibold text-white/60 tracking-[0.14em]">
+            <span className="block text-[9px] uppercase font-semibold text-white/60 tracking-[0.14em]">
               Company
             </span>
             <div className="flex flex-col space-y-2 text-[12px] text-white/85">
@@ -133,7 +160,7 @@ export const Footer: React.FC = () => {
 
           {/* Column 3 — Main Divisions */}
           <div className="space-y-4">
-            <span className="block text-[10px] uppercase font-semibold text-white/60 tracking-[0.14em]">
+            <span className="block text-[9px] uppercase font-semibold text-white/60 tracking-[0.14em]">
               Main Divisions
             </span>
             <div className="flex flex-col space-y-3 text-[12px] text-white/85">
@@ -217,7 +244,7 @@ export const Footer: React.FC = () => {
 
           {/* Column 4 — Services and Other */}
           <div className="space-y-4">
-            <span className="block text-[10px] uppercase font-semibold text-white/60 tracking-[0.14em]">
+            <span className="block text-[9px] uppercase font-semibold text-white/60 tracking-[0.14em]">
               Services
             </span>
             <div className="flex flex-col space-y-2 text-[12px] text-white/85">
@@ -231,7 +258,7 @@ export const Footer: React.FC = () => {
             </div>
 
             <div className="pt-5 space-y-4">
-              <span className="block text-[10px] uppercase font-semibold text-white/60 tracking-[0.14em]">
+              <span className="block text-[9px] uppercase font-semibold text-white/60 tracking-[0.14em]">
                 Other
               </span>
               <div className="flex flex-col space-y-2 text-[12px] text-white/85">

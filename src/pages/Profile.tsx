@@ -20,7 +20,7 @@ export const Profile: React.FC = () => {
       />
 
       <div className="py-12 lg:py-16 max-w-[1340px] mx-auto px-[var(--pad-x)]">
-        <div className="space-y-4 max-w-[560px] text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)]">
+        <div className="space-y-4 max-w-[560px] text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)]">
           {pageData.blocks.map((b, i) => (
             <p key={i}>{b.text}</p>
           ))}

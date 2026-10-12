@@ -29,7 +29,7 @@ export const SITE = {
     { value: 10, suffix: "+", label: "cities served" },
     { value: 1000, suffix: "+", label: "tons of steel fabricated", format: true },
   ],
-  cta: { primary: "Request a Quote", secondary: "Speak to an Engineer" },
+  cta: { primary: "Request a Quote", secondary: "Talk to an Expert" },
   clients: [
     "Haier", "Imperial Denim", "Moiz Steel", "Saif Engineers",
     "Dravton Dairy", "Latifia Dairy", "Maria B", "Elite Stitching",

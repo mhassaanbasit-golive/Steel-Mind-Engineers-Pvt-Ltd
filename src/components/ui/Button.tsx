@@ -31,7 +31,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   // Text link
   if (variant === "link") {
-    const linkBase = `relative inline-flex items-center gap-1.5 text-[var(--blue)] font-semibold text-[13px] cursor-pointer group rounded-none select-none ${className}`;
+    const linkBase = `relative inline-flex items-center gap-1.5 text-[var(--blue)] font-semibold text-[12px] lg:text-[13px] cursor-pointer group rounded-none select-none ${className}`;
     const linkInner = (
       <>
         <span className="relative">
@@ -71,7 +71,7 @@ export const Button: React.FC<ButtonProps> = ({
     );
   }
 
-  let baseStyle = `inline-flex items-center justify-center font-semibold text-[12px] uppercase tracking-[0.06em] min-h-[42px] px-[22px] py-[11px] rounded-none cursor-pointer text-center select-none ${transitionStyle} `;
+  let baseStyle = `inline-flex items-center justify-center font-semibold text-[10px] uppercase tracking-[0.06em] min-h-[38px] px-[18px] py-[9px] rounded-none cursor-pointer text-center select-none ${transitionStyle} `;
 
   if (variant === "primary") {
     // Primary: Background var(--blue). White text.

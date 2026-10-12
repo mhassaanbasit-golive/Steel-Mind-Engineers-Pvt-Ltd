@@ -20,19 +20,19 @@ export const Stat: React.FC<StatProps> = ({
 
   return (
     <div className={`flex flex-col ${className}`} data-reveal="">
-      {/* 40px x 1.5px brand gradient line top */}
+      {/* 40px x 1.5px Royal Blue line top */}
       <div
-        style={{ backgroundImage: "var(--gradient-brand-horizontal)" }}
-        className="w-[40px] h-[1.5px] mb-4"
+        style={{ backgroundColor: "var(--blue)" }}
+        className="w-[40px] h-[1.5px] mb-3 bg-[var(--blue)]"
         data-line=""
       />
       <span
         ref={numberRef}
-        className="text-[40px] lg:text-[64px] font-bold leading-none text-[var(--blue)] tracking-tight mb-2 font-sans"
+        className="text-[32px] lg:text-[48px] font-bold leading-none text-[var(--blue)] tracking-tight mb-2 font-sans"
       >
         0{suffix}
       </span>
-      <span className="text-[11px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
+      <span className="text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
         {label}
       </span>
     </div>

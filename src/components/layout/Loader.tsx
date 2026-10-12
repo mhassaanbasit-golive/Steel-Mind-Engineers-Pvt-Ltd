@@ -201,7 +201,7 @@ export const Loader: React.FC = () => {
           <span className="font-semibold text-[14px] text-[var(--ink)] leading-tight">
             Steel Mind Engineers
           </span>
-          <span className="text-[10px] uppercase tracking-[0.18em] text-[var(--grey)] opacity-70 mt-0.5">
+          <span className="text-[9px] uppercase tracking-[0.18em] text-[var(--grey)] opacity-70 mt-0.5">
             Pvt Ltd
           </span>
         </div>

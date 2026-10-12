@@ -22,8 +22,8 @@ export const Ph: React.FC<PhProps> = ({ ratio = "4/5", className = "", style, bo
     <div
       aria-hidden="true"
       style={{
-        background: "color-mix(in srgb, var(--blue, #1D2E7A) 8%, white)",
-        borderColor: border ? "color-mix(in srgb, var(--blue, #1D2E7A) 15%, #E5E5E5)" : "transparent",
+        background: "color-mix(in srgb, var(--blue, #1E3A8A) 8%, white)",
+        borderColor: border ? "color-mix(in srgb, var(--blue, #1E3A8A) 15%, #E5E5E5)" : "transparent",
         borderWidth: border ? 1 : 0,
         ...customAspect,
         ...style,

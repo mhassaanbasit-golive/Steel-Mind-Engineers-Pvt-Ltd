@@ -64,48 +64,46 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
             {/* Left Column: Spec Grid */}
             <div className="lg:col-span-6 space-y-6" data-reveal-group="">
               <div>
-                <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-2">
-                  Specifications
-                </span>
-                <h2 className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2]">
+                {/* 2.3: Eyebrow "Specifications" removed */}
+                <h2 className="text-[16px] lg:text-[24px] font-semibold text-[var(--ink)] leading-[1.2]">
                   {project.title}
                 </h2>
               </div>
 
               <div className="grid grid-cols-2 gap-x-6 gap-y-4 pt-2 border-t border-[var(--line)]">
                 <div>
-                  <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
+                  <span className="block text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
                     {UI.client}
                   </span>
-                  <div className="text-[14px] lg:text-[16px] font-semibold text-[var(--ink)] mt-0.5">
+                  <div className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] mt-0.5">
                     {project.client}
                   </div>
                 </div>
 
                 <div>
-                  <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
+                  <span className="block text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
                     {UI.location}
                   </span>
-                  <div className="text-[14px] lg:text-[16px] font-semibold text-[var(--ink)] mt-0.5">
+                  <div className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] mt-0.5">
                     {project.location}
                   </div>
                 </div>
 
                 <div>
-                  <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
+                  <span className="block text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
                     {UI.type}
                   </span>
-                  <div className="text-[14px] lg:text-[16px] font-semibold text-[var(--ink)] mt-0.5">
+                  <div className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] mt-0.5">
                     {project.type}
                   </div>
                 </div>
 
                 {project.height && (
                   <div>
-                    <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
+                    <span className="block text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
                       {UI.height}
                     </span>
-                    <div className="text-[14px] lg:text-[16px] font-semibold text-[var(--ink)] mt-0.5">
+                    <div className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] mt-0.5">
                       {project.height}
                     </div>
                   </div>
@@ -113,10 +111,10 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
 
                 {project.width && (
                   <div>
-                    <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
+                    <span className="block text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
                       {UI.width}
                     </span>
-                    <div className="text-[14px] lg:text-[16px] font-semibold text-[var(--ink)] mt-0.5">
+                    <div className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] mt-0.5">
                       {project.width}
                     </div>
                   </div>
@@ -124,10 +122,10 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
 
                 {project.length && (
                   <div>
-                    <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
+                    <span className="block text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
                       {UI.length}
                     </span>
-                    <div className="text-[14px] lg:text-[16px] font-semibold text-[var(--ink)] mt-0.5">
+                    <div className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] mt-0.5">
                       {project.length}
                     </div>
                   </div>
@@ -136,13 +134,13 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
 
               {/* Area */}
               <div className="border-t border-[var(--line)] pt-4 flex items-baseline space-x-2">
-                <span className="text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
+                <span className="text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
                   {UI.area}:
                 </span>
-                <span className="text-[20px] lg:text-[24px] font-bold text-[var(--blue)] leading-none">
+                <span className="text-[16px] lg:text-[24px] font-bold text-[var(--blue)] leading-none">
                   {project.area.toLocaleString()}
                 </span>
-                <span className="text-[13px] font-semibold text-[var(--grey)]">sq ft</span>
+                <span className="text-[12px] lg:text-[13px] font-semibold text-[var(--grey)]">sq ft</span>
               </div>
             </div>
 
@@ -154,16 +152,19 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
         </div>
       </section>
 
-      {/* Block C — "About the Project" as one image-text pair (image right) */}
+      {/* Block C — "About the Project" as one image-text pair (Royal Blue alternating with White) */}
       {aboutBlock && (
-        <section className="py-14 lg:py-20 w-full bg-[var(--offwhite)] border-b border-[var(--line)]">
+        <section
+          style={{ backgroundColor: "var(--blue)" }}
+          className="py-14 lg:py-20 w-full bg-[var(--blue)] text-white"
+        >
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
               <div className="order-2 lg:order-1 lg:col-span-6 space-y-4 max-w-[400px]" data-reveal-group="">
-                <h3 className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] leading-[1.25]">
+                <h3 className="text-[14px] lg:text-[17px] font-semibold text-white leading-[1.25]">
                   {aboutBlock.title || "About the Project"}
                 </h3>
-                <p className="text-[13px] leading-[1.6] text-[var(--grey)]" data-reveal="">
+                <p className="text-[12px] lg:text-[13px] leading-[1.65] text-white/85" data-reveal="">
                   {aboutBlock.text}
                 </p>
               </div>
@@ -176,7 +177,7 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
         </section>
       )}
 
-      {/* Block C — "Design Points" as one image-text pair (image left) */}
+      {/* Block C — "Design Points" as one image-text pair (White) */}
       {designPointsBlock && (
         <section className="py-14 lg:py-20 w-full bg-white border-b border-[var(--line)]">
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
@@ -186,10 +187,10 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
               </div>
 
               <div className="order-2 lg:col-span-6 space-y-4 max-w-[400px]" data-reveal-group="">
-                <h3 className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] leading-[1.25]">
+                <h3 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] leading-[1.25]">
                   {designPointsBlock.title || "Design Points"}
                 </h3>
-                <p className="text-[13px] leading-[1.6] text-[var(--grey)]" data-reveal="">
+                <p className="text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)]" data-reveal="">
                   {designPointsBlock.text}
                 </p>
               </div>
@@ -199,13 +200,11 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
       )}
 
       {/* Gallery Band: first image full-width (16:9), second and third side by side (1:1 each) */}
-      <section className="py-14 lg:py-20 bg-[var(--offwhite)] border-b border-[var(--line)]">
+      <section className="py-14 lg:py-20 bg-white border-b border-[var(--line)]">
         <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] space-y-6">
           <div className="mb-6">
-            <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-1">
-              Project Gallery
-            </span>
-            <h2 className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2]">
+            {/* 2.3: Eyebrow "Project Gallery" removed */}
+            <h2 className="text-[16px] lg:text-[24px] font-semibold text-[var(--ink)] leading-[1.2]">
               Structure & Construction Details
             </h2>
           </div>
@@ -267,20 +266,18 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
         </div>
       </section>
 
-      {/* "What This Project Shows" — blue band, centered, H3 size, white text, data-split */}
+      {/* "What This Project Shows" — Royal Blue band, centered, H3 size, white text */}
       {whatItShowsBlock && (
         <section
           style={{
-            background: "var(--blue-glossy)",
+            backgroundColor: "var(--blue)",
             boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.15)",
           }}
-          className="py-16 lg:py-20 text-white w-full"
+          className="py-16 lg:py-20 bg-[var(--blue)] text-white w-full"
         >
           <div className="max-w-[800px] mx-auto px-[var(--pad-x)] text-center space-y-3">
-            <span className="block text-[10px] uppercase font-semibold text-white/70 tracking-[0.1em]">
-              Summary
-            </span>
-            <h3 className="text-[18px] lg:text-[22px] font-medium leading-[1.3] text-white" data-split="">
+            {/* 2.3: Eyebrow "Summary" removed */}
+            <h3 className="text-[14px] lg:text-[17px] font-medium leading-[1.4] text-white" data-split="">
               {whatItShowsBlock.text}
             </h3>
           </div>
@@ -301,10 +298,8 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
       {data.faq && data.faq.length > 0 && (
         <section className="py-12 lg:py-16 bg-white border-b border-[var(--line)]">
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
-            <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-2">
-              Questions
-            </span>
-            <h2 className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2] mb-6">
+            {/* 2.3: Eyebrow "Questions" removed */}
+            <h2 className="text-[16px] lg:text-[24px] font-semibold text-[var(--ink)] leading-[1.2] mb-6">
               Frequently Asked Questions
             </h2>
             <Accordion items={data.faq} />
@@ -327,10 +322,10 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
             <Link
               to={`/projects/${nextProject.slug}/`}
-              className="group flex items-center justify-between py-4 text-[14px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors"
+              className="group flex items-center justify-between py-4 text-[12px] lg:text-[13px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors"
             >
               <div className="flex flex-col">
-                <span className="text-[10px] uppercase tracking-[0.1em] text-[var(--grey)]">Next Project</span>
+                <span className="text-[9px] uppercase tracking-[0.1em] text-[var(--grey)]">Next Project</span>
                 <span>{nextProject.title}</span>
               </div>
               <svg

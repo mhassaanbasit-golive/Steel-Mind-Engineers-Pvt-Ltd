@@ -180,17 +180,15 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
             }`}
           >
             <div
-              className={`max-w-[75%] px-5 py-3.5 text-[15px] leading-[1.55] transition-all animate-[fadeIn_0.3s_ease-out] ${
+              className={`max-w-[75%] px-5 py-3 text-[12px] lg:text-[13px] leading-[1.55] transition-all animate-[fadeIn_0.3s_ease-out] ${
                 msg.role === "user"
-                  ? "text-white rounded-[20px]"
+                  ? "bg-[var(--blue)] text-white rounded-[20px]"
                   : "bg-white text-[var(--ink)] shadow-[0_4px_12px_rgba(0,0,0,0.05)] rounded-[20px]"
               }`}
               style={
                 msg.role === "user"
                   ? {
-                      background: "var(--blue-btn-gradient)",
-                      boxShadow:
-                        "inset 0 1px 0 rgba(255,255,255,0.22), 0 2px 8px rgba(26,43,104,0.22)",
+                      backgroundColor: "var(--blue)",
                     }
                   : undefined
               }
@@ -207,7 +205,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
               {[0, 1, 2].map((i) => (
                 <div
                   key={i}
-                  className="w-1.5 h-1.5 bg-[var(--ink)] rounded-full animate-pulse"
+                  className="w-1.5 h-1.5 bg-[var(--blue)] rounded-full animate-pulse"
                   style={{
                     animationDelay: `${i * 150}ms`,
                     animationDuration: "1.2s",
@@ -227,7 +225,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
               key={pill}
               type="button"
               onClick={() => sendMessage(pill)}
-              className="px-4 py-2 bg-white/90 border border-[var(--line)] rounded-full text-[13px] font-medium text-[var(--ink)] hover:border-[var(--blue)] transition-colors whitespace-nowrap cursor-pointer shadow-sm"
+              className="px-4 py-2 bg-white/90 border border-[var(--line)] rounded-full text-[12px] font-medium text-[var(--ink)] hover:border-[var(--blue)] transition-colors whitespace-nowrap cursor-pointer shadow-sm"
             >
               {pill}
             </button>
@@ -248,14 +246,14 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
             value={inputVal}
             onChange={(e) => setInputVal(e.target.value)}
             placeholder="Type your message"
-            className="flex-1 bg-white border border-[var(--line)] rounded-full px-5 py-3 text-[16px] focus:outline-none focus:border-[var(--blue)] transition-colors"
+            className="flex-1 bg-white border border-[var(--line)] rounded-full px-5 py-3 text-[12px] lg:text-[13px] focus:outline-none focus:border-[var(--blue)] transition-colors"
           />
 
           <button
             type="submit"
             disabled={!inputVal.trim() || typing}
             aria-label="Send message"
-            className="w-10 h-10 rounded-full bg-[var(--ink)] text-white flex items-center justify-center hover:bg-blue-glossy hover:brightness-110 transition-all disabled:opacity-30 cursor-pointer flex-shrink-0"
+            className="w-10 h-10 rounded-full bg-[var(--blue)] text-white flex items-center justify-center hover:bg-[var(--blue-dark)] transition-all disabled:opacity-30 cursor-pointer flex-shrink-0"
           >
             <svg className="w-5 h-5 stroke-current -rotate-90 translate-x-[1px]" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
               <line x1="12" y1="5" x2="12" y2="19" />

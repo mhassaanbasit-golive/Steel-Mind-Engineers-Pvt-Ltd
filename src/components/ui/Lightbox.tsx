@@ -59,12 +59,12 @@ export const Lightbox: React.FC<LightboxProps> = ({
       role="dialog"
       aria-modal="true"
       aria-label="Image gallery"
-      className="fixed inset-0 z-[400] bg-[var(--ink)]/96 backdrop-blur-md flex flex-col items-center justify-between p-6 select-none"
+      className="fixed inset-0 z-[400] bg-[var(--blue)]/96 backdrop-blur-md flex flex-col items-center justify-between p-6 select-none"
       data-lenis-prevent=""
     >
       {/* Top Header with Close */}
       <div className="w-full flex items-center justify-between text-white/80">
-        <span className="text-[14px] font-medium">Steel Mind Engineers</span>
+        <span className="text-[12px] lg:text-[13px] font-medium">Steel Mind Engineers</span>
         <button
           type="button"
           onClick={onClose}

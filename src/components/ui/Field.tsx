@@ -33,13 +33,13 @@ export const Field: React.FC<FieldProps> = ({
 
   const inputBaseClass = `w-full bg-white border ${
     error ? "border-[var(--error)]" : "border-[var(--line)]"
-  } focus:border-[var(--blue)] focus:outline-none rounded-none text-[16px] text-[var(--ink)] placeholder:text-[var(--grey)]/60 transition-colors px-4`;
+  } focus:border-[var(--blue)] focus:outline-none rounded-none text-[12px] lg:text-[13px] text-[var(--ink)] placeholder:text-[var(--grey)]/60 transition-colors px-4`;
 
   return (
     <div className={`flex flex-col space-y-2 ${className}`}>
       <label
         htmlFor={id}
-        className="text-[11px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]"
+        className="text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]"
       >
         {label} {required && <span className="text-[var(--blue)]">*</span>}
       </label>
@@ -65,7 +65,7 @@ export const Field: React.FC<FieldProps> = ({
             required={required}
             aria-invalid={!!error}
             aria-describedby={error ? errorId : undefined}
-            className={`${inputBaseClass} h-[52px] appearance-none pr-10 cursor-pointer`}
+            className={`${inputBaseClass} h-[44px] appearance-none pr-10 cursor-pointer`}
           >
             <option value="" disabled>
               {placeholder || "Select an option"}
@@ -91,7 +91,7 @@ export const Field: React.FC<FieldProps> = ({
           onChange={onChange}
           aria-invalid={!!error}
           aria-describedby={error ? errorId : undefined}
-          className="text-[14px] text-[var(--grey)] file:mr-4 file:py-3 file:px-4 file:border-0 file:text-[13px] file:font-semibold file:bg-[var(--offwhite)] file:text-[var(--ink)] hover:file:bg-[var(--line)] cursor-pointer"
+          className="text-[12px] lg:text-[13px] text-[var(--grey)] file:mr-4 file:py-2.5 file:px-4 file:border file:border-[var(--blue)] file:text-[10px] file:uppercase file:font-semibold file:bg-white file:text-[var(--blue)] hover:file:bg-[var(--blue)] hover:file:text-white cursor-pointer"
         />
       ) : (
         <input
@@ -103,7 +103,7 @@ export const Field: React.FC<FieldProps> = ({
           required={required}
           aria-invalid={!!error}
           aria-describedby={error ? errorId : undefined}
-          className={`${inputBaseClass} h-[52px]`}
+          className={`${inputBaseClass} h-[44px]`}
         />
       )}
 

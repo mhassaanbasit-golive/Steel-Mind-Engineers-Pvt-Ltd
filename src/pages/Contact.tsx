@@ -159,128 +159,133 @@ export const Contact: React.FC = () => {
         subtitle={pageData.quickAnswer}
       />
 
-      {/* Contact Cards (2x2 mobile, 4 cols desktop; offwhite) */}
-      <section className="py-12 lg:py-16 max-w-[1340px] mx-auto px-[var(--pad-x)]">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-[var(--offwhite)] p-6 space-y-2 border border-[var(--line)]" data-reveal="">
-            <span className="text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
-              Phone 1
-            </span>
-            <div>
-              <a
-                href={`tel:${SITE.tel[0]}`}
-                className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors leading-[1.25]"
-              >
-                {SITE.phones[0]}
-              </a>
+      {/* Contact Details & Addresses (Royal Blue section alternating with White) */}
+      <section
+        style={{ backgroundColor: "var(--blue)" }}
+        className="py-12 lg:py-16 bg-[var(--blue)] text-white"
+      >
+        <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-white/20 border-y border-white/20">
+            <div className="py-5 sm:px-5 first:pl-0 space-y-1.5" data-reveal="">
+              <span className="text-[9px] uppercase font-semibold text-white/70 tracking-[0.1em] block">
+                Phone 1
+              </span>
+              <div>
+                <a
+                  href={`tel:${SITE.tel[0]}`}
+                  className="text-[14px] lg:text-[17px] font-semibold text-white hover:underline transition-colors leading-[1.25]"
+                >
+                  {SITE.phones[0]}
+                </a>
+              </div>
+            </div>
+
+            <div className="py-5 sm:px-5 space-y-1.5" data-reveal="">
+              <span className="text-[9px] uppercase font-semibold text-white/70 tracking-[0.1em] block">
+                Phone 2
+              </span>
+              <div>
+                <a
+                  href={`tel:${SITE.tel[1]}`}
+                  className="text-[14px] lg:text-[17px] font-semibold text-white hover:underline transition-colors leading-[1.25]"
+                >
+                  {SITE.phones[1]}
+                </a>
+              </div>
+            </div>
+
+            <div className="py-5 sm:px-5 space-y-1.5" data-reveal="">
+              <span className="text-[9px] uppercase font-semibold text-white/70 tracking-[0.1em] block">
+                Email
+              </span>
+              <div>
+                <a
+                  href={`mailto:${SITE.email}`}
+                  className="text-[14px] lg:text-[17px] font-semibold text-white hover:underline transition-colors leading-[1.25]"
+                >
+                  {SITE.email}
+                </a>
+              </div>
+            </div>
+
+            <div className="py-5 sm:px-5 last:pr-0 space-y-1.5" data-reveal="">
+              <span className="text-[9px] uppercase font-semibold text-white/70 tracking-[0.1em] block">
+                WhatsApp
+              </span>
+              <div>
+                <a
+                  href={SITE.whatsappMessage}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[14px] lg:text-[17px] font-semibold text-white hover:underline transition-colors leading-[1.25]"
+                >
+                  Chat on WhatsApp
+                </a>
+              </div>
             </div>
           </div>
 
-          <div className="bg-[var(--offwhite)] p-6 space-y-2 border border-[var(--line)]" data-reveal="">
-            <span className="text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
-              Phone 2
-            </span>
-            <div>
-              <a
-                href={`tel:${SITE.tel[1]}`}
-                className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors leading-[1.25]"
-              >
-                {SITE.phones[1]}
-              </a>
+          {/* Addresses with Map Links */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 pt-6">
+            <div className="space-y-1.5">
+              <span className="text-[9px] uppercase font-semibold text-white/70 tracking-[0.1em] block">
+                Head Office
+              </span>
+              <p className="text-[12px] lg:text-[13px] text-white/90 leading-[1.6]">
+                <a
+                  href={SITE.mapHeadOffice}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline"
+                >
+                  {SITE.headOffice}
+                </a>
+              </p>
             </div>
-          </div>
 
-          <div className="bg-[var(--offwhite)] p-6 space-y-2 border border-[var(--line)]" data-reveal="">
-            <span className="text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
-              Email
-            </span>
-            <div>
-              <a
-                href={`mailto:${SITE.email}`}
-                className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors leading-[1.25]"
-              >
-                {SITE.email}
-              </a>
+            <div className="space-y-1.5">
+              <span className="text-[9px] uppercase font-semibold text-white/70 tracking-[0.1em] block">
+                Factory
+              </span>
+              <p className="text-[12px] lg:text-[13px] text-white/90 leading-[1.6]">
+                <a
+                  href={SITE.mapFactory}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline"
+                >
+                  {SITE.factory}
+                </a>
+              </p>
             </div>
-          </div>
-
-          <div className="bg-[var(--offwhite)] p-6 space-y-2 border border-[var(--line)]" data-reveal="">
-            <span className="text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
-              WhatsApp
-            </span>
-            <div>
-              <a
-                href={SITE.whatsappMessage}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors leading-[1.25]"
-              >
-                Chat on WhatsApp
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Addresses with Map Links */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10 pt-8 border-t border-[var(--line)]">
-          <div className="space-y-2">
-            <span className="text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
-              Head Office
-            </span>
-            <p className="text-[13px] lg:text-[15px] text-[var(--ink)] leading-[1.6]">
-              <a
-                href={SITE.mapHeadOffice}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[var(--blue)] hover:underline"
-              >
-                {SITE.headOffice}
-              </a>
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <span className="text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em]">
-              Factory
-            </span>
-            <p className="text-[13px] lg:text-[15px] text-[var(--ink)] leading-[1.6]">
-              <a
-                href={SITE.mapFactory}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[var(--blue)] hover:underline"
-              >
-                {SITE.factory}
-              </a>
-            </p>
           </div>
         </div>
       </section>
 
-      {/* Quote Form Section */}
-      <section id="quote" className="py-12 lg:py-16 bg-[var(--offwhite)] border-y border-[var(--line)]">
+      {/* Quote Form Section — Full-bleed White section with content directly inside (no card box) */}
+      <section id="quote" className="py-12 lg:py-16 bg-white border-b border-[var(--line)]">
         <div className="max-w-[800px] mx-auto px-[var(--pad-x)]">
-          <h2 className="text-[18px] lg:text-[28px] font-semibold leading-[1.2] text-[var(--ink)] mb-3" data-split="">
+          <h2 className="text-[16px] lg:text-[24px] font-semibold leading-[1.2] text-[var(--ink)] mb-3" data-split="">
             Request a Quote for Your Steel Building
           </h2>
-          <p className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)] mb-8 max-w-[560px]">
+          <p className="text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)] mb-8 max-w-[560px]">
             Send the use, size and location of your project. An engineer will read each request and reply with questions and the next steps.
           </p>
 
           {submitted ? (
-            <div className="bg-white p-8 border border-[var(--line)] text-center space-y-4 animate-[fadeIn_0.5s_ease-out]">
-              <div className="w-12 h-12 bg-green-50 text-green-700 mx-auto flex items-center justify-center font-bold text-xl">
+            <div className="py-8 border-t border-[var(--line)] text-center space-y-4 animate-[fadeIn_0.5s_ease-out]">
+              <div className="w-10 h-10 bg-[var(--blue)] text-white mx-auto flex items-center justify-center font-bold text-[14px]">
                 ✓
               </div>
-              <h3 className="text-[18px] lg:text-[22px] font-semibold text-[var(--ink)]">
+              <h3 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)]">
                 Thank You
               </h3>
-              <p className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)] max-w-[500px] mx-auto">
+              <p className="text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)] max-w-[500px] mx-auto">
                 {UI.formThanks}
               </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="bg-white p-6 sm:p-10 border border-[var(--line)] space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6 pt-4 border-t border-[var(--line)]">
               {/* Honeypot field */}
               <input
                 type="text"
@@ -382,7 +387,7 @@ export const Contact: React.FC = () => {
                   onChange={handleFileChange}
                 />
                 {fileData && (
-                  <div className="flex items-center space-x-3 text-[13px] text-[var(--grey)]">
+                  <div className="flex items-center space-x-3 text-[12px] lg:text-[13px] text-[var(--grey)]">
                     <span>Selected: {fileData.name}</span>
                     <button
                       type="button"
@@ -405,7 +410,7 @@ export const Contact: React.FC = () => {
                 </Button>
 
                 {submitError && (
-                  <p className="mt-3 text-[13px] text-[var(--error)] font-medium">
+                  <p className="mt-3 text-[12px] lg:text-[13px] text-[var(--error)] font-medium">
                     {UI.formError}
                   </p>
                 )}
@@ -415,54 +420,59 @@ export const Contact: React.FC = () => {
         </div>
       </section>
 
-      {/* What to Include & Factory Visit Details */}
-      <section className="py-12 lg:py-16 max-w-[1340px] mx-auto px-[var(--pad-x)] space-y-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-          <div className="space-y-3" data-reveal="">
-            <h2 className="text-[18px] lg:text-[28px] font-semibold leading-[1.2] text-[var(--ink)]">
-              What to Include
-            </h2>
-            <p className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)]">
-              The use of the building, the approximate width and length, the height, the city or site, and any crane, mezzanine or extension plan. A rough sketch or a photo is enough to start.
-            </p>
+      {/* What to Include & Factory Visit Details (Royal Blue alternating with White) */}
+      <section
+        style={{ backgroundColor: "var(--blue)" }}
+        className="py-12 lg:py-16 bg-[var(--blue)] text-white"
+      >
+        <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] space-y-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+            <div className="space-y-3" data-reveal="">
+              <h2 className="text-[16px] lg:text-[24px] font-semibold leading-[1.2] text-white">
+                What to Include
+              </h2>
+              <p className="text-[12px] lg:text-[13px] leading-[1.65] text-white/85">
+                The use of the building, the approximate width and length, the height, the city or site, and any crane, mezzanine or extension plan. A rough sketch or a photo is enough to start.
+              </p>
+            </div>
+
+            <div className="space-y-3" data-reveal="">
+              <h2 className="text-[16px] lg:text-[24px] font-semibold leading-[1.2] text-white">
+                What Happens After You Send
+              </h2>
+              <p className="text-[12px] lg:text-[13px] leading-[1.65] text-white/85">
+                An engineer reads the request. The team replies with questions and the next steps. You receive a quote with a schedule, and a 3D concept follows once the scope is agreed.
+              </p>
+            </div>
           </div>
 
-          <div className="space-y-3" data-reveal="">
-            <h2 className="text-[18px] lg:text-[28px] font-semibold leading-[1.2] text-[var(--ink)]">
-              What Happens After You Send
-            </h2>
-            <p className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)]">
-              An engineer reads the request. The team replies with questions and the next steps. You receive a quote with a schedule, and a 3D concept follows once the scope is agreed.
-            </p>
+          <div className="border-t border-white/20 pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h3 className="text-[14px] lg:text-[17px] font-semibold text-white leading-[1.25]">
+                Company Profile Document
+              </h3>
+              <p className="text-[12px] lg:text-[13px] leading-[1.65] text-white/85 mt-1">
+                Download the 29-page company profile PDF to share with your team or consultant.
+              </p>
+            </div>
+            <Button
+              size="sm"
+              variant="hero-white"
+              href={SITE.profilePdf}
+              target="_blank"
+              className="w-fit min-w-[130px]"
+            >
+              {SITE.profileButton}
+            </Button>
           </div>
-        </div>
-
-        <div className="border-t border-[var(--line)] pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h3 className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] leading-[1.25]">
-              Company Profile Document
-            </h3>
-            <p className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)] mt-1">
-              Download the 29-page company profile PDF to share with your team or consultant.
-            </p>
-          </div>
-          <Button
-            size="sm"
-            variant="primary"
-            href={SITE.profilePdf}
-            target="_blank"
-            className="w-fit min-w-[130px]"
-          >
-            {SITE.profileButton}
-          </Button>
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* FAQ (White) */}
       {pageData.faq && (
-        <section className="py-12 lg:py-16 bg-[var(--offwhite)] border-t border-[var(--line)]">
+        <section className="py-12 lg:py-16 bg-white border-b border-[var(--line)]">
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-            <h2 className="text-[18px] lg:text-[28px] font-semibold leading-[1.2] text-[var(--ink)] mb-6" data-split="">
+            <h2 className="text-[16px] lg:text-[24px] font-semibold leading-[1.2] text-[var(--ink)] mb-6" data-split="">
               Frequently Asked Questions
             </h2>
             <Accordion items={pageData.faq} />

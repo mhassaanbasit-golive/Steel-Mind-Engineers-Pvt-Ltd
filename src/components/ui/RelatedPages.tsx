@@ -113,8 +113,8 @@ export const RelatedPages: React.FC<RelatedPagesProps> = ({
   if (validItems.length === 0) return null;
 
   return (
-    <div className={`my-12 ${className}`} data-reveal="">
-      <span className="block text-[12px] uppercase font-semibold text-[var(--grey)] tracking-[0.08em] mb-4">
+    <div className={`my-10 ${className}`} data-reveal="">
+      <span className="block text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.08em] mb-3">
         {UI.relatedPages}
       </span>
       <div className="border-t border-[var(--line)] divide-y divide-[var(--line)] border-b">
@@ -122,7 +122,7 @@ export const RelatedPages: React.FC<RelatedPagesProps> = ({
           <Link
             key={idx}
             to={item.url}
-            className="group flex items-center justify-between h-[56px] text-[16px] font-medium text-[var(--ink)] hover:text-[var(--blue)] transition-colors px-1"
+            className="group flex items-center justify-between h-[48px] text-[13px] lg:text-[14px] font-medium text-[var(--ink)] hover:text-[var(--blue)] transition-colors px-1"
           >
             <span>{item.name}</span>
             <svg

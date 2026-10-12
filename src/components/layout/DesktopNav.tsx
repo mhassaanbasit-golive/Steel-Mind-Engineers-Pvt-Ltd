@@ -54,7 +54,7 @@ export const DesktopNav: React.FC = () => {
                   <Link
                     key={child.url}
                     to={child.url}
-                    className="block px-5 py-3 text-[14px] hover:bg-[var(--offwhite)] hover:text-[var(--blue)] transition-colors border-b border-[var(--line)] last:border-b-0"
+                    className="block px-5 py-3 text-[13px] hover:bg-[var(--blue)] hover:text-white transition-colors border-b border-[var(--line)] last:border-b-0"
                   >
                     {child.label}
                   </Link>
@@ -69,14 +69,14 @@ export const DesktopNav: React.FC = () => {
                   {item.divisions.map((div) => (
                     <div key={div.label} className="flex flex-col space-y-3">
                       <Link to={div.url} className="group/div block overflow-hidden">
-                        <div className="w-full aspect-[4/3] bg-[var(--offwhite)] overflow-hidden mb-3">
+                        <div className="w-full aspect-[4/3] bg-white overflow-hidden mb-3">
                           <img
                             src={div.image}
                             alt={div.label}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover/div:scale-105"
                           />
                         </div>
-                        <h4 className="text-[15px] font-semibold text-[var(--ink)] group-hover/div:text-[var(--blue)] transition-colors">
+                        <h4 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] group-hover/div:text-[var(--blue)] transition-colors">
                           {div.label}
                         </h4>
                       </Link>
@@ -86,7 +86,7 @@ export const DesktopNav: React.FC = () => {
                           <Link
                             key={child.url}
                             to={child.url}
-                            className="text-[13px] text-[var(--grey)] hover:text-[var(--blue)] transition-colors py-0.5"
+                            className="text-[12px] lg:text-[13px] text-[var(--grey)] hover:text-[var(--blue)] transition-colors py-0.5"
                           >
                             {child.label}
                           </Link>
@@ -101,12 +101,13 @@ export const DesktopNav: React.FC = () => {
         );
       })}
 
-      {/* Far Right Action Button */}
+      {/* Far Right Action Button — White background, Royal Blue text in both header states */}
       <div className="pl-4">
         <Button
+          variant="hero-white"
           size="sm"
           href="/contact-us/#quote"
-          className="border border-white/60"
+          className="!bg-white !text-[var(--blue)] hover:!bg-white/90 hover:!text-[var(--blue)] border border-white"
         >
           {SITE.cta.primary}
         </Button>

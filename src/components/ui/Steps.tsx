@@ -27,15 +27,15 @@ export const Steps: React.FC<StepsProps> = ({ items, className = "" }) => {
           return (
             <div key={idx} className="relative" data-reveal="">
               {/* Number marker on the line */}
-              <div className="absolute -left-[44px] lg:-left-[48px] top-0.5 w-6 h-6 flex items-center justify-center bg-[var(--white)]">
-                <span className="text-[13px] font-semibold text-[var(--blue)]">
+              <div className="absolute -left-[44px] lg:-left-[48px] top-0.5 w-6 h-6 flex items-center justify-center bg-white">
+                <span className="text-[12px] font-semibold text-[var(--blue)]">
                   {stepNum}
                 </span>
               </div>
-              <h3 className="text-[20px] lg:text-[22px] font-semibold text-[var(--ink)] mb-2">
+              <h3 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] mb-2">
                 {step.name}
               </h3>
-              <p className="text-[16px] leading-[1.65] text-[var(--grey)] max-w-[700px]">
+              <p className="text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)] max-w-[700px]">
                 {step.text}
               </p>
             </div>

@@ -4,6 +4,10 @@ import { NAV } from "../../data/nav.ts";
 import { SITE } from "../../data/site.ts";
 import { A } from "../../data/assets.ts";
 import { stopScroll, startScroll } from "../../lib/lenis.ts";
+import { FacebookIcon, FacebookIconHandle } from "../icons/facebook.tsx";
+import { InstagramIcon, InstagramIconHandle } from "../icons/instagram.tsx";
+import { TiktokIcon, TiktokIconHandle } from "../icons/tiktok.tsx";
+import { LinkedinIcon, LinkedinIconHandle } from "../icons/linkedin.tsx";
 
 export interface MobileMenuProps {
   isOpen: boolean;
@@ -16,6 +20,11 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
   const [openSubDivision, setOpenSubDivision] = useState<string | null>(null);
   const initialPathRef = useRef(location.pathname);
 
+  const facebookRef = useRef<FacebookIconHandle>(null);
+  const instagramRef = useRef<InstagramIconHandle>(null);
+  const tiktokRef = useRef<TiktokIconHandle>(null);
+  const linkedinRef = useRef<LinkedinIconHandle>(null);
+
   // Close menu only when route actually changes after mounting
   useEffect(() => {
     if (initialPathRef.current !== location.pathname) {
@@ -24,18 +33,31 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
     }
   }, [location.pathname, onClose]);
 
-  // Lock scroll and trap focus
+  // Reset collapsed state and trigger social icon animations on open
   useEffect(() => {
     if (isOpen) {
+      setOpenSection(null);
+      setOpenSubDivision(null);
       stopScroll();
       const mainEl = document.getElementById("main");
       if (mainEl) mainEl.setAttribute("aria-hidden", "true");
+
+      const animTimer = setTimeout(() => {
+        facebookRef.current?.startAnimation();
+        instagramRef.current?.startAnimation();
+        tiktokRef.current?.startAnimation();
+        linkedinRef.current?.startAnimation();
+      }, 150);
+
+      return () => clearTimeout(animTimer);
     } else {
       startScroll();
       const mainEl = document.getElementById("main");
       if (mainEl) mainEl.removeAttribute("aria-hidden");
     }
+  }, [isOpen]);
 
+  useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
@@ -49,75 +71,97 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
+  const isLinkActive = (url: string) =>
+    location.pathname === url || (url !== "/" && location.pathname.startsWith(url));
+
   return (
     <div
       role="dialog"
       aria-modal="true"
       aria-label="Navigation Menu"
       style={{
-        background: "rgba(255, 255, 255, 0.96)",
-        backdropFilter: "blur(20px) saturate(180%)",
-        WebkitBackdropFilter: "blur(20px) saturate(180%)",
+        backgroundColor: "var(--blue)",
       }}
-      className="fixed inset-0 z-[200] text-[var(--ink)] flex flex-col justify-between overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden animate-[menuSlideIn_0.4s_cubic-bezier(0.16,1,0.3,1)_forwards]"
+      className="fixed inset-0 z-[200] h-[100dvh] max-h-[100dvh] overflow-hidden text-white flex flex-col justify-between select-none animate-[menuSlideIn_0.35s_cubic-bezier(0.16,1,0.3,1)_forwards]"
       data-lenis-prevent=""
     >
-      {/* Floating Close Cross (Top Right, 20px, 44px touch) */}
+      {/* Floating Close Cross (Top Right, white, thin stroke 1.5px) */}
       <button
         type="button"
         onClick={onClose}
         aria-label="Close navigation menu"
-        className="fixed top-5 right-5 z-[210] w-11 h-11 flex items-center justify-center text-[var(--ink)] hover:opacity-70 transition-opacity cursor-pointer animate-[fadeIn_0.3s_ease-out]"
+        className="fixed top-3.5 right-4 z-[210] w-10 h-10 flex items-center justify-center text-white hover:opacity-75 transition-opacity cursor-pointer"
       >
-        <svg className="w-6 h-6 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
+        <svg className="w-5 h-5 stroke-white" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
           <line x1="18" y1="6" x2="6" y2="18" />
           <line x1="6" y1="6" x2="18" y2="18" />
         </svg>
       </button>
 
-      {/* Main Content Area: Link list starts at top: 64px from panel top */}
-      <div className="pt-16 pb-8 px-6 max-w-[480px] w-full mx-auto flex-1 flex flex-col justify-between">
+      {/* Main Content Area: Fits strictly in 100dvh without scroll */}
+      <div className="pt-12 pb-4 px-5 max-w-[480px] w-full mx-auto h-full flex flex-col justify-between overflow-hidden">
         {/* Links List */}
-        <div className="divide-y divide-[var(--line)]">
+        <div
+          style={{ borderColor: "rgba(255, 255, 255, 0.15)" }}
+          className="border-t border-b divide-y divide-white/15"
+        >
           {NAV.map((item, idx) => {
             const isMega = item.label === "Main Divisions";
             const hasChildren = !!item.children || isMega;
             const isSectionOpen = openSection === item.label;
+            const active = isLinkActive(item.url);
 
             return (
               <div
                 key={item.label}
                 style={{
-                  animation: `itemFadeIn 0.5s cubic-bezier(0.16,1,0.3,1) ${idx * 0.04}s both`,
+                  borderColor: "rgba(255, 255, 255, 0.15)",
+                  animation: `itemFadeIn 0.4s cubic-bezier(0.16,1,0.3,1) ${idx * 0.03}s both`,
                 }}
-                className="py-1"
               >
-                <div className="h-[44px] flex items-center justify-between">
+                <div className="h-[42px] flex items-center justify-between">
                   {hasChildren ? (
                     <button
                       type="button"
-                      onClick={() =>
-                        setOpenSection(isSectionOpen ? null : item.label)
-                      }
-                      className="w-full flex items-center justify-between text-left text-[18px] lg:text-[20px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors cursor-pointer"
+                      onClick={() => {
+                        setOpenSection(isSectionOpen ? null : item.label);
+                        setOpenSubDivision(null);
+                      }}
+                      style={{ fontWeight: 300 }}
+                      className="w-full h-full flex items-center justify-between text-left text-[15px] font-light text-white hover:opacity-80 transition-opacity cursor-pointer"
                     >
-                      <span>{item.label}</span>
-                      {/* Thin Plus / Minus */}
-                      <span className="relative w-4 h-4 flex items-center justify-center flex-shrink-0">
-                        <span className="absolute w-3.5 h-[1.5px] bg-[var(--ink)]" />
-                        <span
-                          className={`absolute h-3.5 w-[1.5px] bg-[var(--ink)] transition-transform duration-300 ${
-                            isSectionOpen ? "scale-y-0" : "scale-y-100"
-                          }`}
-                        />
+                      <span
+                        style={{ fontWeight: 300 }}
+                        className={
+                          active
+                            ? "underline decoration-white decoration-[2px] underline-offset-4 font-light"
+                            : "font-light"
+                        }
+                      >
+                        {item.label}
                       </span>
+                      {/* Plus icon on group rows: thin 1.5px stroke, white. Rotates 45° on open, 0.3s ease */}
+                      <svg
+                        className="w-4 h-4 stroke-white flex-shrink-0"
+                        style={{
+                          transition: "transform 0.3s ease",
+                          transform: isSectionOpen ? "rotate(45deg)" : "rotate(0deg)",
+                        }}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        strokeWidth="1.5"
+                      >
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                      </svg>
                     </button>
                   ) : item.external ? (
                     <a
                       href={item.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[18px] lg:text-[20px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors block w-full leading-[44px]"
+                      style={{ fontWeight: 300 }}
+                      className="text-[15px] font-light text-white hover:opacity-80 transition-opacity block w-full leading-[42px]"
                     >
                       {item.label}
                     </a>
@@ -125,21 +169,29 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
                     <Link
                       to={item.url}
                       onClick={onClose}
-                      className="text-[18px] lg:text-[20px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors block w-full leading-[44px]"
+                      style={{ fontWeight: 300 }}
+                      className={`text-[15px] font-light text-white hover:opacity-80 transition-opacity block w-full leading-[42px] ${
+                        active ? "underline decoration-white decoration-[2px] underline-offset-4" : ""
+                      }`}
                     >
                       {item.label}
                     </Link>
                   )}
                 </div>
 
-                {/* Sub-links: About Us & Services */}
+                {/* Sub-links: About Us & Services (13px, font-weight 300) */}
                 {hasChildren && !isMega && isSectionOpen && item.children && (
-                  <div className="pl-4 py-2 space-y-1 transition-all">
+                  <div className="pl-3 pb-1.5 space-y-0.5">
                     {item.label === "Services" && (
                       <Link
                         to="/services/"
                         onClick={onClose}
-                        className="block h-[38px] leading-[38px] text-[15px] font-medium text-[var(--grey)] hover:text-[var(--blue)] transition-colors"
+                        style={{ fontWeight: 300 }}
+                        className={`block h-[22px] leading-[22px] text-[13px] font-light text-white hover:opacity-80 transition-opacity ${
+                          location.pathname === "/services/"
+                            ? "underline decoration-white decoration-[2px] underline-offset-4"
+                            : ""
+                        }`}
                       >
                         Overview
                       </Link>
@@ -149,7 +201,12 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
                         key={child.url}
                         to={child.url}
                         onClick={onClose}
-                        className="block h-[38px] leading-[38px] text-[15px] font-medium text-[var(--grey)] hover:text-[var(--blue)] transition-colors"
+                        style={{ fontWeight: 300 }}
+                        className={`block h-[22px] leading-[22px] text-[13px] font-light text-white hover:opacity-80 transition-opacity ${
+                          location.pathname === child.url
+                            ? "underline decoration-white decoration-[2px] underline-offset-4"
+                            : ""
+                        }`}
                       >
                         {child.label}
                       </Link>
@@ -159,35 +216,56 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
 
                 {/* Sub-links & Sub-sub-links: Main Divisions */}
                 {isMega && isSectionOpen && item.divisions && (
-                  <div className="pl-4 py-2 space-y-2 transition-all">
+                  <div className="pl-3 pb-1.5 divide-y divide-white/15">
                     {item.divisions.map((div) => {
                       const isDivOpen = openSubDivision === div.label;
+                      const divActive = location.pathname.startsWith(div.url);
                       return (
-                        <div key={div.label} className="border-b border-[var(--line)]/60 pb-2 last:border-b-0">
+                        <div key={div.label} style={{ borderColor: "rgba(255, 255, 255, 0.15)" }}>
                           <button
                             type="button"
                             onClick={() =>
                               setOpenSubDivision(isDivOpen ? null : div.label)
                             }
-                            className="w-full flex items-center justify-between text-left h-[38px] text-[15px] font-medium text-[var(--ink)] hover:text-[var(--blue)] transition-colors"
+                            style={{ fontWeight: 300 }}
+                            className="w-full flex items-center justify-between text-left h-[26px] text-[13px] font-light text-white hover:opacity-80 transition-opacity cursor-pointer"
                           >
-                            <span>{div.label}</span>
-                            <span className="relative w-3 h-3 flex items-center justify-center flex-shrink-0">
-                              <span className="absolute w-2.5 h-[1px] bg-[var(--grey)]" />
-                              <span
-                                className={`absolute h-2.5 w-[1px] bg-[var(--grey)] transition-transform duration-300 ${
-                                  isDivOpen ? "scale-y-0" : "scale-y-100"
-                                }`}
-                              />
+                            <span
+                              style={{ fontWeight: 300 }}
+                              className={
+                                divActive
+                                  ? "underline decoration-white decoration-[2px] underline-offset-4 font-light"
+                                  : "font-light"
+                              }
+                            >
+                              {div.label}
                             </span>
+                            <svg
+                              className="w-3.5 h-3.5 stroke-white flex-shrink-0"
+                              style={{
+                                transition: "transform 0.3s ease",
+                                transform: isDivOpen ? "rotate(45deg)" : "rotate(0deg)",
+                              }}
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              strokeWidth="1.5"
+                            >
+                              <line x1="12" y1="5" x2="12" y2="19" />
+                              <line x1="5" y1="12" x2="19" y2="12" />
+                            </svg>
                           </button>
 
                           {isDivOpen && (
-                            <div className="pl-6 pt-1 pb-2 space-y-1">
+                            <div className="pl-3 pb-1 grid grid-cols-2 gap-x-2 gap-y-0.5">
                               <Link
                                 to={div.url}
                                 onClick={onClose}
-                                className="block h-[34px] leading-[34px] text-[13px] font-normal text-[var(--grey)] hover:text-[var(--blue)] transition-colors"
+                                style={{ fontWeight: 300 }}
+                                className={`block h-[20px] leading-[20px] text-[12px] font-light text-white hover:opacity-80 truncate ${
+                                  location.pathname === div.url
+                                    ? "underline decoration-white decoration-[2px] underline-offset-4"
+                                    : ""
+                                }`}
                               >
                                 Overview
                               </Link>
@@ -196,7 +274,12 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
                                   key={child.url}
                                   to={child.url}
                                   onClick={onClose}
-                                  className="block h-[34px] leading-[34px] text-[13px] font-normal text-[var(--grey)] hover:text-[var(--blue)] transition-colors"
+                                  style={{ fontWeight: 300 }}
+                                  className={`block h-[20px] leading-[20px] text-[12px] font-light text-white hover:opacity-80 truncate ${
+                                    location.pathname === child.url
+                                      ? "underline decoration-white decoration-[2px] underline-offset-4"
+                                      : ""
+                                  }`}
                                 >
                                   {child.label}
                                 </Link>
@@ -213,50 +296,48 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
           })}
         </div>
 
-        {/* Logo at the end of the menu (bottom of panel) */}
+        {/* Bottom Brand, Contact & Social Block */}
         <div
           style={{
-            animation: "logoFadeIn 0.6s cubic-bezier(0.16,1,0.3,1) 0.35s both",
+            borderColor: "rgba(255, 255, 255, 0.15)",
+            animation: "logoFadeIn 0.5s cubic-bezier(0.16,1,0.3,1) 0.25s both",
           }}
-          className="mt-8 pt-6 border-t border-[var(--line)] flex flex-col space-y-3 pb-[calc(24px+env(safe-area-inset-bottom))]"
+          className="pt-3 border-t flex flex-col space-y-2 pb-[env(safe-area-inset-bottom)]"
         >
-          {/* Transparent Logo 100px ink */}
-          <Link to="/" onClick={onClose} className="inline-block">
-            <img
-              src={A.logoTransparent}
-              alt="Steel Mind Engineers"
-              className="w-[100px] h-auto object-contain brightness-0"
-            />
-          </Link>
+          {/* Transparent Logo in White (filter: brightness(0) invert(1)) + Lockup */}
+          <div className="flex items-center space-x-3">
+            <Link to="/" onClick={onClose} className="inline-block flex-shrink-0">
+              <img
+                src={A.logoTransparent}
+                alt="Steel Mind Engineers"
+                style={{ filter: "brightness(0) invert(1)" }}
+                className="w-[72px] h-auto object-contain"
+              />
+            </Link>
 
-          {/* Text Lockup */}
-          <div className="flex flex-col text-left">
-            <span className="font-semibold text-[13px] text-[var(--ink)] leading-tight">
-              {SITE.header.title}
-            </span>
-            <span className="text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.18em] mt-0.5">
-              {SITE.header.sub}
-            </span>
+            <div className="flex flex-col text-left">
+              <span className="font-normal text-[13px] text-white leading-tight">
+                {SITE.header.title}
+              </span>
+              <span className="text-[9px] uppercase font-normal text-white tracking-[0.18em] mt-0.5">
+                {SITE.header.sub}
+              </span>
+            </div>
           </div>
 
-          {/* Tagline */}
-          <div className="text-[11px] text-[var(--grey)]">
-            {SITE.tagline}
-          </div>
-
-          {/* Contact Block: 11px grey, line-height 1.6 */}
-          <div className="text-[11px] text-[var(--grey)] leading-[1.6] space-y-0.5">
+          {/* Contact Block: White text */}
+          <div className="text-[11px] font-normal text-white leading-[1.45] space-y-0.5">
             <div>
-              <a href={`tel:${SITE.tel[0]}`} className="hover:text-[var(--blue)] hover:underline">
+              <a href={`tel:${SITE.tel[0]}`} className="text-white hover:underline font-normal">
                 {SITE.phones[0]}
               </a>
               {" · "}
-              <a href={`tel:${SITE.tel[1]}`} className="hover:text-[var(--blue)] hover:underline">
+              <a href={`tel:${SITE.tel[1]}`} className="text-white hover:underline font-normal">
                 {SITE.phones[1]}
               </a>
             </div>
             <div>
-              <a href={`mailto:${SITE.email}`} className="hover:text-[var(--blue)] hover:underline">
+              <a href={`mailto:${SITE.email}`} className="text-white hover:underline font-normal">
                 {SITE.email}
               </a>
             </div>
@@ -265,62 +346,54 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
                 href={SITE.mapHeadOffice}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-[var(--blue)] hover:underline"
+                className="text-white hover:underline font-normal"
               >
                 {SITE.headOffice}
               </a>
             </div>
           </div>
 
-          {/* Four Social Icons (18px thin line, ink, gap 14px) */}
-          <div className="flex items-center space-x-[14px] pt-1 text-[var(--ink)]">
+          {/* Four Animated Social Icons: 20px, white, no background */}
+          <div className="flex items-center space-x-4 pt-1 text-white">
             <a
               href={SITE.social.facebook}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
-              className="hover:text-[var(--blue)] transition-colors"
+              onMouseEnter={() => facebookRef.current?.startAnimation()}
+              className="text-white bg-transparent hover:opacity-80 transition-opacity inline-flex items-center justify-center"
             >
-              <svg className="w-[18px] h-[18px] stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-              </svg>
+              <FacebookIcon ref={facebookRef} size={20} className="text-white" />
             </a>
             <a
               href={SITE.social.instagram}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
-              className="hover:text-[var(--blue)] transition-colors"
+              onMouseEnter={() => instagramRef.current?.startAnimation()}
+              className="text-white bg-transparent hover:opacity-80 transition-opacity inline-flex items-center justify-center"
             >
-              <svg className="w-[18px] h-[18px] stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
-                <rect x="2" y="2" width="20" height="20" rx="0" />
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-              </svg>
+              <InstagramIcon ref={instagramRef} size={20} className="text-white" />
             </a>
             <a
               href={SITE.social.tiktok}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="TikTok"
-              className="hover:text-[var(--blue)] transition-colors"
+              onMouseEnter={() => tiktokRef.current?.startAnimation()}
+              className="text-white bg-transparent hover:opacity-80 transition-opacity inline-flex items-center justify-center"
             >
-              <svg className="w-[18px] h-[18px] stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
-                <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
-              </svg>
+              <TiktokIcon ref={tiktokRef} size={20} className="text-white" />
             </a>
             <a
               href={SITE.social.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
-              className="hover:text-[var(--blue)] transition-colors"
+              onMouseEnter={() => linkedinRef.current?.startAnimation()}
+              className="text-white bg-transparent hover:opacity-80 transition-opacity inline-flex items-center justify-center"
             >
-              <svg className="w-[18px] h-[18px] stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
-                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                <rect x="2" y="9" width="4" height="12" />
-                <circle cx="4" cy="4" r="2" />
-              </svg>
+              <LinkedinIcon ref={linkedinRef} size={20} className="text-white" />
             </a>
           </div>
         </div>
@@ -332,11 +405,11 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
           to { transform: translateX(0); }
         }
         @keyframes itemFadeIn {
-          from { opacity: 0; transform: translateY(16px); }
+          from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
         }
         @keyframes logoFadeIn {
-          from { opacity: 0; transform: translateY(12px); }
+          from { opacity: 0; transform: translateY(8px); }
           to { opacity: 1; transform: translateY(0); }
         }
       `}</style>

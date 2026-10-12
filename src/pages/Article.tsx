@@ -72,7 +72,7 @@ export const Article: React.FC<ArticleProps> = ({ data }) => {
       {/* Reading Column: max-w 480px mobile / 560px desktop */}
       <div className="max-w-[480px] lg:max-w-[560px] mx-auto px-[var(--pad-x)] pt-10 pb-12">
         {/* Body Blocks */}
-        <div className="space-y-6 text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)]">
+        <div className="space-y-6 text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)]">
           {data.blocks.map((block: ContentBlock, idx: number) => {
             if (block.type === "h2") {
               const id = (block.title || "").toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -80,7 +80,7 @@ export const Article: React.FC<ArticleProps> = ({ data }) => {
                 <h2
                   key={idx}
                   id={id}
-                  className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] pt-6 leading-[1.2] text-left"
+                  className="text-[16px] lg:text-[24px] font-semibold text-[var(--ink)] pt-6 leading-[1.2] text-left"
                 >
                   {block.title}
                 </h2>
@@ -100,9 +100,9 @@ export const Article: React.FC<ArticleProps> = ({ data }) => {
 
       {/* FAQ */}
       {data.faq && data.faq.length > 0 && (
-        <section className="py-12 lg:py-16 bg-[var(--offwhite)] border-t border-[var(--line)]">
+        <section className="py-12 lg:py-16 bg-white border-t border-[var(--line)]">
           <div className="max-w-[480px] lg:max-w-[560px] mx-auto px-[var(--pad-x)]">
-            <h2 className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2] mb-6" data-split="">
+            <h2 className="text-[16px] lg:text-[24px] font-semibold text-[var(--ink)] leading-[1.2] mb-6" data-split="">
               Frequently Asked Questions
             </h2>
             <Accordion items={data.faq} />
@@ -125,10 +125,10 @@ export const Article: React.FC<ArticleProps> = ({ data }) => {
             <div className="pr-4 lg:pr-6">
               {prevArticle && (
                 <Link to={prevArticle.url} className="group block text-left">
-                  <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-1">
+                  <span className="block text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-1">
                     {UI.previous}
                   </span>
-                  <span className="text-[13px] lg:text-[15px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors line-clamp-2 leading-[1.3]">
+                  <span className="text-[12px] lg:text-[13px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors line-clamp-2 leading-[1.3]">
                     {prevArticle.title}
                   </span>
                 </Link>
@@ -137,10 +137,10 @@ export const Article: React.FC<ArticleProps> = ({ data }) => {
             <div className="pl-4 lg:pl-6 text-right">
               {nextArticle && (
                 <Link to={nextArticle.url} className="group block text-right">
-                  <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-1">
+                  <span className="block text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-1">
                     {UI.next}
                   </span>
-                  <span className="text-[13px] lg:text-[15px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors line-clamp-2 leading-[1.3]">
+                  <span className="text-[12px] lg:text-[13px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors line-clamp-2 leading-[1.3]">
                     {nextArticle.title}
                   </span>
                 </Link>

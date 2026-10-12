@@ -26,7 +26,7 @@ export const Sitemap: React.FC = () => {
           {/* Navigation Sections */}
           {NAV.map((item) => (
             <div key={item.label} className="pt-8 first:pt-0">
-              <h2 className="text-[18px] lg:text-[28px] font-semibold leading-[1.2] text-[var(--ink)] mb-4">
+              <h2 className="text-[16px] lg:text-[24px] font-semibold leading-[1.2] text-[var(--ink)] mb-4">
                 {item.external ? (
                   <a href={item.url} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--blue)]">
                     {item.label} ↗
@@ -42,7 +42,7 @@ export const Sitemap: React.FC = () => {
                 <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pl-4">
                   {item.children.map((c) => (
                     <li key={c.url}>
-                      <Link to={c.url} className="text-[13px] lg:text-[14px] text-[var(--grey)] hover:text-[var(--blue)] hover:underline leading-[1.5]">
+                      <Link to={c.url} className="text-[12px] lg:text-[13px] text-[var(--grey)] hover:text-[var(--blue)] hover:underline leading-[1.5]">
                         {c.label}
                       </Link>
                     </li>
@@ -54,7 +54,7 @@ export const Sitemap: React.FC = () => {
                 <div className="space-y-6 pl-4">
                   {item.divisions.map((div) => (
                     <div key={div.label}>
-                      <h3 className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] mb-2 leading-[1.25]">
+                      <h3 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] mb-2 leading-[1.25]">
                         <Link to={div.url} className="hover:text-[var(--blue)]">
                           {div.label}
                         </Link>
@@ -62,7 +62,7 @@ export const Sitemap: React.FC = () => {
                       <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 pl-4">
                         {div.children.map((c) => (
                           <li key={c.url}>
-                            <Link to={c.url} className="text-[13px] text-[var(--grey)] hover:text-[var(--blue)] hover:underline leading-[1.5]">
+                            <Link to={c.url} className="text-[12px] lg:text-[13px] text-[var(--grey)] hover:text-[var(--blue)] hover:underline leading-[1.5]">
                               {c.label}
                             </Link>
                           </li>
@@ -77,7 +77,7 @@ export const Sitemap: React.FC = () => {
 
           {/* Published Projects */}
           <div className="pt-8">
-            <h2 className="text-[18px] lg:text-[28px] font-semibold leading-[1.2] text-[var(--ink)] mb-4">
+            <h2 className="text-[16px] lg:text-[24px] font-semibold leading-[1.2] text-[var(--ink)] mb-4">
               <Link to="/projects/" className="hover:text-[var(--blue)]">
                 Projects
               </Link>
@@ -85,7 +85,7 @@ export const Sitemap: React.FC = () => {
             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pl-4">
               {publishedProjects.map((p) => (
                 <li key={p.id}>
-                  <Link to={`/projects/${p.slug}/`} className="text-[13px] lg:text-[14px] text-[var(--grey)] hover:text-[var(--blue)] hover:underline leading-[1.5]">
+                  <Link to={`/projects/${p.slug}/`} className="text-[12px] lg:text-[13px] text-[var(--grey)] hover:text-[var(--blue)] hover:underline leading-[1.5]">
                     {p.title} ({p.client})
                   </Link>
                 </li>
@@ -95,7 +95,7 @@ export const Sitemap: React.FC = () => {
 
           {/* Blog Articles */}
           <div className="pt-8">
-            <h2 className="text-[18px] lg:text-[28px] font-semibold leading-[1.2] text-[var(--ink)] mb-4">
+            <h2 className="text-[16px] lg:text-[24px] font-semibold leading-[1.2] text-[var(--ink)] mb-4">
               <Link to="/blog/" className="hover:text-[var(--blue)]">
                 Blog Articles
               </Link>
@@ -103,7 +103,7 @@ export const Sitemap: React.FC = () => {
             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pl-4">
               {blogCards.map((b) => (
                 <li key={b.url}>
-                  <Link to={b.url} className="text-[13px] lg:text-[14px] text-[var(--grey)] hover:text-[var(--blue)] hover:underline leading-[1.5]">
+                  <Link to={b.url} className="text-[12px] lg:text-[13px] text-[var(--grey)] hover:text-[var(--blue)] hover:underline leading-[1.5]">
                     {b.title}
                   </Link>
                 </li>

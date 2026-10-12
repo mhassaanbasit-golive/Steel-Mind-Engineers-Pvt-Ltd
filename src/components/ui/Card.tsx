@@ -33,9 +33,9 @@ export const Card: React.FC<CardProps> = ({
       data-reveal=""
     >
       {imageSrc && (
-        <div className="relative w-full overflow-hidden bg-[var(--offwhite)]">
+        <div className="relative w-full overflow-hidden bg-white">
           {indexBadge && (
-            <span className="absolute top-4 left-4 z-10 text-[11px] font-semibold text-white bg-[var(--ink)]/60 px-2 py-0.5">
+            <span className="absolute top-4 left-4 z-10 text-[9px] uppercase font-semibold text-white bg-[var(--blue)] px-2 py-0.5">
               {indexBadge}
             </span>
           )}
@@ -59,21 +59,16 @@ export const Card: React.FC<CardProps> = ({
       )}
 
       <div className="p-6 flex flex-col flex-1">
-        {label && (
-          <span className="text-[10px] uppercase font-semibold tracking-[0.1em] text-[var(--grey)] mb-2">
-            {label}
-          </span>
-        )}
-        <h3 className="text-[18px] lg:text-[20px] font-semibold leading-[1.25] text-[var(--ink)] mb-2.5">
+        <h3 className="text-[14px] lg:text-[17px] font-semibold leading-[1.25] text-[var(--ink)] mb-2">
           {title}
         </h3>
         {description && (
-          <p className="text-[13px] lg:text-[14px] leading-[1.65] text-[var(--grey)] mb-4 line-clamp-3">
+          <p className="text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)] mb-4 line-clamp-3">
             {description}
           </p>
         )}
         {linkText && (
-          <div className="mt-auto pt-2 flex items-center justify-between text-[13px] font-semibold text-[var(--blue)]">
+          <div className="mt-auto pt-2 flex items-center justify-between text-[10px] uppercase tracking-[0.06em] font-semibold text-[var(--blue)]">
             <span className="relative inline-block">
               {linkText}
               <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[var(--blue)] transition-all duration-300 group-hover:w-full" />

@@ -80,11 +80,11 @@ export const RouteTransition: React.FC = () => {
     >
       <div
         ref={progressBarRef}
-        className="w-full h-full bg-[var(--blue-bright)] origin-left"
+        className="w-full h-full bg-[var(--blue)] origin-left"
         style={{
           transform: "scaleX(0)",
           transformOrigin: "left center",
-          boxShadow: "0 0 10px rgba(37,99,235,0.7), 0 0 4px rgba(37,99,235,0.9)",
+          boxShadow: "0 0 10px var(--blue-glow), 0 0 4px var(--blue-glow)",
         }}
       />
     </div>

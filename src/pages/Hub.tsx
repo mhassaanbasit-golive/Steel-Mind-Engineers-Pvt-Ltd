@@ -97,7 +97,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
             {/* Left Column: First H2 and first two paragraphs */}
             <div className="lg:col-span-6 space-y-4" data-reveal-group="">
               <h2
-                className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2]"
+                className="text-[16px] lg:text-[24px] font-semibold text-[var(--ink)] leading-[1.2]"
                 data-split=""
               >
                 {blockBTitle}
@@ -105,7 +105,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
               {blockBParagraphs.map((p, idx) => (
                 <p
                   key={idx}
-                  className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)]"
+                  className="text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)]"
                   data-reveal=""
                 >
                   {p}
@@ -121,15 +121,16 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
         </div>
       </section>
 
-      {/* Block D — Numbered Feature Grid of Child Pages */}
+      {/* Block D — Numbered Feature Grid of Child Pages (Royal Blue alternating with White) */}
       {childPages.length > 0 && (
-        <section className="py-14 lg:py-20 bg-[var(--offwhite)] border-b border-[var(--line)]">
+        <section
+          style={{ backgroundColor: "var(--blue)" }}
+          className="py-14 lg:py-20 bg-[var(--blue)] text-white"
+        >
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
             <div className="mb-10 lg:mb-14">
-              <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-2">
-                Overview
-              </span>
-              <h2 className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2]">
+              {/* 2.3: Eyebrow "Overview" removed */}
+              <h2 className="text-[16px] lg:text-[24px] font-semibold text-white leading-[1.2]">
                 Explore This Division
               </h2>
             </div>
@@ -144,25 +145,25 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
                     className="group block p-2 bg-transparent transition-all"
                     data-reveal=""
                   >
-                    {/* Top line 24px wide blue */}
-                    <div className="w-6 h-[1px] bg-[var(--blue)] mb-4" />
+                    {/* Top line 24px wide white */}
+                    <div className="w-6 h-[1px] bg-white/60 mb-4" />
 
-                    {/* Outlined number 40px weight 600 */}
+                    {/* Outlined number */}
                     <div
-                      className="text-[40px] font-semibold leading-none mb-3 text-transparent select-none"
-                      style={{ WebkitTextStroke: "1px var(--blue)" }}
+                      className="text-[32px] lg:text-[48px] font-semibold leading-none mb-3 text-transparent select-none"
+                      style={{ WebkitTextStroke: "1px rgba(255,255,255,0.85)" }}
                     >
                       {numStr}
                     </div>
 
-                    {/* Bold name 15px weight 600 */}
-                    <h3 className="text-[15px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors leading-[1.25] mb-2">
+                    {/* H3 subheading 14px mobile / 17px desktop */}
+                    <h3 className="text-[14px] lg:text-[17px] font-semibold text-white group-hover:underline transition-colors leading-[1.25] mb-2">
                       {child.label}
                     </h3>
 
-                    {/* Description 12px grey */}
+                    {/* Description 12px mobile / 13px desktop */}
                     {child.desc && (
-                      <p className="text-[12px] leading-[1.6] text-[var(--grey)] line-clamp-3">
+                      <p className="text-[12px] lg:text-[13px] leading-[1.6] text-white/85 line-clamp-3">
                         {child.desc}
                       </p>
                     )}
@@ -178,10 +179,8 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
       {data.faq && data.faq.length > 0 && (
         <section className="py-12 lg:py-16 bg-white border-b border-[var(--line)]">
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
-            <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-2">
-              Questions
-            </span>
-            <h2 className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2] mb-6">
+            {/* 2.3: Eyebrow "Questions" removed */}
+            <h2 className="text-[16px] lg:text-[24px] font-semibold text-[var(--ink)] leading-[1.2] mb-6">
               Frequently Asked Questions
             </h2>
             <Accordion items={data.faq} />

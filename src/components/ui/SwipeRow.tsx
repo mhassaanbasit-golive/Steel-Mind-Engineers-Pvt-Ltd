@@ -166,11 +166,8 @@ export const SwipeRow: React.FC<SwipeRowProps> = ({
           <div
             ref={thumbRef}
             className={`absolute top-[-0.5px] left-0 h-[2px] transition-transform duration-75 ${
-              isDark ? "bg-white" : ""
+              isDark ? "bg-white" : "bg-[var(--blue)]"
             }`}
-            style={{
-              backgroundImage: isDark ? undefined : "var(--gradient-brand-horizontal)",
-            }}
           />
         </div>
       )}

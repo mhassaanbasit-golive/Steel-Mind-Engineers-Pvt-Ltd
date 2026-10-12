@@ -28,19 +28,19 @@ export const Welcome: React.FC<WelcomeProps> = ({ onStart, muted }) => {
         </svg>
       </div>
 
-      <h2 className="text-[32px] sm:text-[28px] font-semibold text-[var(--ink)] tracking-tight">
+      <h2 className="text-[16px] lg:text-[24px] font-semibold text-[var(--ink)] tracking-tight">
         Welcome!
       </h2>
 
-      <p className="text-[16px] text-[var(--grey)] mt-3">
+      <p className="text-[12px] lg:text-[13px] text-[var(--grey)] mt-3">
         Text us
       </p>
 
-      {/* Solid ink pill button (border-radius: 999px) */}
+      {/* Solid Royal Blue pill button (border-radius: 999px) */}
       <button
         type="button"
         onClick={handleClick}
-        className="w-full mt-10 py-4 px-6 rounded-full bg-[var(--ink)] text-white font-medium text-[13px] uppercase tracking-[0.05em] hover:bg-blue-glossy hover:brightness-110 transition-all duration-300 cursor-pointer shadow-none"
+        className="w-full mt-10 py-3.5 px-6 rounded-full bg-[var(--blue)] text-white font-semibold text-[10px] uppercase tracking-[0.06em] hover:bg-[var(--blue-dark)] transition-all duration-300 cursor-pointer shadow-none"
       >
         START CONVERSATION
       </button>

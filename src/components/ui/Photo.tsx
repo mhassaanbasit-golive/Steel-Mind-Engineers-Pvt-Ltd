@@ -59,8 +59,8 @@ export const Photo: React.FC<PhotoProps> = ({
         <div
           aria-hidden="true"
           style={{
-            background: "color-mix(in srgb, var(--blue, #1D2E7A) 6%, white)",
-            borderColor: "color-mix(in srgb, var(--blue, #1D2E7A) 12%, rgba(0,0,0,0.12))",
+            background: "color-mix(in srgb, var(--blue, #1E3A8A) 6%, white)",
+            borderColor: "color-mix(in srgb, var(--blue, #1E3A8A) 12%, rgba(0,0,0,0.12))",
           }}
           className="w-full h-full border"
         />

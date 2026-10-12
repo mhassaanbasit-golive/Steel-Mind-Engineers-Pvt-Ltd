@@ -128,7 +128,7 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
               {/* Left Column: First H2 and first two paragraphs */}
               <div className="lg:col-span-6 space-y-4" data-reveal-group="">
                 <h2
-                  className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2]"
+                  className="text-[16px] lg:text-[24px] font-semibold text-[var(--ink)] leading-[1.2]"
                   data-split=""
                 >
                   {blockBSection.h2Title}
@@ -136,7 +136,7 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
                 {blockBSection.paragraphs.slice(0, 2).map((p, idx) => (
                   <p
                     key={idx}
-                    className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)]"
+                    className="text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)]"
                     data-reveal=""
                   >
                     {p}
@@ -154,7 +154,7 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
             {blockBSection.paragraphs.length > 2 && (
               <div className="mt-8 space-y-4 max-w-[640px]">
                 {blockBSection.paragraphs.slice(2).map((p, idx) => (
-                  <p key={idx} className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)]">
+                  <p key={idx} className="text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)]">
                     {p}
                   </p>
                 ))}
@@ -171,15 +171,15 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
                       <div key={idx} className="p-2 bg-transparent" data-reveal="">
                         <div className="w-6 h-[1px] bg-[var(--blue)] mb-4" />
                         <div
-                          className="text-[40px] font-semibold leading-none mb-3 text-transparent select-none"
+                          className="text-[32px] lg:text-[48px] font-semibold leading-none mb-3 text-transparent select-none"
                           style={{ WebkitTextStroke: "1px var(--blue)" }}
                         >
                           {numStr}
                         </div>
-                        <h4 className="text-[15px] font-semibold text-[var(--ink)] leading-[1.25] mb-2">
+                        <h4 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] leading-[1.25] mb-2">
                           {item.term}
                         </h4>
-                        <p className="text-[12px] leading-[1.6] text-[var(--grey)]">
+                        <p className="text-[12px] lg:text-[13px] leading-[1.6] text-[var(--grey)]">
                           {item.desc}
                         </p>
                       </div>
@@ -192,9 +192,12 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
         </section>
       )}
 
-      {/* Template T2s: Full-width Sequential Timeline for Steps Pages */}
+      {/* Template T2s: Full-width Sequential Timeline for Steps Pages (Royal Blue alternating with White) */}
       {isTimelinePage && (
-        <section className="py-14 lg:py-20 bg-[var(--offwhite)] border-b border-[var(--line)]">
+        <section
+          style={{ backgroundColor: "var(--blue)" }}
+          className="py-14 lg:py-20 bg-[var(--blue)] text-white"
+        >
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
             {sections
               .flatMap((s) => s.steps || [])
@@ -206,21 +209,21 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
                 return (
                   <div key={idx} className="relative pl-16 pb-12 last:pb-0" data-reveal="">
                     {/* Vertical line running down left of numbers */}
-                    <div className="absolute left-[31px] top-4 bottom-0 w-[1px] bg-[var(--line)]" />
+                    <div className="absolute left-[31px] top-4 bottom-0 w-[1px] bg-white/25" />
 
-                    {/* Step number left 64px outlined blue */}
+                    {/* Step number left outlined white */}
                     <div
-                      className="absolute left-0 top-0 text-[36px] font-semibold leading-none text-transparent select-none"
-                      style={{ WebkitTextStroke: "1px var(--blue)" }}
+                      className="absolute left-0 top-0 text-[32px] lg:text-[48px] font-semibold leading-none text-transparent select-none"
+                      style={{ WebkitTextStroke: "1px rgba(255,255,255,0.85)" }}
                     >
                       {numStr}
                     </div>
 
                     <div className="space-y-3">
-                      <h3 className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] leading-[1.25]">
+                      <h3 className="text-[14px] lg:text-[17px] font-semibold text-white leading-[1.25]">
                         {st.name}
                       </h3>
-                      <p className="text-[13px] lg:text-[15px] leading-[1.6] text-[var(--grey)]">
+                      <p className="text-[12px] lg:text-[13px] leading-[1.65] text-white/85">
                         {st.desc}
                       </p>
 
@@ -243,21 +246,23 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
         </section>
       )}
 
-      {/* Block C — Alternating Image and Text Pairs for remaining H2 sections */}
+      {/* Block C — Alternating Image and Text Pairs for remaining H2 sections (Alternating Royal Blue and White) */}
       {!isTimelinePage &&
         remainingSections.map((sec, idx) => {
           const isEven = idx % 2 === 0;
-          const bg = isEven ? "bg-[var(--offwhite)]" : "bg-white";
           const sectionImg = poolImage(data.url, idx + 2);
 
           return (
             <React.Fragment key={idx}>
-              <div data-line="" className="w-full h-[1px] bg-[var(--line)]" />
-              <section className={`py-14 lg:py-20 w-full ${bg}`}>
+              {!isEven && <div data-line="" className="w-full h-[1px] bg-[var(--line)]" />}
+              <section
+                style={isEven ? { backgroundColor: "var(--blue)" } : undefined}
+                className={`py-14 lg:py-20 w-full ${
+                  isEven ? "bg-[var(--blue)] text-white" : "bg-white text-[var(--ink)]"
+                }`}
+              >
                 <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
-                    {/* Desktop layout: isEven ? Image Left (col 1-5), Text Right (col 7-12) : Text Left (col 1-6), Image Right (col 7-12) */}
-                    {/* Mobile layout: Image always on top (order-1), Text below (order-2) */}
                     <div
                       className={`order-1 ${
                         isEven
@@ -283,7 +288,9 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
                       data-reveal-group=""
                     >
                       <h3
-                        className="text-[15px] lg:text-[18px] font-semibold text-[var(--ink)] leading-[1.25]"
+                        className={`text-[14px] lg:text-[17px] font-semibold leading-[1.25] ${
+                          isEven ? "text-white" : "text-[var(--ink)]"
+                        }`}
                         data-split=""
                       >
                         {sec.h2Title}
@@ -291,7 +298,9 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
                       {sec.paragraphs.map((p, pIdx) => (
                         <p
                           key={pIdx}
-                          className="text-[13px] leading-[1.6] text-[var(--grey)]"
+                          className={`text-[12px] lg:text-[13px] leading-[1.65] ${
+                            isEven ? "text-white/85" : "text-[var(--grey)]"
+                          }`}
                           data-reveal=""
                         >
                           {p}
@@ -302,23 +311,43 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
 
                   {/* Block D if section has defs */}
                   {sec.defs && sec.defs.length > 0 && (
-                    <div className="mt-12 pt-8 border-t border-[var(--line)]">
+                    <div
+                      className={`mt-12 pt-8 border-t ${
+                        isEven ? "border-white/20" : "border-[var(--line)]"
+                      }`}
+                    >
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         {sec.defs.map((item, dIdx) => {
                           const numStr = String(dIdx + 1).padStart(2, "0");
                           return (
                             <div key={dIdx} className="p-2 bg-transparent" data-reveal="">
-                              <div className="w-6 h-[1px] bg-[var(--blue)] mb-4" />
                               <div
-                                className="text-[40px] font-semibold leading-none mb-3 text-transparent select-none"
-                                style={{ WebkitTextStroke: "1px var(--blue)" }}
+                                className={`w-6 h-[1px] mb-4 ${
+                                  isEven ? "bg-white/60" : "bg-[var(--blue)]"
+                                }`}
+                              />
+                              <div
+                                className="text-[32px] lg:text-[48px] font-semibold leading-none mb-3 text-transparent select-none"
+                                style={{
+                                  WebkitTextStroke: isEven
+                                    ? "1px rgba(255,255,255,0.85)"
+                                    : "1px var(--blue)",
+                                }}
                               >
                                 {numStr}
                               </div>
-                              <h4 className="text-[15px] font-semibold text-[var(--ink)] leading-[1.25] mb-2">
+                              <h4
+                                className={`text-[14px] lg:text-[17px] font-semibold leading-[1.25] mb-2 ${
+                                  isEven ? "text-white" : "text-[var(--ink)]"
+                                }`}
+                              >
                                 {item.term}
                               </h4>
-                              <p className="text-[12px] leading-[1.6] text-[var(--grey)]">
+                              <p
+                                className={`text-[12px] lg:text-[13px] leading-[1.6] ${
+                                  isEven ? "text-white/85" : "text-[var(--grey)]"
+                                }`}
+                              >
                                 {item.desc}
                               </p>
                             </div>
@@ -337,10 +366,8 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
       {data.faq && data.faq.length > 0 && (
         <section className="py-12 lg:py-16 bg-white border-b border-[var(--line)]">
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
-            <span className="block text-[10px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-2">
-              Questions
-            </span>
-            <h2 className="text-[18px] lg:text-[28px] font-semibold text-[var(--ink)] leading-[1.2] mb-6">
+            {/* 2.3: Eyebrow "Questions" removed */}
+            <h2 className="text-[16px] lg:text-[24px] font-semibold text-[var(--ink)] leading-[1.2] mb-6">
               Frequently Asked Questions
             </h2>
             <Accordion items={data.faq} />
@@ -363,10 +390,10 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
             <Link
               to={nextPage.url}
-              className="group flex items-center justify-between py-4 text-[14px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors"
+              className="group flex items-center justify-between py-4 text-[12px] lg:text-[13px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors"
             >
               <div className="flex flex-col">
-                <span className="text-[10px] uppercase tracking-[0.1em] text-[var(--grey)]">Next Section</span>
+                <span className="text-[9px] uppercase tracking-[0.1em] text-[var(--grey)]">Next Section</span>
                 <span>{nextPage.label}</span>
               </div>
               <svg

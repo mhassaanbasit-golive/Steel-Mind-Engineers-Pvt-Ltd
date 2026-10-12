@@ -21,11 +21,10 @@ export const ProgressLine: React.FC<ProgressLineProps> = ({
     >
       <div
         className={`absolute top-[-0.5px] left-0 h-[2px] transition-transform duration-75 ${
-          isDark ? "bg-white" : ""
+          isDark ? "bg-white" : "bg-[var(--blue)]"
         }`}
         style={{
           width: "25%",
-          backgroundImage: isDark ? undefined : "var(--gradient-brand-horizontal)",
           transform: `translateX(${progress * 300}%)`,
         }}
       />
