@@ -14,6 +14,7 @@ export interface LayoutGridIconHandle {
 
 interface LayoutGridIconProps extends HTMLAttributes<HTMLDivElement> {
   size?: number;
+  stroke?: string;
 }
 
 const RECT_1_VARIANTS: Variants = {
@@ -53,7 +54,7 @@ const RECT_4_VARIANTS: Variants = {
 };
 
 const LayoutGridIcon = forwardRef<LayoutGridIconHandle, LayoutGridIconProps>(
-  ({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
+  ({ onMouseEnter, onMouseLeave, className, size = 28, stroke = "currentColor", ...props }, ref) => {
     const controls = useAnimation();
     const isControlledRef = useRef(false);
 
@@ -92,7 +93,7 @@ const LayoutGridIcon = forwardRef<LayoutGridIconHandle, LayoutGridIconProps>(
         <svg
           fill="none"
           height={size}
-          stroke="currentColor"
+          stroke={stroke}
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="2"

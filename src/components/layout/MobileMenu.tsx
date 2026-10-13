@@ -85,21 +85,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
       className="fixed inset-0 z-[200] h-[100dvh] max-h-[100dvh] overflow-hidden text-white flex flex-col justify-between select-none animate-[menuSlideIn_0.35s_cubic-bezier(0.16,1,0.3,1)_forwards]"
       data-lenis-prevent=""
     >
-      {/* Floating Close Cross (Top Right, white, thin stroke 1.5px) */}
-      <button
-        type="button"
-        onClick={onClose}
-        aria-label="Close navigation menu"
-        className="fixed top-3.5 right-4 z-[210] w-10 h-10 flex items-center justify-center text-white hover:opacity-75 transition-opacity cursor-pointer"
-      >
-        <svg className="w-5 h-5 stroke-white" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
-      </button>
-
       {/* Main Content Area: Fits strictly in 100dvh without scroll */}
-      <div className="pt-12 pb-4 px-5 max-w-[480px] w-full mx-auto h-full flex flex-col justify-between overflow-hidden">
+      <div className="pt-16 pb-4 px-5 max-w-[480px] w-full mx-auto h-full flex flex-col justify-between overflow-hidden">
         {/* Links List */}
         <div
           style={{ borderColor: "rgba(255, 255, 255, 0.15)" }}

@@ -120,18 +120,7 @@ body::-webkit-scrollbar {
   }
 }
 
-@keyframes blueGlowPulse {
-  0%, 100% {
-    box-shadow: 0 4px 14px var(--blue-glow);
-  }
-  50% {
-    box-shadow: 0 8px 24px rgba(30, 58, 138, 0.6);
-  }
-}
 
-.animate-blue-glow {
-  animation: blueGlowPulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
 
 html {
   scroll-behavior: auto;
