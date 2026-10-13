@@ -225,18 +225,17 @@ export const FloatingTools: React.FC = () => {
         onMouseEnter={() => layoutGridRef.current?.startAnimation()}
         aria-label="Contact options"
         style={{
-          backgroundColor: "#FFFFFF",
-          border: "1px solid var(--blue)",
-          color: "var(--blue)",
+          backgroundColor: "var(--blue)",
+          color: "#FFFFFF",
         }}
-        className="w-[44px] h-[44px] text-[var(--blue)] flex items-center justify-center mb-3 hover:bg-slate-50 transition-colors cursor-pointer rounded-lg"
+        className="w-[44px] h-[44px] text-white flex items-center justify-center mb-3 hover:bg-[var(--blue-dark)] transition-colors cursor-pointer rounded-lg"
       >
         <LayoutGridIcon
           ref={layoutGridRef}
           size={20}
-          stroke="#1E3A8A"
-          className="text-[var(--blue)]"
-          style={{ color: "var(--blue)" }}
+          stroke="#FFFFFF"
+          className="text-white"
+          style={{ color: "#FFFFFF" }}
         />
       </button>
 
