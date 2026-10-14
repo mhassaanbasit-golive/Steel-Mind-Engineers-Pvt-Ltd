@@ -23,6 +23,7 @@ const Advantages = lazy(() => import("./pages/Advantages.tsx").then((m) => ({ de
 const OneStepSolution = lazy(() => import("./pages/OneStepSolution.tsx").then((m) => ({ default: m.OneStepSolution })));
 const SmePolicy = lazy(() => import("./pages/SmePolicy.tsx").then((m) => ({ default: m.SmePolicy })));
 const FactoryTour = lazy(() => import("./pages/FactoryTour.tsx").then((m) => ({ default: m.FactoryTour })));
+const Concept3D = lazy(() => import("./pages/Concept3D.tsx").then((m) => ({ default: m.Concept3D })));
 
 const SuspenseFallback: React.FC = () => (
   <div
@@ -265,6 +266,22 @@ export const AppRoutes: React.FC = () => {
         }
       />
 
+      {/* 3D Concept (PEB Division Subpage) */}
+      <Route
+        path="/pre-engineered-buildings-pakistan/3d-concept/"
+        element={
+          <PageShell hasDarkHero={true}>
+            <Concept3D
+              data={
+                CONTENT_BY_URL[
+                  "/pre-engineered-buildings-pakistan/3d-concept/"
+                ]
+              }
+            />
+          </PageShell>
+        }
+      />
+
       {/* 10. Content Pages (T1, T2, T2s, T3) */}
       {ALL_PAGES.map((page) => {
         // Skip pages handled specifically above or unpublished
@@ -277,6 +294,7 @@ export const AppRoutes: React.FC = () => {
           page.url === "/company-profile/" ||
           page.url === "/pre-engineered-buildings-pakistan/advantages/" ||
           page.url === "/pre-engineered-buildings-pakistan/one-step-solution/" ||
+          page.url === "/pre-engineered-buildings-pakistan/3d-concept/" ||
           page.url === "/about" ||
           page.url.startsWith("/about/") ||
           page.url.startsWith("/about-us/") ||

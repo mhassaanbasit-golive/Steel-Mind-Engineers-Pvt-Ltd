@@ -10,12 +10,14 @@ export interface AccordionProps {
   items: AccordionItemData[];
   className?: string;
   defaultOpenIndex?: number | null;
+  size?: "normal" | "large";
 }
 
 export const Accordion: React.FC<AccordionProps> = ({
   items,
   className = "",
   defaultOpenIndex = null,
+  size = "normal",
 }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(defaultOpenIndex);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -43,8 +45,12 @@ export const Accordion: React.FC<AccordionProps> = ({
     setOpenIndex((prev) => (prev === idx ? null : idx));
   };
 
+  const isLarge = size === "large";
+
   return (
-    <div className={`w-full divide-y divide-[var(--line)] border-y border-[var(--line)] ${className}`}>
+    <div
+      className={`w-full divide-y divide-[var(--line)] border-y border-[var(--line)] ${className}`}
+    >
       {items.map((item, idx) => {
         const isOpen = openIndex === idx;
         const panelId = `accordion-panel-${idx}`;
@@ -58,19 +64,37 @@ export const Accordion: React.FC<AccordionProps> = ({
               aria-expanded={isOpen}
               aria-controls={panelId}
               onClick={() => toggle(idx)}
-              className="w-full py-6 flex items-center justify-between text-left cursor-pointer transition-colors hover:text-[var(--blue)] focus-visible:outline-none"
+              className={`w-full flex items-center justify-between text-left cursor-pointer transition-colors hover:text-[var(--blue)] focus-visible:outline-none ${
+                isLarge
+                  ? "py-[20px] md:py-[28px]"
+                  : "py-6"
+              }`}
             >
-              <span className="text-[12px] lg:text-[14px] font-semibold text-[var(--ink)] pr-6 group-hover:text-[var(--blue)] transition-colors">
+              <span
+                className={`font-semibold text-[var(--ink)] pr-6 group-hover:text-[var(--blue)] transition-colors leading-[1.3] ${
+                  isLarge
+                    ? "text-[16px] md:text-[20px]"
+                    : "text-[12px] lg:text-[14px]"
+                }`}
+              >
                 {item.q}
               </span>
 
               {/* Plus/Minus icon made with two 1px lines */}
-              <span className="relative flex-shrink-0 w-4 h-4 flex items-center justify-center">
-                <span className="absolute w-4 h-[1.5px] bg-[var(--blue)] transition-colors" />
+              <span
+                className={`relative flex-shrink-0 flex items-center justify-center ${
+                  isLarge ? "w-6 h-6" : "w-4 h-4"
+                }`}
+              >
                 <span
-                  className={`absolute h-4 w-[1.5px] bg-[var(--blue)] transition-transform duration-300 ${
-                    isOpen ? "scale-y-0" : "scale-y-100"
+                  className={`absolute bg-[var(--blue)] transition-colors ${
+                    isLarge ? "w-5 h-[1.5px]" : "w-4 h-[1.5px]"
                   }`}
+                />
+                <span
+                  className={`absolute bg-[var(--blue)] transition-transform duration-300 ${
+                    isLarge ? "h-5 w-[1.5px]" : "h-4 w-[1.5px]"
+                  } ${isOpen ? "scale-y-0" : "scale-y-100"}`}
                 />
               </span>
             </button>
@@ -85,7 +109,13 @@ export const Accordion: React.FC<AccordionProps> = ({
               }}
               className="h-0 overflow-hidden"
             >
-              <div className="pb-6 text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)] max-w-[520px]">
+              <div
+                className={`text-[var(--grey)] leading-[1.65] max-w-[640px] ${
+                  isLarge
+                    ? "pt-2 pb-6 text-[15px] md:text-[16px] leading-[1.7]"
+                    : "pb-6 text-[12px] lg:text-[13px]"
+                }`}
+              >
                 {item.a}
               </div>
             </div>

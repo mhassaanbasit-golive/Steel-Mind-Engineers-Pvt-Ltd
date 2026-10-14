@@ -41,7 +41,6 @@ export const NAV: NavItem[] = [
         url: "/pre-engineered-buildings-pakistan/",
         image: A.division.peb,
         children: [
-          { label: "PEB Overview", url: "/pre-engineered-buildings-pakistan/overview/" },
           { label: "Advantages", url: "/pre-engineered-buildings-pakistan/advantages/" },
           { label: "3D Concept", url: "/pre-engineered-buildings-pakistan/3d-concept/" },
           { label: "One-Step Solution", url: "/pre-engineered-buildings-pakistan/one-step-solution/" },
