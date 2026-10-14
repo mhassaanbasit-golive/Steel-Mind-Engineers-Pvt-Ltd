@@ -96,8 +96,10 @@ export const DesktopNav: React.FC = () => {
               >
                 {item.children.map((child) => {
                   const isChildActive =
-                    location.pathname === child.url ||
-                    (child.url !== "/" && location.pathname.startsWith(child.url));
+                    child.url === "/services/" || child.url === "/about" || child.url === "/about/"
+                      ? location.pathname === child.url || location.pathname === child.url.replace(/\/$/, "")
+                      : location.pathname === child.url ||
+                        (child.url !== "/" && location.pathname.startsWith(child.url));
 
                   return (
                     <TransitionLink

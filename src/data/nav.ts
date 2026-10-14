@@ -107,6 +107,7 @@ export const NAV: NavItem[] = [
     label: "Services",
     url: "/services/",
     children: [
+      { label: "Overview", url: "/services/" },
       { label: "Design", url: "/services/design/" },
       { label: "Detailing", url: "/services/detailing/" },
       { label: "Fabrication", url: "/services/fabrication/" },

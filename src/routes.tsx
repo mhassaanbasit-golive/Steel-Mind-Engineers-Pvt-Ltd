@@ -282,6 +282,12 @@ export const AppRoutes: React.FC = () => {
         }
       />
 
+      {/* Redirect old overview page to new PEB overview page */}
+      <Route
+        path="/pre-engineered-buildings-pakistan/overview/"
+        element={<Navigate to="/pre-engineered-buildings-pakistan/" replace />}
+      />
+
       {/* 10. Content Pages (T1, T2, T2s, T3) */}
       {ALL_PAGES.map((page) => {
         // Skip pages handled specifically above or unpublished

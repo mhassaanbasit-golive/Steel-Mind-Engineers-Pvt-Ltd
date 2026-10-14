@@ -170,7 +170,7 @@ export const Footer: React.FC = () => {
                   Pre-Engineered Buildings
                 </Link>
                 <div className="pl-3 pt-1 space-y-1 text-[11px] text-white/70">
-                  <Link to="/pre-engineered-buildings-pakistan/overview/" className="hover:underline block">Overview</Link>
+                  <Link to="/pre-engineered-buildings-pakistan/" className="hover:underline block">Overview</Link>
                   <Link to="/pre-engineered-buildings-pakistan/advantages/" className="hover:underline block">Advantages</Link>
                   <Link to="/pre-engineered-buildings-pakistan/3d-concept/" className="hover:underline block">3D Concept</Link>
                   <Link to="/pre-engineered-buildings-pakistan/one-step-solution/" className="hover:underline block">One-Step Solution</Link>

@@ -9,6 +9,7 @@ import { Card } from "../components/ui/Card.tsx";
 import { Accordion } from "../components/ui/Accordion.tsx";
 import { NextBand } from "../components/ui/NextBand.tsx";
 import { poolImage } from "../data/pool.ts";
+import { blogImages, getBlogCover } from "../data/blogImages.ts";
 
 const CATEGORIES = [
   "All",
@@ -44,7 +45,7 @@ export const BlogIndex: React.FC = () => {
       {/* Block A — Hero Band (Image) */}
       <HeroBand
         variant="image"
-        imageSrc={A.team}
+        imageSrc={blogImages.hero}
         imageAlt="Steel drawings, hard hat and tablet on an engineer's desk at Steel Mind Engineers."
         breadcrumbItems={[
           { label: "Home", href: "/" },
@@ -101,7 +102,8 @@ export const BlogIndex: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredArticles.map((art, idx) => {
-              const imgUrl = poolImage(art.url, idx);
+              const defaultFallback = poolImage(art.url, idx);
+              const imgUrl = getBlogCover(art.title, art.url, defaultFallback);
 
               return (
                 <Card
@@ -134,6 +136,8 @@ export const BlogIndex: React.FC = () => {
 
       {/* Next Band */}
       <NextBand
+        variant="overlay"
+        image={blogImages.nextBanner}
         heading="Discuss Your Project With Our Engineers"
         nextUrl="/contact-us/"
         nextTitle="Contact Us"

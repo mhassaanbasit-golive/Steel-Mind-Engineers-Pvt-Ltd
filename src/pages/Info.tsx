@@ -89,14 +89,35 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
     { label: data.h1.split(":")[0] || "Page" },
   ];
 
-  // Find next page within current NAV group or next division
+  // Find next page within current division or NAV group
   let nextPage: { label: string; url: string } | null = null;
-  for (const item of NAV) {
-    const list = item.children || (item.divisions ? item.divisions.flatMap((d) => d.children) : []);
-    const idx = list.findIndex((c) => c.url === data.url);
-    if (idx !== -1 && idx < list.length - 1) {
-      nextPage = list[idx + 1];
-      break;
+  if (data.url === "/pre-engineered-buildings-pakistan/accessories/") {
+    nextPage = {
+      label: "Pre-Engineered Buildings",
+      url: "/pre-engineered-buildings-pakistan/",
+    };
+  } else {
+    for (const item of NAV) {
+      if (item.divisions) {
+        for (const div of item.divisions) {
+          const idx = div.children.findIndex((c) => c.url === data.url);
+          if (idx !== -1) {
+            if (idx < div.children.length - 1) {
+              nextPage = div.children[idx + 1];
+            } else {
+              nextPage = { label: div.label.replace(/\s*\(PEB\)/, ""), url: div.url };
+            }
+            break;
+          }
+        }
+        if (nextPage) break;
+      } else if (item.children) {
+        const idx = item.children.findIndex((c) => c.url === data.url);
+        if (idx !== -1 && idx < item.children.length - 1) {
+          nextPage = item.children[idx + 1];
+          break;
+        }
+      }
     }
   }
 

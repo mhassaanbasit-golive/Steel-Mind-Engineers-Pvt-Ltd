@@ -212,23 +212,29 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
                   {/* Sub-links for Services / About Us (16px indent) */}
                   {hasChildren && !isMega && isSectionOpen && item.children && (
                     <div className="pl-4 pb-2 pt-1 space-y-1 border-l border-white/20 ml-1.5 my-1">
-                      {item.children.map((child) => (
-                        <TransitionLink
-                          key={child.url}
-                          to={child.url}
-                          onClick={onClose}
-                          style={{ fontWeight: 300 }}
-                          className={`block py-1 text-[12px] font-light text-white/90 hover:opacity-100 transition-opacity ${
-                            location.pathname === child.url ||
-                            (child.url !== "/" &&
-                              location.pathname.startsWith(child.url))
-                              ? "underline decoration-white decoration-[2px] underline-offset-4 font-medium text-white"
-                              : ""
-                          }`}
-                        >
-                          {child.label}
-                        </TransitionLink>
-                      ))}
+                      {item.children.map((child) => {
+                        const isChildActive =
+                          child.url === "/services/" || child.url === "/about" || child.url === "/about/"
+                            ? location.pathname === child.url || location.pathname === child.url.replace(/\/$/, "")
+                            : location.pathname === child.url ||
+                              (child.url !== "/" && location.pathname.startsWith(child.url));
+
+                        return (
+                          <TransitionLink
+                            key={child.url}
+                            to={child.url}
+                            onClick={onClose}
+                            style={{ fontWeight: 300 }}
+                            className={`block py-1 text-[12px] font-light text-white/90 hover:opacity-100 transition-opacity ${
+                              isChildActive
+                                ? "underline decoration-white decoration-[2px] underline-offset-4 font-medium text-white"
+                                : ""
+                            }`}
+                          >
+                            {child.label}
+                          </TransitionLink>
+                        );
+                      })}
                     </div>
                   )}
 

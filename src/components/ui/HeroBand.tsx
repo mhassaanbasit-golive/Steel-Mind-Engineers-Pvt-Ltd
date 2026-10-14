@@ -32,6 +32,10 @@ export const HeroBand: React.FC<HeroBandProps> = ({
           src={bgImage}
           alt={imageAlt || h1}
           className="w-full h-full object-cover object-center"
+          loading="eager"
+          fetchPriority="high"
+          width={2560}
+          height={1440}
           style={{
             objectFit: "cover",
             objectPosition: "center",
