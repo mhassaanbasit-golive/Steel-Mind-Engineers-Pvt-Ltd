@@ -2,12 +2,11 @@ import React, { useState, useMemo } from "react";
 import { Link } from "../components/ui/TransitionLink.tsx";
 import pageData from "../content/generated/page-67.json";
 import blogCards from "../content/generated/blog-cards.json";
-import { A } from "../data/assets.ts";
 import { UI } from "../data/ui.ts";
-import { HeroBand } from "../components/ui/HeroBand.tsx";
+import { SubpageHero } from "../components/subpage/SubpageHero.tsx";
+import { SubpageNextBanner } from "../components/subpage/SubpageNextBanner.tsx";
 import { Card } from "../components/ui/Card.tsx";
 import { Accordion } from "../components/ui/Accordion.tsx";
-import { NextBand } from "../components/ui/NextBand.tsx";
 import { poolImage } from "../data/pool.ts";
 import { blogImages, getBlogCover } from "../data/blogImages.ts";
 
@@ -42,17 +41,12 @@ export const BlogIndex: React.FC = () => {
 
   return (
     <div className="w-full bg-white">
-      {/* Block A — Hero Band (Image) */}
-      <HeroBand
-        variant="image"
-        imageSrc={blogImages.hero}
-        imageAlt="Steel drawings, hard hat and tablet on an engineer's desk at Steel Mind Engineers."
-        breadcrumbItems={[
-          { label: "Home", href: "/" },
-          { label: "Blogs" },
-        ]}
-        h1={pageData.h1}
-        subtitle={pageData.quickAnswer}
+      {/* 1. HERO (matching Advantages page structure and size, subheadings removed) */}
+      <SubpageHero
+        title={pageData.h1}
+        image={blogImages.hero}
+        quoteUrl="/contact-us/#quote"
+        compact={true}
       />
 
       {/* Category Chips & Search Bar */}
@@ -134,13 +128,13 @@ export const BlogIndex: React.FC = () => {
         </section>
       )}
 
-      {/* Next Band */}
-      <NextBand
-        variant="overlay"
-        image={blogImages.nextBanner}
+      {/* 5. NEXT BANNER (matching Advantages page structure, length, size of text) */}
+      <SubpageNextBanner
         heading="Discuss Your Project With Our Engineers"
-        nextUrl="/contact-us/"
-        nextTitle="Contact Us"
+        title="Contact Us"
+        url="/contact-us/"
+        image={blogImages.nextBanner}
+        compact={true}
       />
     </div>
   );

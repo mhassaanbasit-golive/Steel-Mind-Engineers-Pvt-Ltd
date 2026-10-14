@@ -64,7 +64,11 @@ export function getBlogCover(
   url: string,
   fallback: string
 ): string {
-  if (blogImages.covers[title]) return blogImages.covers[title];
-  if (blogImages.covers[url]) return blogImages.covers[url];
+  if (url && blogImages.covers[url]) return blogImages.covers[url];
+  if (title && blogImages.covers[title]) return blogImages.covers[title];
+  for (const [key, img] of Object.entries(blogImages.covers)) {
+    if (key.startsWith("/blog/") && url && url.includes(key)) return img;
+    if (title && (title.includes(key) || key.includes(title))) return img;
+  }
   return fallback;
 }

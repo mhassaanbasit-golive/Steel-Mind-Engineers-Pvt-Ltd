@@ -5,6 +5,7 @@ import { HeroBand } from "../components/ui/HeroBand.tsx";
 import { Accordion } from "../components/ui/Accordion.tsx";
 import { NextBand } from "../components/ui/NextBand.tsx";
 import { poolImage } from "../data/pool.ts";
+import { getBlogCover } from "../data/blogImages.ts";
 import { UI } from "../data/ui.ts";
 import blogCards from "../content/generated/blog-cards.json";
 
@@ -14,7 +15,10 @@ export interface ArticleProps {
 
 export const Article: React.FC<ArticleProps> = ({ data }) => {
   const [scrollProgress, setScrollProgress] = useState(0);
-  const headerImg = poolImage(data.url, 0);
+
+  // Read banner image from the same key as the Blogs list card
+  const fallbackImg = poolImage(data.url, 0);
+  const headerImg = getBlogCover(data.title, data.url, fallbackImg);
 
   // Reading progress bar
   useEffect(() => {
@@ -54,9 +58,9 @@ export const Article: React.FC<ArticleProps> = ({ data }) => {
         />
       </div>
 
-      {/* Block A — Hero Band (Image) */}
+      {/* Block A — Hero Band (Article Variant: Same cover as blog list card) */}
       <HeroBand
-        variant="image"
+        variant="article"
         imageSrc={headerImg}
         imageAlt={data.alt || data.h1}
         breadcrumbItems={[
