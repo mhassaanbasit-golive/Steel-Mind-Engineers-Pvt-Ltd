@@ -4,6 +4,7 @@ import { NAV } from "../data/nav.ts";
 import { CONTENT_BY_URL } from "../content/index.ts";
 import { divisionImages, cl } from "../data/images.ts";
 import { TransitionLink } from "../components/ui/TransitionLink.tsx";
+import { useMediaQuery } from "../hooks/useMediaQuery.ts";
 
 export interface HubProps {
   data: ContentData;
@@ -119,55 +120,161 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
     });
   }, [rawChildren, imagesData]);
 
+  const N = items.length;
+
   // Failed image trackers to avoid broken image icons
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
   const handleImageError = (imgUrl: string) => {
     setFailedImages((prev) => ({ ...prev, [imgUrl]: true }));
   };
 
-  // Active sub-page row index for sticky image
-  const [activeIndex, setActiveIndex] = useState(0);
-  const activeIndexRef = useRef(0);
-  activeIndexRef.current = activeIndex;
-
-  // IntersectionObserver for row scrolling at screen center
-  const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const indexAttr = entry.target.getAttribute("data-row-index");
-            if (indexAttr !== null) {
-              const idx = parseInt(indexAttr, 10);
-              if (!isNaN(idx) && activeIndexRef.current !== idx) {
-                setActiveIndex(idx);
-              }
-            }
-          }
-        });
-      },
-      {
-        rootMargin: "-45% 0px -45% 0px",
-        threshold: 0,
-      }
-    );
-
-    rowRefs.current.forEach((el) => {
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, [items]);
-
   // Reduced motion detection
   const prefersReduced =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // Media query for responsive switching: Stepper (>=1024px) vs Mobile Cards (<1024px)
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+
   // ==========================================
-  // SECTION 2: INTRO ANIMATION SETUP
+  // NATURAL RATIO CHECKERS FOR HERO & NEXT BANNER
+  // Ratio rule: If within 6% of 16/9, keep 16/9. Else set to w / h.
+  // ==========================================
+  const [heroRatio, setHeroRatio] = useState<string>("16 / 9");
+  const [nextRatio, setNextRatio] = useState<string>("16 / 9");
+
+  const checkHeroRatio = (img: HTMLImageElement | null) => {
+    if (!img) return;
+    if (img.naturalWidth && img.naturalHeight) {
+      const w = img.naturalWidth;
+      const h = img.naturalHeight;
+      const target = 16 / 9;
+      const actual = w / h;
+      if (Math.abs(actual - target) / target <= 0.06) {
+        setHeroRatio("16 / 9");
+      } else {
+        setHeroRatio(`${w} / ${h}`);
+      }
+    }
+  };
+
+  const checkNextRatio = (img: HTMLImageElement | null) => {
+    if (!img) return;
+    if (img.naturalWidth && img.naturalHeight) {
+      const w = img.naturalWidth;
+      const h = img.naturalHeight;
+      const target = 16 / 9;
+      const actual = w / h;
+      if (Math.abs(actual - target) / target <= 0.06) {
+        setNextRatio("16 / 9");
+      } else {
+        setNextRatio(`${w} / ${h}`);
+      }
+    }
+  };
+
+  // Preload and decode all list images on mount
+  useEffect(() => {
+    items.forEach((item) => {
+      if (item.image) {
+        const img = new Image();
+        img.src = cl(item.image, 1400);
+        if (img.decode) {
+          img.decode().catch(() => {});
+        }
+      }
+    });
+  }, [items]);
+
+  // ==========================================
+  // DESKTOP STEPPER STATE & PACE CONTROLLER (5 & 5B)
+  // Track activeIndex & prevIndex for entering/leaving animations.
+  // Pace: minimum 900ms between steps. Advances/reverses one step at a time.
+  // ==========================================
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [prevIndex, setPrevIndex] = useState(-1);
+  const [isFlipping, setIsFlipping] = useState(false);
+
+  const activeIndexRef = useRef(0);
+  activeIndexRef.current = activeIndex;
+
+  const targetIndexRef = useRef(0);
+  const isSteppingRef = useRef(false);
+  const stepTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const flipTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const rAFRef = useRef<number | null>(null);
+
+  const trackRef = useRef<HTMLElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
+
+  // Stepping logic moving toward targetIndex by ONE step at a time with min 900ms delay
+  const triggerStep = () => {
+    if (isSteppingRef.current) return;
+    const current = activeIndexRef.current;
+    const target = targetIndexRef.current;
+    if (current === target) return;
+
+    const next = target > current ? current + 1 : current - 1;
+    isSteppingRef.current = true;
+    setIsFlipping(true);
+
+    setPrevIndex(current);
+    activeIndexRef.current = next;
+    setActiveIndex(next);
+
+    if (flipTimerRef.current) clearTimeout(flipTimerRef.current);
+    flipTimerRef.current = setTimeout(() => {
+      setIsFlipping(false);
+    }, 1050);
+
+    // Minimum 900ms between steps
+    if (stepTimerRef.current) clearTimeout(stepTimerRef.current);
+    stepTimerRef.current = setTimeout(() => {
+      isSteppingRef.current = false;
+      triggerStep();
+    }, 900);
+  };
+
+  useEffect(() => {
+    if (!isDesktop || N <= 1) return;
+
+    const onScroll = () => {
+      if (rAFRef.current !== null) return;
+      rAFRef.current = requestAnimationFrame(() => {
+        rAFRef.current = null;
+        if (!trackRef.current || !pinRef.current) return;
+        const navH =
+          parseFloat(
+            getComputedStyle(document.documentElement).getPropertyValue("--nav-h")
+          ) || 88;
+        const trackRect = trackRef.current.getBoundingClientRect();
+        const maxScroll = trackRef.current.offsetHeight - pinRef.current.offsetHeight;
+        if (maxScroll <= 0) return;
+        const p = Math.max(
+          0,
+          Math.min(0.9999, -(trackRect.top - navH) / maxScroll)
+        );
+        const target = Math.floor(p * N);
+        targetIndexRef.current = target;
+        triggerStep();
+      });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    onScroll();
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (rAFRef.current !== null) cancelAnimationFrame(rAFRef.current);
+      if (stepTimerRef.current) clearTimeout(stepTimerRef.current);
+      if (flipTimerRef.current) clearTimeout(flipTimerRef.current);
+    };
+  }, [isDesktop, N]);
+
+  // ==========================================
+  // SECTION 2: INTRO ANIMATION SETUP (KEPT AS-IS)
   // ==========================================
   const introRef = useRef<HTMLElement>(null);
   const [introTriggered, setIntroTriggered] = useState(prefersReduced);
@@ -237,7 +344,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
   }, [introTriggered, prefersReduced, totalIntroDuration]);
 
   // ==========================================
-  // SECTION 4: FAQ STATE
+  // SECTION 4: FAQ STATE (KEPT AS-IS)
   // ==========================================
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const toggleFaq = (idx: number) => {
@@ -255,59 +362,81 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
   return (
     <div className="w-full bg-white text-[var(--ink)] overflow-x-clip">
       {/* ========================================================
-          1. HERO
-          - Box: width 100%, aspect-ratio 1024/559, relative, directly under nav.
-          - Image eager, fetchpriority="high", fade-in 1000ms (opacity only).
-          - Overlay: separate absolute div, exact nav blue at alpha 0.20. Not a filter.
-          - Desktop (768px+): headline and short text bottom-left on the image. Keep existing dark bottom gradient.
-          - Mobile (<768px): image alone in box. Headline and text BELOW image on solid nav blue, 24px side, 32px top/bottom.
-          - Never crop. Object-fit: contain. Dark blue-grey background.
+          1. HERO (ALL 5 DIVISIONS) = STRETCH, NO CROP
+          - Box: position relative; width 100%; overflow hidden; dark blue-grey background (#0F172A);
+            aspect-ratio 16 / 9 until image loads. Same desktop and mobile. No max-height. No min-height.
+          - On onLoad (and ref callback): if ratio within 6% of 16/9, keep 16/9, else ${w} / ${h}.
+          - <img>: position absolute; inset 0; width 100%; height 100%; object-fit: fill. Never cover/contain.
+          - Image: eager, fetchpriority="high", 1000ms opacity fade-in. Cloudinary w_2400.
+          - Remove paragraph under hero headline. Keep only headline and Request a Quote button.
+          - Desktop (768px+): 3 separate absolute overlay divs:
+            a) exact nav blue at alpha 0.30
+            b) linear-gradient(to top, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.10) 100%)
+            c) linear-gradient(to right, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0) 55%)
+            Headline bottom-left on image, white, above all overlays (z-10).
+          - Mobile (<768px): overlay is exact nav blue at alpha 0.20 only. Image shows alone.
+            Headline and button go BELOW image on solid nav blue, white text, 24px side padding, 32px top/bottom padding.
       ======================================================== */}
       <section className="w-full pt-[64px] lg:pt-[88px] bg-white">
-        {/* Aspect Ratio Box 1024/559 */}
-        <div className="w-full aspect-[1024/559] relative bg-[#0F172A] overflow-hidden">
-          {/* Solid dark block if empty or failed, else <img> contain */}
+        {/* Aspect Ratio Box: defaults to 16/9, updates dynamically based on natural image aspect ratio */}
+        <div
+          className="relative w-full overflow-hidden bg-[#0F172A]"
+          style={{ aspectRatio: heroRatio }}
+        >
           {imagesData.hero && !heroHasError ? (
             <img
               src={heroImgUrl}
               alt={config.divisionTitle}
-              width="1600"
-              height="874"
               fetchPriority="high"
               loading="eager"
+              ref={(el) => {
+                if (el && el.complete && el.naturalWidth > 0) {
+                  checkHeroRatio(el);
+                }
+              }}
+              onLoad={(e) => checkHeroRatio(e.currentTarget)}
               onError={() => handleImageError(imagesData.hero)}
-              className="w-full h-full object-contain block animate-[heroFadeIn_1000ms_cubic-bezier(0.22,1,0.36,1)_forwards]"
-              style={{ objectFit: "contain" }}
+              className="absolute inset-0 w-full h-full block animate-[heroFadeIn_1000ms_cubic-bezier(0.22,1,0.36,1)_forwards]"
+              style={{ objectFit: "fill" }}
             />
           ) : (
-            <div className="w-full h-full bg-[#0F172A]" />
+            <div className="absolute inset-0 w-full h-full bg-[#0F172A]" />
           )}
 
-          {/* Overlay: separate absolute div, exact nav blue at alpha 0.20. Not a filter. */}
+          {/* Desktop Overlay (768px+): 3 separate absolute divs, inset 0 */}
+          {/* a) exact nav blue at alpha 0.30 */}
           <div
-            className="absolute inset-0 pointer-events-none"
-            style={{ backgroundColor: "rgba(30, 58, 138, 0.20)" }}
+            className="hidden md:block absolute inset-0 pointer-events-none"
+            style={{ backgroundColor: "rgba(30, 58, 138, 0.30)" }}
           />
-
-          {/* Desktop dark bottom gradient */}
+          {/* b) linear-gradient(to top, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.10) 100%) */}
           <div
             className="hidden md:block absolute inset-0 pointer-events-none"
             style={{
               background:
-                "linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.25) 45%, rgba(0,0,0,0) 100%)",
+                "linear-gradient(to top, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.10) 100%)",
+            }}
+          />
+          {/* c) linear-gradient(to right, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0) 55%) */}
+          <div
+            className="hidden md:block absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(to right, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0) 55%)",
             }}
           />
 
-          {/* Desktop (768px+): Headline & short text bottom-left on the image */}
+          {/* Mobile Overlay (<768px): exact nav blue at alpha 0.20 only */}
+          <div
+            className="md:hidden absolute inset-0 pointer-events-none"
+            style={{ backgroundColor: "rgba(30, 58, 138, 0.20)" }}
+          />
+
+          {/* Desktop Headline & Button bottom-left on image, above all overlays (z-10) */}
           <div className="hidden md:block absolute bottom-8 lg:bottom-12 left-6 lg:left-12 max-w-[680px] text-left z-10 pointer-events-auto">
             <h1 className="text-[24px] lg:text-[40px] font-bold text-white uppercase leading-[1.15] tracking-[-0.02em]">
               {data.h1}
             </h1>
-            {data.quickAnswer && (
-              <p className="mt-3 text-[13px] lg:text-[15px] font-normal text-white/85 leading-[1.6] max-w-[580px]">
-                {data.quickAnswer.split(". ")[0].replace(/\.$/, "") + "."}
-              </p>
-            )}
             <div className="mt-5">
               <TransitionLink
                 to="/contact-us/#quote"
@@ -319,16 +448,11 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
           </div>
         </div>
 
-        {/* Mobile (<768px): Headline and text go BELOW the image on solid nav blue, 24px side, 32px top/bottom */}
+        {/* Mobile (<768px): Headline and button go BELOW the image on solid nav blue, 24px side, 32px top/bottom */}
         <div className="md:hidden w-full bg-[var(--blue)] text-white px-6 py-8 text-left">
           <h1 className="text-[20px] font-bold text-white uppercase leading-[1.2] tracking-[-0.02em]">
             {data.h1}
           </h1>
-          {data.quickAnswer && (
-            <p className="mt-3 text-[13px] font-normal text-white/90 leading-[1.6]">
-              {data.quickAnswer.split(". ")[0].replace(/\.$/, "") + "."}
-            </p>
-          )}
           <div className="mt-5">
             <TransitionLink
               to="/contact-us/#quote"
@@ -341,20 +465,12 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
       </section>
 
       {/* ========================================================
-          2. INTRO
-          - Same centered title and paragraph, same copy.
-          - Padding 120px top/bottom desktop, 72px mobile. Paragraph max-width 640px.
-          - Title animates per CHARACTER. Paragraph per WORD.
-          - Each word = span, display inline-block, white-space nowrap.
-          - Wrapper aria-label = original text. Split spans aria-hidden="true".
-          - Start: opacity 0, translateY(40%), blur 4px. End: opacity 1, translateY(0), blur 0.
-          - 800ms per unit. Stagger 35ms per char, 45ms per word. Cap delay at 1400ms.
-          - Paragraph starts 300ms after title stagger ends.
-          - Trigger once, IntersectionObserver threshold 0.3. Never replay.
+          2. INTRO (KEPT AS-IS)
+          - Spacing: 96px desktop, 56px mobile to list below.
       ======================================================== */}
       <section
         ref={introRef}
-        className="w-full bg-white py-[72px] lg:py-[120px] px-5 lg:px-10"
+        className="w-full bg-white pt-[72px] lg:pt-[120px] pb-[56px] lg:pb-[96px] px-5 lg:px-10"
       >
         <div className="max-w-[720px] mx-auto text-center flex flex-col items-center">
           {/* Animated H2 Title */}
@@ -363,7 +479,6 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
             className="text-[22px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] text-center uppercase"
           >
             {titleWords.map((word, wordIdx) => {
-              // Calculate cumulative character offset before this word
               let prevCharsCount = 0;
               for (let i = 0; i < wordIdx; i++) {
                 prevCharsCount += titleWords[i].length;
@@ -450,147 +565,299 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
       </section>
 
       {/* ========================================================
-          3. SUB-PAGE LIST WITH IMAGES
-          Desktop (1024px+):
-          - CSS grid, columns 7fr / 5fr, gap 64px, max-width 1280px, centered, side padding 32px, align-items start.
-          - Left: ONE sticky box. position sticky; top 120px; width 100%; aspect-ratio 1024/559.
-          - Ancestors have NO overflow hidden/auto/scroll, NO transform, NO filter.
-          - Inside: relative container, dark blue-grey background (#0F172A).
-            One <img> per sub-page, ALL stacked: absolute inset 0, object-fit contain.
-            Only active image opacity 1, others 0. Transition opacity 800ms cubic-bezier(0.22,1,0.36,1).
-          - Right: list of sub-pages.
-            Each row: number (01, 02...), title (H3), desc, link.
-            Hover, focus, scroll change active image with smooth cross-fade, no flicker.
-          Mobile (<1024px):
-          - Each item shows its own image box (aspect-ratio 1024/559, dark blue-grey background, <img> contain)
-            followed by number, title, description, and link!
+          3. SUB-PAGE LIST:
+          - At >= 1024px: DESKTOP SCROLL-PINNED STEPPER (Parts 5 & 5B)
+          - Below 1024px: MOBILE CARDS (Part 6)
+          - Never render both!
       ======================================================== */}
-      <section className="w-full bg-white py-12 lg:py-24 px-5 lg:px-8">
-        <div className="max-w-[1280px] mx-auto grid grid-cols-1 lg:grid-cols-[7fr_5fr] gap-10 lg:gap-16 items-start">
-          {/* DESKTOP LEFT COLUMN: Sticky Box */}
-          <div className="hidden lg:block sticky top-[120px] w-full aspect-[1024/559] bg-[#0F172A] relative overflow-hidden">
-            {items.map((item, idx) => {
-              const isActive = activeIndex === idx;
-              const hasErr = failedImages[item.image];
-              const hasImage = item.image && !hasErr;
+      {isDesktop ? (
+        /* DESKTOP SCROLL-PINNED STEPPER (1024px and wider) */
+        <section
+          ref={trackRef}
+          className="relative w-full bg-white"
+          style={{ height: `calc(${N} * 120vh)` }}
+        >
+          <div
+            ref={pinRef}
+            className="sticky w-full max-w-[1280px] mx-auto px-8 grid grid-cols-[7fr_5fr] gap-16 items-center"
+            style={{
+              top: "var(--nav-h, 88px)",
+              height: "calc(100vh - var(--nav-h, 88px))",
+            }}
+          >
+            {/* LEFT: Image Stage (link to active sub-page) */}
+            <div className="w-full flex items-center justify-center">
+              <TransitionLink
+                to={items[activeIndex]?.url || "#"}
+                className="block relative w-full overflow-hidden select-none cursor-pointer"
+                style={{
+                  width: "min(100%, calc((100vh - var(--nav-h, 88px) - 96px) * 1.5))",
+                  aspectRatio: "3 / 2",
+                  backgroundColor: "#0F172A",
+                }}
+                aria-label={`View ${items[activeIndex]?.title || "division details"}`}
+              >
+                {items.map((item, idx) => {
+                  const isActive = activeIndex === idx;
+                  const isLeaving = prevIndex === idx;
+                  const hasErr = failedImages[item.image];
+                  const hasImage = item.image && !hasErr;
 
-              return (
+                  return (
+                    <div
+                      key={item.url || idx}
+                      className="absolute inset-0 w-full h-full bg-[#0F172A] overflow-hidden"
+                      style={{
+                        opacity: isActive ? 1 : 0,
+                        zIndex: isActive ? 10 : isLeaving ? 5 : 0,
+                        pointerEvents: isActive ? "auto" : "none",
+                        transition: prefersReduced
+                          ? "opacity 200ms ease"
+                          : "opacity 800ms cubic-bezier(0.22, 1, 0.36, 1)",
+                        willChange: isFlipping ? "opacity, transform" : "auto",
+                      }}
+                    >
+                      {hasImage ? (
+                        <img
+                          src={cl(item.image, 1400)}
+                          alt={item.title}
+                          loading="eager"
+                          onError={() => handleImageError(item.image)}
+                          className={`absolute inset-0 w-full h-full object-cover object-center block ${
+                            isActive && !prefersReduced
+                              ? "animate-[enterScale_1000ms_cubic-bezier(0.22,1,0.36,1)_forwards]"
+                              : ""
+                          }`}
+                          style={{
+                            objectFit: "cover",
+                            objectPosition: "center",
+                            transform: isLeaving || prefersReduced ? "scale(1)" : undefined,
+                          }}
+                        />
+                      ) : (
+                        <div className="absolute inset-0 w-full h-full bg-[#0F172A]" />
+                      )}
+                    </div>
+                  );
+                })}
+              </TransitionLink>
+            </div>
+
+            {/* RIGHT: Text Slides stacked in same grid cell */}
+            <div className="w-full relative flex flex-col justify-center">
+              <div className="grid grid-cols-1 grid-rows-1 w-full">
+                {items.map((item, idx) => {
+                  const isActive = activeIndex === idx;
+                  const isLeaving = prevIndex === idx;
+
+                  // Text flip animation per Part 5B
+                  const slideTransform = prefersReduced
+                    ? "none"
+                    : isActive
+                    ? "translateY(0)"
+                    : isLeaving
+                    ? "translateY(-24px)"
+                    : "translateY(24px)";
+
+                  const slideOpacity = isActive ? 1 : 0;
+
+                  const slideTransition = prefersReduced
+                    ? "opacity 200ms ease"
+                    : isActive
+                    ? "opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) 200ms, transform 800ms cubic-bezier(0.22, 1, 0.36, 1) 200ms"
+                    : isLeaving
+                    ? "opacity 600ms cubic-bezier(0.22, 1, 0.36, 1), transform 600ms cubic-bezier(0.22, 1, 0.36, 1)"
+                    : "none";
+
+                  return (
+                    <div
+                      key={item.url || idx}
+                      className="col-start-1 row-start-1 w-full text-left flex flex-col"
+                      style={{
+                        opacity: slideOpacity,
+                        transform: slideTransform,
+                        transition: slideTransition,
+                        pointerEvents: isActive ? "auto" : "none",
+                        zIndex: isActive ? 10 : isLeaving ? 5 : 0,
+                        willChange: isFlipping ? "opacity, transform" : "auto",
+                      }}
+                      aria-hidden={!isActive}
+                      inert={!isActive ? true : undefined}
+                    >
+                      {/* 1. Number */}
+                      <div
+                        className="text-[14px] lg:text-[16px] font-bold text-[#1E3A8A] mb-3 tracking-[0.06em]"
+                        style={{
+                          fontVariantNumeric: "tabular-nums",
+                          opacity: isActive ? 1 : 0,
+                          transform: prefersReduced
+                            ? "none"
+                            : isActive
+                            ? "translateY(0)"
+                            : "translateY(12px)",
+                          transition: prefersReduced
+                            ? "none"
+                            : "opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) 200ms, transform 800ms cubic-bezier(0.22, 1, 0.36, 1) 200ms",
+                        }}
+                      >
+                        {item.number}
+                      </div>
+
+                      {/* 2. Title */}
+                      <h3
+                        className="font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.01em] mb-4"
+                        style={{
+                          fontSize: "clamp(28px, 2.6vw, 40px)",
+                          opacity: isActive ? 1 : 0,
+                          transform: prefersReduced
+                            ? "none"
+                            : isActive
+                            ? "translateY(0)"
+                            : "translateY(12px)",
+                          transition: prefersReduced
+                            ? "none"
+                            : "opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) 280ms, transform 800ms cubic-bezier(0.22, 1, 0.36, 1) 280ms",
+                        }}
+                      >
+                        <TransitionLink
+                          to={item.url}
+                          className="text-[#0A0A0A] hover:text-[#1E3A8A] transition-colors block"
+                        >
+                          {item.title}
+                        </TransitionLink>
+                      </h3>
+
+                      {/* 3. Description (full text, max-width 440px, no ellipsis) */}
+                      {item.desc && (
+                        <p
+                          className="text-[14px] lg:text-[15px] text-[#6B7280] leading-[1.7] max-w-[440px] mb-6"
+                          style={{
+                            opacity: isActive ? 1 : 0,
+                            transform: prefersReduced
+                              ? "none"
+                              : isActive
+                              ? "translateY(0)"
+                              : "translateY(12px)",
+                            transition: prefersReduced
+                              ? "none"
+                              : "opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) 360ms, transform 800ms cubic-bezier(0.22, 1, 0.36, 1) 360ms",
+                          }}
+                        >
+                          {item.desc}
+                        </p>
+                      )}
+
+                      {/* 4. Link View → */}
+                      <div>
+                        <TransitionLink
+                          to={item.url}
+                          className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#1E3A8A] hover:underline"
+                          style={{
+                            opacity: isActive ? 1 : 0,
+                            transform: prefersReduced
+                              ? "none"
+                              : isActive
+                              ? "translateY(0)"
+                              : "translateY(12px)",
+                            transition: prefersReduced
+                              ? "none"
+                              : "opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) 440ms, transform 800ms cubic-bezier(0.22, 1, 0.36, 1) 440ms",
+                          }}
+                        >
+                          <span>View</span>
+                          <span>&rarr;</span>
+                        </TransitionLink>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Progress Line Under the slide: 1px grey line with 1px blue scale line */}
+              <div className="w-full h-[1px] bg-[#E5E5E5] mt-10 relative overflow-hidden">
                 <div
-                  key={item.url || idx}
-                  className={`absolute inset-0 w-full h-full bg-[#0F172A] transition-opacity duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                    isActive
-                      ? "opacity-100 z-10 pointer-events-auto"
-                      : "opacity-0 z-0 pointer-events-none"
-                  }`}
-                >
-                  {hasImage ? (
-                    <img
-                      src={cl(item.image, 1400)}
-                      alt={item.title}
-                      width="1600"
-                      height="874"
-                      loading="lazy"
-                      onError={() => handleImageError(item.image)}
-                      className="w-full h-full object-contain block"
-                      style={{ objectFit: "contain" }}
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-[#0F172A]" />
-                  )}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* RIGHT COLUMN (DESKTOP) & STACKED ROWS (MOBILE) */}
-          <div className="w-full divide-y divide-[#E5E5E5] border-t border-b border-[#E5E5E5]">
-            {items.map((item, idx) => {
-              const isActive = activeIndex === idx;
-              const hasErr = failedImages[item.image];
-              const hasImage = item.image && !hasErr;
-
-              return (
-                <div
-                  key={item.url || idx}
-                  ref={(el) => {
-                    rowRefs.current[idx] = el;
+                  className="absolute inset-y-0 left-0 w-full h-[1px] bg-[#1E3A8A]"
+                  style={{
+                    transform: `scaleX(${(activeIndex + 1) / N})`,
+                    transformOrigin: "left",
+                    transition: prefersReduced
+                      ? "none"
+                      : "transform 800ms cubic-bezier(0.22, 1, 0.36, 1)",
                   }}
-                  data-row-index={idx}
-                  onMouseEnter={() => setActiveIndex(idx)}
-                  onFocus={() => setActiveIndex(idx)}
-                  className={`group py-8 lg:py-10 text-left transition-colors duration-300 ${
-                    isActive ? "bg-slate-50/50 lg:bg-transparent" : ""
-                  }`}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : (
+        /* MOBILE CARDS (below 1024px) */
+        <section className="w-full bg-white px-6 py-6">
+          <div className="w-full flex flex-col gap-8 max-w-[600px] mx-auto">
+            {items.map((item, idx) => {
+              const hasErr = failedImages[item.image];
+              const hasImage = item.image && !hasErr;
+
+              return (
+                <TransitionLink
+                  key={item.url || idx}
+                  to={item.url}
+                  className="block w-full min-h-[48px] select-none no-underline group text-left"
                 >
-                  {/* Mobile-only inline Image Box */}
-                  <div className="lg:hidden w-full aspect-[1024/559] bg-[#0F172A] mb-5 overflow-hidden relative">
+                  {/* Card Image Box: aspect-ratio 3 / 2, overflow hidden, dark blue-grey bg */}
+                  <div className="relative w-full aspect-[3/2] overflow-hidden bg-[#0F172A]">
                     {hasImage ? (
                       <img
                         src={cl(item.image, 1400)}
                         alt={item.title}
-                        width="1600"
-                        height="874"
-                        loading="lazy"
+                        loading={idx < 2 ? "eager" : "lazy"}
+                        fetchPriority={idx === 0 ? "high" : "auto"}
                         onError={() => handleImageError(item.image)}
-                        className="w-full h-full object-contain block"
-                        style={{ objectFit: "contain" }}
+                        className="absolute inset-0 w-full h-full object-cover object-center block"
+                        style={{ objectFit: "cover", objectPosition: "center" }}
                       />
                     ) : (
-                      <div className="w-full h-full bg-[#0F172A]" />
+                      <div className="absolute inset-0 w-full h-full bg-[#0F172A]" />
                     )}
                   </div>
 
-                  {/* Number (01, 02...): Inter 700, #1E3A8A, tabular numerals */}
-                  <div
-                    className="text-[14px] lg:text-[16px] font-bold text-[#1E3A8A] mb-2 tracking-[0.06em]"
-                    style={{ fontVariantNumeric: "tabular-nums" }}
-                  >
-                    {item.number}
+                  {/* Row with number, title, and arrow */}
+                  <div className="flex items-center justify-between gap-3 mt-4">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span
+                        className="text-[14px] font-bold text-[#1E3A8A] tracking-[0.06em] flex-shrink-0"
+                        style={{ fontVariantNumeric: "tabular-nums" }}
+                      >
+                        {item.number}
+                      </span>
+                      <h3 className="text-[18px] font-bold text-[#0A0A0A] leading-[1.2] truncate">
+                        {item.title}
+                      </h3>
+                    </div>
+                    <span className="text-[#1E3A8A] text-[18px] flex-shrink-0 transition-transform duration-300 group-hover:translate-x-1">
+                      &rarr;
+                    </span>
                   </div>
 
-                  {/* Title (H3) */}
-                  <h3 className="text-[18px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em] mb-2">
-                    <TransitionLink
-                      to={item.url}
-                      className="text-[#0A0A0A] hover:text-[#1E3A8A] transition-colors block"
-                    >
-                      {item.title}
-                    </TransitionLink>
-                  </h3>
-
-                  {/* Description */}
+                  {/* ONE line of description with ellipsis */}
                   {item.desc && (
-                    <p className="text-[13px] lg:text-[14px] text-[#6B7280] leading-[1.7] max-w-[500px] mb-4">
+                    <p className="mt-2 text-[13px] text-[#6B7280] leading-[1.5] whitespace-nowrap overflow-hidden text-ellipsis block max-w-full">
                       {item.desc}
                     </p>
                   )}
-
-                  {/* Link View → */}
-                  <TransitionLink
-                    to={item.url}
-                    className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#1E3A8A] hover:underline"
-                  >
-                    <span>View</span>
-                    <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
-                      &rarr;
-                    </span>
-                  </TransitionLink>
-                </div>
+                </TransitionLink>
               );
             })}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ========================================================
-          4. FAQ
-          - Same questions and answers. Full-width hairline rows. Container max-width 1280px.
-          - Open/close 700ms using grid-template-rows 0fr to 1fr plus opacity.
-          - Plus icon rotates to minus over 700ms.
-          - Real <button> with aria-expanded.
+          4. FAQ (KEPT AS-IS)
+          - Spacing: bottom padding 96px desktop, 64px mobile.
+          - Followed by next banner directly.
       ======================================================== */}
       {data.faq && data.faq.length > 0 && (
-        <section className="w-full bg-white py-16 lg:py-24 px-5 lg:px-8 border-t border-[#E5E5E5]">
+        <section className="w-full bg-white pt-16 lg:pt-24 pb-[64px] lg:pb-[96px] px-5 lg:px-8 border-t border-[#E5E5E5]">
           <div className="max-w-[1280px] mx-auto text-left">
             <h2 className="text-[22px] lg:text-[40px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] mb-10">
               Frequently Asked Questions
@@ -620,9 +887,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
                           fill="none"
                           strokeWidth="1.5"
                         >
-                          {/* Horizontal line */}
                           <line x1="5" y1="12" x2="19" y2="12" />
-                          {/* Vertical line: rotates 90deg over 700ms to become horizontal minus */}
                           <line
                             x1="12"
                             y1="5"
@@ -667,35 +932,41 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
       )}
 
       {/* ========================================================
-          5. NEXT DIVISION BANNER
-          - Box: width 100%, aspect-ratio 1024/559, relative. Image contain.
-          - 20% exact nav blue overlay (separate div, alpha 0.20).
-          - Remove the small "NEXT" label. Keep existing headline and link.
-          - White text, bottom-left on desktop.
-          - Desktop: whole banner is one link to the next division.
-          - Mobile (<768px): image alone. Headline and link BELOW image on nav blue, 24px side, 32px top/bottom. Image + text = one tap area.
-          - Order: PEB, Industrial Sheds, Steel Warehouses, Structural Steel Fabrication, Custom Steel Fabrication.
+          5. NEXT DIVISION BANNER (ALL 5 DIVISIONS)
+          - Stretch box and natural-ratio rule matching hero. object-fit: fill. Cloudinary w_2000.
+          - Overlay: exact nav blue alpha 0.20, separate div.
+          - No "NEXT" label. Keep existing headline and link.
+          - Desktop: headline and link bottom-left on image, white. Whole banner is one link.
+          - Mobile: image alone. Headline and link below on nav blue, 24px side, 32px top/bottom padding.
+          - Whole banner is one link.
       ======================================================== */}
       <section className="w-full bg-white border-t border-[#E5E5E5]">
         <TransitionLink
           to={config.nextUrl}
           className="group block w-full no-underline select-none cursor-pointer"
         >
-          {/* Banner Image Box (Aspect Ratio 1024/559) */}
-          <div className="w-full aspect-[1024/559] relative bg-[#0F172A] overflow-hidden">
+          {/* Banner Image Box: stretch with natural aspect ratio */}
+          <div
+            className="relative w-full overflow-hidden bg-[#0F172A]"
+            style={{ aspectRatio: nextRatio }}
+          >
             {imagesData.next && !nextHasError ? (
               <img
                 src={nextImgUrl}
                 alt={config.nextTitle}
-                width="1600"
-                height="874"
                 loading="lazy"
+                ref={(el) => {
+                  if (el && el.complete && el.naturalWidth > 0) {
+                    checkNextRatio(el);
+                  }
+                }}
+                onLoad={(e) => checkNextRatio(e.currentTarget)}
                 onError={() => handleImageError(imagesData.next)}
-                className="w-full h-full object-contain block"
-                style={{ objectFit: "contain" }}
+                className="absolute inset-0 w-full h-full block"
+                style={{ objectFit: "fill" }}
               />
             ) : (
-              <div className="w-full h-full bg-[#0F172A]" />
+              <div className="absolute inset-0 w-full h-full bg-[#0F172A]" />
             )}
 
             {/* Separate 20% exact nav blue overlay */}
@@ -704,12 +975,12 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
               style={{ backgroundColor: "rgba(30, 58, 138, 0.20)" }}
             />
 
-            {/* Desktop dark bottom gradient */}
+            {/* Desktop dark gradient for high contrast */}
             <div
               className="hidden md:block absolute inset-0 pointer-events-none"
               style={{
                 background:
-                  "linear-gradient(to top, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.25) 45%, rgba(0,0,0,0) 100%)",
+                  "linear-gradient(to top, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.30) 45%, rgba(0,0,0,0) 100%)",
               }}
             />
 
@@ -746,6 +1017,10 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
         @keyframes heroFadeIn {
           from { opacity: 0; }
           to { opacity: 1; }
+        }
+        @keyframes enterScale {
+          from { transform: scale(1.04); }
+          to { transform: scale(1); }
         }
       `}</style>
     </div>

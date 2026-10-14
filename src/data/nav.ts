@@ -25,7 +25,12 @@ export interface NavItem {
 export const NAV: NavItem[] = [
   {
     label: "About Us",
-    url: "/about-us/",
+    url: "/about",
+    children: [
+      { label: "About Us", url: "/about" },
+      { label: "SME Policy", url: "/about/sme-policy" },
+      { label: "Factory", url: "/about/factory" },
+    ],
   },
   {
     label: "Main Divisions",

@@ -1,12 +1,10 @@
 {
   "redirects": [
-    { "source": "/about-us/introduction/", "destination": "/about-us/", "permanent": true },
-    { "source": "/about-us/vision/", "destination": "/about-us/", "permanent": true },
-    { "source": "/about-us/mission/", "destination": "/about-us/", "permanent": true },
-    { "source": "/about-us/core-values/", "destination": "/about-us/", "permanent": true },
-    { "source": "/about-us/sme-policy/", "destination": "/about-us/", "permanent": true },
-    { "source": "/about-us/committed-to/", "destination": "/about-us/", "permanent": true },
-    { "source": "/about-us/factory-tour/", "destination": "/about-us/", "permanent": true }
+    { "source": "/about-us/introduction/", "destination": "/about-us/#introduction", "permanent": true },
+    { "source": "/about-us/vision/", "destination": "/about-us/#vision", "permanent": true },
+    { "source": "/about-us/mission/", "destination": "/about-us/#mission", "permanent": true },
+    { "source": "/about-us/core-values/", "destination": "/about-us/#core-values", "permanent": true },
+    { "source": "/about-us/committed-to/", "destination": "/about-us/#committed-to", "permanent": true }
   ],
   "headers": [
     {

@@ -22,6 +22,7 @@
   --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
   --header-h: 64px;
+  --nav-h: 88px;
   --pad-x: 20px;
   --section-y: 80px;
   --gutter: 24px;
@@ -30,6 +31,7 @@
 @media (min-width: 1024px) {
   :root {
     --header-h: 88px;
+    --nav-h: 88px;
     --pad-x: 40px;
     --section-y: 120px;
     --gutter: 32px;

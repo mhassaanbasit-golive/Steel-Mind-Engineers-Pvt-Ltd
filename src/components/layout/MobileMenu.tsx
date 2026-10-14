@@ -18,6 +18,7 @@ export interface MobileMenuProps {
 export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
   const location = useLocation();
   const [openSection, setOpenSection] = useState<string | null>(null);
+  const [openDivision, setOpenDivision] = useState<string | null>(null);
   const initialPathRef = useRef(location.pathname);
 
   const facebookRef = useRef<FacebookIconHandle>(null);
@@ -37,6 +38,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen) {
       setOpenSection(null);
+      setOpenDivision(null);
       stopScroll();
       document.body.style.overflow = "hidden";
       const mainEl = document.getElementById("main");
@@ -69,9 +71,20 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
     };
   }, [isOpen, onClose]);
 
-  const isLinkActive = (url: string) =>
-    location.pathname === url ||
-    (url !== "/" && location.pathname.startsWith(url));
+  const isLinkActive = (url: string, label?: string) => {
+    if (label === "About Us") {
+      return (
+        location.pathname === "/about" ||
+        location.pathname === "/about/" ||
+        location.pathname.startsWith("/about/") ||
+        location.pathname.startsWith("/about-us")
+      );
+    }
+    return (
+      location.pathname === url ||
+      (url !== "/" && location.pathname.startsWith(url))
+    );
+  };
 
   return (
     <div
@@ -90,147 +103,242 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
       className="fixed inset-0 z-[200] h-[100dvh] max-h-[100dvh] overflow-hidden text-white flex flex-col justify-between select-none"
       data-lenis-prevent=""
     >
-      {/* Main Content Area: Compact padding and sizing so it fits cleanly in 100dvh with NO scrollbar */}
+      {/* Main Content Area */}
       <div className="pt-16 pb-3 px-5 max-w-[440px] w-full mx-auto h-full flex flex-col justify-between overflow-hidden">
-        {/* Links List */}
+        {/* Scrollable Links Container */}
         <div
-          style={{ borderColor: "rgba(255, 255, 255, 0.15)" }}
-          className="border-t border-b divide-y divide-white/15"
+          className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden my-2 pr-1"
+          style={{ scrollbarWidth: "none" }}
         >
-          {NAV.map((item) => {
-            const isMega = item.label === "Main Divisions";
-            const hasChildren = !!item.children || isMega;
-            const isSectionOpen = openSection === item.label;
-            const active = isLinkActive(item.url);
+          <div
+            style={{ borderColor: "rgba(255, 255, 255, 0.15)" }}
+            className="border-t border-b divide-y divide-white/15"
+          >
+            {NAV.map((item) => {
+              const isMega = item.label === "Main Divisions";
+              const isAbout = item.label === "About Us";
+              const hasChildren = !!item.children || isMega;
+              const isSectionOpen = openSection === item.label;
+              const active = isLinkActive(item.url, item.label);
 
-            return (
-              <div
-                key={item.label}
-                style={{
-                  borderColor: "rgba(255, 255, 255, 0.15)",
-                }}
-              >
-                <div className="h-[38px] flex items-center justify-between">
-                  {hasChildren ? (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setOpenSection(isSectionOpen ? null : item.label);
-                      }}
-                      style={{ fontWeight: 300 }}
-                      className="w-full h-full flex items-center justify-between text-left text-[14px] font-light text-white hover:opacity-80 transition-opacity cursor-pointer"
-                    >
-                      <span
-                        className={
-                          active
-                            ? "underline decoration-white decoration-[2px] underline-offset-4 font-light"
-                            : "font-light"
-                        }
+              return (
+                <div
+                  key={item.label}
+                  style={{
+                    borderColor: "rgba(255, 255, 255, 0.15)",
+                  }}
+                >
+                  <div className="min-h-[38px] py-1.5 flex items-center justify-between">
+                    {hasChildren ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setOpenSection(isSectionOpen ? null : item.label);
+                        }}
+                        style={{ fontWeight: 400 }}
+                        className="w-full h-full flex items-center justify-between text-left text-[14px] text-white hover:opacity-80 transition-opacity cursor-pointer"
+                      >
+                        <span
+                          className={
+                            active
+                              ? "underline decoration-white decoration-[2px] underline-offset-4 font-medium"
+                              : "font-normal"
+                          }
+                        >
+                          {item.label}
+                        </span>
+                        {/* Chevron icon for About Us, plus icon for other group rows */}
+                        {isAbout ? (
+                          <svg
+                            className="w-3.5 h-3.5 stroke-white flex-shrink-0"
+                            style={{
+                              transition:
+                                "transform 300ms cubic-bezier(0.22, 1, 0.36, 1)",
+                              transform: isSectionOpen
+                                ? "rotate(180deg)"
+                                : "rotate(0deg)",
+                            }}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            strokeWidth="1.5"
+                          >
+                            <polyline points="6 9 12 15 18 9" />
+                          </svg>
+                        ) : (
+                          <svg
+                            className="w-3.5 h-3.5 stroke-white flex-shrink-0"
+                            style={{
+                              transition:
+                                "transform 300ms cubic-bezier(0.22, 1, 0.36, 1)",
+                              transform: isSectionOpen
+                                ? "rotate(45deg)"
+                                : "rotate(0deg)",
+                            }}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            strokeWidth="1.5"
+                          >
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                          </svg>
+                        )}
+                      </button>
+                    ) : item.external ? (
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ fontWeight: 300 }}
+                        className="text-[14px] font-light text-white hover:opacity-80 transition-opacity block w-full leading-[38px]"
                       >
                         {item.label}
-                      </span>
-                      {/* Plus icon on group rows: rotates 45° on open */}
-                      <svg
-                        className="w-3.5 h-3.5 stroke-white flex-shrink-0"
-                        style={{
-                          transition:
-                            "transform 400ms cubic-bezier(0.22, 1, 0.36, 1)",
-                          transform: isSectionOpen
-                            ? "rotate(45deg)"
-                            : "rotate(0deg)",
-                        }}
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        strokeWidth="1.5"
-                      >
-                        <line x1="12" y1="5" x2="12" y2="19" />
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                      </svg>
-                    </button>
-                  ) : item.external ? (
-                    <a
-                      href={item.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ fontWeight: 300 }}
-                      className="text-[14px] font-light text-white hover:opacity-80 transition-opacity block w-full leading-[38px]"
-                    >
-                      {item.label}
-                    </a>
-                  ) : (
-                    <TransitionLink
-                      to={item.url}
-                      onClick={onClose}
-                      style={{ fontWeight: 300 }}
-                      className={`text-[14px] font-light text-white hover:opacity-80 transition-opacity block w-full leading-[38px] ${
-                        active
-                          ? "underline decoration-white decoration-[2px] underline-offset-4"
-                          : ""
-                      }`}
-                    >
-                      {item.label}
-                    </TransitionLink>
-                  )}
-                </div>
-
-                {/* Sub-links for Services / About Us */}
-                {hasChildren && !isMega && isSectionOpen && item.children && (
-                  <div className="pl-3 pb-1 space-y-0.5">
-                    {item.children.map((child) => (
+                      </a>
+                    ) : (
                       <TransitionLink
-                        key={child.url}
-                        to={child.url}
+                        to={item.url}
                         onClick={onClose}
                         style={{ fontWeight: 300 }}
-                        className={`block h-[22px] leading-[22px] text-[12px] font-light text-white hover:opacity-80 transition-opacity ${
-                          location.pathname === child.url
+                        className={`text-[14px] font-light text-white hover:opacity-80 transition-opacity block w-full leading-[38px] ${
+                          active
                             ? "underline decoration-white decoration-[2px] underline-offset-4"
                             : ""
                         }`}
                       >
-                        {child.label}
+                        {item.label}
                       </TransitionLink>
-                    ))}
+                    )}
                   </div>
-                )}
 
-                {/* Main Divisions: Tapping a division opens its overview page (with transition) and closes the menu */}
-                {isMega && isSectionOpen && item.divisions && (
-                  <div className="pl-3 pb-1 divide-y divide-white/10">
-                    {item.divisions.map((div) => {
-                      const divActive = location.pathname.startsWith(div.url);
-
-                      return (
-                        <div
-                          key={div.label}
-                          style={{ borderColor: "rgba(255, 255, 255, 0.10)" }}
-                          className="h-[26px] flex items-center"
+                  {/* Sub-links for Services / About Us (16px indent) */}
+                  {hasChildren && !isMega && isSectionOpen && item.children && (
+                    <div className="pl-4 pb-2 pt-1 space-y-1 border-l border-white/20 ml-1.5 my-1">
+                      {item.children.map((child) => (
+                        <TransitionLink
+                          key={child.url}
+                          to={child.url}
+                          onClick={onClose}
+                          style={{ fontWeight: 300 }}
+                          className={`block py-1 text-[12px] font-light text-white/90 hover:opacity-100 transition-opacity ${
+                            location.pathname === child.url ||
+                            (child.url !== "/" &&
+                              location.pathname.startsWith(child.url))
+                              ? "underline decoration-white decoration-[2px] underline-offset-4 font-medium text-white"
+                              : ""
+                          }`}
                         >
-                          <TransitionLink
-                            to={div.url}
-                            onClick={onClose}
-                            style={{ fontWeight: 300 }}
-                            className={`w-full flex items-center justify-between text-left text-[12px] font-light text-white hover:opacity-80 transition-opacity ${
-                              divActive
-                                ? "underline decoration-white decoration-[2px] underline-offset-4 font-light"
-                                : "font-light"
-                            }`}
+                          {child.label}
+                        </TransitionLink>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Main Divisions: Expandable accordion showing each division and ALL its proper sub-pages */}
+                  {isMega && isSectionOpen && item.divisions && (
+                    <div className="pl-2 pb-2 pt-1 divide-y divide-white/10">
+                      {item.divisions.map((div) => {
+                        const divActive = location.pathname.startsWith(div.url);
+                        const isDivOpen = openDivision === div.label;
+
+                        return (
+                          <div
+                            key={div.label}
+                            style={{ borderColor: "rgba(255, 255, 255, 0.10)" }}
+                            className="py-1"
                           >
-                            <span className="truncate pr-2">{div.label}</span>
-                            <span className="text-[11px] opacity-60 flex-shrink-0">&rarr;</span>
-                          </TransitionLink>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                            {/* Division Title & Toggle Button */}
+                            <div className="flex items-center justify-between min-h-[32px]">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setOpenDivision(isDivOpen ? null : div.label)
+                                }
+                                className="flex-1 flex items-center justify-between text-left text-[13px] text-white hover:opacity-80 transition-opacity cursor-pointer pr-2"
+                              >
+                                <span
+                                  className={
+                                    divActive
+                                      ? "underline decoration-white decoration-[2px] underline-offset-4 font-medium"
+                                      : "font-normal"
+                                  }
+                                >
+                                  {div.label}
+                                </span>
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setOpenDivision(isDivOpen ? null : div.label)
+                                }
+                                aria-label={`Toggle ${div.label} sub-pages`}
+                                className="w-7 h-7 flex items-center justify-center text-white/80 hover:text-white cursor-pointer flex-shrink-0"
+                              >
+                                <svg
+                                  className="w-3 h-3 stroke-white"
+                                  style={{
+                                    transition:
+                                      "transform 300ms cubic-bezier(0.22, 1, 0.36, 1)",
+                                    transform: isDivOpen
+                                      ? "rotate(45deg)"
+                                      : "rotate(0deg)",
+                                  }}
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  strokeWidth="1.5"
+                                >
+                                  <line x1="12" y1="5" x2="12" y2="19" />
+                                  <line x1="5" y1="12" x2="19" y2="12" />
+                                </svg>
+                              </button>
+                            </div>
+
+                            {/* Proper Sub-pages list */}
+                            {isDivOpen && div.children && (
+                              <div className="pl-3 pt-1 pb-2 space-y-1 border-l border-white/20 ml-1.5 mt-1">
+                                {/* Division Overview Link */}
+                                <TransitionLink
+                                  to={div.url}
+                                  onClick={onClose}
+                                  className="block py-1 text-[12px] font-medium text-white/95 hover:text-white transition-opacity"
+                                >
+                                  &bull; {div.label} Overview &rarr;
+                                </TransitionLink>
+
+                                {/* Individual Sub-pages */}
+                                {div.children.map((child) => {
+                                  const isChildActive =
+                                    location.pathname === child.url;
+
+                                  return (
+                                    <TransitionLink
+                                      key={child.url}
+                                      to={child.url}
+                                      onClick={onClose}
+                                      className={`block py-1 text-[12px] text-white/80 hover:text-white transition-opacity ${
+                                        isChildActive
+                                          ? "underline decoration-white decoration-[2px] underline-offset-4 text-white font-medium"
+                                          : "font-light"
+                                      }`}
+                                    >
+                                      {child.label}
+                                    </TransitionLink>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Compact Footer lockup inside Mobile Drawer */}
-        <div className="pt-2 space-y-2">
+        <div className="pt-2 space-y-2 flex-shrink-0">
           <div className="flex items-center space-x-2.5">
             <TransitionLink to="/" onClick={onClose} className="block">
               <img

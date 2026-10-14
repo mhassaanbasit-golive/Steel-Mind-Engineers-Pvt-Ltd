@@ -19,6 +19,10 @@ const Article = lazy(() => import("./pages/Article.tsx").then((m) => ({ default:
 const Profile = lazy(() => import("./pages/Profile.tsx").then((m) => ({ default: m.Profile })));
 const Sitemap = lazy(() => import("./pages/Sitemap.tsx").then((m) => ({ default: m.Sitemap })));
 const NotFound = lazy(() => import("./pages/NotFound.tsx").then((m) => ({ default: m.NotFound })));
+const Advantages = lazy(() => import("./pages/Advantages.tsx").then((m) => ({ default: m.Advantages })));
+const OneStepSolution = lazy(() => import("./pages/OneStepSolution.tsx").then((m) => ({ default: m.OneStepSolution })));
+const SmePolicy = lazy(() => import("./pages/SmePolicy.tsx").then((m) => ({ default: m.SmePolicy })));
+const FactoryTour = lazy(() => import("./pages/FactoryTour.tsx").then((m) => ({ default: m.FactoryTour })));
 
 const SuspenseFallback: React.FC = () => (
   <div
@@ -76,22 +80,68 @@ export const AppRoutes: React.FC = () => {
         }
       />
 
-      {/* About Us (Single merged page) */}
+      {/* 1. About Us (3-page split) */}
       <Route
-        path="/about-us/"
+        path="/about"
         element={
           <PageShell hasDarkHero={false}>
             <AboutUs />
           </PageShell>
         }
       />
-      <Route path="/about-us/introduction/" element={<Navigate to="/about-us/#introduction" replace />} />
-      <Route path="/about-us/vision/" element={<Navigate to="/about-us/#vision" replace />} />
-      <Route path="/about-us/mission/" element={<Navigate to="/about-us/#mission" replace />} />
-      <Route path="/about-us/core-values/" element={<Navigate to="/about-us/#core-values" replace />} />
-      <Route path="/about-us/sme-policy/" element={<Navigate to="/about-us/#sme-policy" replace />} />
-      <Route path="/about-us/committed-to/" element={<Navigate to="/about-us/#committed-to" replace />} />
-      <Route path="/about-us/factory-tour/" element={<Navigate to="/about-us/#factory-tour" replace />} />
+      <Route
+        path="/about/"
+        element={
+          <PageShell hasDarkHero={false}>
+            <AboutUs />
+          </PageShell>
+        }
+      />
+      <Route
+        path="/about/sme-policy"
+        element={
+          <PageShell hasDarkHero={false}>
+            <SmePolicy />
+          </PageShell>
+        }
+      />
+      <Route
+        path="/about/sme-policy/"
+        element={
+          <PageShell hasDarkHero={false}>
+            <SmePolicy />
+          </PageShell>
+        }
+      />
+      <Route
+        path="/about/factory"
+        element={
+          <PageShell hasDarkHero={false}>
+            <FactoryTour />
+          </PageShell>
+        }
+      />
+      <Route
+        path="/about/factory/"
+        element={
+          <PageShell hasDarkHero={false}>
+            <FactoryTour />
+          </PageShell>
+        }
+      />
+
+      {/* Backward-compatibility redirects for /about-us */}
+      <Route path="/about-us" element={<Navigate to="/about" replace />} />
+      <Route path="/about-us/" element={<Navigate to="/about" replace />} />
+      <Route path="/about-us/sme-policy" element={<Navigate to="/about/sme-policy" replace />} />
+      <Route path="/about-us/sme-policy/" element={<Navigate to="/about/sme-policy" replace />} />
+      <Route path="/about-us/factory-tour" element={<Navigate to="/about/factory" replace />} />
+      <Route path="/about-us/factory-tour/" element={<Navigate to="/about/factory" replace />} />
+      <Route path="/about-us/introduction/" element={<Navigate to="/about#introduction" replace />} />
+      <Route path="/about-us/vision/" element={<Navigate to="/about#vision" replace />} />
+      <Route path="/about-us/mission/" element={<Navigate to="/about#mission" replace />} />
+      <Route path="/about-us/core-values/" element={<Navigate to="/about#core-values" replace />} />
+      <Route path="/about-us/committed-to/" element={<Navigate to="/about/sme-policy#committed-to" replace />} />
 
       {/* 2. Projects Hub */}
       <Route
@@ -185,6 +235,36 @@ export const AppRoutes: React.FC = () => {
         }
       />
 
+      {/* Advantages (PEB Division Subpage) */}
+      <Route
+        path="/pre-engineered-buildings-pakistan/advantages/"
+        element={
+          <PageShell hasDarkHero={true}>
+            <Advantages
+              data={
+                CONTENT_BY_URL["/pre-engineered-buildings-pakistan/advantages/"]
+              }
+            />
+          </PageShell>
+        }
+      />
+
+      {/* One-Step Solution (PEB Division Subpage) */}
+      <Route
+        path="/pre-engineered-buildings-pakistan/one-step-solution/"
+        element={
+          <PageShell hasDarkHero={true}>
+            <OneStepSolution
+              data={
+                CONTENT_BY_URL[
+                  "/pre-engineered-buildings-pakistan/one-step-solution/"
+                ]
+              }
+            />
+          </PageShell>
+        }
+      />
+
       {/* 10. Content Pages (T1, T2, T2s, T3) */}
       {ALL_PAGES.map((page) => {
         // Skip pages handled specifically above or unpublished
@@ -195,6 +275,10 @@ export const AppRoutes: React.FC = () => {
           page.url === "/contact-us/" ||
           page.url === "/blog/" ||
           page.url === "/company-profile/" ||
+          page.url === "/pre-engineered-buildings-pakistan/advantages/" ||
+          page.url === "/pre-engineered-buildings-pakistan/one-step-solution/" ||
+          page.url === "/about" ||
+          page.url.startsWith("/about/") ||
           page.url.startsWith("/about-us/") ||
           page.url.startsWith("/projects/") // Projects handled above
         ) {

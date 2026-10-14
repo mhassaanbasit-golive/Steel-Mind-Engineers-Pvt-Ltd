@@ -133,7 +133,8 @@ function collectNavUrls(items: any[]): string[] {
 
 const navUrls = collectNavUrls(NAV);
 for (const nUrl of navUrls) {
-  if (!seenUrls.has(nUrl) && nUrl !== "/about-us/") {
+  const cleanUrl = nUrl.split("#")[0];
+  if (!seenUrls.has(cleanUrl) && !["/about-us/", "/about", "/about/", "/about/sme-policy", "/about/sme-policy/", "/about/factory", "/about/factory/"].includes(cleanUrl)) {
     console.error(`HARD FAIL: Nav route has no matching content file: ${nUrl}`);
     hasError = true;
   }

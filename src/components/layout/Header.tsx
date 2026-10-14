@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { SITE } from "../../data/site.ts";
 import { useScrollState } from "../../hooks/useScrollState.ts";
@@ -15,6 +15,28 @@ export const Header: React.FC<HeaderProps> = () => {
   const isHomepage = location.pathname === "/";
   const { scrolled } = useScrollState(80);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+
+  // Measure nav element offsetHeight, write it to :root as --nav-h (default 88px)
+  useEffect(() => {
+    const updateNavH = () => {
+      if (headerRef.current) {
+        const h = headerRef.current.offsetHeight;
+        document.documentElement.style.setProperty("--nav-h", `${h}px`);
+      }
+    };
+    updateNavH();
+    window.addEventListener("resize", updateNavH);
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined" && headerRef.current) {
+      ro = new ResizeObserver(updateNavH);
+      ro.observe(headerRef.current);
+    }
+    return () => {
+      window.removeEventListener("resize", updateNavH);
+      if (ro) ro.disconnect();
+    };
+  }, []);
 
   // On homepage: transparent for first 80px, then solid Royal Blue.
   // On every inner page or when menu is open: solid Royal Blue.
@@ -23,6 +45,7 @@ export const Header: React.FC<HeaderProps> = () => {
   return (
     <>
       <header
+        ref={headerRef}
         style={{
           backgroundColor: isSolidBlue ? "var(--blue)" : "transparent",
           borderColor: isSolidBlue ? "rgba(255, 255, 255, 0.12)" : "transparent",

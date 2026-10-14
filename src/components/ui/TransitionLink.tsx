@@ -46,7 +46,7 @@ export const TransitionLink: React.FC<TransitionLinkProps> = ({
     e.preventDefault();
     onClick?.(e);
 
-    // Link to current page: do nothing
+    // Link to current page: scroll to anchor if hash exists, else do nothing
     const currentClean = location.pathname.replace(/\/$/, "");
     const destinationClean = destination
       .split("?")[0]
@@ -54,6 +54,16 @@ export const TransitionLink: React.FC<TransitionLinkProps> = ({
       .replace(/\/$/, "");
 
     if (currentClean === destinationClean) {
+      if (destination.includes("#")) {
+        const hash = destination.split("#")[1];
+        if (hash) {
+          const el = document.getElementById(hash);
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth" });
+            window.history.pushState(null, "", `#${hash}`);
+          }
+        }
+      }
       return;
     }
 

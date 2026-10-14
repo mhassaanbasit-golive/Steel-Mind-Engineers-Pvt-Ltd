@@ -5,10 +5,10 @@ export const cl = (url: string, w: number) =>
 
 export const divisionImages = {
   "pre-engineered-buildings": {
-    hero: B + "v1791924846/Hero.png",
+    hero: B + "v1791942854/peb-hero.png",
     next: B + "v1791924839/peb-next-banner-image.jpg",
     list: [
-      { number: "01", title: "PEB Overview", image: B + "v1791924841/peb-overview_image.jpg" },
+      { number: "01", title: "PEB Overview", image: B + "v1791942268/peb-overview.jpg" },
       { number: "02", title: "Advantages", image: B + "v1791924838/peb-advantage.jpg" },
       { number: "03", title: "3D Concept", image: B + "v1791924837/peb-3d-concept.jpg" },
       { number: "04", title: "One-Step Solution", image: B + "v1791924840/peb-onestopsolution.jpg" },
@@ -61,8 +61,8 @@ export const divisionImages = {
       { number: "01", title: "Machine Frames", image: B + "v1791924829/csf-machine-frames.jpg" },
       { number: "02", title: "Storage Tanks", image: B + "v1791924832/csf-storage-tanks.jpg" },
       { number: "03", title: "Hoppers and Bins", image: B + "v1791924828/csf-hoppers-and-bins.jpg" },
-      { number: "04", title: "Steel Doors and Gates", image: "" }, // link coming
-      { number: "05", title: "Steel Stairs", image: "" }, // link coming
+      { number: "04", title: "Steel Doors and Gates", image: B + "v1791924832/csf-steeldoors-and-gates.jpg" },
+      { number: "05", title: "Steel Stairs", image: B + "v1791924831/csf-steel-stairs.jpg" },
     ],
   },
 };

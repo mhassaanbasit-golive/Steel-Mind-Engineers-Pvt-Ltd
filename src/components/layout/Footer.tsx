@@ -128,25 +128,25 @@ export const Footer: React.FC = () => {
               Company
             </span>
             <div className="flex flex-col space-y-2 text-[12px] text-white/85">
-              <Link to="/about-us/introduction/" className="hover:underline hover:text-white">
+              <Link to="/about" className="hover:underline hover:text-white">
                 About Us
               </Link>
-              <Link to="/about-us/vision/" className="hover:underline hover:text-white">
+              <Link to="/about#vision" className="hover:underline hover:text-white">
                 Vision
               </Link>
-              <Link to="/about-us/mission/" className="hover:underline hover:text-white">
+              <Link to="/about#mission" className="hover:underline hover:text-white">
                 Mission
               </Link>
-              <Link to="/about-us/core-values/" className="hover:underline hover:text-white">
+              <Link to="/about#core-values" className="hover:underline hover:text-white">
                 Our Core Values
               </Link>
-              <Link to="/about-us/sme-policy/" className="hover:underline hover:text-white">
+              <Link to="/about/sme-policy#sme-policy" className="hover:underline hover:text-white">
                 SME Policy
               </Link>
-              <Link to="/about-us/committed-to/" className="hover:underline hover:text-white">
+              <Link to="/about/sme-policy#committed-to" className="hover:underline hover:text-white">
                 Committed To
               </Link>
-              <Link to="/about-us/factory-tour/" className="hover:underline hover:text-white">
+              <Link to="/about/factory" className="hover:underline hover:text-white">
                 Factory Tour
               </Link>
               <Link to="/clients/" className="hover:underline hover:text-white">
