@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { TransitionLink } from "./TransitionLink.tsx";
 
 export interface BreadcrumbItem {
   label: string;
@@ -29,14 +29,14 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
               <span className={isWhite ? "text-white/50" : "text-[var(--grey)]/50"}>/</span>
             )}
             {item.href && !isLast ? (
-              <Link
+              <TransitionLink
                 to={item.href}
                 className={`transition-colors ${
                   isWhite ? "text-white/80 hover:text-white" : "text-[var(--grey)] hover:text-[var(--ink)]"
                 }`}
               >
                 {item.label}
-              </Link>
+              </TransitionLink>
             ) : (
               <span className={`font-medium ${isWhite ? "text-white" : "text-[var(--ink)]"}`}>
                 {item.label}

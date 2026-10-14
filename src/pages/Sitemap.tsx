@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "../components/ui/TransitionLink.tsx";
 import { NAV } from "../data/nav.ts";
 import { HeroBand } from "../components/ui/HeroBand.tsx";
 import { NextBand } from "../components/ui/NextBand.tsx";

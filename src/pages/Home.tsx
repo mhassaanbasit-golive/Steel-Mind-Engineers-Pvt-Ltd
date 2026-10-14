@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "../components/ui/TransitionLink.tsx";
 import pageData from "../content/generated/page-01.json";
 import { SITE } from "../data/site.ts";
 import { A } from "../data/assets.ts";

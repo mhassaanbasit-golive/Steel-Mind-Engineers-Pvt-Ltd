@@ -38,26 +38,18 @@ export const HubFaq: React.FC<HubFaqProps> = ({ items }) => {
     }
 
     const nextEl = contentRefs.current[idx];
-    const textEl = innerTextRefs.current[idx];
     if (nextEl) {
-      gsap.to(nextEl, { height: "auto", duration: 0.5, ease: "expo.out" });
-    }
-    if (textEl) {
-      gsap.fromTo(
-        textEl,
-        { opacity: 0, y: 8 },
-        { opacity: 1, y: 0, duration: 0.4, delay: 0.1, ease: "expo.out" }
-      );
+      gsap.to(nextEl, { height: "auto", duration: 0.4, ease: "expo.out" });
     }
 
     setOpenIndex(idx);
   };
 
   return (
-    <section className="w-full bg-[#FFFFFF] py-[96px] lg:py-[120px] px-[20px] lg:px-[40px] border-b border-[var(--line)]">
+    <section className="w-full bg-[#FFFFFF] py-[80px] lg:py-[112px] px-[20px] lg:px-[40px] border-b border-[#E5E5E5]">
       <div className="max-w-[1340px] mx-auto">
-        {/* Heading */}
-        <h2 className="text-[28px] lg:text-[44px] font-bold text-[var(--ink)] tracking-[-0.02em] mb-10">
+        {/* H2 Heading */}
+        <h2 className="text-[22px] lg:text-[48px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] mb-10">
           Frequently Asked Questions
         </h2>
 
@@ -125,12 +117,7 @@ export const HubFaq: React.FC<HubFaqProps> = ({ items }) => {
                       paddingBottom: "24px",
                     }}
                   >
-                    <p
-                      className="text-[14px] lg:text-[15px] leading-[1.7] max-w-[800px]"
-                      style={{
-                        color: "var(--grey)",
-                      }}
-                    >
+                    <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]">
                       {item.a}
                     </p>
                   </div>

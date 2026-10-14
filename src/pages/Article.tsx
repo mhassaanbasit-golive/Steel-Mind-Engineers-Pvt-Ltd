@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "../components/ui/TransitionLink.tsx";
 import { ContentData, ContentBlock } from "../content/types.ts";
 import { HeroBand } from "../components/ui/HeroBand.tsx";
 import { Accordion } from "../components/ui/Accordion.tsx";
@@ -68,10 +68,10 @@ export const Article: React.FC<ArticleProps> = ({ data }) => {
         subtitle={data.quickAnswer}
       />
 
-      {/* Reading Column: max-w 480px mobile / 560px desktop */}
-      <div className="max-w-[480px] lg:max-w-[560px] mx-auto px-[var(--pad-x)] pt-10 pb-12">
+      {/* Reading Column: max-w 480px mobile / 600px desktop */}
+      <div className="max-w-[480px] lg:max-w-[600px] mx-auto px-[var(--pad-x)] pt-10 pb-12">
         {/* Body Blocks */}
-        <div className="space-y-6 text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)]">
+        <div className="space-y-6 text-[14px] lg:text-[15px] leading-[1.7] text-[#6B7280]">
           {data.blocks.map((block: ContentBlock, idx: number) => {
             if (block.type === "h2") {
               const id = (block.title || "").toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -79,7 +79,7 @@ export const Article: React.FC<ArticleProps> = ({ data }) => {
                 <h2
                   key={idx}
                   id={id}
-                  className="text-[16px] lg:text-[24px] font-semibold text-[var(--ink)] pt-6 leading-[1.2] text-left"
+                  className="text-[22px] lg:text-[48px] font-bold text-[#0A0A0A] pt-6 leading-[1.15] tracking-[-0.02em] text-left"
                 >
                   {block.title}
                 </h2>
@@ -87,7 +87,7 @@ export const Article: React.FC<ArticleProps> = ({ data }) => {
             }
             if (block.type === "p") {
               return (
-                <p key={idx} className="text-left">
+                <p key={idx} className="text-left text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280]">
                   {block.text}
                 </p>
               );
@@ -99,9 +99,9 @@ export const Article: React.FC<ArticleProps> = ({ data }) => {
 
       {/* FAQ */}
       {data.faq && data.faq.length > 0 && (
-        <section className="py-12 lg:py-16 bg-white border-t border-[var(--line)]">
-          <div className="max-w-[480px] lg:max-w-[560px] mx-auto px-[var(--pad-x)]">
-            <h2 className="text-[16px] lg:text-[24px] font-semibold text-[var(--ink)] leading-[1.2] mb-6" data-split="">
+        <section className="py-12 lg:py-16 bg-white border-t border-[#E5E5E5]">
+          <div className="max-w-[480px] lg:max-w-[600px] mx-auto px-[var(--pad-x)]">
+            <h2 className="text-[22px] lg:text-[48px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] mb-6">
               Frequently Asked Questions
             </h2>
             <Accordion items={data.faq} />

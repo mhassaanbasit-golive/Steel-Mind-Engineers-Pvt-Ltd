@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState, Suspense, lazy } from "react";
 import { useLocation } from "react-router-dom";
 import { SkipLink } from "./SkipLink.tsx";
-import { Loader } from "./Loader.tsx";
 import { Header } from "./Header.tsx";
 import { Footer } from "./Footer.tsx";
 import { FloatingTools } from "./FloatingTools.tsx";
-import { RouteTransition } from "./RouteTransition.tsx";
+import { BackButton } from "../ui/BackButton.tsx";
 import { initMotion } from "../../lib/motion.ts";
 
 const ChatOverlay = lazy(() =>
@@ -38,7 +37,6 @@ export const PageShell: React.FC<PageShellProps> = ({
     let revertMotion: (() => void) | undefined;
     let r1: number;
     let r2: number;
-    let r3: number;
 
     r1 = requestAnimationFrame(() => {
       r2 = requestAnimationFrame(() => {
@@ -58,8 +56,8 @@ export const PageShell: React.FC<PageShellProps> = ({
   return (
     <div className="relative min-h-screen flex flex-col bg-white text-[var(--ink)] overflow-x-clip">
       <SkipLink />
-      <Loader />
       <Header hasDarkHero={isHomepage} />
+      {!isHomepage && <BackButton />}
 
       <main
         id="main"
@@ -79,8 +77,6 @@ export const PageShell: React.FC<PageShellProps> = ({
           <ChatOverlay />
         </Suspense>
       )}
-
-      <RouteTransition />
     </div>
   );
 };

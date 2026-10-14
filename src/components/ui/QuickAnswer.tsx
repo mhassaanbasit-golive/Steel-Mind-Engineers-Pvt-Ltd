@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { TransitionLink } from "./TransitionLink.tsx";
 import { stopScroll, startScroll } from "../../lib/lenis.ts";
 
 export interface QuickAnswerProps {
@@ -171,13 +171,13 @@ export const QuickAnswer: React.FC<QuickAnswerProps> = ({
                   }
                   return (
                     <li key={idx}>
-                      <Link
+                      <TransitionLink
                         to={item.url}
                         onClick={() => setIsOpen(false)}
                         className="text-[var(--blue)] hover:underline font-medium"
                       >
                         {item.title}
-                      </Link>
+                      </TransitionLink>
                     </li>
                   );
                 })}

@@ -1,17 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { Img, ImgProps } from "./Img.tsx";
+import { TransitionLink } from "./TransitionLink.tsx";
 
 export interface CardProps {
   imageSrc?: string;
   imageAlt?: string;
-  imageRatio?: ImgProps["ratio"];
-  label?: string;
+  imageRatio?: "4/3" | "16/9" | string;
   title: string;
   description?: string;
   href?: string;
   linkText?: string;
-  indexBadge?: string;
   className?: string;
 }
 
@@ -19,69 +16,60 @@ export const Card: React.FC<CardProps> = ({
   imageSrc,
   imageAlt = "",
   imageRatio = "4/3",
-  label,
   title,
   description,
   href,
   linkText,
-  indexBadge,
   className = "",
 }) => {
-  const content = (
-    <div
-      className={`group relative flex flex-col bg-white border border-[var(--line)] p-0 rounded-none cursor-pointer overflow-hidden transition-all duration-400 ease-[cubic-bezier(0.23,1,0.32,1)] hover:shadow-[0_12px_32px_rgba(30,58,138,0.10)] hover:-translate-y-[2px] hover:border-[rgba(30,58,138,0.2)] ${className}`}
-      data-reveal=""
-    >
-      {imageSrc && (
-        <div className="relative w-full overflow-hidden bg-white">
-          {indexBadge && (
-            <span className="absolute top-4 left-4 z-10 text-[9px] uppercase font-semibold text-white bg-[var(--blue)] px-2 py-0.5">
-              {indexBadge}
-            </span>
-          )}
-          <div className="transition-transform duration-500 ease-out group-hover:scale-[1.03]">
-            <Img src={imageSrc} alt={imageAlt || title} ratio={imageRatio} />
-          </div>
+  const is16by9 = imageRatio === "16/9";
 
-          {/* Blue arrow badge (bottom-left of image) fades in and slides up 4px */}
-          <div className="absolute bottom-3 left-3 w-7 h-7 bg-[var(--blue)] text-white flex items-center justify-center opacity-0 translate-y-1 transition-all duration-400 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:opacity-100 group-hover:translate-y-0 z-10 shadow-sm">
-            <svg
-              className="w-3.5 h-3.5 stroke-current"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2.5"
-            >
-              <line x1="7" y1="17" x2="17" y2="7" />
-              <polyline points="7 7 17 7 17 17" />
-            </svg>
-          </div>
+  const cardInner = (
+    <div
+      className={`group w-full bg-[#FFFFFF] border-0 rounded-none overflow-hidden transition-[box-shadow,transform] duration-[400ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:shadow-[0_16px_48px_rgba(30,58,138,0.12)] hover:-translate-y-1 ${className}`}
+    >
+      {/* Edge-to-edge Image at top */}
+      {imageSrc && (
+        <div
+          className={`w-full overflow-hidden bg-[#FFFFFF] ${
+            is16by9 ? "aspect-[16/9]" : "aspect-[4/3]"
+          }`}
+        >
+          <img
+            src={imageSrc}
+            alt={imageAlt || title}
+            className="w-full h-full object-cover object-center transition-transform duration-[600ms] ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.04]"
+            loading="lazy"
+          />
         </div>
       )}
 
-      <div className="p-6 flex flex-col flex-1">
-        <h3 className="text-[14px] lg:text-[17px] font-semibold leading-[1.25] text-[var(--ink)] mb-2">
+      {/* Body below image: Padding 24px */}
+      <div className="p-[24px] flex flex-col flex-1 text-left bg-[#FFFFFF]">
+        {/* Above title: a 40px wide, 2px tall #1E3A8A line. Margin-bottom 16px */}
+        <div className="w-[40px] h-[2px] bg-[#1E3A8A] mb-[16px]" />
+
+        {/* Title: 16px weight 600, #0A0A0A, line-height 1.3, letter-spacing -0.01em. Margin-bottom 8px */}
+        <h3 className="text-[16px] font-semibold text-[#0A0A0A] leading-[1.3] tracking-[-0.01em] mb-[8px]">
           {title}
         </h3>
+
+        {/* Description: 13px, #6B7280, line-height 1.6, max 3 lines. Margin-bottom 12px */}
         {description && (
-          <p className="text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)] mb-4 line-clamp-3">
+          <p className="text-[13px] text-[#6B7280] leading-[1.6] line-clamp-3 mb-[12px]">
             {description}
           </p>
         )}
+
+        {/* Optional link: 13px weight 600, #1E3A8A, underline on hover */}
         {linkText && (
-          <div className="mt-auto pt-2 flex items-center justify-between text-[10px] uppercase tracking-[0.06em] font-semibold text-[var(--blue)]">
-            <span className="relative inline-block">
+          <div className="mt-auto pt-1">
+            <span className="text-[13px] font-semibold text-[#1E3A8A] group-hover:underline inline-flex items-center gap-1">
               {linkText}
-              <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[var(--blue)] transition-all duration-300 group-hover:w-full" />
+              <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
+                &rarr;
+              </span>
             </span>
-            <svg
-              className="w-4 h-4 stroke-current text-[var(--blue)] transition-transform duration-300 group-hover:translate-x-1"
-              viewBox="0 0 24 24"
-              fill="none"
-              strokeWidth="2"
-            >
-              <line x1="5" y1="12" x2="19" y2="12" />
-              <polyline points="12 5 19 12 12 19" />
-            </svg>
           </div>
         )}
       </div>
@@ -91,17 +79,22 @@ export const Card: React.FC<CardProps> = ({
   if (href) {
     if (href.startsWith("http")) {
       return (
-        <a href={href} target="_blank" rel="noopener noreferrer" className="block">
-          {content}
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block w-full no-underline"
+        >
+          {cardInner}
         </a>
       );
     }
     return (
-      <Link to={href} className="block">
-        {content}
-      </Link>
+      <TransitionLink to={href} className="block w-full no-underline">
+        {cardInner}
+      </TransitionLink>
     );
   }
 
-  return content;
+  return cardInner;
 };

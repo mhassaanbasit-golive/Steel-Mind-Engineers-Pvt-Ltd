@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { TransitionLink } from "./TransitionLink.tsx";
 import { A } from "../../data/assets.ts";
 
 const ROW1 = [
@@ -76,7 +76,7 @@ export const Marquee: React.FC<{ className?: string }> = ({
         </h2>
       </div>
 
-      <Link
+      <TransitionLink
         to="/clients/"
         aria-label="Client logos"
         className="block space-y-6 cursor-pointer focus-visible:outline-none pointer-events-auto overflow-hidden"
@@ -122,7 +122,7 @@ export const Marquee: React.FC<{ className?: string }> = ({
             {desktopTrack2.map((name, i) => renderLogo(name, `d2-${i}`))}
           </div>
         </div>
-      </Link>
+      </TransitionLink>
 
       <style>{`
         @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }

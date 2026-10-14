@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "../components/ui/TransitionLink.tsx";
 import { SITE } from "../data/site.ts";
 import { Canvas } from "../components/ui/Canvas.tsx";
 import { Button } from "../components/ui/Button.tsx";
 import { NextBand } from "../components/ui/NextBand.tsx";
 import { lenis } from "../lib/lenis.ts";
 import { gsap } from "../lib/gsap.ts";
+import { HeroBand } from "../components/ui/HeroBand.tsx";
+import { A } from "../data/assets.ts";
 import { useReducedMotion } from "../hooks/useReducedMotion.ts";
 
 // Content Files for Pages 2 through 8
@@ -16,6 +18,27 @@ import page5 from "../content/generated/page-05.json";
 import page6 from "../content/generated/page-06.json";
 import page7 from "../content/generated/page-07.json";
 import page8 from "../content/generated/page-08.json";
+
+const STICKY_IMAGES = [
+  {
+    id: "introduction",
+    src: A.team,
+    alt: "Steel Mind Engineers Leadership and Engineering Team",
+    title: "Introduction",
+  },
+  {
+    id: "vision",
+    src: A.project.haierCraneMezzanine[0],
+    alt: "Modern Industrial Pre-Engineered Building Structure",
+    title: "Vision",
+  },
+  {
+    id: "mission",
+    src: A.service.fabrication,
+    alt: "Precision Steel Fabrication, Cutting, and Welding Quality Inspection",
+    title: "Mission",
+  },
+];
 
 interface SectionInfo {
   id: string;
@@ -35,8 +58,7 @@ const SECTIONS: SectionInfo[] = [
 
 export const AboutUs: React.FC = () => {
   const reducedMotion = useReducedMotion();
-  const [activeSectionIndex, setActiveSectionIndex] = useState(0);
-  const [railVisible, setRailVisible] = useState(false);
+  const [activeZoneBIndex, setActiveZoneBIndex] = useState(0);
 
   const [isMobile, setIsMobile] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
@@ -70,49 +92,53 @@ export const AboutUs: React.FC = () => {
     }
   }, []);
 
-  // Scroll Tracking for Chapter Rail & Sticky Image using IntersectionObserver
+  // Track scroll position to seamlessly switch desktop card images at end of sections
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const idx = SECTIONS.findIndex((s) => s.id === entry.target.id);
-            if (idx !== -1) {
-              setActiveSectionIndex(idx);
-              if (idx >= 0 && idx < 6) {
-                setRailVisible(true);
-              } else {
-                setRailVisible(false);
-              }
-            }
-          }
-        });
-      },
-      {
-        rootMargin: "-40% 0px -40% 0px",
-        threshold: 0,
-      }
-    );
+    let ticking = false;
 
-    SECTIONS.forEach((s) => {
-      const el = document.getElementById(s.id);
-      if (el) observer.observe(el);
-    });
+    const updateActiveImage = () => {
+      const visionEl = document.getElementById("vision");
+      const missionEl = document.getElementById("mission");
+      if (!visionEl || !missionEl) return;
 
-    return () => observer.disconnect();
-  }, []);
+      // Trigger point: when next section reaches upper half of viewport (50%)
+      const triggerPoint = window.innerHeight * 0.5;
+      const visionTop = visionEl.getBoundingClientRect().top;
+      const missionTop = missionEl.getBoundingClientRect().top;
 
-  // Smooth scroll handler for chapter rail dots
-  const handleDotClick = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      if (lenis) {
-        lenis.scrollTo(el, { offset: -32, duration: 1.2 });
+      let nextIndex = 0;
+      if (missionTop <= triggerPoint) {
+        nextIndex = 2; // Section 3: Mission
+      } else if (visionTop <= triggerPoint) {
+        nextIndex = 1; // Section 2: Vision
       } else {
-        el.scrollIntoView({ behavior: "smooth" });
+        nextIndex = 0; // Section 1: Introduction
       }
-    }
-  };
+
+      setActiveZoneBIndex((prev) => (prev !== nextIndex ? nextIndex : prev));
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(updateActiveImage);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    lenis?.on("scroll", onScroll);
+
+    // Initial check on mount
+    updateActiveImage();
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      lenis?.off("scroll", onScroll);
+    };
+  }, []);
 
   // Factory Tour timeline line animation via scaleY scrub
   const timelineLineRef = useRef<HTMLDivElement>(null);
@@ -231,86 +257,43 @@ export const AboutUs: React.FC = () => {
 
   return (
     <div className="relative w-full bg-white text-[var(--ink)]">
-      {/* ========================================================= */}
-      {/* ZONE A — CHAPTER RAIL (THE SPINE) */}
-      {/* ========================================================= */}
-      <nav
-        aria-label="Page chapters"
-        style={{
-          transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)",
-        }}
-        className={`fixed left-5 top-1/2 -translate-y-1/2 z-50 w-10 hidden lg:flex flex-col items-center pointer-events-none transition-opacity ${
-          railVisible
-            ? "opacity-100 !pointer-events-auto duration-600"
-            : "opacity-0 !duration-400"
-        }`}
-      >
-        <div className="flex flex-col items-center text-center select-none min-h-[42px] mb-4">
-          <span className="text-[9px] font-mono font-semibold uppercase tracking-[0.1em] text-[var(--blue)] tabular-nums transition-opacity duration-400">
-            {SECTIONS[activeSectionIndex]?.num || "01"}
-          </span>
-          <span className="text-[9px] uppercase font-medium text-[var(--ink)] max-w-[120px] leading-tight mt-0.5 whitespace-nowrap transition-opacity duration-400">
-            {SECTIONS[activeSectionIndex]?.label || "Introduction"}
-          </span>
-        </div>
-
-        <div className="flex flex-col items-center space-y-8">
-          {SECTIONS.map((sec, idx) => {
-            const isActive = idx === activeSectionIndex;
-            const isPassed = idx < activeSectionIndex;
-            return (
-              <button
-                key={sec.id}
-                type="button"
-                onClick={() => handleDotClick(sec.id)}
-                aria-label={`Jump to ${sec.label}`}
-                className="group relative flex items-center justify-center p-1 cursor-pointer focus:outline-none"
-              >
-                <span
-                  style={{
-                    transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)",
-                  }}
-                  className={`w-[6px] h-[6px] rounded-full transition-all duration-400 ${
-                    isActive
-                      ? "bg-[var(--blue)] border-0 scale-110"
-                      : isPassed
-                      ? "bg-[var(--blue)]/40 border-0"
-                      : "bg-transparent border border-[var(--line)]"
-                  }`}
-                />
-              </button>
-            );
-          })}
-        </div>
-      </nav>
+      {/* Hero Band — Section 3 */}
+      <HeroBand
+        imageSrc={A.about}
+        imageAlt="About Steel Mind Engineers"
+        h1={page2.h1}
+        subtitle={page2.quickAnswer}
+      />
 
       {/* ========================================================= */}
       {/* ZONE B — STICKY IMAGE COLUMN (INTRODUCTION, VISION, MISSION) */}
       {/* ========================================================= */}
-      <section className="w-full bg-white pt-[calc(var(--header-h)+32px)] pb-[72px] lg:pb-[112px]">
+      <section className="w-full bg-white pt-12 lg:pt-16 pb-[72px] lg:pb-[112px]">
         <div className="max-w-[1340px] mx-auto px-5 lg:px-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
             {/* Left Column Scrolls */}
             <div className="w-full">
-              {/* --- 1. INTRODUCTION BLOCK (2.3: Eyebrow "INTRODUCTION" removed) --- */}
-              <div id="introduction" className="w-full">
+              {/* --- 1. INTRODUCTION BLOCK --- */}
+              <div id="introduction" className="w-full pb-16 lg:pb-32 lg:min-h-[460px] flex flex-col justify-center">
                 {isMobile && (
                   <div className="mb-8">
-                    <Canvas slot="about.introduction.main" ratio="4/5" />
+                    <img
+                      src={STICKY_IMAGES[0].src}
+                      alt={STICKY_IMAGES[0].alt}
+                      className="w-full aspect-[4/5] object-cover border border-[#E5E5E5]"
+                    />
                   </div>
                 )}
 
-                <h1 className="text-[20px] lg:text-[32px] font-semibold tracking-[-0.015em] text-[var(--ink)] leading-[1.15]">
+                <h2 className="text-[22px] lg:text-[48px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em]">
                   {page2.h1}
-                </h1>
+                </h2>
 
-                <div className="w-[40px] h-[1px] bg-[var(--blue)] mt-4" />
-
-                <p className="text-[12px] lg:text-[13px] text-[var(--ink)] font-medium max-w-[520px] mt-5 leading-[1.65]">
+                <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px] mt-5">
                   {page2.quickAnswer}
                 </p>
 
-                <div className="mt-4 space-y-4 text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)] max-w-[520px]">
+                <div className="mt-4 space-y-4 text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]">
                   <p>{p2Paragraph1}</p>
                   <p>{p2Paragraph2}</p>
                 </div>
@@ -326,51 +309,61 @@ export const AboutUs: React.FC = () => {
 
                   <Link
                     to="/contact-us/"
-                    className="text-[10px] uppercase tracking-[0.06em] font-semibold text-[var(--blue)] hover:underline inline-flex items-center gap-1.5 ml-3"
+                    className="text-[13px] font-semibold text-[#1E3A8A] hover:underline inline-flex items-center gap-1.5 ml-3"
                   >
                     Get in Touch &rarr;
                   </Link>
                 </div>
               </div>
 
-              <div className="w-[40px] h-[1px] bg-[var(--line)] my-12" />
+              <div className="w-[40px] h-[1px] bg-[#E5E5E5] my-6 lg:my-10" />
 
-              {/* --- 2. VISION BLOCK (2.3: Eyebrow "VISION" removed) --- */}
-              <div id="vision" className="w-full pt-12 lg:pt-20">
+              {/* --- 2. VISION BLOCK --- */}
+              <div id="vision" className="w-full pt-8 lg:pt-16 pb-16 lg:pb-32 lg:min-h-[460px] flex flex-col justify-center">
                 {isMobile && (
                   <div className="mb-8">
-                    <Canvas slot="about.vision.hero" ratio="4/5" />
+                    <img
+                      src={STICKY_IMAGES[1].src}
+                      alt={STICKY_IMAGES[1].alt}
+                      className="w-full aspect-[4/5] object-cover border border-[#E5E5E5]"
+                    />
                   </div>
                 )}
 
-                <h2 className="text-[16px] lg:text-[24px] font-semibold tracking-[-0.015em] text-[var(--ink)] leading-[1.2]">
+                <h2 className="text-[22px] lg:text-[48px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em]">
                   {page3.h1}
                 </h2>
 
-                <div className="w-[40px] h-[1px] bg-[var(--blue)] mt-4" />
-
-                <p className="text-[12px] lg:text-[13px] text-[var(--ink)] font-medium max-w-[520px] mt-5 leading-[1.65]">
+                <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px] mt-5">
                   {page3.quickAnswer}
                 </p>
 
-                <div className="mt-4 space-y-4 text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)] max-w-[520px]">
+                <div className="mt-4 space-y-4 text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]">
                   {p3Paragraphs.map((pText, i) => (
                     <p key={i}>{pText}</p>
                   ))}
                 </div>
               </div>
 
-              <div className="w-[40px] h-[1px] bg-[var(--line)] my-12" />
+              <div className="w-[40px] h-[1px] bg-[#E5E5E5] my-6 lg:my-10" />
 
-              {/* --- 3. MISSION BLOCK (2.3: Eyebrow "MISSION" removed) --- */}
-              <div id="mission" className="w-full pt-12 lg:pt-20">
-                <h2 className="text-[16px] lg:text-[24px] font-semibold tracking-[-0.015em] text-[var(--ink)] leading-[1.2]">
+              {/* --- 3. MISSION BLOCK --- */}
+              <div id="mission" className="w-full pt-8 lg:pt-16 pb-12 lg:min-h-[460px] flex flex-col justify-center">
+                {isMobile && (
+                  <div className="mb-8">
+                    <img
+                      src={STICKY_IMAGES[2].src}
+                      alt={STICKY_IMAGES[2].alt}
+                      className="w-full aspect-[4/5] object-cover border border-[#E5E5E5]"
+                    />
+                  </div>
+                )}
+
+                <h2 className="text-[22px] lg:text-[48px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em]">
                   {page4.h1}
                 </h2>
 
-                <div className="w-[40px] h-[1px] bg-[var(--blue)] mt-4" />
-
-                <p className="text-[12px] lg:text-[13px] text-[var(--ink)] font-medium max-w-[520px] mt-5 leading-[1.65]">
+                <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px] mt-5">
                   {page4.quickAnswer}
                 </p>
 
@@ -379,13 +372,13 @@ export const AboutUs: React.FC = () => {
                     const numStr = String(idx + 1).padStart(2, "0");
                     return (
                       <div key={def.name} className="space-y-1">
-                        <div className="text-[12px] font-bold text-[var(--blue)] font-mono leading-none">
+                        <div className="text-[16px] font-bold text-[#1E3A8A] tabular-nums tracking-[0.06em]">
                           {numStr}
                         </div>
-                        <h3 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] leading-tight">
+                        <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
                           {def.name}
                         </h3>
-                        <p className="text-[12px] lg:text-[13px] text-[var(--grey)] leading-[1.65] max-w-[480px]">
+                        <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]">
                           {def.text}
                         </p>
                       </div>
@@ -397,69 +390,26 @@ export const AboutUs: React.FC = () => {
 
             {/* Right Column: Sticky Shared Container (Desktop Only) */}
             {!isMobile && (
-              <div className="hidden lg:block sticky top-[96px] h-[calc(100vh-192px)] w-full overflow-hidden border border-[var(--line)] bg-white">
-                <div
-                  style={{
-                    transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)",
-                  }}
-                  className={`absolute inset-0 w-full h-full transition-opacity duration-800 ${
-                    activeSectionIndex === 0
-                      ? "opacity-100 z-10"
-                      : "opacity-0 pointer-events-none z-0"
-                  }`}
-                >
-                  <Canvas
-                    slot="about.introduction.main"
-                    ratio="4/5"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                <div
-                  style={{
-                    transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)",
-                  }}
-                  className={`absolute inset-0 w-full h-full transition-opacity duration-800 ${
-                    activeSectionIndex === 1
-                      ? "opacity-100 z-10"
-                      : "opacity-0 pointer-events-none z-0"
-                  }`}
-                >
-                  <Canvas
-                    slot="about.vision.hero"
-                    ratio="4/5"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                <div
-                  style={{
-                    transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)",
-                  }}
-                  className={`absolute inset-0 w-full h-full transition-opacity duration-800 ${
-                    activeSectionIndex >= 2
-                      ? "opacity-100 z-10"
-                      : "opacity-0 pointer-events-none z-0"
-                  }`}
-                >
+              <div className="hidden lg:block sticky top-[96px] h-[calc(100vh-192px)] w-full overflow-hidden border border-[#E5E5E5] bg-[#0A0A0A]">
+                {STICKY_IMAGES.map((img, idx) => (
                   <div
-                    data-canvas=""
-                    data-slot="about.introduction.main"
-                    data-canvas-slot="about.introduction.main"
-                    data-canvas-ratio="4/5"
-                    aria-hidden="true"
-                    className="w-full h-full border border-dashed border-[var(--line)] bg-white flex flex-col items-center justify-center p-3 text-center select-none"
+                    key={img.title}
+                    style={{
+                      transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
+                    }}
+                    className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${
+                      activeZoneBIndex === idx
+                        ? "opacity-100 z-10"
+                        : "opacity-0 pointer-events-none z-0"
+                    }`}
                   >
-                    <div className="flex flex-col items-center justify-center space-y-0.5">
-                      <span className="text-[9px] uppercase tracking-[0.1em] text-[var(--grey)] font-medium break-all px-1">
-                        about.introduction.main (cropped top)
-                      </span>
-                      <span className="text-[9px] uppercase tracking-[0.08em] text-[var(--grey)]/70">
-                        4/5
-                      </span>
-                    </div>
+                    <img
+                      src={img.src}
+                      alt={img.alt}
+                      className="w-full h-full object-cover object-center"
+                    />
                   </div>
-                </div>
+                ))}
               </div>
             )}
           </div>
@@ -476,14 +426,13 @@ export const AboutUs: React.FC = () => {
         className="w-full bg-[var(--blue)] text-white py-[72px] lg:py-[112px]"
       >
         <div className="max-w-[1340px] mx-auto px-5 lg:px-10">
-          {/* 2.3: Eyebrow "OUR CORE VALUES" removed */}
-          <h2 className="text-[16px] lg:text-[24px] font-semibold tracking-[-0.015em] text-white leading-[1.2]">
+          <h2 className="text-[22px] lg:text-[48px] font-bold text-white leading-[1.15] tracking-[-0.02em]">
             {page5.h1}
           </h2>
 
           <div className="w-[40px] h-[1px] bg-white/40 mt-4" />
 
-          <p className="text-[12px] lg:text-[13px] text-white/90 font-medium max-w-[560px] mt-5 leading-[1.65]">
+          <p className="text-[14px] lg:text-[15px] text-white/90 font-normal leading-[1.7] max-w-[600px] mt-5">
             {page5.quickAnswer}
           </p>
 
@@ -491,14 +440,14 @@ export const AboutUs: React.FC = () => {
             {p5Cards.map((card) => (
               <div key={card.num} className="flex flex-col">
                 <div className="w-[40px] h-[1px] bg-white/40 mb-3" />
-                <div className="text-[32px] lg:text-[48px] font-bold text-white font-sans leading-none">
+                <div className="text-[16px] font-bold text-white tabular-nums tracking-[0.06em]">
                   {card.num}
                 </div>
                 <div className="w-full h-[1px] bg-white/20 mt-4" />
-                <h3 className="text-[14px] lg:text-[17px] font-semibold text-white mt-4 leading-snug">
+                <h3 className="text-[17px] lg:text-[22px] font-semibold text-white mt-4 leading-[1.25] tracking-[-0.01em]">
                   {card.title}
                 </h3>
-                <p className="text-[12px] lg:text-[13px] text-white/80 leading-[1.65] max-w-[360px] mt-2">
+                <p className="text-[14px] lg:text-[15px] text-white/80 leading-[1.7] max-w-[600px] mt-2">
                   {card.desc}
                 </p>
               </div>
@@ -513,30 +462,29 @@ export const AboutUs: React.FC = () => {
         className="w-full bg-white text-[var(--ink)] py-[72px] lg:py-[112px]"
       >
         <div className="max-w-[1340px] mx-auto px-5 lg:px-10">
-          {/* 2.3: Eyebrow "SME POLICY" removed */}
-          <h2 className="text-[16px] lg:text-[24px] font-semibold tracking-[-0.015em] text-[var(--ink)] leading-[1.2]">
+          <h2 className="text-[22px] lg:text-[48px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em]">
             {page6.h1}
           </h2>
 
-          <div className="w-[40px] h-[1px] bg-[var(--blue)] mt-4" />
+          <div className="w-[40px] h-[1px] bg-[#1E3A8A] mt-4" />
 
-          <p className="text-[12px] lg:text-[13px] text-[var(--ink)] font-medium max-w-[560px] mt-5 leading-[1.65]">
+          <p className="text-[14px] lg:text-[15px] text-[#6B7280] font-normal max-w-[600px] mt-5 leading-[1.7]">
             {page6.quickAnswer}
           </p>
 
-          <div className="divide-y divide-[var(--line)] border-y border-[var(--line)] mt-12">
+          <div className="divide-y divide-[#E5E5E5] border-y border-[#E5E5E5] mt-12">
             {p6Strips.map((strip) => (
               <div
                 key={strip.num}
                 className="grid grid-cols-1 lg:grid-cols-[64px_1fr_1.8fr] gap-4 lg:gap-8 py-6 px-3 items-baseline"
               >
-                <div className="text-[32px] lg:text-[48px] font-bold text-[var(--blue)] font-sans leading-none">
+                <div className="text-[16px] font-bold text-[#1E3A8A] tabular-nums tracking-[0.06em]">
                   {strip.num}
                 </div>
-                <h3 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] leading-snug">
+                <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
                   {strip.title}
                 </h3>
-                <p className="text-[12px] lg:text-[13px] text-[var(--grey)] leading-[1.65] max-w-[520px]">
+                <p className="text-[14px] lg:text-[15px] text-[#6B7280] leading-[1.7] max-w-[600px]">
                   {strip.desc}
                 </p>
               </div>
@@ -552,14 +500,13 @@ export const AboutUs: React.FC = () => {
         className="w-full bg-[var(--blue)] text-white py-[72px] lg:py-[112px]"
       >
         <div className="max-w-[1340px] mx-auto px-5 lg:px-10">
-          {/* 2.3: Eyebrow "COMMITTED TO" removed */}
-          <h2 className="text-[16px] lg:text-[24px] font-semibold tracking-[-0.015em] text-white leading-[1.2]">
+          <h2 className="text-[22px] lg:text-[48px] font-bold text-white leading-[1.15] tracking-[-0.02em]">
             {page7.h1}
           </h2>
 
           <div className="w-[40px] h-[1px] bg-white/40 mt-4" />
 
-          <p className="text-[12px] lg:text-[13px] text-white/90 font-medium max-w-[560px] mt-5 leading-[1.65]">
+          <p className="text-[14px] lg:text-[15px] text-white/90 font-normal max-w-[600px] mt-5 leading-[1.7]">
             {page7.quickAnswer}
           </p>
 
@@ -572,13 +519,13 @@ export const AboutUs: React.FC = () => {
                 <div key={com.num} className="pt-6">
                   <div className="w-[7px] h-[7px] rounded-full bg-white -mt-[28px] mb-6" />
 
-                  <div className="text-[32px] lg:text-[48px] font-bold text-white font-sans leading-none">
+                  <div className="text-[16px] font-bold text-white tabular-nums tracking-[0.06em]">
                     {com.num}
                   </div>
-                  <h3 className="text-[14px] lg:text-[17px] font-semibold text-white leading-snug max-w-[220px] mt-2">
+                  <h3 className="text-[17px] lg:text-[22px] font-semibold text-white leading-[1.25] tracking-[-0.01em] mt-2">
                     {com.title}
                   </h3>
-                  <p className="text-[12px] lg:text-[13px] text-white/80 leading-[1.65] max-w-[220px] mt-2">
+                  <p className="text-[14px] lg:text-[15px] text-white/80 leading-[1.7] max-w-[600px] mt-2">
                     {com.desc}
                   </p>
                 </div>
@@ -593,13 +540,13 @@ export const AboutUs: React.FC = () => {
             {p7Commitments.map((com) => (
               <div key={com.num} className="relative">
                 <div className="absolute -left-[32px] top-1 w-[10px] h-[10px] rounded-full bg-white" />
-                <div className="text-[32px] font-bold text-white font-sans leading-none">
+                <div className="text-[16px] font-bold text-white tabular-nums tracking-[0.06em]">
                   {com.num}
                 </div>
-                <h3 className="text-[14px] font-semibold text-white leading-snug mt-1">
+                <h3 className="text-[17px] font-semibold text-white leading-[1.25] tracking-[-0.01em] mt-1">
                   {com.title}
                 </h3>
-                <p className="text-[12px] text-white/80 leading-[1.65] mt-1">
+                <p className="text-[14px] text-white/80 leading-[1.7] mt-1">
                   {com.desc}
                 </p>
               </div>
@@ -632,11 +579,11 @@ export const AboutUs: React.FC = () => {
           <div className="relative z-10 w-full max-w-[1340px] mx-auto p-10 lg:p-16">
             <div className="max-w-[900px] text-left">
               {/* 2.3: Eyebrow "FACTORY TOUR" removed */}
-              <h2 className="text-[16px] lg:text-[24px] font-semibold text-white tracking-[-0.015em] leading-[1.2]">
+              <h2 className="text-[22px] lg:text-[48px] font-bold text-white leading-[1.15] tracking-[-0.02em]">
                 {page8.h1}
               </h2>
 
-              <p className="text-[12px] lg:text-[13px] text-white/85 max-w-[560px] mt-4 leading-[1.65]">
+              <p className="text-[14px] lg:text-[15px] text-white/85 max-w-[600px] mt-4 leading-[1.7]">
                 {page8.quickAnswer}
               </p>
             </div>
@@ -645,7 +592,7 @@ export const AboutUs: React.FC = () => {
 
         <div className="w-full bg-white py-[72px] lg:py-[112px]">
           <div className="max-w-[1340px] mx-auto px-5 lg:px-10">
-            <p className="text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)] max-w-[640px]">
+            <p className="text-[14px] lg:text-[15px] leading-[1.7] text-[#6B7280] max-w-[600px]">
               {p8WhereFactoryText}
             </p>
 
@@ -655,7 +602,7 @@ export const AboutUs: React.FC = () => {
             >
               <div
                 ref={timelineLineRef}
-                className="absolute left-[15px] lg:left-[19px] top-2 bottom-6 w-[1px] bg-[var(--blue)] origin-top"
+                className="absolute left-[15px] lg:left-[19px] top-2 bottom-6 w-[1px] bg-[#1E3A8A] origin-top"
               />
 
               {p8Steps.map((step: any, idx: number) => {
@@ -664,15 +611,15 @@ export const AboutUs: React.FC = () => {
 
                 return (
                   <div key={step.name} className="relative">
-                    <div className="absolute -left-[48px] lg:-left-[64px] top-0 text-[14px] lg:text-[17px] font-bold text-[var(--blue)] font-mono leading-none bg-white pr-2">
+                    <div className="absolute -left-[48px] lg:-left-[64px] top-0 text-[16px] font-bold text-[#1E3A8A] tabular-nums tracking-[0.06em] bg-white pr-2">
                       {stepNum}
                     </div>
 
                     <div className="space-y-2">
-                      <h3 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] leading-snug">
+                      <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
                         {step.name}
                       </h3>
-                      <p className="text-[12px] lg:text-[13px] text-[var(--grey)] leading-[1.65] max-w-[480px]">
+                      <p className="text-[14px] lg:text-[15px] text-[#6B7280] leading-[1.7] max-w-[600px]">
                         {step.text}
                       </p>
 

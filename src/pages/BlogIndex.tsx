@@ -1,10 +1,11 @@
 import React, { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "../components/ui/TransitionLink.tsx";
 import pageData from "../content/generated/page-67.json";
 import blogCards from "../content/generated/blog-cards.json";
 import { A } from "../data/assets.ts";
 import { UI } from "../data/ui.ts";
 import { HeroBand } from "../components/ui/HeroBand.tsx";
+import { Card } from "../components/ui/Card.tsx";
 import { Accordion } from "../components/ui/Accordion.tsx";
 import { NextBand } from "../components/ui/NextBand.tsx";
 import { poolImage } from "../data/pool.ts";
@@ -100,46 +101,19 @@ export const BlogIndex: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredArticles.map((art, idx) => {
-              const isFirst = idx === 0 && selectedCategory === "All" && !searchQuery;
               const imgUrl = poolImage(art.url, idx);
 
               return (
-                <Link
+                <Card
                   key={art.number}
-                  to={art.url}
-                  className={`group block bg-transparent overflow-hidden ${
-                    isFirst ? "md:col-span-2 lg:col-span-2" : ""
-                  }`}
-                  data-reveal=""
-                >
-                  <div className={`${isFirst ? "aspect-[16/9]" : "aspect-[4/3]"} w-full overflow-hidden bg-white`}>
-                    <img
-                      src={imgUrl}
-                      alt={art.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                  </div>
-
-                  <div className="pt-4 space-y-2">
-                    <span className="text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] block">
-                      {art.category}
-                    </span>
-                    <h3 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors leading-[1.25]">
-                      {art.title}
-                    </h3>
-                    <p className="text-[12px] lg:text-[13px] text-[var(--grey)] leading-[1.6] line-clamp-3">
-                      {art.summary}
-                    </p>
-                    <div className="pt-2 flex items-center text-[10px] uppercase tracking-[0.06em] font-semibold text-[var(--blue)]">
-                      <span>{UI.readArticle}</span>
-                      <svg className="w-3.5 h-3.5 ml-1 stroke-current transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                        <polyline points="12 5 19 12 12 19" />
-                      </svg>
-                    </div>
-                  </div>
-                </Link>
+                  href={art.url}
+                  imageSrc={imgUrl}
+                  imageAlt={art.title}
+                  imageRatio="4/3"
+                  title={art.title}
+                  description={art.summary}
+                  linkText={UI.readArticle}
+                />
               );
             })}
           </div>
@@ -148,9 +122,9 @@ export const BlogIndex: React.FC = () => {
 
       {/* FAQ */}
       {pageData.faq && pageData.faq.length > 0 && (
-        <section className="py-12 lg:py-16 bg-white border-t border-[var(--line)]">
+        <section className="py-12 lg:py-16 bg-white border-t border-[#E5E5E5]">
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-            <h2 className="text-[16px] lg:text-[24px] font-semibold leading-[1.2] text-[var(--ink)] mb-6" data-split="">
+            <h2 className="text-[22px] lg:text-[48px] font-bold leading-[1.15] tracking-[-0.02em] text-[#0A0A0A] mb-6">
               Frequently Asked Questions
             </h2>
             <Accordion items={pageData.faq} />

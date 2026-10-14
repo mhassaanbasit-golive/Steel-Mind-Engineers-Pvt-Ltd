@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { TransitionLink } from "./TransitionLink.tsx";
 
 export interface NextBandProps {
   heading?: string;
@@ -21,10 +21,10 @@ export const NextBand: React.FC<NextBandProps> = ({
       <div className="next-band-inner">
         <div className="next-band-label">NEXT</div>
         <h2 className="next-band-heading">{descriptiveHeading}</h2>
-        <Link className="next-band-link" to={nextUrl}>
+        <TransitionLink className="next-band-link" to={nextUrl}>
           {nextTitle}
           <span className="next-band-arrow">→</span>
-        </Link>
+        </TransitionLink>
       </div>
     </section>
   );

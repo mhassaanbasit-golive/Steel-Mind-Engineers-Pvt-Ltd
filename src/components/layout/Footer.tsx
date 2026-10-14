@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "../ui/TransitionLink.tsx";
 import { SITE } from "../../data/site.ts";
 import { A } from "../../data/assets.ts";
 import { FacebookIcon, FacebookIconHandle } from "../icons/facebook.tsx";

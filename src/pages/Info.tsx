@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "../components/ui/TransitionLink.tsx";
 import { ContentData, ContentBlock } from "../content/types.ts";
 import { HeroBand } from "../components/ui/HeroBand.tsx";
 import { Canvas } from "../components/ui/Canvas.tsx";
@@ -126,64 +126,56 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
 
       {/* Block B — Information Panel (First H2 + First 2 Paragraphs + Image) */}
       {blockBSection && (
-        <section className="py-12 lg:py-20 bg-white border-b border-[var(--line)]">
+        <section className="py-12 lg:py-20 bg-white border-b border-[#E5E5E5]">
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
               {/* Left Column: First H2 and first two paragraphs */}
-              <div className="lg:col-span-6 space-y-4" data-reveal-group="">
-                <h2
-                  className="text-[16px] lg:text-[24px] font-semibold text-[var(--ink)] leading-[1.2]"
-                  data-split=""
-                >
+              <div className="lg:col-span-6 space-y-4">
+                <h2 className="text-[22px] lg:text-[48px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em]">
                   {blockBSection.h2Title}
                 </h2>
                 {blockBSection.paragraphs.slice(0, 2).map((p, idx) => (
                   <p
                     key={idx}
-                    className="text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)]"
-                    data-reveal=""
+                    className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]"
                   >
                     {p}
                   </p>
                 ))}
               </div>
 
-              {/* Right Column: Page image 4:3 */}
-              <div className="lg:col-span-6" data-reveal="">
+              {/* Right Column: Page image 4:3 on mobile, natural on desktop */}
+              <div className="lg:col-span-6 w-full">
                 <Canvas slot="info" ratio="4/3" src={infoImg} alt={blockBSection.h2Title} />
               </div>
             </div>
 
             {/* Any extra paragraphs or defs inside Block B section */}
             {blockBSection.paragraphs.length > 2 && (
-              <div className="mt-8 space-y-4 max-w-[640px]">
+              <div className="mt-8 space-y-4 max-w-[600px]">
                 {blockBSection.paragraphs.slice(2).map((p, idx) => (
-                  <p key={idx} className="text-[12px] lg:text-[13px] leading-[1.65] text-[var(--grey)]">
+                  <p key={idx} className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]">
                     {p}
                   </p>
                 ))}
               </div>
             )}
 
-            {/* Block D — Numbered Feature Grid if defs in block B */}
+            {/* Feature Grid if defs in block B */}
             {blockBSection.defs && blockBSection.defs.length > 0 && (
-              <div className="mt-12 pt-8 border-t border-[var(--line)]">
+              <div className="mt-12 pt-8 border-t border-[#E5E5E5]">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                   {blockBSection.defs.map((item, idx) => {
                     const numStr = String(idx + 1).padStart(2, "0");
                     return (
-                      <div key={idx} className="p-2 bg-transparent" data-reveal="">
-                        <div className="w-6 h-[1px] bg-[var(--blue)] mb-4" />
-                        <div
-                          className="text-[32px] lg:text-[48px] font-semibold leading-none mb-3 text-transparent select-none"
-                          style={{ WebkitTextStroke: "1px var(--blue)" }}
-                        >
+                      <div key={idx} className="p-2 bg-transparent text-left">
+                        <div className="text-[16px] font-bold text-[#1E3A8A] tabular-nums tracking-[0.06em] mb-3">
                           {numStr}
                         </div>
-                        <h4 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] leading-[1.25] mb-2">
+                        <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em] mb-2">
                           {item.term}
-                        </h4>
-                        <p className="text-[12px] lg:text-[13px] leading-[1.6] text-[var(--grey)]">
+                        </h3>
+                        <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]">
                           {item.desc}
                         </p>
                       </div>
@@ -196,13 +188,10 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
         </section>
       )}
 
-      {/* Template T2s: Full-width Sequential Timeline for Steps Pages (Royal Blue alternating with White) */}
+      {/* Sequential Timeline for Steps Pages */}
       {isTimelinePage && (
-        <section
-          style={{ backgroundColor: "var(--blue)" }}
-          className="py-14 lg:py-20 bg-[var(--blue)] text-white"
-        >
-          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
+        <section className="py-14 lg:py-20 bg-white border-b border-[#E5E5E5]">
+          <div className="max-w-[720px] mx-auto px-[var(--pad-x)]">
             {sections
               .flatMap((s) => s.steps || [])
               .map((st, idx) => {
@@ -211,29 +200,26 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
                 const showImg = idx % 2 === 0;
 
                 return (
-                  <div key={idx} className="relative pl-16 pb-12 last:pb-0" data-reveal="">
+                  <div key={idx} className="relative pl-12 pb-12 last:pb-0 text-left">
                     {/* Vertical line running down left of numbers */}
-                    <div className="absolute left-[31px] top-4 bottom-0 w-[1px] bg-white/25" />
+                    <div className="absolute left-[8px] top-6 bottom-0 w-[1px] bg-[#1E3A8A]/30" />
 
-                    {/* Step number left outlined white */}
-                    <div
-                      className="absolute left-0 top-0 text-[32px] lg:text-[48px] font-semibold leading-none text-transparent select-none"
-                      style={{ WebkitTextStroke: "1px rgba(255,255,255,0.85)" }}
-                    >
+                    {/* Step number left */}
+                    <div className="absolute left-0 top-0 text-[16px] font-bold text-[#1E3A8A] tabular-nums tracking-[0.06em]">
                       {numStr}
                     </div>
 
                     <div className="space-y-3">
-                      <h3 className="text-[14px] lg:text-[17px] font-semibold text-white leading-[1.25]">
+                      <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
                         {st.name}
                       </h3>
-                      <p className="text-[12px] lg:text-[13px] leading-[1.65] text-white/85">
+                      <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]">
                         {st.desc}
                       </p>
 
                       {/* Image alternating between pairs of steps */}
                       {showImg && (
-                        <div className="pt-4 max-w-[440px]">
+                        <div className="pt-4 max-w-[480px]">
                           <Canvas
                             slot={`step-${idx + 1}`}
                             ratio="4/3"
@@ -250,7 +236,7 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
         </section>
       )}
 
-      {/* Block C — Alternating Image and Text Pairs for remaining H2 sections (Alternating Royal Blue and White) */}
+      {/* Alternating Image and Text Pairs for remaining H2 sections */}
       {!isTimelinePage &&
         remainingSections.map((sec, idx) => {
           const isEven = idx % 2 === 0;
@@ -258,22 +244,15 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
 
           return (
             <React.Fragment key={idx}>
-              {!isEven && <div data-line="" className="w-full h-[1px] bg-[var(--line)]" />}
-              <section
-                style={isEven ? { backgroundColor: "var(--blue)" } : undefined}
-                className={`py-14 lg:py-20 w-full ${
-                  isEven ? "bg-[var(--blue)] text-white" : "bg-white text-[var(--ink)]"
-                }`}
-              >
+              <section className="py-14 lg:py-20 w-full bg-white border-b border-[#E5E5E5]">
                 <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
                     <div
-                      className={`order-1 ${
+                      className={`w-full ${
                         isEven
                           ? "lg:col-span-6 lg:order-1"
                           : "lg:col-span-6 lg:order-2"
                       }`}
-                      data-reveal=""
                     >
                       <Canvas
                         slot={`pair-${idx + 1}`}
@@ -284,28 +263,19 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
                     </div>
 
                     <div
-                      className={`order-2 space-y-4 max-w-[400px] ${
+                      className={`space-y-4 max-w-[600px] ${
                         isEven
                           ? "lg:col-span-6 lg:order-2"
                           : "lg:col-span-6 lg:order-1"
                       }`}
-                      data-reveal-group=""
                     >
-                      <h3
-                        className={`text-[14px] lg:text-[17px] font-semibold leading-[1.25] ${
-                          isEven ? "text-white" : "text-[var(--ink)]"
-                        }`}
-                        data-split=""
-                      >
+                      <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
                         {sec.h2Title}
                       </h3>
                       {sec.paragraphs.map((p, pIdx) => (
                         <p
                           key={pIdx}
-                          className={`text-[12px] lg:text-[13px] leading-[1.65] ${
-                            isEven ? "text-white/85" : "text-[var(--grey)]"
-                          }`}
-                          data-reveal=""
+                          className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]"
                         >
                           {p}
                         </p>
@@ -313,45 +283,21 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
                     </div>
                   </div>
 
-                  {/* Block D if section has defs */}
+                  {/* Feature Grid if section has defs */}
                   {sec.defs && sec.defs.length > 0 && (
-                    <div
-                      className={`mt-12 pt-8 border-t ${
-                        isEven ? "border-white/20" : "border-[var(--line)]"
-                      }`}
-                    >
+                    <div className="mt-12 pt-8 border-t border-[#E5E5E5]">
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         {sec.defs.map((item, dIdx) => {
                           const numStr = String(dIdx + 1).padStart(2, "0");
                           return (
-                            <div key={dIdx} className="p-2 bg-transparent" data-reveal="">
-                              <div
-                                className={`w-6 h-[1px] mb-4 ${
-                                  isEven ? "bg-white/60" : "bg-[var(--blue)]"
-                                }`}
-                              />
-                              <div
-                                className="text-[32px] lg:text-[48px] font-semibold leading-none mb-3 text-transparent select-none"
-                                style={{
-                                  WebkitTextStroke: isEven
-                                    ? "1px rgba(255,255,255,0.85)"
-                                    : "1px var(--blue)",
-                                }}
-                              >
+                            <div key={dIdx} className="p-2 bg-transparent text-left">
+                              <div className="text-[16px] font-bold text-[#1E3A8A] tabular-nums tracking-[0.06em] mb-3">
                                 {numStr}
                               </div>
-                              <h4
-                                className={`text-[14px] lg:text-[17px] font-semibold leading-[1.25] mb-2 ${
-                                  isEven ? "text-white" : "text-[var(--ink)]"
-                                }`}
-                              >
+                              <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em] mb-2">
                                 {item.term}
-                              </h4>
-                              <p
-                                className={`text-[12px] lg:text-[13px] leading-[1.6] ${
-                                  isEven ? "text-white/85" : "text-[var(--grey)]"
-                                }`}
-                              >
+                              </h3>
+                              <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]">
                                 {item.desc}
                               </p>
                             </div>
@@ -366,12 +312,11 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
           );
         })}
 
-      {/* FAQ (Block E Divided List Rows) */}
+      {/* FAQ */}
       {data.faq && data.faq.length > 0 && (
-        <section className="py-12 lg:py-16 bg-white border-b border-[var(--line)]">
+        <section className="py-12 lg:py-16 bg-white border-b border-[#E5E5E5]">
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
-            {/* 2.3: Eyebrow "Questions" removed */}
-            <h2 className="text-[16px] lg:text-[24px] font-semibold text-[var(--ink)] leading-[1.2] mb-6">
+            <h2 className="text-[22px] lg:text-[48px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] mb-6">
               Frequently Asked Questions
             </h2>
             <Accordion items={data.faq} />

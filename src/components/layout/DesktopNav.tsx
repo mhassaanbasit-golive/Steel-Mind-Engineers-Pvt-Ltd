@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { NAV, NavItem } from "../../data/nav.ts";
 import { Button } from "../ui/Button.tsx";
 import { SITE } from "../../data/site.ts";
+import { TransitionLink } from "../ui/TransitionLink.tsx";
 
 export const DesktopNav: React.FC = () => {
   const location = useLocation();
@@ -34,7 +35,7 @@ export const DesktopNav: React.FC = () => {
                 {item.label}
               </a>
             ) : (
-              <Link
+              <TransitionLink
                 to={item.url}
                 className={`relative py-1 transition-opacity hover:opacity-60 flex items-center ${
                   isActive ? "text-white" : "text-white/90"
@@ -44,20 +45,20 @@ export const DesktopNav: React.FC = () => {
                 {isActive && (
                   <span className="absolute bottom-0 inset-x-0 h-[1px] bg-white" />
                 )}
-              </Link>
+              </TransitionLink>
             )}
 
             {/* Standard Dropdown: About Us, Services */}
             {hasChildren && !isMega && activeDropdown === item.label && item.children && (
               <div className="absolute top-[80px] left-0 w-[280px] bg-white text-[var(--ink)] shadow-none border border-[var(--line)] py-2 z-50 animate-[fadeDrop_0.35s_cubic-bezier(0.16,1,0.3,1)_forwards]">
                 {item.children.map((child) => (
-                  <Link
+                  <TransitionLink
                     key={child.url}
                     to={child.url}
                     className="block px-5 py-3 text-[13px] hover:bg-[var(--blue)] hover:text-white transition-colors border-b border-[var(--line)] last:border-b-0"
                   >
                     {child.label}
-                  </Link>
+                  </TransitionLink>
                 ))}
               </div>
             )}
@@ -68,7 +69,7 @@ export const DesktopNav: React.FC = () => {
                 <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] py-8 grid grid-cols-5 gap-6">
                   {item.divisions.map((div) => (
                     <div key={div.label} className="flex flex-col space-y-3">
-                      <Link to={div.url} className="group/div block overflow-hidden">
+                      <TransitionLink to={div.url} className="group/div block overflow-hidden">
                         <div className="w-full aspect-[4/3] bg-white overflow-hidden mb-3">
                           <img
                             src={div.image}
@@ -79,17 +80,17 @@ export const DesktopNav: React.FC = () => {
                         <h4 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] group-hover/div:text-[var(--blue)] transition-colors">
                           {div.label}
                         </h4>
-                      </Link>
+                      </TransitionLink>
 
                       <div className="flex flex-col space-y-1.5 pt-2 border-t border-[var(--line)]">
                         {div.children.map((child) => (
-                          <Link
+                          <TransitionLink
                             key={child.url}
                             to={child.url}
                             className="text-[12px] lg:text-[13px] text-[var(--grey)] hover:text-[var(--blue)] transition-colors py-0.5"
                           >
                             {child.label}
-                          </Link>
+                          </TransitionLink>
                         ))}
                       </div>
                     </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { TransitionLink } from "./TransitionLink.tsx";
 import { A } from "../../data/assets.ts";
 import { SITE } from "../../data/site.ts";
 
@@ -74,7 +74,7 @@ export const QuoteBand: React.FC<QuoteBandProps> = ({
           data-fade-up=""
         >
           {/* Request a Quote: Solid White button with Royal Blue text */}
-          <Link
+          <TransitionLink
             to="/contact-us/#quote"
             style={{
               background: "#FFFFFF",
@@ -84,7 +84,7 @@ export const QuoteBand: React.FC<QuoteBandProps> = ({
             className="inline-flex items-center justify-center font-semibold text-[10px] uppercase tracking-[0.08em] px-4 py-2.5 min-h-[36px] border border-white bg-white text-[var(--blue)] hover:bg-white/90 transition-all duration-300 rounded-none cursor-pointer select-none text-center"
           >
             Request a Quote
-          </Link>
+          </TransitionLink>
 
           {/* Talk to an Expert: Transparent button with White border and White text */}
           <a

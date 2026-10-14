@@ -1,11 +1,11 @@
 import React, { Suspense, lazy } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-import { Home } from "./pages/Home.tsx";
 import { PageShell } from "./components/layout/PageShell.tsx";
 import { ALL_PAGES, ALL_ARTICLES, CONTENT_BY_URL } from "./content/index.ts";
 import { PROJECTS } from "./data/projects.ts";
 import { getTemplateForPage } from "./data/templates.ts";
 
+const Home = lazy(() => import("./pages/Home.tsx").then((m) => ({ default: m.Home })));
 const AboutUs = lazy(() => import("./pages/AboutUs.tsx").then((m) => ({ default: m.AboutUs })));
 const Hub = lazy(() => import("./pages/Hub.tsx").then((m) => ({ default: m.Hub })));
 const Info = lazy(() => import("./pages/Info.tsx").then((m) => ({ default: m.Info })));
@@ -20,11 +20,51 @@ const Profile = lazy(() => import("./pages/Profile.tsx").then((m) => ({ default:
 const Sitemap = lazy(() => import("./pages/Sitemap.tsx").then((m) => ({ default: m.Sitemap })));
 const NotFound = lazy(() => import("./pages/NotFound.tsx").then((m) => ({ default: m.NotFound })));
 
+const SuspenseFallback: React.FC = () => (
+  <div
+    className="fixed inset-0 z-[9999] flex items-center justify-center select-none"
+    style={{ backgroundColor: "var(--blue, #1E3A8A)" }}
+  >
+    <div
+      className="flex items-center justify-center"
+      style={{ gap: "clamp(8px, 2vw, 14px)" }}
+    >
+      <span
+        className="rounded-full bg-white block"
+        style={{
+          width: "clamp(8px, 2.2vw, 14px)",
+          height: "clamp(8px, 2.2vw, 14px)",
+          animation:
+            "pageTransitionWave 1200ms cubic-bezier(0.22, 1, 0.36, 1) infinite 0ms",
+        }}
+      />
+      <span
+        className="rounded-full bg-white block"
+        style={{
+          width: "clamp(8px, 2.2vw, 14px)",
+          height: "clamp(8px, 2.2vw, 14px)",
+          animation:
+            "pageTransitionWave 1200ms cubic-bezier(0.22, 1, 0.36, 1) infinite 160ms",
+        }}
+      />
+      <span
+        className="rounded-full bg-white block"
+        style={{
+          width: "clamp(8px, 2.2vw, 14px)",
+          height: "clamp(8px, 2.2vw, 14px)",
+          animation:
+            "pageTransitionWave 1200ms cubic-bezier(0.22, 1, 0.36, 1) infinite 320ms",
+        }}
+      />
+    </div>
+  </div>
+);
+
 export const AppRoutes: React.FC = () => {
   const publishedProjects = PROJECTS.filter((p) => p.published);
 
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<SuspenseFallback />}>
       <Routes>
       {/* 1. Home */}
       <Route

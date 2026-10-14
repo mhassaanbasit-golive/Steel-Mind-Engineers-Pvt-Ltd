@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { SITE } from "../../data/site.ts";
 import { useScrollState } from "../../hooks/useScrollState.ts";
 import { DesktopNav } from "./DesktopNav.tsx";
 import { MobileMenu } from "./MobileMenu.tsx";
+import { TransitionLink } from "../ui/TransitionLink.tsx";
 
 export interface HeaderProps {
   hasDarkHero?: boolean;
@@ -30,7 +31,7 @@ export const Header: React.FC<HeaderProps> = () => {
       >
         <div className="max-w-[1340px] mx-auto h-[64px] lg:h-[88px] px-5 lg:px-10 flex items-center justify-between">
           {/* Brand Lockup */}
-          <Link
+          <TransitionLink
             to="/"
             className="flex flex-col text-left group select-none cursor-pointer"
             aria-label="Steel Mind Engineers Homepage"
@@ -41,7 +42,7 @@ export const Header: React.FC<HeaderProps> = () => {
             <span className="text-[9px] uppercase font-semibold text-white/70 tracking-[0.18em] mt-0.5">
               {SITE.header.sub}
             </span>
-          </Link>
+          </TransitionLink>
 
           {/* Desktop Navigation */}
           <DesktopNav />
@@ -76,7 +77,7 @@ export const Header: React.FC<HeaderProps> = () => {
                     transformOrigin: "12px 12px",
                     transform: mobileMenuOpen
                       ? "translateY(0px) rotate(45deg)"
-                      : "translateY(-3.75px) rotate(0deg)",
+                      : "translateY(-3px) rotate(0deg)",
                     transition: "transform 0.4s cubic-bezier(0.23, 1, 0.32, 1)",
                   }}
                 />
@@ -93,7 +94,7 @@ export const Header: React.FC<HeaderProps> = () => {
                     transformOrigin: "12px 12px",
                     transform: mobileMenuOpen
                       ? "translateY(0px) rotate(-45deg)"
-                      : "translateY(3.75px) rotate(0deg)",
+                      : "translateY(3px) rotate(0deg)",
                     transition: "transform 0.4s cubic-bezier(0.23, 1, 0.32, 1)",
                   }}
                 />

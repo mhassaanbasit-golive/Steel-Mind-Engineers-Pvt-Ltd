@@ -26,70 +26,23 @@ const EASE_PREMIUM = "cubic-bezier(0.23, 1, 0.32, 1)";
 const EASE_CLIP = "cubic-bezier(0.76, 0, 0.24, 1)";
 
 export const Reveal = {
-  Lines(target: HTMLElement | string, options?: { stagger?: number; duration?: number }) {
+  Lines(target: HTMLElement | string) {
+    // Text renders at full opacity the moment the page paints. No fade. No reveal.
     if (typeof window === "undefined") return;
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const el = typeof target === "string" ? document.querySelector<HTMLElement>(target) : target;
     if (!el) return;
-
-    if (prefersReduced) {
-      gsap.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.25 });
-      return;
-    }
-
-    const text = el.textContent || "";
-    el.innerHTML = "";
-    const wrap = document.createElement("span");
-    wrap.className = "inline-block overflow-hidden align-top";
-    const inner = document.createElement("span");
-    inner.className = "inline-block";
-    inner.textContent = text;
-    wrap.appendChild(inner);
-    el.appendChild(wrap);
-
-    gsap.fromTo(
-      inner,
-      { yPercent: 105 },
-      {
-        yPercent: 0,
-        duration: options?.duration ?? 0.8,
-        ease: EASE_PREMIUM,
-        scrollTrigger: {
-          trigger: el,
-          start: "top 88%",
-          once: true,
-        },
-      }
-    );
+    el.style.opacity = "1";
+    el.style.visibility = "visible";
   },
 
-  Fade(target: HTMLElement | HTMLElement[] | string, options?: { stagger?: number; duration?: number }) {
+  Fade(target: HTMLElement | HTMLElement[] | string, _options?: { stagger?: number }) {
+    // Text renders at full opacity the moment the page paints. No fade. No reveal.
     if (typeof window === "undefined") return;
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const items = typeof target === "string" ? Array.from(document.querySelectorAll<HTMLElement>(target)) : Array.isArray(target) ? target : [target];
-    if (items.length === 0) return;
-
-    if (prefersReduced) {
-      gsap.fromTo(items, { opacity: 0 }, { opacity: 1, duration: 0.25 });
-      return;
-    }
-
-    gsap.fromTo(
-      items,
-      { opacity: 0, y: 20 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: options?.duration ?? 0.7,
-        stagger: options?.stagger ?? 0.08,
-        ease: EASE_PREMIUM,
-        scrollTrigger: {
-          trigger: items[0],
-          start: "top 88%",
-          once: true,
-        },
-      }
-    );
+    items.forEach((item) => {
+      item.style.opacity = "1";
+      item.style.visibility = "visible";
+    });
   },
 
   Image(frame: HTMLElement | string, options?: { noScale?: boolean }) {

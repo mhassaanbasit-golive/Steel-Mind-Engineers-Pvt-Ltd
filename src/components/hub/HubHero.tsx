@@ -57,40 +57,12 @@ export const HubHero: React.FC<HubHeroProps> = ({
         );
       }
 
-      // Page entrance choreography
-      // 1. Hero image wrapper: scale: 1.08 -> 1 over 1.4s, opacity: 0 -> 1 over 1s
+      // Image reveals only
       if (imageWrapRef.current) {
         gsap.fromTo(
           imageWrapRef.current,
           { scale: 1.08, opacity: 0 },
           { scale: 1, opacity: 1, duration: 1.4, ease: EASE_OUT_EXPO }
-        );
-      }
-
-      // 2. Hero H1: split into lines with SplitText, lines animate yPercent: 110 -> 0 over 0.9s, stagger 0.08s, delay 0.4s
-      if (h1Ref.current) {
-        const split = splitLines(h1Ref.current);
-        if (split.lines.length > 0) {
-          gsap.fromTo(
-            split.lines,
-            { yPercent: 110 },
-            {
-              yPercent: 0,
-              duration: 0.9,
-              ease: EASE_OUT_EXPO,
-              stagger: 0.08,
-              delay: 0.4,
-            }
-          );
-        }
-      }
-
-      // 3. Hero subtitle: opacity: 0, y: 16 -> 1, 0 over 0.6s --ease-out-expo, delay 0.7s
-      if (subtitleRef.current) {
-        gsap.fromTo(
-          subtitleRef.current,
-          { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: 0.6, ease: EASE_OUT_EXPO, delay: 0.7 }
         );
       }
     }, containerRef);
@@ -152,27 +124,22 @@ export const HubHero: React.FC<HubHeroProps> = ({
 
       {/* Content wrapper: z-index: 3 */}
       <div
-        className="absolute z-[3] flex flex-col justify-end pointer-events-auto"
-        style={{
-          left: "var(--pad-x)",
-          right: "var(--pad-x)",
-          bottom: "40px",
-        }}
+        className="absolute z-[3] flex flex-col justify-end pointer-events-auto left-[20px] bottom-[40px] right-[20px] lg:left-[40px] lg:bottom-[64px] lg:right-[40px]"
       >
-        <div className="w-full max-w-[320px] lg:max-w-[720px] lg:mb-6">
-          {/* H1: font-size 22px (mobile), 40px (desktop), 700, line-height 1.15, -0.02em, uppercase, #FFFFFF, max-width 320px (mobile), 720px (desktop) */}
+        <div className="w-full max-w-[320px] lg:max-w-[640px]">
+          {/* H1: 22px mobile / 40px desktop. Weight 700. Uppercase. White. Line-height 1.15. Letter-spacing -0.02em. */}
           <h1
             ref={h1Ref}
-            className="text-[22px] lg:text-[40px] font-bold text-[#FFFFFF] uppercase leading-[1.15] tracking-[-0.02em] max-w-[320px] lg:max-w-[720px]"
+            className="text-[22px] lg:text-[40px] font-bold text-white uppercase leading-[1.15] tracking-[-0.02em]"
           >
             {h1}
           </h1>
 
-          {/* Subtitle: font-size 12px (mobile), 14px (desktop), 400, line-height 1.6, rgba(255,255,255,0.82), max-width 560px, margin-top 16px */}
+          {/* Subtitle: 12px mobile / 14px desktop. White 82%. Max-width 560px. Margin-top 14px. */}
           {cleanSubtitle && (
             <p
               ref={subtitleRef}
-              className="mt-4 text-[12px] lg:text-[14px] font-normal text-white/82 leading-[1.6] max-w-[560px]"
+              className="mt-[14px] text-[12px] lg:text-[14px] font-normal leading-[1.6] max-w-[560px]"
               style={{
                 color: "rgba(255, 255, 255, 0.82)",
               }}
