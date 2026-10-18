@@ -42,9 +42,9 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
 
   return (
     <div className="w-full bg-white">
-      {/* Block A — Hero Band (Image) */}
+      {/* Block A — Hero Band (Immersive) */}
       <HeroBand
-        variant="image"
+        variant="immersive"
         imageSrc={img1}
         imageAlt={data.alt || project.title}
         breadcrumbItems={[

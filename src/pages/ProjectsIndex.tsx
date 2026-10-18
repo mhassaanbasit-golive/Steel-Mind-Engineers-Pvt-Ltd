@@ -14,9 +14,9 @@ export const ProjectsIndex: React.FC = () => {
 
   return (
     <div className="w-full bg-white">
-      {/* Block A — Hero Band (Image) */}
+      {/* Block A — Hero Band (Immersive) */}
       <HeroBand
-        variant="image"
+        variant="immersive"
         imageSrc={A.project.haierCraneMezzanine[0]}
         imageAlt="Finished steel crane shed built by Steel Mind Engineers in Pakistan."
         breadcrumbItems={[

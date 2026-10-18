@@ -81,9 +81,10 @@ export const QuoteBand: React.FC<QuoteBandProps> = ({
               color: "var(--blue)",
               borderColor: "#FFFFFF",
             }}
-            className="inline-flex items-center justify-center font-semibold text-[10px] uppercase tracking-[0.08em] px-4 py-2.5 min-h-[36px] border border-white bg-white text-[var(--blue)] hover:bg-white/90 transition-all duration-300 rounded-none cursor-pointer select-none text-center"
+            className="group inline-flex items-center justify-center font-semibold text-[10px] uppercase tracking-[0.08em] px-5 py-2.5 min-h-[38px] border border-white bg-white text-[var(--blue)] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.3)] active:translate-y-0 active:scale-[0.98] rounded-none cursor-pointer select-none text-center"
           >
-            Request a Quote
+            <span>Request a Quote</span>
+            <span className="ml-1.5 inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1">→</span>
           </TransitionLink>
 
           {/* Talk to an Expert: Transparent button with White border and White text */}
@@ -94,9 +95,10 @@ export const QuoteBand: React.FC<QuoteBandProps> = ({
               color: "#FFFFFF",
               borderColor: "#FFFFFF",
             }}
-            className="inline-flex items-center justify-center font-semibold text-[10px] uppercase tracking-[0.08em] px-4 py-2.5 min-h-[36px] border border-white bg-transparent text-white hover:bg-white hover:text-[var(--blue)] transition-all duration-300 rounded-none cursor-pointer select-none text-center"
+            className="group inline-flex items-center justify-center font-semibold text-[10px] uppercase tracking-[0.08em] px-5 py-2.5 min-h-[38px] border border-white bg-transparent text-white hover:bg-white hover:text-[var(--blue)] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.2)] active:translate-y-0 active:scale-[0.98] rounded-none cursor-pointer select-none text-center"
           >
-            Talk to an Expert
+            <span>Talk to an Expert</span>
+            <span className="ml-1.5 inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1">→</span>
           </a>
         </div>
       </div>

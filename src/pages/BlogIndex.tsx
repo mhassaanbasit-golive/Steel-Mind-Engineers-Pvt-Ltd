@@ -50,7 +50,7 @@ export const BlogIndex: React.FC = () => {
       />
 
       {/* Category Chips & Search Bar */}
-      <div className="bg-white border-b border-[var(--line)] py-3 sticky top-[var(--header-h)] z-40">
+      <div className="bg-white border-b border-[var(--line)] py-3 sticky top-[var(--nav-offset,60px)] z-40 transition-[top] duration-300">
         <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
           {/* Category Chips */}
           <div className="flex items-center space-x-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden py-1">

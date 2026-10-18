@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from "react";
+import { TransitionLink } from "./TransitionLink.tsx";
 import { A } from "../../data/assets.ts";
 import { BreadcrumbItem } from "./Breadcrumb.tsx";
 import { BackButton } from "./BackButton.tsx";
@@ -64,7 +65,7 @@ export const HeroBand: React.FC<HeroBandProps> = ({
       <section ref={containerRef} className="relative w-full bg-[#0A0A0A] overflow-hidden">
         {/* Desktop (768px and up) */}
         <div
-          className="hidden md:flex relative w-full overflow-hidden flex-col justify-between"
+          className="hidden md:flex relative w-full overflow-hidden flex-col justify-end"
           style={{
             height: "min(calc(100svh - 40px), 720px)",
             minHeight: "520px",
@@ -121,14 +122,13 @@ export const HeroBand: React.FC<HeroBandProps> = ({
             </h1>
 
             <div className="mt-6">
-              <a
-                ref={btnRef}
-                href="/contact-us/#quote"
+              <TransitionLink
+                to="/contact-us/#quote"
                 className="btn btn-light btn-sm"
               >
                 <span>Request a Quote</span>
                 <span className="btn-arrow">→</span>
-              </a>
+              </TransitionLink>
             </div>
 
             {/* Visually hidden sub-text for SEO preservation */}
@@ -183,13 +183,13 @@ export const HeroBand: React.FC<HeroBandProps> = ({
             </h1>
 
             <div className="mt-5">
-              <a
-                href="/contact-us/#quote"
+              <TransitionLink
+                to="/contact-us/#quote"
                 className="btn btn-light btn-sm"
               >
                 <span>Request a Quote</span>
                 <span className="btn-arrow">→</span>
-              </a>
+              </TransitionLink>
             </div>
 
             {/* Hidden subtext for SEO */}

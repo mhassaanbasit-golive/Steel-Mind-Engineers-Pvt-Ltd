@@ -352,35 +352,42 @@ export const Home: React.FC = () => {
                   fontWeight: 600,
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
-                  padding: "6px 12px",
-                  height: "28px",
+                  padding: "6px 14px",
+                  height: "30px",
                   border: "1px solid #FFFFFF",
                   borderRadius: 0,
                   lineHeight: 1,
                 }}
-                className="inline-flex items-center justify-center whitespace-nowrap select-none cursor-pointer hover:opacity-90 transition-opacity"
+                className="group inline-flex items-center justify-center whitespace-nowrap select-none cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.3)] active:translate-y-0 active:scale-[0.98]"
               >
-                Request a Quote
+                <span>Request a Quote</span>
+                <span className="ml-1.5 inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1">
+                  →
+                </span>
               </Link>
 
               <Link
                 to="/projects/"
                 style={{
-                  background: "transparent",
+                  background: "rgba(255, 255, 255, 0.08)",
+                  backdropFilter: "blur(4px)",
                   color: "#FFFFFF",
                   fontSize: "9px",
                   fontWeight: 600,
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
-                  padding: "6px 12px",
-                  height: "28px",
+                  padding: "6px 14px",
+                  height: "30px",
                   border: "1px solid rgba(255, 255, 255, 0.85)",
                   borderRadius: 0,
                   lineHeight: 1,
                 }}
-                className="inline-flex items-center justify-center whitespace-nowrap select-none cursor-pointer hover:bg-white/10 transition-colors"
+                className="group inline-flex items-center justify-center whitespace-nowrap select-none cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-white hover:text-[var(--blue)] hover:border-white hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.25)] active:translate-y-0 active:scale-[0.98]"
               >
-                View Our Projects
+                <span>View Our Projects</span>
+                <span className="ml-1.5 inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1">
+                  →
+                </span>
               </Link>
             </div>
           </div>
@@ -514,7 +521,7 @@ export const Home: React.FC = () => {
                   <Img
                     src={item.img}
                     alt={item.title}
-                    ratio={isMobile ? "16/9" : "4/3"}
+                    ratio="4/5"
                   />
                 </div>
               </div>
@@ -576,7 +583,7 @@ export const Home: React.FC = () => {
               >
                 <div className="overflow-hidden mb-3 bg-white/5">
                   <div className="transition-transform duration-500 group-hover:scale-[1.03]">
-                    <Img src={svc.img} alt={svc.name} ratio={isMobile ? "16/9" : "4/3"} />
+                    <Img src={svc.img} alt={svc.name} ratio="4/5" />
                   </div>
                 </div>
 
@@ -615,8 +622,7 @@ export const Home: React.FC = () => {
                     <Img
                       src={mainImg}
                       alt={p.title}
-                      ratio="16/9"
-                      objectFit="contain"
+                      ratio="4/5"
                     />
                   </div>
                 </div>
@@ -626,7 +632,7 @@ export const Home: React.FC = () => {
                   </h3>
                   <div>
                     <span
-                      className="inline-flex items-center justify-center font-semibold text-white uppercase transition-colors duration-300 group-hover:bg-[var(--blue-dark)]"
+                      className="inline-flex items-center justify-center font-semibold text-white uppercase transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:bg-[var(--blue-dark)] group-hover:-translate-y-0.5 group-hover:shadow-[0_4px_12px_rgba(30,58,138,0.3)] active:translate-y-0 active:scale-[0.98]"
                       style={{
                         background: "var(--blue)",
                         color: "#FFFFFF",
@@ -634,14 +640,14 @@ export const Home: React.FC = () => {
                         fontWeight: 600,
                         letterSpacing: "0.08em",
                         textTransform: "uppercase",
-                        padding: "8px 14px",
+                        padding: "8px 16px",
                         height: "34px",
                         borderRadius: 0,
                         lineHeight: 1,
-                        transition: "background 0.3s ease",
                       }}
                     >
-                      View Project
+                      <span>View Project</span>
+                      <span className="ml-1.5 inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
                     </span>
                   </div>
                 </div>
@@ -756,7 +762,7 @@ export const Home: React.FC = () => {
             >
               <div className="overflow-hidden mb-4">
                 <div className="transition-transform duration-500 group-hover:scale-[1.03]">
-                  <Img src={art.img} alt={art.title} ratio="4/3" />
+                  <Img src={art.img} alt={art.title} ratio="16/9" />
                 </div>
               </div>
               <span className="block text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-2">

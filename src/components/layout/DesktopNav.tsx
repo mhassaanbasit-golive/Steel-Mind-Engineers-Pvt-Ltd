@@ -67,21 +67,30 @@ export const DesktopNav: React.FC = () => {
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transition-opacity hover:opacity-60 flex items-center py-2"
+                className="group/navlink relative py-2 px-1 flex items-center transition-all duration-300 text-white/85 hover:text-white"
               >
-                {item.label}
+                <span className="relative z-10 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/navlink:-translate-y-[1px]">
+                  {item.label}
+                </span>
+                <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-white transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] scale-x-0 opacity-0 group-hover/navlink:scale-x-100 group-hover/navlink:opacity-100 origin-center" />
               </a>
             ) : (
               <TransitionLink
                 to={item.url}
-                className={`relative py-2 transition-opacity hover:opacity-60 flex items-center ${
-                  isActive ? "text-white" : "text-white/90"
+                className={`group/navlink relative py-2 px-1 flex items-center transition-all duration-300 ${
+                  isActive ? "text-white font-semibold" : "text-white/85 hover:text-white"
                 }`}
               >
-                <span>{item.label}</span>
-                {isActive && (
-                  <span className="absolute bottom-0 inset-x-0 h-[1px] bg-white" />
-                )}
+                <span className="relative z-10 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/navlink:-translate-y-[1px]">
+                  {item.label}
+                </span>
+                <span
+                  className={`absolute bottom-0 left-0 right-0 h-[2px] bg-white transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                    isActive
+                      ? "scale-x-100 opacity-100"
+                      : "scale-x-0 opacity-0 group-hover/navlink:scale-x-100 group-hover/navlink:opacity-100 origin-center"
+                  }`}
+                />
               </TransitionLink>
             )}
 
@@ -90,7 +99,7 @@ export const DesktopNav: React.FC = () => {
               <div
                 className={`absolute top-full left-0 ${
                   isAbout ? "min-w-[200px]" : "w-[280px]"
-                } bg-white text-[var(--ink)] border border-[var(--line,#E5E5E5)] p-2 z-50 animate-[fadeDrop8_250ms_cubic-bezier(0.16,1,0.3,1)_forwards] shadow-none`}
+                } bg-white text-[var(--ink)] border border-[var(--line,#E5E5E5)] p-2 z-50 animate-[fadeDrop8_250ms_cubic-bezier(0.16,1,0.3,1)_forwards] shadow-lg`}
                 onMouseEnter={() => setActiveDropdown(item.label)}
                 onMouseLeave={() => setActiveDropdown(null)}
               >
@@ -106,13 +115,16 @@ export const DesktopNav: React.FC = () => {
                       key={child.url}
                       to={child.url}
                       onClick={() => setActiveDropdown(null)}
-                      className={`block px-4 py-2.5 text-[13px] transition-colors border-b border-[var(--line,#E5E5E5)] last:border-b-0 ${
+                      className={`group/drop flex items-center justify-between px-4 py-2.5 text-[13px] transition-all duration-200 ease-out border-b border-[var(--line,#E5E5E5)] last:border-b-0 ${
                         isChildActive
-                          ? "bg-[var(--blue,#1E3A8A)] text-white font-semibold"
-                          : "text-[var(--ink,#0A0A0A)] hover:bg-[var(--blue,#1E3A8A)] hover:text-white"
+                          ? "bg-[var(--blue,#1E3A8A)] text-white font-semibold pl-5"
+                          : "text-[var(--ink,#0A0A0A)] hover:bg-[var(--blue,#1E3A8A)] hover:text-white hover:pl-5"
                       }`}
                     >
-                      {child.label}
+                      <span>{child.label}</span>
+                      <span className="opacity-0 group-hover/drop:opacity-100 transition-opacity duration-200 text-[11px]">
+                        &rarr;
+                      </span>
                     </TransitionLink>
                   );
                 })}

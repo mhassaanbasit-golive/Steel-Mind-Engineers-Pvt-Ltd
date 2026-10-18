@@ -172,6 +172,11 @@ export const AppRoutes: React.FC = () => {
         }
       />
 
+      {/* Project Short Slug Aliases */}
+      <Route path="/projects/haier-store-shed/" element={<Navigate to="/projects/haier-peb-crane-and-mezzanine-shed-raiwind/" replace />} />
+      <Route path="/projects/dravton-dairy-shed/" element={<Navigate to="/projects/dravton-dairy-peb-dairy-shed-chunian/" replace />} />
+      <Route path="/projects/maria-b-mezzanine/" element={<Navigate to="/projects/maria-b-peb-mezzanine-floor-lahore/" replace />} />
+
       {/* 3. Published Project Detail Pages (T5) */}
       {publishedProjects.map((proj) => {
         const url = `/projects/${proj.slug}/`;
@@ -334,8 +339,8 @@ export const AppRoutes: React.FC = () => {
           ComponentToRender = <Hub data={page} />;
         } else if (template === "T2s") {
           ComponentToRender = <Info data={page} isStepsPage={true} />;
-        } else if (template === "T3") {
-          ComponentToRender = <DiagramGallery data={page} />;
+        } else {
+          ComponentToRender = <Info data={page} />;
         }
 
         return (
