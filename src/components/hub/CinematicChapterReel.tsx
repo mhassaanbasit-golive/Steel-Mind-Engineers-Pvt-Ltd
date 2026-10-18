@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "../ui/TransitionLink.tsx";
 import { POOLS } from "../../data/pool.ts";
 
 export interface ReelChapterItem {

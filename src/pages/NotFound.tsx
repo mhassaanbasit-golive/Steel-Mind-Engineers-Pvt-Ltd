@@ -3,6 +3,20 @@ import { UI } from "../data/ui.ts";
 import { Button } from "../components/ui/Button.tsx";
 
 export const NotFound: React.FC = () => {
+  React.useEffect(() => {
+    let meta = document.querySelector('meta[name="robots"]') as HTMLMetaElement | null;
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.name = "robots";
+      document.head.appendChild(meta);
+    }
+    const prev = meta.content;
+    meta.content = "noindex, nofollow";
+    return () => {
+      if (meta) meta.content = prev || "index, follow";
+    };
+  }, []);
+
   return (
     <div className="w-full min-h-[60vh] flex flex-col items-center justify-center text-center px-4 pt-[calc(var(--header-h)+48px)] pb-24 bg-white">
       <h1 className="text-[20px] lg:text-[32px] font-semibold text-[var(--ink)] leading-[1.15] mb-4">

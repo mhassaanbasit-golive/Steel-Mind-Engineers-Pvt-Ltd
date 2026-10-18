@@ -7,6 +7,8 @@ import React, {
   useCallback,
 } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { lenis, stopScroll, startScroll, scrollToTop } from "../lib/lenis.ts";
+import { ScrollTrigger } from "../lib/gsap.ts";
 
 interface PageTransitionContextType {
   transitionNavigate: (to: string) => void;
@@ -16,7 +18,7 @@ interface PageTransitionContextType {
 const PageTransitionContext = createContext<PageTransitionContextType>({
   transitionNavigate: () => {},
   isTransitioning: false,
-});
+} satisfies PageTransitionContextType);
 
 export const useTransitionNavigate = () => {
   const ctx = useContext(PageTransitionContext);
@@ -28,52 +30,49 @@ export const useIsTransitioning = () => {
   return ctx.isTransitioning;
 };
 
-// Helper: decode any hero image or high priority image on the incoming page
+// Helper: decode hero image on incoming page
 const waitForHeroImage = (): Promise<void> => {
   return new Promise((resolve) => {
-    const timer = setTimeout(resolve, 3000);
+    const timer = setTimeout(resolve, 800);
 
-    // Give React time to mount the DOM
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const heroImg = document.querySelector<HTMLImageElement>(
-          'img[fetchpriority="high"], main img:first-of-type, #main img:first-of-type'
-        );
+      const heroImg = document.querySelector<HTMLImageElement>(
+        'img[fetchpriority="high"], main img:first-of-type, #main img:first-of-type, section:first-of-type img'
+      );
 
-        if (!heroImg) {
-          clearTimeout(timer);
-          resolve();
-          return;
-        }
+      if (!heroImg) {
+        clearTimeout(timer);
+        resolve();
+        return;
+      }
 
-        if (heroImg.complete && heroImg.naturalWidth > 0) {
-          clearTimeout(timer);
-          resolve();
-          return;
-        }
+      if (heroImg.complete && heroImg.naturalWidth > 0) {
+        clearTimeout(timer);
+        resolve();
+        return;
+      }
 
-        if (heroImg.decode) {
-          heroImg
-            .decode()
-            .then(() => {
-              clearTimeout(timer);
-              resolve();
-            })
-            .catch(() => {
-              clearTimeout(timer);
-              resolve();
-            });
-        } else {
-          heroImg.onload = () => {
+      if (heroImg.decode) {
+        heroImg
+          .decode()
+          .then(() => {
             clearTimeout(timer);
             resolve();
-          };
-          heroImg.onerror = () => {
+          })
+          .catch(() => {
             clearTimeout(timer);
             resolve();
-          };
-        }
-      });
+          });
+      } else {
+        heroImg.onload = () => {
+          clearTimeout(timer);
+          resolve();
+        };
+        heroImg.onerror = () => {
+          clearTimeout(timer);
+          resolve();
+        };
+      }
     });
   });
 };
@@ -82,7 +81,7 @@ const waitForFonts = (): Promise<void> => {
   if (typeof document !== "undefined" && document.fonts?.ready) {
     return Promise.race([
       document.fonts.ready.then(() => {}),
-      new Promise<void>((r) => setTimeout(r, 2000)),
+      new Promise<void>((r) => setTimeout(r, 600)),
     ]);
   }
   return Promise.resolve();
@@ -96,202 +95,293 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
   const currentLocationRef = useRef(location.pathname);
   currentLocationRef.current = location.pathname;
 
-  const isLockedRef = useRef(false);
-  const [overlayVisible, setOverlayVisible] = useState(true);
-  const [overlayOpacity, setOverlayOpacity] = useState(1);
-  const [transitionDuration, setTransitionDuration] = useState(400);
+  const isTransitioningRef = useRef(false);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const dotsRef = useRef<HTMLDivElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
 
-  const prefersReduced =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const [overlayActive, setOverlayActive] = useState(false);
+  const [loadingBarVisible, setLoadingBarVisible] = useState(false);
 
-  // Initial load handler
+  // Set history manual scroll restoration
   useEffect(() => {
-    // Clean up initial HTML preloader if present
-    const preloader = document.getElementById("initial-preloader");
-    if (preloader) {
-      preloader.remove();
+    if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
     }
-    document.documentElement.classList.remove("site-loading");
+  }, []);
 
-    const startTime = Date.now();
-    isLockedRef.current = true;
+  // Save scroll position per path
+  useEffect(() => {
+    const saveScroll = () => {
+      try {
+        const key = `scroll_${location.pathname}`;
+        sessionStorage.setItem(key, String(window.scrollY));
+      } catch {}
+    };
 
-    Promise.all([waitForFonts(), waitForHeroImage()]).then(() => {
-      const elapsed = Date.now() - startTime;
-      const remainingHold = Math.max(0, 600 - elapsed);
+    window.addEventListener("beforeunload", saveScroll);
+    return () => {
+      saveScroll();
+      window.removeEventListener("beforeunload", saveScroll);
+    };
+  }, [location.pathname]);
 
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-        const fadeOutTime = prefersReduced ? 200 : 600;
-        setTransitionDuration(fadeOutTime);
-        setOverlayOpacity(0);
-
+  // Loading bar animation controller
+  const startLoadingBar = useCallback(() => {
+    setLoadingBarVisible(true);
+    const bar = progressBarRef.current;
+    if (bar) {
+      bar.style.transition = "none";
+      bar.style.transform = "scaleX(0)";
+      bar.style.opacity = "1";
+      requestAnimationFrame(() => {
+        bar.style.transition = "transform 400ms cubic-bezier(0.16, 1, 0.3, 1)";
+        bar.style.transform = "scaleX(0.7)";
         setTimeout(() => {
-          setOverlayVisible(false);
-          isLockedRef.current = false;
-        }, fadeOutTime);
-      }, remainingHold);
-    });
-  }, [prefersReduced]);
+          if (isTransitioningRef.current && bar) {
+            bar.style.transition = "transform 600ms ease-out";
+            bar.style.transform = "scaleX(0.92)";
+          }
+        }, 350);
+      });
+    }
+  }, []);
 
-  // Back/forward navigation (popstate)
+  const finishLoadingBar = useCallback(() => {
+    const bar = progressBarRef.current;
+    if (bar) {
+      bar.style.transition = "transform 200ms ease-out";
+      bar.style.transform = "scaleX(1)";
+      setTimeout(() => {
+        bar.style.transition = "opacity 250ms ease";
+        bar.style.opacity = "0";
+        setTimeout(() => {
+          setLoadingBarVisible(false);
+          bar.style.transform = "scaleX(0)";
+        }, 250);
+      }, 150);
+    } else {
+      setLoadingBarVisible(false);
+    }
+  }, []);
+
+  // Handle browser back/forward buttons (POP)
   useEffect(() => {
     const handlePopState = () => {
-      if (isLockedRef.current) return;
-      isLockedRef.current = true;
+      if (isTransitioningRef.current) return;
+      isTransitioningRef.current = true;
+      setOverlayActive(true);
+      startLoadingBar();
 
-      // Show overlay at once (no fade-in delay)
-      setTransitionDuration(0);
-      setOverlayOpacity(1);
-      setOverlayVisible(true);
+      const overlay = overlayRef.current;
+      const dots = dotsRef.current;
+      if (overlay) {
+        overlay.style.transition = "clip-path 400ms cubic-bezier(0.76, 0, 0.24, 1)";
+        overlay.style.clipPath = "inset(0 0 0 0)";
+      }
+      if (dots) {
+        dots.style.transition = "opacity 200ms ease";
+        dots.style.opacity = "1";
+      }
 
-      const startTime = Date.now();
+      stopScroll();
+
       Promise.all([waitForFonts(), waitForHeroImage()]).then(() => {
-        const elapsed = Date.now() - startTime;
-        const remainingHold = Math.max(0, 600 - elapsed);
+        // Restore scroll position
+        let savedY = 0;
+        try {
+          const key = `scroll_${window.location.pathname}`;
+          savedY = Number(sessionStorage.getItem(key)) || 0;
+        } catch {}
+
+        if (lenis) {
+          lenis.scrollTo(savedY, { immediate: true, force: true });
+        } else {
+          window.scrollTo(0, savedY);
+        }
+        ScrollTrigger.refresh();
+        finishLoadingBar();
 
         setTimeout(() => {
-          window.scrollTo(0, 0);
-          const fadeOutTime = prefersReduced ? 200 : 600;
-          setTransitionDuration(fadeOutTime);
-          setOverlayOpacity(0);
+          if (dots) dots.style.opacity = "0";
+          if (overlay) {
+            overlay.style.transition = "clip-path 500ms cubic-bezier(0.76, 0, 0.24, 1)";
+            overlay.style.clipPath = "inset(0 0 100% 0)";
+          }
 
           setTimeout(() => {
-            setOverlayVisible(false);
-            isLockedRef.current = false;
-          }, fadeOutTime);
-        }, remainingHold);
+            if (overlay) {
+              // PREVENT FLICKER: Set transition to none before resetting position!
+              overlay.style.transition = "none";
+              overlay.style.clipPath = "inset(100% 0 0 0)";
+            }
+            setOverlayActive(false);
+            isTransitioningRef.current = false;
+            startScroll();
+          }, 500);
+        }, 100);
       });
     };
 
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
-  }, [prefersReduced]);
+  }, [startLoadingBar, finishLoadingBar]);
 
-  // Programmatic & Link transition navigation
+  // Transition navigation function
   const transitionNavigate = useCallback(
     (to: string) => {
-      // 1. Ignore click if a transition is running (ref lock)
-      if (isLockedRef.current) return;
+      if (isTransitioningRef.current) return;
 
-      // Link to current page: do nothing
       const currentClean = currentLocationRef.current.replace(/\/$/, "");
       const toClean = to.split("?")[0].split("#")[0].replace(/\/$/, "");
       if (currentClean === toClean) {
+        if (lenis) {
+          lenis.scrollTo(0, { duration: 0.8 });
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
         return;
       }
 
-      isLockedRef.current = true;
-      const fadeInTime = prefersReduced ? 200 : 400;
-      setTransitionDuration(fadeInTime);
-      setOverlayVisible(true);
-      // Ensure element is visible before starting opacity fade
-      requestAnimationFrame(() => {
-        setOverlayOpacity(1);
-      });
+      isTransitioningRef.current = true;
+      setOverlayActive(true);
+      startLoadingBar();
+      stopScroll();
 
-      const startTime = Date.now();
+      const overlay = overlayRef.current;
+      const dots = dotsRef.current;
 
-      // 2. Overlay fades IN 400ms.
-      // 3. When fully visible, change route.
+      // 1. Covering: sweep blue curtain in
+      if (overlay) {
+        overlay.style.transition = "clip-path 400ms cubic-bezier(0.76, 0, 0.24, 1)";
+        overlay.style.clipPath = "inset(0 0 0 0)";
+      }
+
+      setTimeout(() => {
+        if (dots) {
+          dots.style.transition = "opacity 180ms ease";
+          dots.style.opacity = "1";
+        }
+      }, 200);
+
+      // 2. Perform navigation once covered
       setTimeout(() => {
         routerNavigate(to);
 
-        // 4. Wait for: route component loaded, fonts, hero image decoded
-        Promise.all([waitForFonts(), waitForHeroImage()]).then(() => {
-          // 5. Hold overlay at least 600ms total
-          const elapsed = Date.now() - startTime;
-          const remainingHold = Math.max(0, 600 - elapsed);
+        // 3. Wait for content readiness
+        Promise.all([
+          waitForFonts(),
+          waitForHeroImage(),
+          new Promise<void>((r) => {
+            requestAnimationFrame(() => requestAnimationFrame(() => r()));
+          }),
+        ]).then(() => {
+          // Scroll immediately to top while covered
+          scrollToTop();
+          ScrollTrigger.refresh();
+          finishLoadingBar();
 
+          // 4. Revealing: upward wipe
           setTimeout(() => {
-            // 6. window.scrollTo(0,0) before fade-out
-            window.scrollTo(0, 0);
+            if (dots) {
+              dots.style.transition = "opacity 120ms ease";
+              dots.style.opacity = "0";
+            }
 
-            // 7. Fade OUT 600ms. Release lock.
-            const fadeOutTime = prefersReduced ? 200 : 600;
-            setTransitionDuration(fadeOutTime);
-            setOverlayOpacity(0);
+            if (overlay) {
+              overlay.style.transition = "clip-path 500ms cubic-bezier(0.76, 0, 0.24, 1)";
+              overlay.style.clipPath = "inset(0 0 100% 0)";
+            }
 
+            // Fire page reveal event for staggered entrance animations
             setTimeout(() => {
-              setOverlayVisible(false);
-              isLockedRef.current = false;
-            }, fadeOutTime);
-          }, remainingHold);
+              document.dispatchEvent(new Event("page:revealed"));
+              window.dispatchEvent(new Event("page:revealed"));
+            }, 250);
+
+            // 5. Reset to idle — PREVENT FLICKER: disable transition before repositioning!
+            setTimeout(() => {
+              if (overlay) {
+                overlay.style.transition = "none";
+                overlay.style.clipPath = "inset(100% 0 0 0)";
+              }
+              setOverlayActive(false);
+              isTransitioningRef.current = false;
+              startScroll();
+            }, 500);
+          }, 80);
         });
-      }, fadeInTime);
+      }, 400);
+
+      // Safety timeout: ensure site never gets permanently locked
+      setTimeout(() => {
+        if (isTransitioningRef.current) {
+          finishLoadingBar();
+          if (overlay) {
+            overlay.style.transition = "none";
+            overlay.style.clipPath = "inset(100% 0 0 0)";
+          }
+          setOverlayActive(false);
+          isTransitioningRef.current = false;
+          startScroll();
+        }
+      }, 3500);
     },
-    [routerNavigate, prefersReduced]
+    [routerNavigate, startLoadingBar, finishLoadingBar]
   );
 
   return (
     <PageTransitionContext.Provider
-      value={{ transitionNavigate, isTransitioning: overlayVisible }}
+      value={{ transitionNavigate, isTransitioning: overlayActive }}
     >
+      {/* Sleek Top Loading Bar (Linear / YouTube style) */}
+      <div
+        aria-hidden="true"
+        className="fixed top-0 inset-x-0 z-[10001] h-[3px] pointer-events-none overflow-hidden"
+        style={{ display: loadingBarVisible ? "block" : "none" }}
+      >
+        <div
+          ref={progressBarRef}
+          className="w-full h-full bg-gradient-to-r from-[#1E3A8A] via-[#2563EB] to-[#60A5FA] origin-left"
+          style={{
+            transform: "scaleX(0)",
+            transformOrigin: "left center",
+            boxShadow: "0 0 10px rgba(37,99,235,0.7), 0 0 4px #FFFFFF",
+          }}
+        />
+      </div>
+
       {children}
 
-      {/* ONE full-screen overlay. position fixed; inset 0; z-index 9999; background exact nav blue. */}
+      {/* Royal Blue Curtain Overlay with 3 Pulsing Dots */}
       <div
-        aria-hidden={!overlayVisible}
+        ref={overlayRef}
+        aria-hidden={!overlayActive}
         className="fixed inset-0 z-[9999] flex items-center justify-center select-none"
         style={{
-          backgroundColor: "var(--blue, #1E3A8A)",
-          opacity: overlayOpacity,
-          pointerEvents: overlayVisible ? "auto" : "none",
-          transition: `opacity ${transitionDuration}ms cubic-bezier(0.22, 1, 0.36, 1)`,
+          backgroundColor: "#1E3A8A",
+          clipPath: "inset(100% 0 0 0)",
+          pointerEvents: overlayActive ? "auto" : "none",
         }}
       >
-        {/* Centre: 3 white dots in a row. Size clamp(8px, 2.2vw, 14px). Gap clamp(8px, 2vw, 14px). */}
         <div
-          className="flex items-center justify-center"
-          style={{
-            gap: "clamp(8px, 2vw, 14px)",
-          }}
+          ref={dotsRef}
+          className="flex items-center justify-center opacity-0"
+          style={{ gap: "10px" }}
         >
           <span
-            className="rounded-full bg-white block"
-            style={{
-              width: "clamp(8px, 2.2vw, 14px)",
-              height: "clamp(8px, 2.2vw, 14px)",
-              animation: prefersReduced
-                ? "none"
-                : "pageTransitionWave 1200ms cubic-bezier(0.22, 1, 0.36, 1) infinite 0ms",
-            }}
+            className="w-2.5 h-2.5 rounded-full bg-white block animate-bounce"
+            style={{ animationDelay: "0ms", animationDuration: "750ms" }}
           />
           <span
-            className="rounded-full bg-white block"
-            style={{
-              width: "clamp(8px, 2.2vw, 14px)",
-              height: "clamp(8px, 2.2vw, 14px)",
-              animation: prefersReduced
-                ? "none"
-                : "pageTransitionWave 1200ms cubic-bezier(0.22, 1, 0.36, 1) infinite 160ms",
-            }}
+            className="w-2.5 h-2.5 rounded-full bg-white block animate-bounce"
+            style={{ animationDelay: "150ms", animationDuration: "750ms" }}
           />
           <span
-            className="rounded-full bg-white block"
-            style={{
-              width: "clamp(8px, 2.2vw, 14px)",
-              height: "clamp(8px, 2.2vw, 14px)",
-              animation: prefersReduced
-                ? "none"
-                : "pageTransitionWave 1200ms cubic-bezier(0.22, 1, 0.36, 1) infinite 320ms",
-            }}
+            className="w-2.5 h-2.5 rounded-full bg-white block animate-bounce"
+            style={{ animationDelay: "300ms", animationDuration: "750ms" }}
           />
         </div>
-
-        <style>{`
-          @keyframes pageTransitionWave {
-            0%, 100% {
-              transform: scale(0.6);
-              opacity: 0.4;
-            }
-            50% {
-              transform: scale(1);
-              opacity: 1;
-            }
-          }
-        `}</style>
       </div>
     </PageTransitionContext.Provider>
   );

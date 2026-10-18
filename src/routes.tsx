@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { PageShell } from "./components/layout/PageShell.tsx";
 import { ALL_PAGES, ALL_ARTICLES, CONTENT_BY_URL } from "./content/index.ts";
@@ -65,12 +65,30 @@ const SuspenseFallback: React.FC = () => (
   </div>
 );
 
+import { useNavigate, useLocation } from "react-router-dom";
+
+const TrailingSlashRedirect: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const { pathname, search, hash } = location;
+    if (pathname !== "/" && !pathname.endsWith("/") && !pathname.includes(".")) {
+      navigate(`${pathname}/${search}${hash}`, { replace: true });
+    }
+  }, [location, navigate]);
+
+  return null;
+};
+
 export const AppRoutes: React.FC = () => {
   const publishedProjects = PROJECTS.filter((p) => p.published);
 
   return (
-    <Suspense fallback={<SuspenseFallback />}>
-      <Routes>
+    <>
+      <TrailingSlashRedirect />
+      <Suspense fallback={null}>
+        <Routes>
       {/* 1. Home */}
       <Route
         path="/"
@@ -342,7 +360,8 @@ export const AppRoutes: React.FC = () => {
           </PageShell>
         }
       />
-    </Routes>
-    </Suspense>
+      </Routes>
+      </Suspense>
+    </>
   );
 };

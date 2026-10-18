@@ -6,6 +6,7 @@ import { Footer } from "./Footer.tsx";
 import { FloatingTools } from "./FloatingTools.tsx";
 import { BackButton } from "../ui/BackButton.tsx";
 import { initMotion } from "../../lib/motion.ts";
+import { ErrorBoundary } from "../common/ErrorBoundary.tsx";
 
 const ChatOverlay = lazy(() =>
   import("../chat/ChatOverlay.tsx").then((m) => ({ default: m.ChatOverlay }))
@@ -65,7 +66,9 @@ export const PageShell: React.FC<PageShellProps> = ({
         className="flex-1 w-full flow-root m-0 p-0"
       >
         <div key={location.pathname} className="w-full">
-          {children}
+          <ErrorBoundary resetKey={location.pathname}>
+            {children}
+          </ErrorBoundary>
         </div>
       </main>
 

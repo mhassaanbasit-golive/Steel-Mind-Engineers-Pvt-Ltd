@@ -8,13 +8,106 @@ import { NextBand } from "../components/ui/NextBand.tsx";
 import { poolImage } from "../data/pool.ts";
 import { NAV } from "../data/nav.ts";
 
+import {
+  EngineeringLayout,
+  PrimaryFramingLayout,
+  BasicParametersLayout,
+  SubStructuresLayout,
+  CraneSystemLayout,
+  MezzanineLayout,
+  AccessoriesLayout,
+} from "../components/subpage/layouts/PebLayouts.tsx";
+import {
+  FactoryShedsLayout,
+  DairyShedsLayout,
+  PoultryShedsLayout,
+  WorkshopShedsLayout,
+  CraneShedsLayout,
+} from "../components/subpage/layouts/IndustrialLayouts.tsx";
+import {
+  StorageWarehousesLayout,
+  LogisticsWarehousesLayout,
+  ColdStorageLayout,
+  GrainWarehousesLayout,
+  LoadingDocksLayout,
+} from "../components/subpage/layouts/WarehouseLayouts.tsx";
+import {
+  ColumnsBeamsLayout,
+  TrussesLayout,
+  MezzanineFloorsLayout,
+  SteelBridgesLayout,
+  CraneGantryLayout,
+} from "../components/subpage/layouts/StructuralLayouts.tsx";
+import {
+  MachineFramesLayout,
+  StorageTanksLayout,
+  HoppersBinsLayout,
+  DoorsGatesLayout,
+  SteelStairsLayout,
+} from "../components/subpage/layouts/CustomLayouts.tsx";
+import {
+  DesignLayout,
+  DetailingLayout,
+  FabricationLayout,
+  CleaningLayout,
+  PaintingLayout,
+  ErectionLayout,
+  AfterSaleLayout,
+} from "../components/subpage/layouts/ServicesLayouts.tsx";
+
 export interface InfoProps {
   data: ContentData;
   isStepsPage?: boolean;
 }
 
 export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
-  // Hero variant: Blue for About and Services, image for division children
+  // 1. PEB Division Signature Layouts (9.1 - 9.7)
+  if (data.url.includes("engineering-department")) return <EngineeringLayout data={data} />;
+  if (data.url.includes("primary-framing-system")) return <PrimaryFramingLayout data={data} />;
+  if (data.url.includes("basic-parameters")) return <BasicParametersLayout data={data} />;
+  if (data.url.includes("sub-structures")) return <SubStructuresLayout data={data} />;
+  if (data.url.includes("crane-system")) return <CraneSystemLayout data={data} />;
+  if (data.url.includes("mezzanine-system")) return <MezzanineLayout data={data} />;
+  if (data.url.includes("accessories")) return <AccessoriesLayout data={data} />;
+
+  // 2. Industrial Sheds Division Signature Layouts (9.8 - 9.12)
+  if (data.url.includes("factory-sheds")) return <FactoryShedsLayout data={data} />;
+  if (data.url.includes("dairy-farm-sheds")) return <DairyShedsLayout data={data} />;
+  if (data.url.includes("poultry-sheds")) return <PoultryShedsLayout data={data} />;
+  if (data.url.includes("workshop-sheds")) return <WorkshopShedsLayout data={data} />;
+  if (data.url.includes("crane-sheds")) return <CraneShedsLayout data={data} />;
+
+  // 3. Steel Warehouses Division Signature Layouts (9.13 - 9.17)
+  if (data.url.includes("storage-warehouses")) return <StorageWarehousesLayout data={data} />;
+  if (data.url.includes("logistics-warehouses")) return <LogisticsWarehousesLayout data={data} />;
+  if (data.url.includes("cold-storage")) return <ColdStorageLayout data={data} />;
+  if (data.url.includes("grain-and-wheat")) return <GrainWarehousesLayout data={data} />;
+  if (data.url.includes("warehouses-with-loading-docks")) return <LoadingDocksLayout data={data} />;
+
+  // 4. Structural Steel Fabrication Signature Layouts (9.18 - 9.22)
+  if (data.url.includes("columns-and-beams")) return <ColumnsBeamsLayout data={data} />;
+  if (data.url.includes("trusses")) return <TrussesLayout data={data} />;
+  if (data.url.includes("mezzanine-floors")) return <MezzanineFloorsLayout data={data} />;
+  if (data.url.includes("steel-bridges")) return <SteelBridgesLayout data={data} />;
+  if (data.url.includes("crane-gantry")) return <CraneGantryLayout data={data} />;
+
+  // 5. Custom Steel Fabrication Signature Layouts (9.23 - 9.27)
+  if (data.url.includes("machine-frames")) return <MachineFramesLayout data={data} />;
+  if (data.url.includes("storage-tanks")) return <StorageTanksLayout data={data} />;
+  if (data.url.includes("hoppers-and-bins")) return <HoppersBinsLayout data={data} />;
+  if (data.url.includes("doors-and-gates")) return <DoorsGatesLayout data={data} />;
+  if (data.url.includes("steel-stairs")) return <SteelStairsLayout data={data} />;
+
+  // 6. Services Sub-pages Signature Layouts (9.28 - 9.34)
+  if (data.url.includes("/services/design/")) return <DesignLayout data={data} />;
+  if (data.url.includes("/services/detailing/")) return <DetailingLayout data={data} />;
+  if (data.url.includes("/services/fabrication/")) return <FabricationLayout data={data} />;
+  if (data.url.includes("/services/cleaning/")) return <CleaningLayout data={data} />;
+  if (data.url.includes("/services/painting/")) return <PaintingLayout data={data} />;
+  if (data.url.includes("/services/erection/")) return <ErectionLayout data={data} />;
+  if (data.url.includes("/services/after-sale-services/")) return <AfterSaleLayout data={data} />;
+
+  // Otherwise, default layout for finished/overview pages
   const isBlueHero = data.url.startsWith("/about-us/") || data.url.startsWith("/services/");
   const headerImg = isBlueHero ? undefined : poolImage(data.url, 0);
 
