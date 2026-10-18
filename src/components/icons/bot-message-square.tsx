@@ -63,13 +63,11 @@ export const BotMessageSquareIcon = forwardRef<
         strokeLinejoin="round"
         strokeWidth="2"
         variants={{
-          normal: { rotate: 0, y: 0, scale: 1 },
+          normal: { scale: 1 },
           animate: {
-            rotate: [0, -3, 3, 0, 0],
-            y: [0, 1.5, -1.5, 0],
-            scale: [1, 1.03, 1],
+            scale: [1, 1.05, 1],
             transition: {
-              duration: 1,
+              duration: 0.6,
               ease: "easeInOut",
               repeat: 0,
             },
@@ -91,7 +89,7 @@ export const BotMessageSquareIcon = forwardRef<
               transition: {
                 duration: 0.6,
                 ease: "easeInOut",
-                repeat: 1,
+                repeat: 0,
               },
             },
           }}
@@ -125,8 +123,8 @@ export const BotMessageSquareIcon = forwardRef<
             animate: {
               opacity: [0.3, 1, 0.3],
               transition: {
-                repeat: Number.POSITIVE_INFINITY,
-                duration: 1.2,
+                repeat: 0,
+                duration: 0.8,
                 delay: 0,
               },
             },
@@ -141,9 +139,9 @@ export const BotMessageSquareIcon = forwardRef<
             animate: {
               opacity: [0.3, 1, 0.3],
               transition: {
-                repeat: Number.POSITIVE_INFINITY,
-                duration: 1.2,
-                delay: 0.3,
+                repeat: 0,
+                duration: 0.8,
+                delay: 0.15,
               },
             },
           }}
@@ -157,9 +155,9 @@ export const BotMessageSquareIcon = forwardRef<
             animate: {
               opacity: [0.3, 1, 0.3],
               transition: {
-                repeat: Number.POSITIVE_INFINITY,
-                duration: 1.2,
-                delay: 0.6,
+                repeat: 0,
+                duration: 0.8,
+                delay: 0.3,
               },
             },
           }}

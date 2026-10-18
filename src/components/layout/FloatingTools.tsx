@@ -32,39 +32,31 @@ export const FloatingTools: React.FC = () => {
   const emailRef = useRef<MessageSquareMoreIconHandle>(null);
   const linkedinRef = useRef<LinkedinIconHandle>(null);
 
-  // Play animation on load, site:ready, or fallback
+  // Make floating tools visible after loader completes or fallback and trigger entrance animation
   useEffect(() => {
     let triggered = false;
 
-    const playIcons = () => {
-      botMessageRef.current?.startAnimation();
-      layoutGridRef.current?.startAnimation();
-    };
-
     const triggerEntrance = () => {
-      if (triggered) {
-        playIcons();
-        return;
-      }
+      if (triggered) return;
       triggered = true;
       setVisible(true);
-      requestAnimationFrame(() => {
-        setTimeout(playIcons, 60);
-      });
+      setTimeout(() => {
+        botMessageRef.current?.startAnimation();
+        layoutGridRef.current?.startAnimation();
+      }, 350);
     };
 
     const handleLoaderDone = () => {
-      setTimeout(triggerEntrance, 300);
+      setTimeout(triggerEntrance, 250);
     };
 
     const handleSiteReady = () => {
       triggerEntrance();
-      playIcons();
     };
 
     window.addEventListener("site:ready", handleSiteReady);
     window.addEventListener("loader:done", handleLoaderDone);
-    const fallbackTimer = setTimeout(triggerEntrance, 1000);
+    const fallbackTimer = setTimeout(triggerEntrance, 900);
 
     return () => {
       window.removeEventListener("site:ready", handleSiteReady);
@@ -72,26 +64,6 @@ export const FloatingTools: React.FC = () => {
       clearTimeout(fallbackTimer);
     };
   }, []);
-
-  // Play animation when scrolled into view (IntersectionObserver, threshold: 0.5)
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            botMessageRef.current?.startAnimation();
-            layoutGridRef.current?.startAnimation();
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-
-    observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, [visible]);
 
   // 6.2: On opening any section that contains an animated icon (dial open), the icon plays its animation once.
   useEffect(() => {
@@ -221,14 +193,17 @@ export const FloatingTools: React.FC = () => {
       {/* Contact Dial Toggle Button */}
       <button
         type="button"
-        onClick={() => setDialOpen(!dialOpen)}
+        onClick={() => {
+          layoutGridRef.current?.startAnimation();
+          setDialOpen(!dialOpen);
+        }}
         onMouseEnter={() => layoutGridRef.current?.startAnimation()}
         aria-label="Contact options"
         style={{
           backgroundColor: "var(--blue)",
           color: "#FFFFFF",
         }}
-        className="w-[44px] h-[44px] text-white flex items-center justify-center mb-3 hover:bg-[var(--blue-dark)] transition-colors cursor-pointer rounded-lg"
+        className="w-[44px] h-[44px] text-white flex items-center justify-center mb-3 hover:bg-[var(--blue-dark)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer rounded-lg shadow-md"
       >
         <LayoutGridIcon
           ref={layoutGridRef}
@@ -242,11 +217,14 @@ export const FloatingTools: React.FC = () => {
       {/* AI Chat Launcher */}
       <button
         type="button"
-        onClick={handleOpenChat}
+        onClick={() => {
+          botMessageRef.current?.startAnimation();
+          handleOpenChat();
+        }}
         onMouseEnter={() => botMessageRef.current?.startAnimation()}
         aria-label="Open AI Assistant Chat"
         style={{ backgroundColor: "var(--blue)" }}
-        className="w-[52px] h-[52px] rounded-full text-white flex items-center justify-center hover:bg-[var(--blue-dark)] active:scale-95 cursor-pointer transition-colors"
+        className="w-[52px] h-[52px] rounded-full text-white flex items-center justify-center hover:bg-[var(--blue-dark)] hover:scale-105 active:scale-95 cursor-pointer transition-all duration-300 shadow-lg"
       >
         <BotMessageSquareIcon
           ref={botMessageRef}

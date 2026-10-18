@@ -148,7 +148,7 @@ export const SwipeRow: React.FC<SwipeRowProps> = ({
         {React.Children.map(children, (child, idx) => (
           <div
             key={idx}
-            className="flex-shrink-0 w-[calc(100vw-110px)] sm:w-[360px] lg:w-[calc((min(100vw,1340px)-2*var(--pad-x)-2*var(--gutter))/2.5)] [scroll-snap-align:start]"
+            className="flex-shrink-0 w-[280px] sm:w-[340px] lg:w-[calc((min(100vw,1340px)-2*var(--pad-x)-2*var(--gutter))/2.5)] [scroll-snap-align:start]"
           >
             {child}
           </div>

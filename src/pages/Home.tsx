@@ -40,7 +40,7 @@ export const Home: React.FC = () => {
 
   const pRef = useRef<HTMLParagraphElement>(null);
 
-  // ITEM 1 — Step C: Animate each character on scroll
+  // ITEM 1 — Step C: Animate each character on scroll efficiently
   useEffect(() => {
     const p = pRef.current;
     if (!p) return;
@@ -49,6 +49,7 @@ export const Home: React.FC = () => {
 
     gsap.registerPlugin(ScrollTrigger);
 
+    let lastRevealed = -1;
     const trigger = ScrollTrigger.create({
       trigger: p,
       start: "top 85%",
@@ -56,9 +57,12 @@ export const Home: React.FC = () => {
       scrub: 0.5,
       onUpdate: (self) => {
         const revealed = Math.floor(self.progress * total);
-        chars.forEach((c, i) => {
-          c.style.color = i < revealed ? "var(--ink)" : "var(--grey)";
-        });
+        if (revealed !== lastRevealed) {
+          lastRevealed = revealed;
+          chars.forEach((c, i) => {
+            c.style.color = i < revealed ? "var(--ink)" : "var(--grey)";
+          });
+        }
       },
     });
 
@@ -505,19 +509,19 @@ export const Home: React.FC = () => {
               className="group flex flex-col h-full bg-transparent cursor-pointer"
               data-reveal=""
             >
-              <div className="overflow-hidden">
+              <div className="overflow-hidden bg-[#F3F4F6]">
                 <div className="transition-transform duration-500 group-hover:scale-[1.03]">
                   <Img
                     src={item.img}
                     alt={item.title}
-                    ratio="4/5"
+                    ratio={isMobile ? "16/9" : "4/3"}
                   />
                 </div>
               </div>
 
-              <div className="p-5 flex-1 flex flex-col justify-between space-y-2">
+              <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-2">
                 <div>
-                  <h3 className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors leading-[1.25]">
+                  <h3 className="text-[15px] lg:text-[17px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors leading-[1.25]">
                     {item.title}
                   </h3>
                   <p className="mt-2 text-[12px] lg:text-[13px] leading-[1.6] text-[var(--grey)] line-clamp-3">
@@ -570,14 +574,14 @@ export const Home: React.FC = () => {
                 className="group block bg-transparent p-4"
                 data-reveal=""
               >
-                <div className="overflow-hidden mb-3">
+                <div className="overflow-hidden mb-3 bg-white/5">
                   <div className="transition-transform duration-500 group-hover:scale-[1.03]">
-                    <Img src={svc.img} alt={svc.name} ratio="4/5" />
+                    <Img src={svc.img} alt={svc.name} ratio={isMobile ? "16/9" : "4/3"} />
                   </div>
                 </div>
 
                 <div className="space-y-1">
-                  <h3 className="text-[14px] lg:text-[17px] font-semibold text-white group-hover:text-white/80 transition-colors leading-[1.25]">
+                  <h3 className="text-[15px] lg:text-[17px] font-semibold text-white group-hover:text-white/80 transition-colors leading-[1.25]">
                     {svc.name}
                   </h3>
                   <p className="text-[12px] lg:text-[13px] leading-[1.6] text-white/80">

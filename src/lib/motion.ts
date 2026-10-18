@@ -6,12 +6,8 @@ export const EASE_OUT = "cubic-bezier(0.22, 1, 0.36, 1)";
 export const EASE_IN_OUT = "cubic-bezier(0.76, 0, 0.24, 1)";
 export const EASE_SOFT = "cubic-bezier(0.23, 1, 0.32, 1)";
 
-// Synchronize Lenis and ScrollTrigger once
+// Synchronize Lenis and ScrollTrigger once (handled in lenis.ts)
 if (typeof window !== "undefined") {
-  if (lenis) {
-    lenis.on("scroll", ScrollTrigger.update);
-  }
-
   if (document.fonts) {
     document.fonts.ready.then(() => {
       ScrollTrigger.refresh();

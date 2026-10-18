@@ -19,115 +19,115 @@ export const SubpageNextBanner: React.FC<SubpageNextBannerProps> = ({
   compact = false,
   overlay = false,
 }) => {
-  const [ratio, setRatio] = useState<string>("16 / 9");
   const [hasError, setHasError] = useState(false);
-
-  const checkRatio = (img: HTMLImageElement | null) => {
-    if (!img) return;
-    if (img.naturalWidth && img.naturalHeight) {
-      const w = img.naturalWidth;
-      const h = img.naturalHeight;
-      const target = 16 / 9;
-      const actual = w / h;
-      if (Math.abs(actual - target) / target <= 0.06) {
-        setRatio("16 / 9");
-      } else {
-        setRatio(`${w} / ${h}`);
-      }
-    }
-  };
-
-  const nextUrl = image ? cl(image, 2000) : "";
+  const nextUrl = image ? cl(image, 2560) : "";
 
   return (
-    <section className="w-full bg-white border-t border-[#E5E5E5]">
+    <section className="w-full bg-[#0A0A0A] border-t border-[#E5E5E5]/20 overflow-hidden">
       <TransitionLink
         to={url}
         className="group block w-full no-underline select-none cursor-pointer"
       >
-        {/* Banner Image Box: stretch with natural aspect ratio */}
-        <div
-          className="relative w-full overflow-hidden bg-[#0F172A]"
-          style={{ aspectRatio: ratio }}
-        >
+        {/* Desktop (768px and up): Cinematic widescreen banner */}
+        <div className="hidden md:block relative w-full h-[380px] lg:h-[440px] overflow-hidden bg-[#0A0A0A]">
           {nextUrl && !hasError ? (
             <img
               src={nextUrl}
               alt={title}
               loading="lazy"
-              ref={(el) => {
-                if (el && el.complete && el.naturalWidth > 0) {
-                  checkRatio(el);
-                }
-              }}
-              onLoad={(e) => checkRatio(e.currentTarget)}
               onError={() => setHasError(true)}
-              className="absolute inset-0 w-full h-full block"
-              style={{ objectFit: "fill" }}
+              className="absolute inset-0 w-full h-full object-cover object-center block transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.05]"
             />
           ) : (
-            <div className="absolute inset-0 w-full h-full bg-[#0F172A]" />
+            <div className="absolute inset-0 w-full h-full bg-[#0A0A0A]" />
           )}
 
-          {/* Separate 20% exact nav blue overlay */}
+          {/* 1. Flat tint on photo: nav blue at 25% */}
           <div
             className="absolute inset-0 pointer-events-none"
-            style={{ backgroundColor: "rgba(30, 58, 138, 0.20)" }}
+            style={{ backgroundColor: "rgba(30, 58, 138, 0.25)" }}
           />
 
-          {/* Desktop dark gradient for high contrast */}
+          {/* 2. Dark contrast gradient */}
           <div
-            className="hidden md:block absolute inset-0 pointer-events-none"
+            className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                "linear-gradient(to top, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.30) 45%, rgba(0,0,0,0) 100%)",
+                "linear-gradient(to top, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.35) 50%, rgba(0, 0, 0, 0.15) 100%)",
             }}
           />
 
-          {/* 20% overlay when overlay prop is true */}
-          {overlay && (
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                backgroundColor: "rgba(0, 0, 0, 0.20)",
-                zIndex: 3,
-              }}
-            />
-          )}
+          {/* 3. Left gradient for high text readability */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(to right, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.35) 45%, rgba(0, 0, 0, 0) 75%)",
+            }}
+          />
 
           {/* Desktop Headline & link bottom-left on image */}
-          <div className="hidden md:block absolute bottom-8 lg:bottom-12 left-6 lg:left-12 max-w-[800px] text-left z-10">
-            <h2 className="text-[24px] lg:text-[38px] font-bold text-white tracking-[-0.02em] leading-[1.15] mb-4">
+          <div className="absolute bottom-10 lg:bottom-14 left-6 lg:left-12 max-w-[840px] text-left z-10">
+            <span className="block text-[11px] uppercase tracking-[0.14em] font-semibold text-white/80 mb-2.5">
+              NEXT
+            </span>
+            <h2 className="text-[26px] lg:text-[38px] font-bold text-white tracking-[-0.02em] leading-[1.18] mb-5">
               {heading}
             </h2>
-            <div className="inline-flex items-center gap-2 text-[14px] lg:text-[16px] font-semibold text-white">
+            <div className="inline-flex items-center gap-2.5 text-[15px] lg:text-[17px] font-semibold text-white">
               <span>{title}</span>
-              <span className="inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-2">
+              <span className="inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-2 text-[20px]">
                 &rarr;
               </span>
             </div>
           </div>
         </div>
 
-        {/* Mobile (<768px): Headline and link BELOW image on nav blue, 24px side, 32px top/bottom */}
-        <div className="md:hidden w-full bg-[var(--blue)] text-white px-6 py-8 text-left">
-          <h2
-            className={`font-bold text-white tracking-[-0.02em] mb-4 ${
-              compact ? "text-balance [hyphens:none] line-clamp-2" : "text-[19px] leading-[1.25]"
-            }`}
-            style={{
-              fontSize: compact ? "clamp(18px, 5vw, 24px)" : undefined,
-              lineHeight: compact ? 1.25 : undefined,
-              textWrap: compact ? ("balance" as any) : undefined,
-            }}
+        {/* Mobile (below 768px): Photo on top 16/9, solid nav-blue panel underneath */}
+        <div className="md:hidden w-full flex flex-col">
+          <div
+            className="relative w-full overflow-hidden bg-[#0A0A0A]"
+            style={{ aspectRatio: "16 / 9" }}
           >
-            {heading}
-          </h2>
-          <div className="inline-flex items-center gap-2 text-[14px] font-semibold text-white">
-            <span>{title}</span>
-            <span className="inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5">
-              &rarr;
+            {nextUrl && !hasError ? (
+              <img
+                src={nextUrl}
+                alt={title}
+                loading="lazy"
+                onError={() => setHasError(true)}
+                className="w-full h-full object-cover object-center block"
+              />
+            ) : (
+              <div className="w-full h-full bg-[#0A0A0A]" />
+            )}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{ backgroundColor: "rgba(30, 58, 138, 0.22)" }}
+            />
+          </div>
+
+          <div
+            style={{ backgroundColor: "var(--blue, #1E3A8A)" }}
+            className="w-full bg-[var(--blue)] text-white px-6 py-8 text-left"
+          >
+            <span className="block text-[10px] uppercase tracking-[0.14em] font-semibold text-white/80 mb-2">
+              NEXT
             </span>
+            <h2
+              className="font-bold text-white tracking-[-0.02em] mb-4"
+              style={{
+                fontSize: "clamp(17px, 4.8vw, 22px)",
+                lineHeight: 1.25,
+              }}
+            >
+              {heading}
+            </h2>
+            <div className="inline-flex items-center gap-2 text-[14px] font-semibold text-white">
+              <span>{title}</span>
+              <span className="inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5 text-[17px]">
+                &rarr;
+              </span>
+            </div>
           </div>
         </div>
       </TransitionLink>

@@ -10,7 +10,7 @@ export interface HeaderProps {
   hasDarkHero?: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = () => {
+export const Header: React.FC<HeaderProps> = ({ hasDarkHero = true }) => {
   const location = useLocation();
   const isHomepage = location.pathname === "/";
   const [scrolled, setScrolled] = useState(false);
@@ -86,8 +86,8 @@ export const Header: React.FC<HeaderProps> = () => {
     }
   }, [mobileMenuOpen]);
 
-  // Visual state: transparent on hero if homepage and not scrolled; otherwise solid Royal Blue
-  const isSolidBlue = !isHomepage || scrolled || mobileMenuOpen;
+  // Visual state: transparent on hero if hasDarkHero and not scrolled; otherwise solid Royal Blue
+  const isSolidBlue = !hasDarkHero || scrolled || mobileMenuOpen;
 
   return (
     <>

@@ -57,7 +57,7 @@ export const PageShell: React.FC<PageShellProps> = ({
   return (
     <div className="relative min-h-screen flex flex-col bg-white text-[var(--ink)] overflow-x-clip">
       <SkipLink />
-      <Header hasDarkHero={isHomepage} />
+      <Header hasDarkHero={hasDarkHero} />
       {!isHomepage && <BackButton />}
 
       <main

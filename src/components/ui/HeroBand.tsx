@@ -61,12 +61,13 @@ export const HeroBand: React.FC<HeroBandProps> = ({
   // Variant: immersive (PART 7.1)
   if (variant === "immersive") {
     return (
-      <section ref={containerRef} className="relative w-full bg-[#0A0A0A]">
+      <section ref={containerRef} className="relative w-full bg-[#0A0A0A] overflow-hidden">
         {/* Desktop (768px and up) */}
         <div
           className="hidden md:flex relative w-full overflow-hidden flex-col justify-between"
           style={{
-            height: "clamp(520px, calc(100svh - var(--nav-h)), 760px)",
+            height: "min(calc(100svh - 40px), 720px)",
+            minHeight: "520px",
           }}
         >
           {/* Full-bleed photo with scale & fade */}
@@ -78,14 +79,14 @@ export const HeroBand: React.FC<HeroBandProps> = ({
               loading="eager"
               fetchPriority="high"
               decoding="async"
-              className="w-full h-full object-cover object-center"
+              className="w-full h-full object-cover object-[center_45%]"
             />
           </div>
 
-          {/* Flat nav blue tint 22% */}
+          {/* Flat nav blue tint 28% */}
           <div
             className="absolute inset-0 z-[1] pointer-events-none"
-            style={{ backgroundColor: "rgba(30, 58, 138, 0.22)" }}
+            style={{ backgroundColor: "rgba(30, 58, 138, 0.28)" }}
           />
 
           {/* Gradient */}
@@ -93,20 +94,27 @@ export const HeroBand: React.FC<HeroBandProps> = ({
             className="absolute inset-0 z-[2] pointer-events-none"
             style={{
               background:
-                "linear-gradient(to top, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.28) 38%, rgba(0,0,0,0) 70%)",
+                "linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.30) 45%, rgba(0,0,0,0) 100%)",
             }}
           />
 
-
+          {/* Left gradient for contrast */}
+          <div
+            className="absolute inset-0 z-[2] pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(to right, rgba(0,0,0,0.48) 0%, rgba(0,0,0,0) 55%)",
+            }}
+          />
 
           {/* Bottom text block */}
-          <div className="container relative z-[3] pb-14 text-left">
+          <div className="container relative z-[3] pb-12 lg:pb-14 text-left">
             <h1
               ref={headlineRef}
-              className="font-bold text-white uppercase tracking-[-0.02em] max-w-[860px]"
+              className="font-bold text-white uppercase tracking-[-0.02em] max-w-[840px]"
               style={{
                 fontSize: "var(--fs-hero)",
-                lineHeight: 1.1,
+                lineHeight: 1.15,
               }}
             >
               {h1}
@@ -115,7 +123,7 @@ export const HeroBand: React.FC<HeroBandProps> = ({
             <div className="mt-6">
               <a
                 ref={btnRef}
-                href="/contact-us/"
+                href="/contact-us/#quote"
                 className="btn btn-light btn-sm"
               >
                 <span>Request a Quote</span>
@@ -142,7 +150,7 @@ export const HeroBand: React.FC<HeroBandProps> = ({
 
         {/* Mobile (below 768px) */}
         <div className="md:hidden w-full flex flex-col">
-          {/* Photo on top 16/9 with Back button */}
+          {/* Photo on top 16/9 */}
           <div className="relative w-full overflow-hidden bg-[#0A0A0A]" style={{ aspectRatio: "16/9" }}>
             <img
               src={cld(bgImage, 1080)}
@@ -156,28 +164,27 @@ export const HeroBand: React.FC<HeroBandProps> = ({
               className="absolute inset-0 pointer-events-none"
               style={{ backgroundColor: "rgba(30, 58, 138, 0.22)" }}
             />
-
           </div>
 
-          {/* Solid nav blue panel underneath */}
+          {/* Solid nav blue panel underneath — bold thickness preserved, proportional size */}
           <div
-            className="w-full text-white text-left px-6 py-7"
+            className="w-full text-white text-left px-6 py-8"
             style={{ backgroundColor: "var(--blue)" }}
           >
             <h1
               className="font-bold text-white uppercase tracking-[-0.02em]"
               style={{
-                fontSize: "var(--fs-hero)",
-                lineHeight: 1.22,
+                fontSize: "clamp(16px, 4.6vw, 21px)",
+                lineHeight: 1.25,
                 textWrap: "balance",
               }}
             >
               {h1}
             </h1>
 
-            <div className="mt-[18px]">
+            <div className="mt-5">
               <a
-                href="/contact-us/"
+                href="/contact-us/#quote"
                 className="btn btn-light btn-sm"
               >
                 <span>Request a Quote</span>
