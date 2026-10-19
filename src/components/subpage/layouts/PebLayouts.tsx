@@ -601,117 +601,15 @@ export const SubStructuresLayout: React.FC<{ data: ContentData }> = ({ data }) =
   );
 };
 
-// Crane Arrangement Item with drawing hairline and responsive static diagram
-const CraneArrangementItem: React.FC<{
-  title: string;
-  desc: string;
-  diagram: string;
-  onEnlarge: (diagram: string) => void;
-}> = ({ title, desc, diagram, onEnlarge }) => {
-  const itemRef = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const el = itemRef.current;
-    if (!el) return;
-
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      setInView(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div ref={itemRef} className="w-full text-left">
-      {/* 1px top hairline (draws in subtle blue) */}
-      <div className="w-full h-[1px] bg-transparent overflow-hidden mb-3 sm:mb-4 lg:mb-8">
-        <div
-          className={`h-[1px] bg-[rgba(30,58,138,0.22)] transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] origin-left ${
-            inView ? "w-full" : "w-0"
-          }`}
-        />
-      </div>
-
-      {/* SVG diagram: small & compact on mobile, responsive, static */}
-      <div className="w-full max-w-[280px] sm:max-w-[360px] lg:max-w-none mx-auto static bg-white">
-        <CraneDiagram
-          type={diagram}
-          animate={true}
-          className="w-full h-auto block static max-h-[170px] sm:max-h-[220px] lg:max-h-[340px]"
-        />
-      </div>
-
-      {/* Spacing & Typography scaled for mobile with all text in brand blue */}
-      <div className="mt-3 sm:mt-4 lg:mt-8 space-y-1.5 sm:space-y-2 lg:space-y-3">
-        <h3 className="text-[14.5px] sm:text-[17px] lg:text-[24px] font-[500] text-[var(--blue,#1E3A8A)] leading-[1.25]">
-          {title}
-        </h3>
-        <p className="text-[12px] sm:text-[13.5px] lg:text-[15px] text-[var(--blue,#1E3A8A)] leading-[1.6]">
-          {desc}
-        </p>
-      </div>
-
-      {/* Enlarge Diagram .link-arrow */}
-      <div className="mt-2.5 sm:mt-3 lg:mt-4">
-        <button
-          type="button"
-          onClick={() => onEnlarge(diagram)}
-          className="link-arrow text-[var(--blue,#1E3A8A)] font-semibold text-[11.5px] sm:text-[12.5px] lg:text-[13.5px] cursor-pointer inline-flex items-center gap-1.5 sm:gap-2"
-        >
-          <span>Enlarge Diagram</span>
-          <span className="btn-arrow inline-block" aria-hidden="true">
-            &rarr;
-          </span>
-        </button>
-      </div>
-    </div>
-  );
-};
-
-// 9.5 Crane System (Portion 2.4) — 4fr/8fr grid, compact mobile scale, blue text palette
+// 9.5 Crane System (Portion 2.4) — clean diagrams, no grid background, no numbers
 export const CraneSystemLayout: React.FC<{ data: ContentData }> = ({ data }) => {
   const { sections } = extractSections(data);
   const sheets = [
-    {
-      title: "Jib crane and monorail crane",
-      desc: "Cantilevered arm or single linear I-beam track serving localized workstations and manufacturing bays.",
-      diagram: "Jib & Monorail",
-    },
-    {
-      title: "Semi-gantry crane",
-      desc: "One runway rail mounted on the building column and the other running on ground tracks for versatile floor clearance.",
-      diagram: "Semi-Gantry",
-    },
-    {
-      title: "Top-running crane in clear-span building",
-      desc: "High-capacity heavy crane trolley traveling atop elevated runway beams supported by reinforced portal columns.",
-      diagram: "Top-Running Clear Span",
-    },
-    {
-      title: "Top-running crane in multi-span building",
-      desc: "Dual or multi-bay crane runways operating independently across parallel industrial assembly aisles.",
-      diagram: "Top-Running Multi-Span",
-    },
-    {
-      title: "Underhung crane",
-      desc: "Suspended crane trolley riding on the lower flanges of roof rafters, saving crucial floor area for smaller loads.",
-      diagram: "Underhung",
-    },
+    { title: "Jib crane and monorail crane", desc: "Cantilevered arm or single linear I-beam track serving localized workstations and manufacturing bays.", diagram: "Jib & Monorail" },
+    { title: "Semi-gantry crane", desc: "One runway rail mounted on the building column and the other running on ground tracks for versatile floor clearance.", diagram: "Semi-Gantry" },
+    { title: "Top-running crane in clear-span building", desc: "High-capacity heavy crane trolley traveling atop elevated runway beams supported by reinforced portal columns.", diagram: "Top-Running Clear Span" },
+    { title: "Top-running crane in multi-span building", desc: "Dual or multi-bay crane runways operating independently across parallel industrial assembly aisles.", diagram: "Top-Running Multi-Span" },
+    { title: "Underhung crane", desc: "Suspended crane trolley riding on the lower flanges of roof rafters, saving crucial floor area for smaller loads.", diagram: "Underhung" },
   ];
 
   const introSec = sections[0];
@@ -727,34 +625,54 @@ export const CraneSystemLayout: React.FC<{ data: ContentData }> = ({ data }) => 
         subtitle={data.quickAnswer}
       />
 
-      <section className="container py-6 sm:py-10 lg:py-[var(--sec-y-lg)]">
-        <div className="grid grid-cols-1 lg:grid-cols-[4fr_8fr] gap-8 sm:gap-10 lg:gap-[96px] items-start text-left">
+      <section className="container py-[var(--sec-y-lg)]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start text-left">
           {/* Left Sticky Intro Block */}
           <div
-            className="lg:sticky self-start"
+            className="lg:col-span-4 sticky"
             style={{ top: "calc(var(--nav-offset, 80px) + 24px)" }}
           >
-            <h2 className="text-[17px] sm:text-[22px] lg:text-[34px] font-[500] text-[var(--blue,#1E3A8A)] leading-[1.2] mb-2 sm:mb-3">
-              <TwoTone
-                text={introSec?.title || "Why Crane Buildings Need Special Design"}
-                accentColor="var(--blue, #1E3A8A)"
-              />
+            <h2 className="text-[28px] lg:text-[40px] font-[500] text-[var(--ink)] leading-[1.15] mb-4">
+              <TwoTone text={introSec?.title || "Why Crane Buildings Need Special Design"} />
             </h2>
-            <p className="text-[12.5px] sm:text-[13.5px] lg:text-[16px] text-[var(--blue,#1E3A8A)] leading-[1.6]">
+            <p className="text-[15px] lg:text-[17px] text-[#1E3A8A] leading-[1.75]">
               {introSec?.text}
             </p>
           </div>
 
-          {/* Right SVG Diagrams (5 arrangements one after another, compact on mobile) */}
-          <div className="flex flex-col gap-8 sm:gap-12 lg:gap-[96px]">
+          {/* Right SVG Diagrams (Clean white page, no grid or card border) */}
+          <div className="lg:col-span-8 space-y-24">
             {sheets.map((sh, idx) => (
-              <CraneArrangementItem
+              <div
                 key={idx}
-                title={sh.title}
-                desc={sh.desc}
-                diagram={sh.diagram}
-                onEnlarge={setModalDiagram}
-              />
+                className="pt-8 border-t border-[rgba(15,23,42,0.12)] space-y-6"
+              >
+                <div className="w-full flex items-center justify-center py-4 bg-white">
+                  <div className="w-full max-h-[360px] flex items-center justify-center">
+                    <CraneDiagram type={sh.diagram} className="w-full h-auto static max-h-[360px] block" />
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <h3 className="text-[20px] lg:text-[28px] font-[500] text-[var(--ink)] leading-[1.2]">
+                    {sh.title}
+                  </h3>
+                  <p className="text-[15px] lg:text-[17px] text-[#1E3A8A] leading-[1.65]">
+                    {sh.desc}
+                  </p>
+                </div>
+
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => setModalDiagram(sh.diagram)}
+                    className="link-arrow text-[var(--blue)] font-semibold text-[14px] cursor-pointer"
+                  >
+                    <span>Enlarge Diagram</span>
+                    <span className="btn-arrow inline-block" aria-hidden="true">&rarr;</span>
+                  </button>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -770,41 +688,32 @@ export const CraneSystemLayout: React.FC<{ data: ContentData }> = ({ data }) => 
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white p-5 sm:p-7 max-w-[800px] w-full rounded-lg shadow-2xl relative text-left"
+            className="bg-white p-8 max-w-[800px] w-full rounded shadow-2xl relative text-left"
           >
-            <div className="flex justify-between items-center mb-5">
-              <h3 className="text-[17px] sm:text-[20px] font-semibold text-[var(--blue,#1E3A8A)]">
-                {modalDiagram}
-              </h3>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-[22px] font-bold text-[var(--ink)]">{modalDiagram}</h3>
               <button
                 type="button"
                 onClick={() => setModalDiagram(null)}
-                aria-label="Close modal"
-                className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100 text-[20px] font-medium text-[var(--blue,#1E3A8A)] hover:text-[var(--blue-dark)] cursor-pointer transition-colors"
+                className="text-[24px] font-bold text-[#1E3A8A] hover:text-[var(--ink)] cursor-pointer"
               >
                 ✕
               </button>
             </div>
-            <div className="w-full py-4 sm:py-6 flex items-center justify-center bg-white">
-              <CraneDiagram
-                type={modalDiagram}
-                animate={false}
-                className="max-w-[640px] w-full h-auto block static"
-              />
+            <div className="w-full py-8 flex items-center justify-center bg-slate-50">
+              <CraneDiagram type={modalDiagram} className="max-w-[640px] w-full h-auto" />
             </div>
           </div>
         </div>
       )}
 
       {data.faq && data.faq.length > 0 && (
-        <section className="container py-6 sm:py-8 lg:py-[var(--sec-y)]">
+        <section className="container py-[var(--sec-y)]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="text-[17px] sm:text-[22px] lg:text-[30px] font-[600] text-[var(--blue,#1E3A8A)] mb-4 sm:mb-6">
+            <h2 className="text-[22px] lg:text-[36px] font-[600] text-[var(--ink)] mb-8">
               Frequently Asked Questions
             </h2>
-            <div style={{ "--faq-a-color": "var(--blue, #1E3A8A)" } as React.CSSProperties}>
-              <Accordion items={data.faq} size="large" />
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}

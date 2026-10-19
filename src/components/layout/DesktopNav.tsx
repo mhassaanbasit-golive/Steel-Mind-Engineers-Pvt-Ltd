@@ -35,7 +35,7 @@ export const DesktopNav: React.FC = () => {
   return (
     <nav
       ref={navRef}
-      className="hidden lg:flex items-center space-x-8 text-[14px] font-medium text-white relative h-full overflow-visible"
+      className="hidden lg:flex items-center space-x-5 xl:space-x-7 text-[13.5px] xl:text-[14px] font-medium text-white relative h-full overflow-visible"
     >
       {NAV.map((item: NavItem) => {
         const isMega = item.label === "Main Divisions";
@@ -48,6 +48,7 @@ export const DesktopNav: React.FC = () => {
             location.pathname.startsWith("/about/") ||
             location.pathname.startsWith("/about-us")
           : location.pathname === item.url ||
+            location.pathname.replace(/\/$/, "") === item.url.replace(/\/$/, "") ||
             (item.url !== "/" && location.pathname.startsWith(item.url));
 
         return (

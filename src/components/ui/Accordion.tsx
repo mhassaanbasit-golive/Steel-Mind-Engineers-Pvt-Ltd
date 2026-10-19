@@ -114,7 +114,7 @@ export const Accordion: React.FC<AccordionProps> = ({
               className="h-0 overflow-hidden"
             >
               <div
-                className={`text-[var(--faq-a-color,var(--grey))] max-w-[680px] ${
+                className={`text-[var(--grey)] max-w-[680px] ${
                   isLarge
                     ? "pt-2 pb-6 text-[15px] md:text-[17px] leading-[1.7]"
                     : "pb-6 text-[13px] lg:text-[15px] leading-[1.65]"

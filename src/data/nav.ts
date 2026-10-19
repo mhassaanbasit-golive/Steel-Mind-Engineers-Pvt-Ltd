@@ -134,4 +134,8 @@ export const NAV: NavItem[] = [
     label: "Blogs",
     url: "/blog/",
   },
+  {
+    label: "Contact Us",
+    url: "/contact-us/",
+  },
 ];

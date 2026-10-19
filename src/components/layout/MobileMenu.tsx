@@ -80,8 +80,11 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
         location.pathname.startsWith("/about-us")
       );
     }
+    const cleanPath = location.pathname.replace(/\/$/, "");
+    const cleanUrl = url.replace(/\/$/, "");
     return (
       location.pathname === url ||
+      (cleanUrl !== "" && cleanPath === cleanUrl) ||
       (url !== "/" && location.pathname.startsWith(url))
     );
   };

@@ -4,15 +4,9 @@ export interface TwoToneProps {
   text: string;
   className?: string;
   light?: boolean;
-  accentColor?: string;
 }
 
-export const TwoTone: React.FC<TwoToneProps> = ({
-  text,
-  className = "",
-  light = false,
-  accentColor,
-}) => {
+export const TwoTone: React.FC<TwoToneProps> = ({ text, className = "", light = false }) => {
   if (!text) return null;
   const words = text.trim().split(/\s+/);
   if (words.length <= 2) {
@@ -23,8 +17,7 @@ export const TwoTone: React.FC<TwoToneProps> = ({
   const part2 = words.slice(cutoff).join(" ");
 
   const color1 = light ? "#FFFFFF" : "var(--ink)";
-  const color2 =
-    accentColor || (light ? "rgba(255, 255, 255, 0.55)" : "#9AA3B2");
+  const color2 = light ? "rgba(255, 255, 255, 0.55)" : "#9AA3B2";
 
   return (
     <span className={className}>

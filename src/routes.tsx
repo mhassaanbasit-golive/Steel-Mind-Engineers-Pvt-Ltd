@@ -14,6 +14,7 @@ const ProjectsIndex = lazy(() => import("./pages/ProjectsIndex.tsx").then((m) =>
 const Project = lazy(() => import("./pages/Project.tsx").then((m) => ({ default: m.Project })));
 const Clients = lazy(() => import("./pages/Clients.tsx").then((m) => ({ default: m.Clients })));
 const Contact = lazy(() => import("./pages/Contact.tsx").then((m) => ({ default: m.Contact })));
+const ContactUs = lazy(() => import("./pages/ContactUs.tsx").then((m) => ({ default: m.ContactUs })));
 const BlogIndex = lazy(() => import("./pages/BlogIndex.tsx").then((m) => ({ default: m.BlogIndex })));
 const Article = lazy(() => import("./pages/Article.tsx").then((m) => ({ default: m.Article })));
 const Profile = lazy(() => import("./pages/Profile.tsx").then((m) => ({ default: m.Profile })));
@@ -206,12 +207,38 @@ export const AppRoutes: React.FC = () => {
         }
       />
 
-      {/* 5. Contact Us Page */}
+      {/* 5. Existing Contact Page */}
+      <Route
+        path="/contact/"
+        element={
+          <PageShell hasDarkHero={false}>
+            <Contact />
+          </PageShell>
+        }
+      />
+      <Route
+        path="/contact"
+        element={
+          <PageShell hasDarkHero={false}>
+            <Contact />
+          </PageShell>
+        }
+      />
+
+      {/* New Contact Page Route (/contact-us) */}
       <Route
         path="/contact-us/"
         element={
-          <PageShell hasDarkHero={true}>
-            <Contact />
+          <PageShell hasDarkHero={false}>
+            <ContactUs />
+          </PageShell>
+        }
+      />
+      <Route
+        path="/contact-us"
+        element={
+          <PageShell hasDarkHero={false}>
+            <ContactUs />
           </PageShell>
         }
       />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { SITE } from "../../data/site.ts";
 import { DesktopNav } from "./DesktopNav.tsx";
@@ -13,11 +13,22 @@ export interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ hasDarkHero = true }) => {
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [overHero, setOverHero] = useState<boolean>(hasDarkHero);
   const headerRef = useRef<HTMLElement>(null);
   const lastScrollYRef = useRef(0);
   const isHiddenRef = useRef(false);
+
+  // Requirement 2: Solid blue on ALL pages EXCEPT the Homepage
+  const isHome =
+    location.pathname === "/" ||
+    location.pathname === "" ||
+    location.pathname === "/index.html";
+
+  // By default, header is transparent at the top on the Homepage.
+  // On ALL pages EXCEPT the Homepage, the header MUST have a solid blue background (var(--blue)).
+  const isSolidBlue = !isHome || scrolled || mobileMenuOpen;
 
   // Sync nav element height to :root variables accurately
   useEffect(() => {
@@ -40,11 +51,21 @@ export const Header: React.FC<HeaderProps> = ({ hasDarkHero = true }) => {
   // On route change: reset visible state & detect [data-hero]
   useEffect(() => {
     isHiddenRef.current = false;
-    headerRef.current?.removeAttribute("data-hidden");
+    setHidden(false);
+    if (headerRef.current) {
+      headerRef.current.removeAttribute("data-hidden");
+      headerRef.current.style.transform = "translateY(0)";
+    }
     const navH = headerRef.current?.offsetHeight || (window.innerWidth < 1024 ? 60 : 80);
     document.documentElement.style.setProperty("--nav-offset", `${navH}px`);
 
-    setScrolled(window.scrollY > 24);
+    const initialY =
+      window.scrollY ||
+      window.pageYOffset ||
+      document.documentElement.scrollTop ||
+      0;
+    lastScrollYRef.current = Math.max(0, initialY);
+    setScrolled(initialY > 24);
 
     let r1: number;
     let r2: number;
@@ -65,57 +86,97 @@ export const Header: React.FC<HeaderProps> = ({ hasDarkHero = true }) => {
     };
   }, [location.pathname, hasDarkHero]);
 
-  // Smart scroll: hide on fast scroll down, reveal on scroll up, turns solid blue after 24px
-  useEffect(() => {
-    const handleScrollUpdate = (scrollY: number) => {
-      const isPast24 = scrollY > 24;
-      setScrolled(isPast24);
+  // Requirement 3: Smart scroll behavior (hide on scroll down, show on scroll up)
+  const handleScrollUpdate = useCallback((rawScrollY: number) => {
+    const currentScrollY = Math.max(0, rawScrollY);
+    const isPast24 = currentScrollY > 24;
+    setScrolled(isPast24);
 
-      // Never hide if mobile menu is open or focused inside header
-      if (mobileMenuOpen || headerRef.current?.contains(document.activeElement)) {
-        if (isHiddenRef.current) {
-          isHiddenRef.current = false;
-          headerRef.current?.removeAttribute("data-hidden");
-          const navH = headerRef.current?.offsetHeight || 60;
-          document.documentElement.style.setProperty("--nav-offset", `${navH}px`);
-        }
-        lastScrollYRef.current = scrollY;
-        return;
-      }
-
-      const diff = scrollY - lastScrollYRef.current;
-
-      if (scrollY > 100 && diff > 10 && !isHiddenRef.current) {
-        // Scrolling down -> hide header
-        isHiddenRef.current = true;
-        headerRef.current?.setAttribute("data-hidden", "true");
-        document.documentElement.style.setProperty("--nav-offset", "0px");
-      } else if ((diff < -6 || scrollY < 60) && isHiddenRef.current) {
-        // Scrolling up -> show header
+    // Never hide if mobile menu is open or focused inside header
+    if (mobileMenuOpen || headerRef.current?.contains(document.activeElement)) {
+      if (isHiddenRef.current) {
         isHiddenRef.current = false;
-        headerRef.current?.removeAttribute("data-hidden");
-        const navH = headerRef.current?.offsetHeight || 60;
+        setHidden(false);
+        if (headerRef.current) {
+          headerRef.current.removeAttribute("data-hidden");
+          headerRef.current.style.transform = "translateY(0)";
+        }
+        const navH = headerRef.current?.offsetHeight || (window.innerWidth < 1024 ? 60 : 80);
         document.documentElement.style.setProperty("--nav-offset", `${navH}px`);
       }
+      lastScrollYRef.current = currentScrollY;
+      return;
+    }
 
-      lastScrollYRef.current = scrollY;
-    };
+    // When near top, always show header
+    if (currentScrollY <= 24) {
+      if (isHiddenRef.current) {
+        isHiddenRef.current = false;
+        setHidden(false);
+        if (headerRef.current) {
+          headerRef.current.removeAttribute("data-hidden");
+          headerRef.current.style.transform = "translateY(0)";
+        }
+        const navH = headerRef.current?.offsetHeight || (window.innerWidth < 1024 ? 60 : 80);
+        document.documentElement.style.setProperty("--nav-offset", `${navH}px`);
+      }
+      lastScrollYRef.current = currentScrollY;
+      return;
+    }
 
-    if (lenis) {
-      const onLenisScroll = (e: any) => handleScrollUpdate(e.scroll || window.scrollY);
-      lenis.on("scroll", onLenisScroll);
-      return () => {
-        lenis?.off("scroll", onLenisScroll);
-      };
-    } else {
-      const onNativeScroll = () => handleScrollUpdate(window.scrollY);
-      window.addEventListener("scroll", onNativeScroll, { passive: true });
-      return () => window.removeEventListener("scroll", onNativeScroll);
+    const diff = currentScrollY - lastScrollYRef.current;
+
+    // Scrolling DOWN -> hide header
+    if (diff > 6 && currentScrollY > 50 && !isHiddenRef.current) {
+      isHiddenRef.current = true;
+      setHidden(true);
+      if (headerRef.current) {
+        headerRef.current.setAttribute("data-hidden", "true");
+        headerRef.current.style.transform = "translateY(-100%)";
+      }
+      document.documentElement.style.setProperty("--nav-offset", "0px");
+      lastScrollYRef.current = currentScrollY;
+    }
+    // Scrolling UP -> show header
+    else if (diff < -6 && isHiddenRef.current) {
+      isHiddenRef.current = false;
+      setHidden(false);
+      if (headerRef.current) {
+        headerRef.current.removeAttribute("data-hidden");
+        headerRef.current.style.transform = "translateY(0)";
+      }
+      const navH = headerRef.current?.offsetHeight || (window.innerWidth < 1024 ? 60 : 80);
+      document.documentElement.style.setProperty("--nav-offset", `${navH}px`);
+      lastScrollYRef.current = currentScrollY;
+    }
+    // Track reference when continuing in the same state
+    else if (!isHiddenRef.current && currentScrollY < lastScrollYRef.current) {
+      lastScrollYRef.current = currentScrollY;
+    } else if (isHiddenRef.current && currentScrollY > lastScrollYRef.current) {
+      lastScrollYRef.current = currentScrollY;
     }
   }, [mobileMenuOpen]);
 
-  // Solid blue: when not over hero, or scrolled past 24px, or mobile menu is open
-  const isSolidBlue = !overHero || scrolled || mobileMenuOpen;
+  useEffect(() => {
+    const onScroll = () => {
+      const currentScrollY =
+        window.scrollY ||
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        0;
+      handleScrollUpdate(currentScrollY);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    if (lenis) {
+      lenis.on("scroll", onScroll);
+    }
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      lenis?.off("scroll", onScroll);
+    };
+  }, [handleScrollUpdate]);
 
   return (
     <>
@@ -123,10 +184,12 @@ export const Header: React.FC<HeaderProps> = ({ hasDarkHero = true }) => {
         ref={headerRef}
         data-over-hero={String(overHero)}
         style={{
-          backgroundColor: isSolidBlue ? "#1E3A8A" : "transparent",
+          backgroundColor: isSolidBlue ? "var(--blue, #1E3A8A)" : "transparent",
           borderColor: isSolidBlue ? "rgba(255, 255, 255, 0.12)" : "transparent",
+          transform: hidden ? "translateY(-100%)" : "translateY(0)",
+          willChange: "transform",
         }}
-        className={`fixed top-0 inset-x-0 z-[220] h-[60px] md:h-[72px] lg:h-[80px] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] border-b text-white data-[hidden=true]:-translate-y-full ${
+        className={`fixed top-0 inset-x-0 z-[220] h-[60px] md:h-[72px] lg:h-[80px] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] border-b text-white data-[hidden=true]:-translate-y-full ${
           isSolidBlue ? "shadow-[0_4px_20px_rgba(15,23,42,0.15)]" : ""
         }`}
       >

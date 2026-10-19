@@ -151,7 +151,9 @@ export const PROJECTS: ProjectData[] = [
     width: "180 ft",
     length: "180 ft",
     area: 32400,
-    images: [],
+    images: [
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401784/Haier-Injection-Modling-Structure-Fabrication-Main-Image.png",
+    ],
     published: false,
   },
   {
@@ -183,7 +185,9 @@ export const PROJECTS: ProjectData[] = [
     width: "180 ft",
     length: "180 ft",
     area: 32400,
-    images: [],
+    images: [
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401784/Haier-Injection-Modling-Structure-Fabrication-Main-Image.png",
+    ],
     published: false,
   },
   {
@@ -215,7 +219,9 @@ export const PROJECTS: ProjectData[] = [
     width: "184 ft",
     length: "525 ft",
     area: 96600,
-    images: [],
+    images: [
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401784/Haier-Injection-Modling-Structure-Fabrication-Main-Image.png",
+    ],
     published: false,
   },
 ];
