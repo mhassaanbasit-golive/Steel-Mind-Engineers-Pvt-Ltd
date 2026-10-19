@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef, useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { ContentData, ContentBlock } from "../../../content/types.ts";
 import { HeroBand } from "../../ui/HeroBand.tsx";
@@ -45,9 +45,11 @@ function extractSections(data: ContentData) {
   return { introPs, sections };
 }
 
-// 9.1 Engineering Department — kept per 1.2
+// 9.1 Engineering Department — One-Step Solution typography & interactive 3-card hover layout
 export const EngineeringLayout: React.FC<{ data: ContentData }> = ({ data }) => {
   const { introPs, sections } = extractSections(data);
+  const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(null);
+
   const stepsBlock = sections.find((s) => s.items && s.items.length >= 6) || sections[1];
   const steps = stepsBlock?.items || [
     { name: "Requirement study", text: "Analyzing building purpose, dimensions and special loads." },
@@ -61,7 +63,8 @@ export const EngineeringLayout: React.FC<{ data: ContentData }> = ({ data }) => 
   const ledgerBlocks = sections.filter((s) => s !== stepsBlock && s !== sections[0]).slice(0, 3);
 
   return (
-    <article className="w-full bg-white">
+    <article className="w-full bg-white text-[var(--ink)]">
+      {/* 1. Hero Band */}
       <HeroBand
         variant="immersive"
         imageSrc="https://res.cloudinary.com/cyfb9slf/image/upload/v1792007694/Engineering-hero.jpg"
@@ -70,60 +73,209 @@ export const EngineeringLayout: React.FC<{ data: ContentData }> = ({ data }) => 
         subtitle={data.quickAnswer}
       />
 
-      <section className="container py-[var(--sec-y-lg)] text-left">
-        <h2 className="text-[28px] lg:text-[44px] font-[500] leading-[1.1] tracking-[-0.025em] mb-4">
-          <TwoTone text={sections[0]?.title || "What the Engineering Department Does"} />
+      {/* 2. Intro Section: WHAT THE ENGINEERING DEPARTMENT DOES */}
+      <section className="container py-[var(--sec-y-lg)] text-left max-w-[1340px] mx-auto">
+        <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] uppercase mb-4">
+          WHAT THE ENGINEERING DEPARTMENT DOES
         </h2>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-6 border-t border-[rgba(15,23,42,0.12)]">
-          <div className="lg:col-span-5 text-[17px] lg:text-[20px] font-medium text-[var(--ink)] leading-[1.6]">
-            {introPs[0]}
-          </div>
-          <div className="lg:col-span-7 text-[15px] lg:text-[17px] text-[#1E3A8A] leading-[1.65]">
-            {sections[0]?.text || introPs.slice(1).join(" ")}
+        <div className="w-full h-[1px] bg-[#E5E5E5] my-6" />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="lg:col-span-12">
+            <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[880px]">
+              {sections[0]?.text || introPs[0]}
+            </p>
+            {introPs.slice(1).length > 0 && (
+              <p className="mt-4 text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[880px]">
+                {introPs.slice(1).join(" ")}
+              </p>
+            )}
           </div>
         </div>
       </section>
 
-      <section className="container pb-[var(--sec-y-lg)]">
-        <Steps title={stepsBlock?.title || "The Design Process"} items={steps} />
+      {/* 3. Steps Rail: THE DESIGN PROCESS (2px blue vertical line, 10px dot, solid bold var(--blue) number above title) */}
+      <section className="container pb-[var(--sec-y-lg)] text-left max-w-[1340px] mx-auto">
+        <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] uppercase mb-12">
+          THE DESIGN PROCESS
+        </h2>
+
+        <div className="max-w-[760px] mx-auto">
+          <ol className="list-none m-0 p-0 relative">
+            {steps.map((step, idx) => {
+              const stepNumber = String(idx + 1).padStart(2, "0");
+              const isLast = idx === steps.length - 1;
+
+              return (
+                <li
+                  key={idx}
+                  className={`relative pl-[44px] lg:pl-[64px] ${isLast ? "pb-0" : "pb-12 lg:pb-16"}`}
+                >
+                  {/* Rail: 2px blue vertical line */}
+                  {!isLast && (
+                    <div
+                      className="absolute top-[28px] lg:top-[36px] bottom-0 w-[2px] pointer-events-none"
+                      style={{
+                        left: "16px",
+                        backgroundColor: "var(--blue)",
+                      }}
+                    />
+                  )}
+
+                  {/* 10px dot centered on rail */}
+                  <div
+                    className="absolute rounded-full box-border z-[2]"
+                    style={{
+                      left: "16px",
+                      top: "28px",
+                      width: "10px",
+                      height: "10px",
+                      transform: "translate(-50%, -50%)",
+                      backgroundColor: "var(--blue)",
+                      border: "2px solid var(--blue)",
+                    }}
+                  />
+
+                  {/* Number: solid, bold, var(--blue), placed above its title, like One-Step */}
+                  <div className="text-[40px] lg:text-[64px] font-[800] text-[var(--blue)] leading-none select-none mb-3">
+                    {stepNumber}
+                  </div>
+
+                  {/* Title: bold, ink colour, sentence case */}
+                  <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mb-2">
+                    {step.name}
+                  </h3>
+
+                  {/* Text: the blue of One-Step body text (var(--blue)), regular weight */}
+                  <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[580px]">
+                    {step.text}
+                  </p>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
       </section>
 
-      <section className="container pb-[var(--sec-y-lg)]">
-        <Pic
-          src="https://res.cloudinary.com/cyfb9slf/image/upload/v1792007695/peb-engineering-wide.jpg"
-          alt="PEB Engineering Wide View"
-          ratio={16 / 9}
-        />
+      {/* 4. Wide View Photo: Clean framing, no grey border */}
+      <section className="container pb-[var(--sec-y-lg)] max-w-[1340px] mx-auto">
+        <div className="w-full relative overflow-hidden bg-slate-900 shadow-sm" style={{ aspectRatio: "16 / 9" }}>
+          <img
+            src="https://res.cloudinary.com/cyfb9slf/image/upload/v1792007695/peb-engineering-wide.jpg"
+            alt="PEB Engineering Wide View"
+            className="w-full h-full object-cover block"
+            loading="lazy"
+          />
+        </div>
       </section>
 
+      {/* 5. 3 Blocks: High-end interactive cards with hover transition & crisp typography */}
       {ledgerBlocks.length > 0 && (
-        <section className="container pb-[var(--sec-y-lg)] border-b border-[rgba(15,23,42,0.12)] text-left">
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[rgba(15,23,42,0.12)]">
-            {ledgerBlocks.map((blk, idx) => (
-              <div key={idx} className="py-6 md:py-0 md:px-8 first:pl-0 last:pr-0 space-y-3">
-                <h3 className="font-[600] text-[20px] lg:text-[24px] text-[var(--ink)]">
-                  {blk.title}
-                </h3>
-                <p className="text-[#1E3A8A] text-[15px] lg:text-[17px] leading-[1.65]">
-                  {blk.text}
-                </p>
-              </div>
-            ))}
+        <section className="container pb-[var(--sec-y-lg)] text-left max-w-[1340px] mx-auto">
+          <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-4">
+            DELIVERABLES AND VALUE
+          </h2>
+          <div className="w-full h-[1px] bg-[#E5E5E5] mb-8 lg:mb-12" />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {ledgerBlocks.map((blk, idx) => {
+              const blockNum = String(idx + 1).padStart(2, "0");
+              return (
+                <div
+                  key={idx}
+                  className="relative bg-white border border-[#E5E5E5] p-6 lg:p-8 flex flex-col justify-between group transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] hover:-translate-y-2 hover:shadow-[0_16px_36px_rgba(30,58,138,0.08)] hover:border-[var(--blue)] overflow-hidden"
+                >
+                  {/* 3px top blue accent line that expands smoothly from left to right on hover */}
+                  <div className="absolute top-0 left-0 right-0 h-[3px] bg-[var(--blue)] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] origin-left" />
+
+                  <div>
+                    {/* Number: solid, bold, var(--blue), placed above its title, like One-Step */}
+                    <div className="text-[40px] lg:text-[48px] font-[800] text-[var(--blue)] leading-none select-none mb-3">
+                      {blockNum}
+                    </div>
+
+                    {/* Title: bold, ink colour, sentence case, One-Step desktop 20px */}
+                    <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mb-3 group-hover:text-[var(--blue)] transition-colors duration-300">
+                      {blk.title}
+                    </h3>
+
+                    {/* Text: the blue of One-Step body text, regular weight */}
+                    <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
+                      {blk.text}
+                    </p>
+                  </div>
+
+                  {/* Interactive card footer accent */}
+                  <div className="mt-6 pt-4 border-t border-[#E5E5E5] group-hover:border-[var(--blue)]/30 flex items-center justify-between text-[13px] font-semibold text-[var(--blue)] transition-colors">
+                    <span>Engineering Specification</span>
+                    <span className="transform group-hover:translate-x-1.5 transition-transform duration-300 inline-block" aria-hidden="true">&rarr;</span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </section>
       )}
 
+      {/* 6. Frequently Asked Questions: One-Step style, ZERO grey text */}
       {data.faq && data.faq.length > 0 && (
-        <section className="container py-[var(--sec-y)]">
-          <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="text-[22px] lg:text-[36px] font-[600] text-[var(--ink)] mb-8">
-              Frequently Asked Questions
+        <section className="container py-[var(--sec-y-lg)] border-t border-[#E5E5E5] text-left max-w-[1340px] mx-auto">
+          <div className="max-w-[800px] mx-auto">
+            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
+              FREQUENTLY ASKED QUESTIONS
             </h2>
-            <Accordion items={data.faq} size="large" />
+
+            <div className="w-full divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
+              {data.faq.map((item, idx) => {
+                const isOpen = openFaqIdx === idx;
+                const panelId = `eng-faq-panel-${idx}`;
+                const headerId = `eng-faq-header-${idx}`;
+
+                return (
+                  <div key={idx} className="group overflow-hidden">
+                    <button
+                      id={headerId}
+                      type="button"
+                      aria-expanded={isOpen}
+                      aria-controls={panelId}
+                      onClick={() => setOpenFaqIdx(isOpen ? null : idx)}
+                      className="w-full py-5 lg:py-6 flex items-center justify-between text-left cursor-pointer transition-colors"
+                    >
+                      <span className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug pr-4">
+                        {item.q}
+                      </span>
+                      <span
+                        className={`flex-shrink-0 w-8 h-8 rounded-full border border-[var(--blue)] flex items-center justify-center text-[var(--blue)] font-bold text-[18px] transition-transform duration-300 ${
+                          isOpen ? "rotate-45 bg-[var(--blue)] text-white" : "bg-white"
+                        }`}
+                        aria-hidden="true"
+                      >
+                        +
+                      </span>
+                    </button>
+
+                    <div
+                      id={panelId}
+                      role="region"
+                      aria-labelledby={headerId}
+                      className="overflow-hidden transition-all duration-300 ease-out"
+                      style={{
+                        maxHeight: isOpen ? "400px" : "0px",
+                        opacity: isOpen ? 1 : 0,
+                      }}
+                    >
+                      <p className="pb-6 text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[680px]">
+                        {item.a}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
       )}
 
+      {/* 7. Next Band */}
       <NextBand
         image="https://res.cloudinary.com/cyfb9slf/image/upload/v1792033592/Primary-framing-hero.jpg"
         nextUrl="/pre-engineered-buildings-pakistan/primary-framing-system/"
@@ -768,7 +920,7 @@ export const BasicParametersLayout: React.FC<{ data: ContentData }> = ({ data })
             {note1 && (
               <div className="relative pt-6">
                 <div className="w-full h-[1px] bg-[#E5E5E5] absolute top-0 left-0" />
-                <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mb-3">
+                <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mb-3 uppercase">
                   {note1.title}
                 </h3>
                 <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
@@ -780,7 +932,7 @@ export const BasicParametersLayout: React.FC<{ data: ContentData }> = ({ data })
             {note2 && (
               <div className="relative pt-6">
                 <div className="w-full h-[1px] bg-[#E5E5E5] absolute top-0 left-0" />
-                <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mb-3">
+                <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mb-3 uppercase">
                   {note2.title}
                 </h3>
                 <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
@@ -1324,7 +1476,7 @@ export const CraneSystemLayout: React.FC<{ data: ContentData }> = ({ data }) => 
   );
 };
 
-// 9.6 Mezzanine System (Portion 2.5) — 900ms flex desktop, 4 full-bleed stacking cards mobile
+// 9.6 Mezzanine System — desktop expanding panels, 4 full-bleed stacking cards mobile, One-Step text style
 export const MezzanineLayout: React.FC<{ data: ContentData }> = ({ data }) => {
   const { sections } = extractSections(data);
   const panelsData = [
@@ -1351,11 +1503,275 @@ export const MezzanineLayout: React.FC<{ data: ContentData }> = ({ data }) => {
   ];
 
   const experienceSec = sections[4] || sections[3];
-  const [activePanel, setActivePanel] = useState(0);
+  const [activePanel, setActivePanel] = useState<number>(0);
   const [mobileOpenIdx, setMobileOpenIdx] = useState<number>(0); // First open at load
+  const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(null);
+
+  const mainRef = useRef<HTMLElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const innerRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const shadeRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const panelRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const experienceSecRef = useRef<HTMLElement>(null);
+  const experienceTitleRef = useRef<HTMLHeadingElement>(null);
+  const experienceTextRef = useRef<HTMLParagraphElement>(null);
+
+  const faqSecRef = useRef<HTMLElement>(null);
+  const faqTitleRef = useRef<HTMLHeadingElement>(null);
+
+  const hoverTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const refreshTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const debouncedRefresh = useCallback(() => {
+    if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current);
+    refreshTimerRef.current = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 200);
+  }, []);
+
+  useEffect(() => {
+    if (typeof document !== "undefined" && document.fonts) {
+      document.fonts.ready.then(() => {
+        debouncedRefresh();
+      });
+    }
+  }, [debouncedRefresh]);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+
+      // Desktop: min-width: 1024px
+      mm.add("(min-width: 1024px)", () => {
+        if (experienceSecRef.current && experienceTitleRef.current && experienceTextRef.current) {
+          gsap.set([experienceTitleRef.current, experienceTextRef.current], {
+            y: 24,
+            opacity: 0,
+          });
+
+          ScrollTrigger.create({
+            trigger: experienceSecRef.current,
+            start: "top 85%",
+            once: true,
+            invalidateOnRefresh: true,
+            onEnter: () => {
+              gsap.to([experienceTitleRef.current, experienceTextRef.current], {
+                y: 0,
+                opacity: 1,
+                duration: 0.9,
+                ease: "E1",
+                stagger: 0.09,
+                overwrite: "auto",
+                onStart: () => {
+                  gsap.set([experienceTitleRef.current, experienceTextRef.current], {
+                    willChange: "transform, opacity",
+                  });
+                },
+                onComplete: () => {
+                  gsap.set([experienceTitleRef.current, experienceTextRef.current], {
+                    clearProps: "willChange",
+                  });
+                },
+              });
+            },
+          });
+        }
+
+        if (faqSecRef.current && faqTitleRef.current) {
+          gsap.set(faqTitleRef.current, { y: 24, opacity: 0 });
+
+          ScrollTrigger.create({
+            trigger: faqSecRef.current,
+            start: "top 85%",
+            once: true,
+            invalidateOnRefresh: true,
+            onEnter: () => {
+              gsap.to(faqTitleRef.current, {
+                y: 0,
+                opacity: 1,
+                duration: 0.9,
+                ease: "E1",
+                overwrite: "auto",
+                onStart: () => {
+                  gsap.set(faqTitleRef.current, { willChange: "transform, opacity" });
+                },
+                onComplete: () => {
+                  gsap.set(faqTitleRef.current, { clearProps: "willChange" });
+                },
+              });
+            },
+          });
+        }
+      });
+
+      // Mobile: max-width: 1023px
+      mm.add("(max-width: 1023px)", () => {
+        // STACK: For every card except the last, create one ScrollTrigger:
+        // trigger = NEXT card, start "top bottom", end = "top " + (that card's sticky top in px), scrub 1.4.
+        // It tweens that card's .inner to scale .95 and its .shade to opacity .32 (ease "none").
+        for (let i = 0; i < panelsData.length - 1; i++) {
+          const nextCard = cardRefs.current[i + 1];
+          const currentInner = innerRefs.current[i];
+          const currentShade = shadeRefs.current[i];
+          if (!nextCard || !currentInner || !currentShade) continue;
+
+          const navOffset =
+            parseFloat(
+              getComputedStyle(document.documentElement).getPropertyValue("--nav-offset")
+            ) || 60;
+          const stickyTopPx = navOffset + 12 + i * 10;
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: nextCard,
+              start: "top bottom",
+              end: () => `top ${stickyTopPx}px`,
+              scrub: 1.4,
+              invalidateOnRefresh: true,
+            },
+          });
+
+          tl.to(
+            currentInner,
+            {
+              scale: 0.95,
+              ease: "none",
+            },
+            0
+          );
+
+          tl.to(
+            currentShade,
+            {
+              opacity: 0.32,
+              ease: "none",
+            },
+            0
+          );
+        }
+
+        if (experienceSecRef.current && experienceTitleRef.current && experienceTextRef.current) {
+          gsap.set([experienceTitleRef.current, experienceTextRef.current], {
+            y: 24,
+            opacity: 0,
+          });
+
+          ScrollTrigger.create({
+            trigger: experienceSecRef.current,
+            start: "top 90%",
+            once: true,
+            invalidateOnRefresh: true,
+            onEnter: () => {
+              gsap.to([experienceTitleRef.current, experienceTextRef.current], {
+                y: 0,
+                opacity: 1,
+                duration: 0.9,
+                ease: "E1",
+                stagger: 0.09,
+                overwrite: "auto",
+                onStart: () => {
+                  gsap.set([experienceTitleRef.current, experienceTextRef.current], {
+                    willChange: "transform, opacity",
+                  });
+                },
+                onComplete: () => {
+                  gsap.set([experienceTitleRef.current, experienceTextRef.current], {
+                    clearProps: "willChange",
+                  });
+                },
+              });
+            },
+          });
+        }
+
+        if (faqSecRef.current && faqTitleRef.current) {
+          gsap.set(faqTitleRef.current, { y: 24, opacity: 0 });
+
+          ScrollTrigger.create({
+            trigger: faqSecRef.current,
+            start: "top 90%",
+            once: true,
+            invalidateOnRefresh: true,
+            onEnter: () => {
+              gsap.to(faqTitleRef.current, {
+                y: 0,
+                opacity: 1,
+                duration: 0.9,
+                ease: "E1",
+                overwrite: "auto",
+                onStart: () => {
+                  gsap.set(faqTitleRef.current, { willChange: "transform, opacity" });
+                },
+                onComplete: () => {
+                  gsap.set(faqTitleRef.current, { clearProps: "willChange" });
+                },
+              });
+            },
+          });
+        }
+      });
+
+      // Reduced motion: show final state immediately
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        if (experienceTitleRef.current && experienceTextRef.current) {
+          gsap.set([experienceTitleRef.current, experienceTextRef.current], {
+            y: 0,
+            opacity: 1,
+          });
+        }
+        if (faqTitleRef.current) {
+          gsap.set(faqTitleRef.current, { y: 0, opacity: 1 });
+        }
+        innerRefs.current.forEach((el) => {
+          if (el) gsap.set(el, { scale: 1 });
+        });
+        shadeRefs.current.forEach((el) => {
+          if (el) gsap.set(el, { opacity: 0 });
+        });
+      });
+    }, mainRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  const handlePanelMouseEnter = (idx: number) => {
+    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+    hoverTimerRef.current = setTimeout(() => {
+      setActivePanel(idx);
+    }, 150);
+  };
+
+  const handlePanelMouseLeave = () => {
+    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+  };
+
+  const handlePanelClick = (idx: number) => {
+    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+    setActivePanel(idx);
+  };
+
+  const handlePanelKeyDown = (e: React.KeyboardEvent, idx: number) => {
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      e.preventDefault();
+      const next = (idx + 1) % panelsData.length;
+      setActivePanel(next);
+      panelRefs.current[next]?.focus();
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      e.preventDefault();
+      const prev = (idx - 1 + panelsData.length) % panelsData.length;
+      setActivePanel(prev);
+      panelRefs.current[prev]?.focus();
+    }
+  };
+
+  const toggleMobileAccordion = (idx: number) => {
+    setMobileOpenIdx((prev) => (prev === idx ? -1 : idx));
+    debouncedRefresh();
+  };
 
   return (
-    <article className="w-full bg-white text-[var(--ink)]">
+    <article ref={mainRef} className="w-full bg-white text-[var(--ink)]">
       <HeroBand
         variant="immersive"
         imageSrc="https://res.cloudinary.com/cyfb9slf/image/upload/v1792033605/mezzanine-hero.jpg"
@@ -1366,90 +1782,137 @@ export const MezzanineLayout: React.FC<{ data: ContentData }> = ({ data }) => {
 
       {/* Main Section */}
       <section className="container py-[var(--sec-y-lg)]">
-        {/* Desktop: Expanding Panels (no numbers, 900ms flex, vertical titles, text fades in 450ms after 300ms delay) */}
+        {/* Desktop: Expanding Panels (flex: 5 on active, flex: 1 on others, transition flex-grow 900ms cubic-bezier(.16,1,.3,1)) */}
         <div className="hidden lg:flex h-[640px] gap-3">
           {panelsData.map((p, idx) => {
             const isActive = activePanel === idx;
             return (
               <div
                 key={idx}
-                onMouseEnter={() => setActivePanel(idx)}
-                onClick={() => setActivePanel(idx)}
-                className={`relative overflow-hidden cursor-pointer transition-all duration-900 ease-[cubic-bezier(0.16,1,0.3,1)] bg-slate-900 ${
-                  isActive ? "flex-[5]" : "flex-1"
-                }`}
+                ref={(el) => {
+                  panelRefs.current[idx] = el;
+                }}
+                tabIndex={0}
+                role="region"
+                aria-label={p.title}
+                onMouseEnter={() => handlePanelMouseEnter(idx)}
+                onMouseLeave={handlePanelMouseLeave}
+                onClick={() => handlePanelClick(idx)}
+                onFocus={() => handlePanelClick(idx)}
+                onKeyDown={(e) => handlePanelKeyDown(e, idx)}
+                className="relative overflow-hidden cursor-pointer bg-slate-900 focus-visible:outline-none"
+                style={{
+                  flex: isActive ? 5 : 1,
+                  transition: "flex-grow 900ms cubic-bezier(0.16, 1, 0.3, 1)",
+                }}
               >
                 <img
-                  src={p.img}
+                  src={cl(p.img, 1920)}
                   alt={p.title}
+                  width={1920}
+                  height={1288}
+                  loading={idx === 0 ? "eager" : "lazy"}
+                  decoding="async"
                   className="w-full h-full object-cover"
+                  style={{
+                    transform: isActive ? "scale(1)" : "scale(1.06)",
+                    transition: "transform 1200ms cubic-bezier(0.16, 1, 0.3, 1)",
+                  }}
+                  onLoad={debouncedRefresh}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent pointer-events-none" />
 
                 {/* Collapsed State: Vertical title only (no numbers) */}
-                {!isActive && (
-                  <div className="absolute inset-0 p-6 flex flex-col justify-end items-start pointer-events-none">
-                    <span
-                      className="text-white font-bold text-[20px] whitespace-nowrap select-none"
-                      style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
-                    >
-                      {p.title}
-                    </span>
-                  </div>
-                )}
+                <div
+                  className="absolute inset-0 p-6 flex flex-col justify-end items-start pointer-events-none"
+                  style={{
+                    opacity: isActive ? 0 : 1,
+                    transition: "opacity 300ms cubic-bezier(0.16, 1, 0.3, 1)",
+                  }}
+                >
+                  <span
+                    className="text-white font-bold text-[20px] whitespace-nowrap select-none uppercase"
+                    style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+                  >
+                    {p.title}
+                  </span>
+                </div>
 
-                {/* Active State: Title + Text in white (fades in 450ms after 300ms delay) */}
-                {isActive && (
-                  <div className="absolute bottom-10 left-10 right-10 text-left space-y-3 z-10 pointer-events-none animate-[fadeIn_450ms_ease_300ms_forwards]">
-                    <h3 className="text-[20px] font-bold text-white leading-snug">
-                      {p.title}
-                    </h3>
-                    <p className="text-white text-[16px] leading-[1.7] font-normal max-w-[560px]">
-                      {p.text}
-                    </p>
-                  </div>
-                )}
+                {/* Active State: Title + Text in white (fades in 450ms after 300ms delay). Fixed width 480px, clipped by panel */}
+                <div
+                  className="absolute bottom-10 left-10 text-left pointer-events-none z-10 w-[480px] max-w-[480px]"
+                  style={{
+                    opacity: isActive ? 1 : 0,
+                    transition: isActive
+                      ? "opacity 450ms cubic-bezier(0.16, 1, 0.3, 1) 300ms"
+                      : "opacity 200ms ease 0ms",
+                  }}
+                >
+                  <h3 className="text-[20px] font-bold text-white leading-snug mb-3 uppercase tracking-[-0.01em]">
+                    {p.title}
+                  </h3>
+                  <p className="text-white text-[16px] leading-[1.7] font-normal">
+                    {p.text}
+                  </p>
+                </div>
               </div>
             );
           })}
         </div>
 
-        {/* Mobile: 4 stacking cards perfectly centered in the middle of the screen, no cut or clipping */}
-        <div className="lg:hidden relative w-full max-w-[540px] mx-auto flex flex-col pb-16">
+        {/* Mobile: 4 stacking cards with full-bleed photos, no borders, 64px row with title and plus icon */}
+        <div className="lg:hidden relative w-full max-w-[540px] mx-auto flex flex-col pb-24">
           {panelsData.map((p, idx) => {
             const isOpen = mobileOpenIdx === idx;
-            const isLast = idx === panelsData.length - 1;
 
             return (
               <div
                 key={idx}
-                className="sticky w-full mx-auto"
+                ref={(el) => {
+                  cardRefs.current[idx] = el;
+                }}
+                className="relative w-full"
                 style={{
-                  top: `calc(var(--nav-offset, 60px) + ${idx * 8}px)`,
+                  position: "sticky",
+                  top: `calc(var(--nav-offset, 60px) + 12px + ${idx * 10}px)`,
                   zIndex: idx + 1,
-                  marginBottom: isLast ? "0" : "24svh",
+                  marginBottom: "14svh",
                 }}
               >
-                {/* Centered card with solid white background, clean elevation for smooth stacking slide-over, NO border */}
-                <div className="w-full bg-white shadow-[0_4px_24px_rgba(0,0,0,0.08)] overflow-hidden">
+                {/* .inner holds the content with scale animation on scroll */}
+                <div
+                  ref={(el) => {
+                    innerRefs.current[idx] = el;
+                  }}
+                  className="relative w-full bg-white shadow-[0_4px_24px_rgba(0,0,0,0.08)] overflow-hidden"
+                  style={{ transformOrigin: "top center" }}
+                >
                   {/* Photo edge to edge inside card at its real shape */}
-                  <div className="w-full bg-slate-900 overflow-hidden">
+                  <div
+                    className="w-full bg-slate-900 overflow-hidden"
+                    style={{ aspectRatio: "1024 / 687" }}
+                  >
                     <img
-                      src={p.img}
+                      src={cl(p.img, 1920)}
                       alt={p.title}
-                      className="w-full h-auto block object-cover"
+                      width={1024}
+                      height={687}
                       loading={idx === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                      className="w-full h-full object-cover block"
+                      style={{ aspectRatio: "1024 / 687" }}
+                      onLoad={debouncedRefresh}
                     />
                   </div>
 
                   {/* 64px row with title and plus icon */}
                   <button
                     type="button"
-                    onClick={() => setMobileOpenIdx(isOpen ? -1 : idx)}
-                    className="w-full h-[64px] min-h-[64px] px-5 flex items-center justify-between text-left cursor-pointer border-0 bg-white select-none"
+                    onClick={() => toggleMobileAccordion(idx)}
+                    className="w-full h-[64px] min-h-[64px] px-5 flex items-center justify-between text-left cursor-pointer border-0 bg-white select-none focus-visible:outline-none"
                     aria-expanded={isOpen}
                   >
-                    <h3 className="text-[17px] font-bold text-[#0A0A0A] leading-snug pr-3">
+                    <h3 className="text-[17px] font-bold text-[#0A0A0A] leading-snug pr-3 uppercase">
                       {p.title}
                     </h3>
                     <span className="w-6 h-6 flex items-center justify-center flex-shrink-0 text-[#0A0A0A]">
@@ -1463,7 +1926,7 @@ export const MezzanineLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                         strokeLinecap="round"
                         style={{
                           transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                          transition: "transform 600ms cubic-bezier(0.16, 1, 0.3, 1)",
+                          transition: "transform 400ms cubic-bezier(0.16, 1, 0.3, 1)",
                         }}
                       >
                         <line x1="12" y1="5" x2="12" y2="19" />
@@ -1480,12 +1943,29 @@ export const MezzanineLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                       transition: "grid-template-rows 600ms cubic-bezier(0.16, 1, 0.3, 1)",
                     }}
                   >
-                    <div className="overflow-hidden px-5">
-                      <p className="text-[15px] leading-[1.6] text-[var(--blue)] font-normal pb-6">
+                    <div className="min-h-0 overflow-hidden px-5">
+                      <p
+                        className="text-[15px] leading-[1.6] text-[var(--blue)] font-normal pb-6"
+                        style={{
+                          opacity: isOpen ? 1 : 0,
+                          transition: isOpen
+                            ? "opacity 400ms cubic-bezier(0.16, 1, 0.3, 1) 150ms"
+                            : "opacity 200ms ease 0ms",
+                        }}
+                      >
                         {p.text}
                       </p>
                     </div>
                   </div>
+
+                  {/* .shade (absolute dark overlay, opacity 0, tweens to 0.32) */}
+                  <div
+                    ref={(el) => {
+                      shadeRefs.current[idx] = el;
+                    }}
+                    className="absolute inset-0 bg-black pointer-events-none"
+                    style={{ opacity: 0 }}
+                  />
                 </div>
               </div>
             );
@@ -1493,17 +1973,26 @@ export const MezzanineLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         </div>
       </section>
 
-      {/* Experience Band (Full Width Nav Blue, TEXT STYLE heading and text in solid white) */}
+      {/* Experience Band (Full Width Nav Blue, white text, RISE once) */}
       {experienceSec && (
-        <section className="w-full bg-[var(--blue)] text-white py-[var(--sec-y-lg)]">
+        <section
+          ref={experienceSecRef}
+          className="w-full bg-[var(--blue)] text-white py-[var(--sec-y-lg)]"
+        >
           <div className="container grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start text-left">
             <div className="lg:col-span-5">
-              <h2 className="text-[16px] lg:text-[44px] font-bold text-white uppercase leading-tight lg:leading-[1.15] tracking-[-0.02em]">
+              <h2
+                ref={experienceTitleRef}
+                className="text-[16px] lg:text-[44px] font-bold text-white uppercase leading-tight lg:leading-[1.15] tracking-[-0.02em]"
+              >
                 {experienceSec.title?.toUpperCase() || "EXPERIENCE"}
               </h2>
             </div>
             <div className="lg:col-span-7">
-              <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-white font-normal max-w-[640px]">
+              <p
+                ref={experienceTextRef}
+                className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-white font-normal max-w-[640px]"
+              >
                 {experienceSec.text}
               </p>
             </div>
@@ -1511,14 +2000,88 @@ export const MezzanineLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         </section>
       )}
 
-      {/* Frequently Asked Questions */}
+      {/* Frequently Asked Questions (One-Step style, ZERO grey text) */}
       {data.faq && data.faq.length > 0 && (
-        <section className="container py-[var(--sec-y)]">
+        <section ref={faqSecRef} className="container py-[var(--sec-y-lg)]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
+            <h2
+              ref={faqTitleRef}
+              className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8"
+            >
               FREQUENTLY ASKED QUESTIONS
             </h2>
-            <Accordion items={data.faq} size="large" />
+
+            <div className="w-full divide-y divide-[rgba(15,23,42,0.12)] border-y border-[rgba(15,23,42,0.12)]">
+              {data.faq.map((item, idx) => {
+                const isOpen = openFaqIdx === idx;
+                const panelId = `faq-panel-${idx}`;
+                const headerId = `faq-header-${idx}`;
+
+                return (
+                  <div key={idx} className="group overflow-hidden">
+                    <button
+                      id={headerId}
+                      type="button"
+                      aria-expanded={isOpen}
+                      aria-controls={panelId}
+                      onClick={() => {
+                        setOpenFaqIdx((prev) => (prev === idx ? null : idx));
+                        debouncedRefresh();
+                      }}
+                      className="w-full min-h-[52px] py-5 flex items-center justify-between text-left cursor-pointer focus-visible:outline-none"
+                    >
+                      <span className="font-bold text-[17px] lg:text-[20px] text-[#0A0A0A] pr-6 leading-snug">
+                        {item.q}
+                      </span>
+
+                      <span className="w-6 h-6 flex items-center justify-center flex-shrink-0 text-[#0A0A0A]">
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          style={{
+                            transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
+                            transition: "transform 400ms cubic-bezier(0.16, 1, 0.3, 1)",
+                          }}
+                        >
+                          <line x1="12" y1="5" x2="12" y2="19" />
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                      </span>
+                    </button>
+
+                    <div
+                      id={panelId}
+                      role="region"
+                      aria-labelledby={headerId}
+                      className="grid"
+                      style={{
+                        gridTemplateRows: isOpen ? "1fr" : "0fr",
+                        transition: "grid-template-rows 600ms cubic-bezier(0.16, 1, 0.3, 1)",
+                      }}
+                    >
+                      <div className="min-h-0 overflow-hidden">
+                        <p
+                          className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal pb-6 max-w-[680px]"
+                          style={{
+                            opacity: isOpen ? 1 : 0,
+                            transition: isOpen
+                              ? "opacity 400ms cubic-bezier(0.16, 1, 0.3, 1) 150ms"
+                              : "opacity 200ms ease 0ms",
+                          }}
+                        >
+                          {item.a}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
       )}
