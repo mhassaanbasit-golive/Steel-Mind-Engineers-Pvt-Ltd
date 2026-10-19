@@ -14,6 +14,7 @@ import { Accordion } from "../components/ui/Accordion.tsx";
 import { QuoteBand } from "../components/ui/QuoteBand.tsx";
 import { useReducedMotion } from "../hooks/useReducedMotion.ts";
 import { gsap, ScrollTrigger } from "../lib/gsap.ts";
+import { cl, srcSet } from "../lib/cloudinary.ts";
 
 const TURNKEY_TEXT =
   "We are a turnkey solution provider offering design, fabrication, and installation for pre-engineered steel buildings, steel structures, and industrial sheds, as well as custom steel fabrication across Pakistan.";
@@ -592,10 +593,14 @@ export const Home: React.FC = () => {
               >
                 <div className="overflow-hidden mb-3 bg-[#F3F4F6]">
                   <div className="transition-transform duration-500 group-hover:scale-[1.03]">
-                    <Img
-                      src={mainImg}
+                    <img
+                      src={mainImg && !mainImg.startsWith("/") ? cl(mainImg, 1080) : mainImg}
+                      srcSet={mainImg && !mainImg.startsWith("/") ? srcSet(mainImg) : undefined}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 1080px"
                       alt={p.title}
-                      ratio="4/5"
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-auto block object-contain"
                     />
                   </div>
                 </div>
