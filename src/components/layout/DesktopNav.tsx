@@ -177,7 +177,7 @@ export const DesktopNav: React.FC = () => {
                                 className={`text-[12px] lg:text-[13px] py-1 transition-colors leading-tight ${
                                   isChildActive
                                     ? "text-[var(--blue)] font-semibold"
-                                    : "text-[#4B5563] hover:text-[var(--blue)]"
+                                    : "text-[var(--blue)]/80 hover:text-[var(--blue)] font-medium"
                                 }`}
                               >
                                 {child.label}

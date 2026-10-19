@@ -72,7 +72,7 @@ export const FactoryTour: React.FC = () => {
         className="w-full bg-white py-[72px] lg:py-[112px]"
       >
         <div className="max-w-[1340px] mx-auto px-5 lg:px-10">
-          <p className="text-[14px] lg:text-[15px] leading-[1.7] text-[#6B7280] max-w-[600px] text-left">
+          <p className="text-[14px] lg:text-[15px] leading-[1.7] text-[var(--blue)] max-w-[600px] text-left">
             {p8WhereFactoryText}
           </p>
 
@@ -103,7 +103,7 @@ export const FactoryTour: React.FC = () => {
                     <h2 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
                       {step.name}
                     </h2>
-                    <p className="text-[14px] lg:text-[15px] text-[#6B7280] leading-[1.7] max-w-[600px]">
+                    <p className="text-[14px] lg:text-[15px] text-[var(--blue)] leading-[1.7] max-w-[600px]">
                       {step.text}
                     </p>
 

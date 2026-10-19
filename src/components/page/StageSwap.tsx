@@ -158,7 +158,7 @@ export const StageSwap: React.FC<StageSwapProps> = ({
                 <h3 className="text-[30px] font-[500] text-[var(--ink)] leading-[1.15] tracking-[-0.025em] mb-4">
                   {row.title}
                 </h3>
-                <p className="text-[17px] text-[#5B6472] leading-[1.65] max-w-[560px]">
+                <p className="text-[17px] text-[var(--blue)] leading-[1.65] max-w-[560px]">
                   {row.text}
                 </p>
               </div>
@@ -236,7 +236,7 @@ export const StageSwap: React.FC<StageSwapProps> = ({
               <h3 className="text-[20px] font-[600] text-[var(--ink)] leading-[1.2] tracking-[-0.025em] mb-2.5">
                 {row.title}
               </h3>
-              <p className="text-[15px] text-[#5B6472] leading-[1.65]">
+              <p className="text-[15px] text-[var(--blue)] leading-[1.65]">
                 {row.text}
               </p>
             </div>

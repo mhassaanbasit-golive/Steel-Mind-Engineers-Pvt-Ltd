@@ -56,7 +56,7 @@ export const Card: React.FC<CardProps> = ({
 
         {/* Description: 13px, #6B7280, line-height 1.6, max 3 lines. Margin-bottom 12px */}
         {description && (
-          <p className="text-[13px] text-[#6B7280] leading-[1.6] line-clamp-3 mb-[12px]">
+          <p className="text-[13px] text-[var(--blue)] leading-[1.6] line-clamp-3 mb-[12px]">
             {description}
           </p>
         )}

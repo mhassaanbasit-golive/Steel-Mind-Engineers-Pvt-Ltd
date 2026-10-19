@@ -29,26 +29,26 @@
   --nav-h: 60px;
   --nav-offset: 60px;
   --pad-x: 16px;
-  --section-y: 64px;
+  --section-y: 44px;
 
   /* Layout grid */
   --container: 1280px;
-  --gutter: 20px;
-  --sec-y: 56px;
-  --sec-y-lg: 72px;
+  --gutter: 16px;
+  --sec-y: 40px;
+  --sec-y-lg: 60px;
 
-  /* Typography tokens (Mobile defaults - balanced and proportional) */
-  --fs-hero: clamp(18px, 5vw, 24px);
-  --fs-h2: clamp(17px, 4.2vw, 22px);
-  --fs-h3: 16px;
-  --fs-lead: 15px;
-  --fs-body: 14px;
-  --fs-small: 12px;
-  --fs-eyebrow: 10px;
-  --fs-btn: 11px;
-  --fs-faq-q: 15px;
-  --fs-num: 36px;
-  --fs-next-title: clamp(18px, 4.5vw, 24px);
+  /* Typography tokens (Mobile defaults - balanced, compact and proportional) */
+  --fs-hero: clamp(16px, 4.4vw, 20px);
+  --fs-h2: clamp(14px, 3.6vw, 18px);
+  --fs-h3: 13.5px;
+  --fs-lead: 12.5px;
+  --fs-body: 12px;
+  --fs-small: 10.5px;
+  --fs-eyebrow: 9px;
+  --fs-btn: 9.5px;
+  --fs-faq-q: 13px;
+  --fs-num: 24px;
+  --fs-next-title: clamp(15px, 3.8vw, 20px);
 }
 
 @media (min-width: 768px) {
@@ -198,7 +198,7 @@ html.lenis, html.lenis body {
 /* Typography Utility Classes */
 .hero-h1 {
   color: #FFFFFF;
-  font-size: clamp(20px, 5.2vw, 26px);
+  font-size: clamp(17px, 4.4vw, 22px);
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -212,7 +212,7 @@ html.lenis, html.lenis body {
 
 .inner-h1 {
   color: #0A0A0A;
-  font-size: clamp(20px, 5.2vw, 26px);
+  font-size: clamp(17px, 4.4vw, 22px);
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -225,7 +225,7 @@ html.lenis, html.lenis body {
 
 .heading-h2 {
   color: #0A0A0A;
-  font-size: clamp(18px, 4.4vw, 24px);
+  font-size: clamp(15px, 3.6vw, 20px);
   font-weight: 700;
   line-height: 1.18;
   letter-spacing: -0.02em;
@@ -238,7 +238,7 @@ html.lenis, html.lenis body {
 
 .heading-h3 {
   color: #0A0A0A;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   line-height: 1.25;
   letter-spacing: -0.01em;
@@ -251,9 +251,9 @@ html.lenis, html.lenis body {
 
 .body-text {
   color: #6B7280;
-  font-size: 14px;
+  font-size: 12.5px;
   font-weight: 400;
-  line-height: 1.65;
+  line-height: 1.6;
   max-width: 600px;
 }
 @media (min-width: 1024px) {
@@ -265,7 +265,7 @@ html.lenis, html.lenis body {
 
 .label-meta {
   color: #6B7280;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -277,6 +277,26 @@ html.lenis, html.lenis body {
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.06em;
+}
+
+/* Other than homepage: change grey text to blue (especially main divisions sub sections) and faded numbers to blue */
+main:not([data-home="true"]) {
+  --grey: #1E3A8A;
+  --grey-strong: #1E3A8A;
+}
+
+main:not([data-home="true"]) .text-\[\#6B7280\],
+main:not([data-home="true"]) .text-\[\#4B5563\],
+main:not([data-home="true"]) .text-gray-500,
+main:not([data-home="true"]) .text-gray-600 {
+  color: #1E3A8A !important;
+}
+
+main:not([data-home="true"]) p.text-\[\#6B7280\],
+main:not([data-home="true"]) p.text-\[\#4B5563\],
+main:not([data-home="true"]) span.text-\[\#6B7280\],
+main:not([data-home="true"]) span.text-\[\#4B5563\] {
+  color: #1E3A8A !important;
 }
 
 .link-accent {

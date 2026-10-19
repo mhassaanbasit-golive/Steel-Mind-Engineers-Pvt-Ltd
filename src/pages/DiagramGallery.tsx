@@ -85,7 +85,7 @@ export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
               {blockBParagraphs.map((p, idx) => (
                 <p
                   key={idx}
-                  className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]"
+                  className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]"
                 >
                   {p}
                 </p>
@@ -126,7 +126,7 @@ export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
                   <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] mb-2 leading-[1.25] tracking-[-0.01em]">
                     {item.name}
                   </h3>
-                  <p className="text-[14px] lg:text-[15px] leading-[1.7] text-[#6B7280] line-clamp-3">
+                  <p className="text-[14px] lg:text-[15px] leading-[1.7] text-[var(--blue)] line-clamp-3">
                     {item.text}
                   </p>
                   <span className="mt-4 text-[13px] font-semibold text-[#1E3A8A] inline-block uppercase tracking-[0.06em]">
@@ -171,7 +171,7 @@ export const DiagramGallery: React.FC<DiagramGalleryProps> = ({ data }) => {
               <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
                 {modalItem.name}
               </h3>
-              <p className="text-[14px] lg:text-[15px] leading-[1.7] text-[#6B7280]">
+              <p className="text-[14px] lg:text-[15px] leading-[1.7] text-[var(--blue)]">
                 {modalItem.text}
               </p>
             </div>

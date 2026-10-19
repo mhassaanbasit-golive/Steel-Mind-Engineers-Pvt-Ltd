@@ -84,7 +84,7 @@ export const ImageAccordion: React.FC<ImageAccordionProps> = ({
               }}
             >
               <div className="overflow-hidden">
-                <p className="pb-4 text-[15px] text-[#5B6472] leading-[1.65]">
+                <p className="pb-4 text-[15px] text-[var(--blue)] leading-[1.65]">
                   {item.text}
                 </p>
               </div>

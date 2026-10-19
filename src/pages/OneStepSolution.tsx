@@ -422,7 +422,7 @@ export const OneStepSolution: React.FC<OneStepSolutionProps> = ({ data }) => {
                     className="block font-bold leading-none select-none"
                     style={{
                       fontSize: "var(--num)",
-                      color: isActive ? "#1E3A8A" : "rgba(10, 10, 10, 0.18)",
+                      color: isActive ? "#1E3A8A" : "rgba(30, 58, 138, 0.45)",
                       transition: prefersReduced
                         ? "none"
                         : "color 800ms cubic-bezier(0.22, 1, 0.36, 1)",

@@ -18,7 +18,7 @@ export const OutlineNum: React.FC<OutlineNumProps> = ({
       className={`font-semibold tabular-nums transition-colors duration-300 select-none ${className}`}
       style={{
         fontSize: "var(--fs-num)",
-        color: active ? "var(--blue)" : "rgba(10, 10, 10, 0.18)",
+        color: "var(--blue, #1E3A8A)",
       }}
     >
       {displayNum}

@@ -149,11 +149,11 @@ export const Loader: React.FC = () => {
         {/* Steel Mind logo */}
         <img
           ref={logoRef}
-          src="https://res.cloudinary.com/cyfb9slf/image/upload/v1792204152/android-chrome-512x512.png"
+          src="https://res.cloudinary.com/cyfb9slf/image/upload/v1791401768/Landscape.jpg"
           alt="Steel Mind Engineers"
-          width={168}
-          height={168}
-          className="w-[120px] sm:w-[150px] md:w-[168px] h-auto object-contain transition-transform"
+          width={240}
+          height={88}
+          className="w-[180px] sm:w-[220px] md:w-[260px] max-w-[80vw] h-auto object-contain transition-transform"
         />
 
         {/* Loading progress bar */}

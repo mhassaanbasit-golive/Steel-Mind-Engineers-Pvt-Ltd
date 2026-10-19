@@ -42,7 +42,7 @@ export const HubChapterList: React.FC<HubChapterListProps> = ({ chapters }) => {
 
             {/* Description: 14px, #6B7280, line-height 1.7, max-width 480px. Margin-bottom 16px. */}
             {chapter.desc && (
-              <p className="text-[14px] text-[#6B7280] leading-[1.7] max-w-[480px] mb-[16px]">
+              <p className="text-[14px] text-[var(--blue)] leading-[1.7] max-w-[480px] mb-[16px]">
                 {chapter.desc}
               </p>
             )}

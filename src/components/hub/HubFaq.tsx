@@ -117,7 +117,7 @@ export const HubFaq: React.FC<HubFaqProps> = ({ items }) => {
                       paddingBottom: "24px",
                     }}
                   >
-                    <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]">
+                    <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]">
                       {item.a}
                     </p>
                   </div>

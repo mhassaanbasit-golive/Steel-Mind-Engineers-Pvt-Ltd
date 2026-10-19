@@ -542,7 +542,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
           {introParagraph && (
             <p
               aria-label={introParagraph}
-              className="mt-6 max-w-[640px] text-[14px] lg:text-[15px] font-normal text-[#6B7280] leading-[1.7] text-center mx-auto"
+              className="mt-6 max-w-[640px] text-[14px] lg:text-[15px] font-normal text-[var(--blue)] leading-[1.7] text-center mx-auto"
             >
               {paraWords.map((word, wordIdx) => {
                 const delay = prefersReduced
@@ -766,7 +766,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
                       {/* Description */}
                       {item.desc && (
                         <p
-                          className="text-[14px] lg:text-[15px] text-[#6B7280] leading-[1.7] max-w-[440px] mb-6"
+                          className="text-[14px] lg:text-[15px] text-[var(--blue)] leading-[1.7] max-w-[440px] mb-6"
                           style={{
                             opacity: isActive ? 1 : 0,
                             transform: prefersReduced
@@ -868,7 +868,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
 
                   {/* ONE line of description with ellipsis */}
                   {item.desc && (
-                    <p className="mt-2 text-[13px] text-[#6B7280] leading-[1.5] whitespace-nowrap overflow-hidden text-ellipsis block max-w-full">
+                    <p className="mt-2 text-[13px] text-[var(--blue)] leading-[1.5] whitespace-nowrap overflow-hidden text-ellipsis block max-w-full">
                       {item.desc}
                     </p>
                   )}
@@ -946,7 +946,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
                       }}
                     >
                       <div className="overflow-hidden">
-                        <p className="pt-3 pb-2 text-[14px] lg:text-[15px] text-[#6B7280] leading-[1.7] max-w-[800px]">
+                        <p className="pt-3 pb-2 text-[14px] lg:text-[15px] text-[var(--blue)] leading-[1.7] max-w-[800px]">
                           {item.a}
                         </p>
                       </div>

@@ -355,7 +355,7 @@ export const Concept3D: React.FC<Concept3DProps> = ({ data }) => {
                           marginBottom: "16px",
                           color: isActive
                             ? "var(--blue, #1E3A8A)"
-                            : "rgba(10, 10, 10, 0.18)",
+                            : "rgba(30, 58, 138, 0.45)",
                           transition: prefersReduced
                             ? "none"
                             : "color 500ms ease",

@@ -73,7 +73,7 @@ export const EngineeringLayout: React.FC<{ data: ContentData }> = ({ data }) => 
           <div className="lg:col-span-5 text-[17px] lg:text-[20px] font-medium text-[var(--ink)] leading-[1.6]">
             {introPs[0]}
           </div>
-          <div className="lg:col-span-7 text-[15px] lg:text-[17px] text-[#5B6472] leading-[1.65]">
+          <div className="lg:col-span-7 text-[15px] lg:text-[17px] text-[#1E3A8A] leading-[1.65]">
             {sections[0]?.text || introPs.slice(1).join(" ")}
           </div>
         </div>
@@ -99,7 +99,7 @@ export const EngineeringLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                 <h3 className="font-[600] text-[20px] lg:text-[24px] text-[var(--ink)]">
                   {blk.title}
                 </h3>
-                <p className="text-[#5B6472] text-[15px] lg:text-[17px] leading-[1.65]">
+                <p className="text-[#1E3A8A] text-[15px] lg:text-[17px] leading-[1.65]">
                   {blk.text}
                 </p>
               </div>
@@ -155,7 +155,7 @@ export const PrimaryFramingLayout: React.FC<{ data: ContentData }> = ({ data }) 
         <h2 className="text-[24px] lg:text-[38px] font-[500] text-[var(--ink)] mb-4 tracking-[-0.025em]">
           <TwoTone text={sections[0]?.title || "What the Primary Frame Is"} />
         </h2>
-        <p className="text-[15px] lg:text-[17px] text-[#5B6472] leading-[1.65]">
+        <p className="text-[15px] lg:text-[17px] text-[#1E3A8A] leading-[1.65]">
           {sections[0]?.text || introPs[0]}
         </p>
       </section>
@@ -204,7 +204,7 @@ export const PrimaryFramingLayout: React.FC<{ data: ContentData }> = ({ data }) 
                   type="button"
                   onClick={() => setActiveIdx(idx)}
                   className={`w-full h-[56px] flex items-center justify-between text-left cursor-pointer transition-colors px-2 ${
-                    activeIdx === idx ? "text-[var(--blue)] font-bold" : "text-[#5B6472] hover:text-[var(--ink)] font-medium"
+                    activeIdx === idx ? "text-[var(--blue)] font-bold" : "text-[#1E3A8A] hover:text-[var(--ink)] font-medium"
                   }`}
                 >
                   <span className="text-[14px]">{t.name}</span>
@@ -222,7 +222,7 @@ export const PrimaryFramingLayout: React.FC<{ data: ContentData }> = ({ data }) 
             <div className="mt-8 pt-6 border-t border-[rgba(15,23,42,0.12)] flex flex-col justify-between">
               <div>
                 <h3 className="text-[28px] font-[500] text-[var(--ink)] mb-3 leading-[1.15]">{activeType.name}</h3>
-                <p className="text-[#5B6472] leading-[1.65] text-[15px] lg:text-[17px]">
+                <p className="text-[#1E3A8A] leading-[1.65] text-[15px] lg:text-[17px]">
                   {activeType.desc}
                 </p>
               </div>
@@ -259,7 +259,7 @@ export const PrimaryFramingLayout: React.FC<{ data: ContentData }> = ({ data }) 
               <button
                 type="button"
                 onClick={() => setModalOpen(false)}
-                className="text-[24px] font-bold text-[#5B6472] hover:text-[var(--ink)] cursor-pointer"
+                className="text-[24px] font-bold text-[#1E3A8A] hover:text-[var(--ink)] cursor-pointer"
               >
                 ✕
               </button>
@@ -267,7 +267,7 @@ export const PrimaryFramingLayout: React.FC<{ data: ContentData }> = ({ data }) 
             <div className="w-full py-8 flex items-center justify-center bg-slate-50">
               <FrameDiagram type={activeType.name} className="max-w-[640px] w-full" />
             </div>
-            <p className="mt-6 text-[#5B6472] leading-[1.6] text-[15px]">{activeType.desc}</p>
+            <p className="mt-6 text-[#1E3A8A] leading-[1.6] text-[15px]">{activeType.desc}</p>
           </div>
         </div>
       )}
@@ -364,7 +364,7 @@ export const BasicParametersLayout: React.FC<{ data: ContentData }> = ({ data })
               <h3 className="text-[24px] font-[500] text-[var(--ink)]">
                 <TwoTone text={note1.title} />
               </h3>
-              <p className="text-[#5B6472] text-[16px] leading-[1.65]">
+              <p className="text-[#1E3A8A] text-[16px] leading-[1.65]">
                 {note1.text}
               </p>
             </div>
@@ -374,7 +374,7 @@ export const BasicParametersLayout: React.FC<{ data: ContentData }> = ({ data })
               <h3 className="text-[24px] font-[500] text-[var(--ink)]">
                 <TwoTone text={note2.title} />
               </h3>
-              <p className="text-[#5B6472] text-[16px] leading-[1.65]">
+              <p className="text-[#1E3A8A] text-[16px] leading-[1.65]">
                 {note2.text}
               </p>
             </div>
@@ -461,7 +461,7 @@ export const SubStructuresLayout: React.FC<{ data: ContentData }> = ({ data }) =
               {introPs[0] || sections[0]?.text}
             </p>
             {introPs.slice(1).length > 0 && (
-              <p className="mt-4 text-[15px] lg:text-[17px] text-[#5B6472] leading-[1.65]">
+              <p className="mt-4 text-[15px] lg:text-[17px] text-[#1E3A8A] leading-[1.65]">
                 {introPs.slice(1).join(" ")}
               </p>
             )}
@@ -486,7 +486,7 @@ export const SubStructuresLayout: React.FC<{ data: ContentData }> = ({ data }) =
                 </div>
               </div>
               <div className="lg:col-span-7">
-                <p className="text-[15px] lg:text-[17px] text-[#5B6472] leading-[1.65] max-w-[420px] overflow-wrap-anywhere">
+                <p className="text-[15px] lg:text-[17px] text-[#1E3A8A] leading-[1.65] max-w-[420px] overflow-wrap-anywhere">
                   {item.text}
                 </p>
               </div>
@@ -547,7 +547,7 @@ export const SubStructuresLayout: React.FC<{ data: ContentData }> = ({ data }) =
               <h3 className="text-[22px] lg:text-[28px] font-[500] text-[var(--ink)] leading-[1.2]">
                 {ao.name}
               </h3>
-              <p className="text-[15px] lg:text-[16px] text-[#5B6472] leading-[1.65]">
+              <p className="text-[15px] lg:text-[16px] text-[#1E3A8A] leading-[1.65]">
                 {ao.desc}
               </p>
             </div>
@@ -573,7 +573,7 @@ export const SubStructuresLayout: React.FC<{ data: ContentData }> = ({ data }) =
               </h2>
             </div>
             <div className="lg:col-span-7">
-              <p className="text-[15px] lg:text-[17px] text-[#5B6472] leading-[1.75]">
+              <p className="text-[15px] lg:text-[17px] text-[#1E3A8A] leading-[1.75]">
                 {fastenersSec.text}
               </p>
             </div>
@@ -635,7 +635,7 @@ export const CraneSystemLayout: React.FC<{ data: ContentData }> = ({ data }) => 
             <h2 className="text-[28px] lg:text-[40px] font-[500] text-[var(--ink)] leading-[1.15] mb-4">
               <TwoTone text={introSec?.title || "Why Crane Buildings Need Special Design"} />
             </h2>
-            <p className="text-[15px] lg:text-[17px] text-[#5B6472] leading-[1.75]">
+            <p className="text-[15px] lg:text-[17px] text-[#1E3A8A] leading-[1.75]">
               {introSec?.text}
             </p>
           </div>
@@ -657,7 +657,7 @@ export const CraneSystemLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                   <h3 className="text-[20px] lg:text-[28px] font-[500] text-[var(--ink)] leading-[1.2]">
                     {sh.title}
                   </h3>
-                  <p className="text-[15px] lg:text-[17px] text-[#5B6472] leading-[1.65]">
+                  <p className="text-[15px] lg:text-[17px] text-[#1E3A8A] leading-[1.65]">
                     {sh.desc}
                   </p>
                 </div>
@@ -695,7 +695,7 @@ export const CraneSystemLayout: React.FC<{ data: ContentData }> = ({ data }) => 
               <button
                 type="button"
                 onClick={() => setModalDiagram(null)}
-                className="text-[24px] font-bold text-[#5B6472] hover:text-[var(--ink)] cursor-pointer"
+                className="text-[24px] font-bold text-[#1E3A8A] hover:text-[var(--ink)] cursor-pointer"
               >
                 ✕
               </button>
@@ -940,7 +940,7 @@ export const AccessoriesLayout: React.FC<{ data: ContentData }> = ({ data }) => 
         <h2 className="text-[28px] lg:text-[44px] font-[500] text-[var(--ink)]">
           <TwoTone text={sections[0]?.title || "Why Accessories Matter"} />
         </h2>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 text-[#5B6472] leading-[1.75] text-[15px] lg:text-[18px]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 text-[#1E3A8A] leading-[1.75] text-[15px] lg:text-[18px]">
           <p>{introPs[0] || sections[0]?.text}</p>
           <p>{introPs[1] || ""}</p>
         </div>
@@ -957,7 +957,7 @@ export const AccessoriesLayout: React.FC<{ data: ContentData }> = ({ data }) => 
             type="button"
             onClick={() => selectCategory(idx)}
             className={`relative py-1 text-[13px] font-semibold whitespace-nowrap cursor-pointer transition-colors ${
-              activeCategory === idx ? "text-[var(--blue)]" : "text-[#5B6472]"
+              activeCategory === idx ? "text-[var(--blue)]" : "text-[#1E3A8A]"
             }`}
           >
             <span>{cat.title}</span>
@@ -983,7 +983,7 @@ export const AccessoriesLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                   type="button"
                   onClick={() => selectCategory(idx)}
                   className={`block text-left text-[16px] font-bold transition-colors cursor-pointer ${
-                    activeCategory === idx ? "text-[var(--blue)]" : "text-[#5B6472] hover:text-[var(--ink)]"
+                    activeCategory === idx ? "text-[var(--blue)]" : "text-[#1E3A8A] hover:text-[var(--ink)]"
                   }`}
                 >
                   {cat.title}
@@ -1011,7 +1011,7 @@ export const AccessoriesLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                   {cat.items.map((it, iIdx) => (
                     <div key={iIdx} className="border-t border-[rgba(15,23,42,0.12)] pt-4 space-y-2">
                       <h4 className="text-[20px] font-[600] text-[var(--ink)]">{it.name}</h4>
-                      <p className="text-[#5B6472] leading-[1.65] text-[15px] lg:text-[16px]">
+                      <p className="text-[#1E3A8A] leading-[1.65] text-[15px] lg:text-[16px]">
                         {it.text}
                       </p>
                     </div>
@@ -1030,7 +1030,7 @@ export const AccessoriesLayout: React.FC<{ data: ContentData }> = ({ data }) => 
             <h3 className="text-[24px] lg:text-[28px] font-[500] text-[var(--ink)]">
               <TwoTone text={howToChoose.title} />
             </h3>
-            <p className="text-[#5B6472] leading-[1.75] text-[15px] lg:text-[16px]">
+            <p className="text-[#1E3A8A] leading-[1.75] text-[15px] lg:text-[16px]">
               {howToChoose.text}
             </p>
           </div>

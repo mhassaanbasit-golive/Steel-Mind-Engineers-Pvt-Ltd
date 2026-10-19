@@ -91,7 +91,7 @@ export const SmePolicy: React.FC = () => {
         className="w-full bg-white text-[var(--ink)] py-[72px] lg:py-[112px]"
       >
         <div className="max-w-[1340px] mx-auto px-5 lg:px-10">
-          <p className="text-[14px] lg:text-[15px] text-[#6B7280] font-normal max-w-[600px] leading-[1.7]">
+          <p className="text-[14px] lg:text-[15px] text-[var(--blue)] font-normal max-w-[600px] leading-[1.7]">
             {page6.quickAnswer}
           </p>
 
@@ -107,7 +107,7 @@ export const SmePolicy: React.FC = () => {
                 <h2 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
                   {strip.title}
                 </h2>
-                <p className="text-[14px] lg:text-[15px] text-[#6B7280] leading-[1.7] max-w-[600px]">
+                <p className="text-[14px] lg:text-[15px] text-[var(--blue)] leading-[1.7] max-w-[600px]">
                   {strip.desc}
                 </p>
               </div>

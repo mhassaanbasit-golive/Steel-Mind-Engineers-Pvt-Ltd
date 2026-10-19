@@ -17,9 +17,9 @@ export const HubIntro: React.FC<HubIntroProps> = ({
           {divisionTitle}
         </h2>
 
-        {/* Body Paragraph: Color #6B7280, Size 14px mobile / 15px desktop, Weight 400, Line-height 1.7, Max-width 600px, Full opacity */}
+        {/* Body Paragraph: Color var(--blue), Size 14px mobile / 15px desktop, Weight 400, Line-height 1.7, Max-width 600px, Full opacity */}
         {quickAnswer && (
-          <p className="mt-[20px] max-w-[600px] text-[14px] lg:text-[15px] font-normal text-[#6B7280] leading-[1.7] text-center mx-auto">
+          <p className="mt-[20px] max-w-[600px] text-[14px] lg:text-[15px] font-normal text-[var(--blue)] leading-[1.7] text-center mx-auto">
             {quickAnswer}
           </p>
         )}

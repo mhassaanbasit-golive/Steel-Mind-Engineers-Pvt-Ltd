@@ -205,11 +205,11 @@ export const AboutUs: React.FC = () => {
                   {page2.h1}
                 </h2>
 
-                <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px] mt-5">
+                <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px] mt-5">
                   {page2.quickAnswer}
                 </p>
 
-                <div className="mt-4 space-y-4 text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]">
+                <div className="mt-4 space-y-4 text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]">
                   <p>{p2Paragraph1}</p>
                   <p>{p2Paragraph2}</p>
                 </div>
@@ -256,11 +256,11 @@ export const AboutUs: React.FC = () => {
                   {page3.h1}
                 </h2>
 
-                <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px] mt-5">
+                <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px] mt-5">
                   {page3.quickAnswer}
                 </p>
 
-                <div className="mt-4 space-y-4 text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]">
+                <div className="mt-4 space-y-4 text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]">
                   {p3Paragraphs.map((pText, i) => (
                     <p key={i}>{pText}</p>
                   ))}
@@ -291,7 +291,7 @@ export const AboutUs: React.FC = () => {
                   {page4.h1}
                 </h2>
 
-                <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px] mt-5">
+                <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px] mt-5">
                   {page4.quickAnswer}
                 </p>
 
@@ -306,7 +306,7 @@ export const AboutUs: React.FC = () => {
                         <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
                           {def.name}
                         </h3>
-                        <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]">
+                        <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]">
                           {def.text}
                         </p>
                       </div>

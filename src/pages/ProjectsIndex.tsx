@@ -32,7 +32,7 @@ export const ProjectsIndex: React.FC = () => {
         <h2 className="text-[22px] lg:text-[48px] font-bold leading-[1.15] tracking-[-0.02em] text-[#0A0A0A] mb-4">
           Proof You Can Check
         </h2>
-        <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]">
+        <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]">
           A steel contractor is best judged by what it has built. Every project below lists the client, the place, the height, the width, the length and the covered area. The largest crane sheds cover almost 100,000 square feet, and the dairy sheds show repeat work for the same farms.
         </p>
       </section>
@@ -59,7 +59,7 @@ export const ProjectsIndex: React.FC = () => {
                   <h3 className="text-[17px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
                     {proj.title}
                   </h3>
-                  <p className="text-[12px] font-medium text-[#6B7280] tracking-[0.02em] mt-0.5">
+                  <p className="text-[12px] font-medium text-[var(--blue)] tracking-[0.02em] mt-0.5">
                     {proj.client} · {proj.location}
                   </p>
                 </div>

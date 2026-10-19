@@ -63,6 +63,7 @@ export const PageShell: React.FC<PageShellProps> = ({
       <main
         id="main"
         ref={mainRef}
+        data-home={String(isHomepage)}
         style={{
           paddingTop: hasDarkHero ? 0 : "var(--nav-h, 80px)",
         }}

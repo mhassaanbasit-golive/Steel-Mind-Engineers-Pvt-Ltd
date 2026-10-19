@@ -251,7 +251,7 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
                 {blockBSection.paragraphs.slice(0, 2).map((p, idx) => (
                   <p
                     key={idx}
-                    className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]"
+                    className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]"
                   >
                     {p}
                   </p>
@@ -268,7 +268,7 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
             {blockBSection.paragraphs.length > 2 && (
               <div className="mt-8 space-y-4 max-w-[600px]">
                 {blockBSection.paragraphs.slice(2).map((p, idx) => (
-                  <p key={idx} className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]">
+                  <p key={idx} className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]">
                     {p}
                   </p>
                 ))}
@@ -289,7 +289,7 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
                         <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em] mb-2">
                           {item.term}
                         </h3>
-                        <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]">
+                        <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]">
                           {item.desc}
                         </p>
                       </div>
@@ -327,7 +327,7 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
                       <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
                         {st.name}
                       </h3>
-                      <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]">
+                      <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]">
                         {st.desc}
                       </p>
 
@@ -389,7 +389,7 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
                       {sec.paragraphs.map((p, pIdx) => (
                         <p
                           key={pIdx}
-                          className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]"
+                          className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]"
                         >
                           {p}
                         </p>
@@ -411,7 +411,7 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
                               <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em] mb-2">
                                 {item.term}
                               </h3>
-                              <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280] max-w-[600px]">
+                              <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]">
                                 {item.desc}
                               </p>
                             </div>

@@ -70,7 +70,7 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
 
               <div className="grid grid-cols-2 gap-x-6 gap-y-4 pt-2 border-t border-[#E5E5E5]">
                 <div>
-                  <span className="block text-[12px] font-medium text-[#6B7280] tracking-[0.02em]">
+                  <span className="block text-[12px] font-medium text-[var(--blue)] tracking-[0.02em]">
                     {UI.client}
                   </span>
                   <div className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] mt-0.5">
@@ -79,7 +79,7 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
                 </div>
 
                 <div>
-                  <span className="block text-[12px] font-medium text-[#6B7280] tracking-[0.02em]">
+                  <span className="block text-[12px] font-medium text-[var(--blue)] tracking-[0.02em]">
                     {UI.location}
                   </span>
                   <div className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] mt-0.5">
@@ -88,7 +88,7 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
                 </div>
 
                 <div>
-                  <span className="block text-[12px] font-medium text-[#6B7280] tracking-[0.02em]">
+                  <span className="block text-[12px] font-medium text-[var(--blue)] tracking-[0.02em]">
                     {UI.type}
                   </span>
                   <div className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] mt-0.5">
@@ -98,7 +98,7 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
 
                 {project.height && (
                   <div>
-                    <span className="block text-[12px] font-medium text-[#6B7280] tracking-[0.02em]">
+                    <span className="block text-[12px] font-medium text-[var(--blue)] tracking-[0.02em]">
                       {UI.height}
                     </span>
                     <div className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] mt-0.5">
@@ -109,7 +109,7 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
 
                 {project.width && (
                   <div>
-                    <span className="block text-[12px] font-medium text-[#6B7280] tracking-[0.02em]">
+                    <span className="block text-[12px] font-medium text-[var(--blue)] tracking-[0.02em]">
                       {UI.width}
                     </span>
                     <div className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] mt-0.5">
@@ -120,7 +120,7 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
 
                 {project.length && (
                   <div>
-                    <span className="block text-[12px] font-medium text-[#6B7280] tracking-[0.02em]">
+                    <span className="block text-[12px] font-medium text-[var(--blue)] tracking-[0.02em]">
                       {UI.length}
                     </span>
                     <div className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] mt-0.5">
@@ -132,13 +132,13 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
 
               {/* Area */}
               <div className="border-t border-[#E5E5E5] pt-4 flex items-baseline space-x-2">
-                <span className="text-[12px] font-medium text-[#6B7280] tracking-[0.02em]">
+                <span className="text-[12px] font-medium text-[var(--blue)] tracking-[0.02em]">
                   {UI.area}:
                 </span>
                 <span className="text-[16px] font-bold text-[#1E3A8A] tabular-nums tracking-[0.06em]">
                   {project.area.toLocaleString()}
                 </span>
-                <span className="text-[12px] font-medium text-[#6B7280]">sq ft</span>
+                <span className="text-[12px] font-medium text-[var(--blue)]">sq ft</span>
               </div>
             </div>
 
@@ -159,7 +159,7 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
                 <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
                   {aboutBlock.title || "About the Project"}
                 </h3>
-                <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280]">
+                <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)]">
                   {aboutBlock.text}
                 </p>
               </div>
@@ -185,7 +185,7 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
                 <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
                   {designPointsBlock.title || "Design Points"}
                 </h3>
-                <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280]">
+                <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)]">
                   {designPointsBlock.text}
                 </p>
               </div>

@@ -75,7 +75,7 @@ export const Article: React.FC<ArticleProps> = ({ data }) => {
       {/* Reading Column: max-w 480px mobile / 600px desktop */}
       <div className="max-w-[480px] lg:max-w-[600px] mx-auto px-[var(--pad-x)] pt-10 pb-12">
         {/* Body Blocks */}
-        <div className="space-y-6 text-[14px] lg:text-[15px] leading-[1.7] text-[#6B7280]">
+        <div className="space-y-6 text-[14px] lg:text-[15px] leading-[1.7] text-[var(--blue)]">
           {data.blocks.map((block: ContentBlock, idx: number) => {
             if (block.type === "h2") {
               const id = (block.title || "").toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -91,7 +91,7 @@ export const Article: React.FC<ArticleProps> = ({ data }) => {
             }
             if (block.type === "p") {
               return (
-                <p key={idx} className="text-left text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#6B7280]">
+                <p key={idx} className="text-left text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)]">
                   {block.text}
                 </p>
               );

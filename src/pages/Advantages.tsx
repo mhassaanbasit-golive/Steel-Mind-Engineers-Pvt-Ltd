@@ -315,7 +315,7 @@ export const Advantages: React.FC<AdvantagesProps> = ({ data }) => {
                         >
                           <div className="overflow-hidden min-h-0">
                             <p
-                              className="pl-16 pb-8 text-[15px] text-[#6B7280] leading-[1.7] max-w-[520px]"
+                              className="pl-16 pb-8 text-[15px] text-[var(--blue)] leading-[1.7] max-w-[520px]"
                               style={{
                                 transform:
                                   isOpen || prefersReduced
@@ -499,7 +499,7 @@ export const Advantages: React.FC<AdvantagesProps> = ({ data }) => {
                       >
                         <div className="overflow-hidden min-h-0">
                           <p
-                            className="pl-12 pb-6 text-[15px] text-[#6B7280] leading-[1.6]"
+                            className="pl-12 pb-6 text-[15px] text-[var(--blue)] leading-[1.6]"
                             style={{
                               transform:
                                 isOpen || prefersReduced
@@ -598,7 +598,7 @@ export const Advantages: React.FC<AdvantagesProps> = ({ data }) => {
               {/* Column A: text up to end of sentence about concrete. 1px light grey top line */}
               <div className="relative pt-6">
                 <div className="absolute top-0 inset-x-0 h-[1px] bg-[#E5E5E5]" />
-                <p className="text-[15px] text-[#6B7280] leading-[1.7]">
+                <p className="text-[15px] text-[var(--blue)] leading-[1.7]">
                   Concrete buildings are cast on site. They depend on curing
                   time and weather, and changes are slow.
                 </p>
@@ -619,7 +619,7 @@ export const Advantages: React.FC<AdvantagesProps> = ({ data }) => {
                       : "transform 800ms cubic-bezier(0.22, 1, 0.36, 1) 300ms",
                   }}
                 />
-                <p className="text-[15px] text-[#6B7280] leading-[1.7]">
+                <p className="text-[15px] text-[var(--blue)] leading-[1.7]">
                   A PEB is made in a factory and assembled on site. This is why
                   many factory, warehouse and farm owners in Pakistan now ask
                   for a PEB first.
@@ -838,7 +838,7 @@ export const Advantages: React.FC<AdvantagesProps> = ({ data }) => {
                       }}
                     >
                       <div className="overflow-hidden">
-                        <p className="pt-3 pb-2 text-[15px] text-[#6B7280] leading-[1.7] max-w-[800px]">
+                        <p className="pt-3 pb-2 text-[15px] text-[var(--blue)] leading-[1.7] max-w-[800px]">
                           {item.a}
                         </p>
                       </div>

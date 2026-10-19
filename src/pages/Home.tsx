@@ -313,7 +313,7 @@ export const Home: React.FC = () => {
           >
             {/* Heading */}
             <h1
-              className="text-[18px] lg:text-[30px] font-semibold leading-[1.1] tracking-[-0.01em] text-white whitespace-nowrap max-w-fit"
+              className="text-[15px] sm:text-[18px] lg:text-[30px] font-semibold leading-[1.15] tracking-[-0.01em] text-white whitespace-nowrap max-w-fit"
               style={{
                 whiteSpace: "nowrap",
                 maxWidth: "fit-content",
@@ -327,7 +327,7 @@ export const Home: React.FC = () => {
 
             {/* Subheading directly below heading */}
             <p
-              className="mt-[10px] text-[12px] lg:text-[14px] font-normal leading-[1.5] text-white/85 max-w-[280px] lg:max-w-[480px] text-left"
+              className="mt-[8px] sm:mt-[10px] text-[11px] sm:text-[12px] lg:text-[14px] font-normal leading-[1.45] sm:leading-[1.5] text-white/85 max-w-[280px] sm:max-w-[340px] lg:max-w-[480px] text-left"
               style={{
                 WebkitLineClamp: "unset",
                 overflow: "visible",
@@ -340,52 +340,25 @@ export const Home: React.FC = () => {
 
             {/* Small buttons placed directly below the subheading in the bottom-left corner */}
             <div
-              className="mt-[14px] flex flex-row flex-nowrap items-center justify-start gap-[8px]"
+              className="mt-[10px] sm:mt-[14px] flex flex-wrap items-center justify-start gap-[6px] sm:gap-[8px]"
               data-fade-up=""
             >
               <Link
                 to="/contact-us/#quote"
-                style={{
-                  background: "#FFFFFF",
-                  color: "var(--blue)",
-                  fontSize: "9px",
-                  fontWeight: 600,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  padding: "6px 14px",
-                  height: "30px",
-                  border: "1px solid #FFFFFF",
-                  borderRadius: 0,
-                  lineHeight: 1,
-                }}
-                className="btn btn--light btn-sm group inline-flex items-center justify-center whitespace-nowrap select-none cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.3)] active:translate-y-0 active:scale-[0.98]"
+                className="hero-btn-primary group inline-flex items-center justify-center whitespace-nowrap select-none cursor-pointer hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.3)] active:translate-y-0 active:scale-[0.98]"
               >
                 <span>Request a Quote</span>
-                <span className="btn-arrow ml-1.5 inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1" aria-hidden="true">
+                <span className="btn-arrow ml-1 inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1" aria-hidden="true">
                   &rarr;
                 </span>
               </Link>
 
               <Link
                 to="/projects/"
-                style={{
-                  background: "rgba(255, 255, 255, 0.08)",
-                  backdropFilter: "blur(4px)",
-                  color: "#FFFFFF",
-                  fontSize: "9px",
-                  fontWeight: 600,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  padding: "6px 14px",
-                  height: "30px",
-                  border: "1px solid rgba(255, 255, 255, 0.85)",
-                  borderRadius: 0,
-                  lineHeight: 1,
-                }}
-                className="btn btn-sm group inline-flex items-center justify-center whitespace-nowrap select-none cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-white hover:text-[var(--blue)] hover:border-white hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.25)] active:translate-y-0 active:scale-[0.98]"
+                className="hero-btn-secondary group inline-flex items-center justify-center whitespace-nowrap select-none cursor-pointer hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.25)] active:translate-y-0 active:scale-[0.98]"
               >
                 <span>View Our Projects</span>
-                <span className="btn-arrow ml-1.5 inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1" aria-hidden="true">
+                <span className="btn-arrow ml-1 inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1" aria-hidden="true">
                   &rarr;
                 </span>
               </Link>
@@ -413,14 +386,14 @@ export const Home: React.FC = () => {
           ref={pRef}
           className="fade-text"
           style={{
-            fontSize: "20px",
+            fontSize: "clamp(14px, 2.2vw, 20px)",
             fontWeight: 500,
-            lineHeight: 1.4,
+            lineHeight: 1.45,
             letterSpacing: "-0.01em",
             textAlign: "center",
             maxWidth: "900px",
             margin: "0 auto",
-            padding: "96px 20px",
+            padding: "clamp(48px, 8vw, 96px) 20px",
           }}
         >
           {TURNKEY_TEXT.split("").map((ch, i) => (
