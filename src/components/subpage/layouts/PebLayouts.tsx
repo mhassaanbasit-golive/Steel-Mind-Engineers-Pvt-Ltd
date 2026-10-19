@@ -1,7 +1,9 @@
-// PEB Division Signature Layouts (Portion 2: 2.1 - 2.6)
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { ContentData, ContentBlock } from "../../../content/types.ts";
 import { HeroBand } from "../../ui/HeroBand.tsx";
+import { SubpageHero } from "../SubpageHero.tsx";
+import { SubpageNextBanner } from "../SubpageNextBanner.tsx";
+import { cl } from "../../../data/images.ts";
 import { Accordion } from "../../ui/Accordion.tsx";
 import { NextBand } from "../../ui/NextBand.tsx";
 import { Steps } from "../../ui/Steps.tsx";
@@ -292,111 +294,493 @@ export const PrimaryFramingLayout: React.FC<{ data: ContentData }> = ({ data }) 
   );
 };
 
-// 9.3 Basic Parameters (Portion 2.1) — StageSwap with 9 matched images
+// 9.3 Basic Parameters — Two-column sticky image stack & rail layout
+interface BasicParamItem {
+  num: string;
+  title: string;
+  text: string;
+  image: string;
+}
+
+const BASIC_PARAM_ITEMS: BasicParamItem[] = [
+  {
+    num: "01",
+    title: "Width",
+    text: "The distance between the two side walls, measured from the outside face of one sidewall girt to the outside face of the other. This sets the span of the frame.",
+    image:
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1792033597/sub-structures-hero.jpg",
+  },
+  {
+    num: "02",
+    title: "Length",
+    text: "The distance along the building between the end walls. It is divided into bays.",
+    image:
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1792033598/sub-structures-wide.jpg",
+  },
+  {
+    num: "03",
+    title: "Bay spacing",
+    text: "The distance between two frames. The best spacing depends on the loads and the roof system, and the engineer will confirm it.",
+    image:
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1792033592/Primary-framing-hero.jpg",
+  },
+  {
+    num: "04",
+    title: "Eave height",
+    text: "The height from the floor to the top of the outer eave purlin. Set it from the tallest machine, stack or truck that must enter. Clear height, measured to the bottom of the rafter, and ridge height, measured to the peak, are also stated.",
+    image:
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1792033593/basic-parameters-1.jpg",
+  },
+  {
+    num: "05",
+    title: "Roof slope",
+    text: "The angle of the roof. A low slope between 0.5 in 10 and 1.5 in 10 is common for PEB. Rain and sheet type affect the choice.",
+    image:
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1792007695/peb-engineering-wide.jpg",
+  },
+  {
+    num: "06",
+    title: "Loads",
+    text: "Include the dead load, the live load, wind, and any special loads such as solar panels, hanging equipment or cranes.",
+    image:
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1792033599/crane-system-hero.jpg",
+  },
+  {
+    num: "07",
+    title: "Location",
+    text: "The site decides wind speed and rain intensity. Give the city and, if possible, the exact site.",
+    image:
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1792007694/Engineering-hero.jpg",
+  },
+  {
+    num: "08",
+    title: "Openings",
+    text: "List the number, size and position of doors, windows and loading docks.",
+    image:
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1792033608/accessories-3.jpg",
+  },
+  {
+    num: "09",
+    title: "Extras",
+    text: "Mention any crane, mezzanine, insulation, skylight or future extension.",
+    image:
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1792033601/mezzanine-1.jpg",
+  },
+];
+
+const INITIAL_RATIOS: number[] = [
+  1024 / 572, // 1 Width: 1.790
+  1024 / 430, // 2 Length: 2.381
+  1024 / 572, // 3 Bay spacing: 1.790
+  1024 / 687, // 4 Eave height: 1.491
+  1024 / 572, // 5 Roof slope: 1.790
+  1024 / 572, // 6 Loads: 1.790
+  1024 / 572, // 7 Location: 1.790
+  1024 / 687, // 8 Openings: 1.491
+  1024 / 687, // 9 Extras: 1.491
+];
+
 export const BasicParametersLayout: React.FC<{ data: ContentData }> = ({ data }) => {
   const { introPs, sections } = extractSections(data);
-  const paramsBlock = sections.find((s) => s.items && s.items.length >= 8) || sections[1];
-  const rawParams = paramsBlock?.items || [
-    { name: "Width", text: "Total distance from outside of outer eave strut to outside of opposite eave strut." },
-    { name: "Length", text: "Overall building length measured out-to-out of endwall steel framing." },
-    { name: "Bay spacing", text: "Distance between the centers of two adjacent interior portal frame columns." },
-    { name: "Eave height", text: "Vertical distance from finished floor level to the top of the eave strut." },
-    { name: "Roof slope", text: "Angle of roof pitch, commonly 1:10 or 1:20 for pre-engineered frames." },
-    { name: "Design loads", text: "Dead, live, wind pressure, and seismic zone requirements for Pakistan." },
-    { name: "Location", text: "City and geographic wind/seismic data specific to the project site." },
-    { name: "Openings", text: "Industrial doors, windows, louvers, and ridge ventilation cut-outs." },
-    { name: "Extras", text: "Overhead cranes, mezzanine floors, canopies, and future extension bays." },
-  ];
 
-  // Exactly 9 matched PEB images as specified in 2.1
-  const paramImages = [
-    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792033597/sub-structures-hero.jpg",
-    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792033598/sub-structures-wide.jpg",
-    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792033592/Primary-framing-hero.jpg",
-    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792033593/basic-parameters-1.jpg",
-    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792007695/peb-engineering-wide.jpg",
-    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792033599/crane-system-hero.jpg",
-    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792007694/Engineering-hero.jpg",
-    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792033608/accessories-3.jpg",
-    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792033601/mezzanine-1.jpg",
-  ];
+  const [activeIdx, setActiveIdx] = useState<number>(0);
+  const activeIdxRef = useRef<number>(0);
 
-  const stageRows = rawParams.map((p, idx) => ({
-    title: p.name,
-    text: p.text,
-    image: paramImages[idx] || paramImages[0],
-    alt: `Steel structure ${p.name.toLowerCase()} design parameter`,
-  }));
+  const [displayedIdx, setDisplayedIdx] = useState<number>(0);
+  const [incomingIdx, setIncomingIdx] = useState<number | null>(null);
+  const [enterActive, setEnterActive] = useState<boolean>(false);
+  const animTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const note1 = sections.find((s) => s.title.includes("Framing")) || sections[2];
-  const note2 = sections.find((s) => s.title.includes("Data")) || sections[3];
+  const [imageRatios, setImageRatios] = useState<number[]>(INITIAL_RATIOS);
+
+  const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const mobileImageBoxRef = useRef<HTMLDivElement | null>(null);
+
+  const prefersReduced =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Handle activeIdx image transitions:
+  // Active image enters with clip-path: inset(0 0 100% 0) to inset(0) in 1100ms.
+  // The old image stays under it until the end.
+  useEffect(() => {
+    if (prefersReduced) {
+      setDisplayedIdx(activeIdx);
+      setIncomingIdx(null);
+      setEnterActive(false);
+      return;
+    }
+
+    if (activeIdx !== displayedIdx && activeIdx !== incomingIdx) {
+      if (incomingIdx !== null) {
+        setDisplayedIdx(incomingIdx);
+      }
+      if (animTimeoutRef.current) {
+        clearTimeout(animTimeoutRef.current);
+      }
+
+      setIncomingIdx(activeIdx);
+      setEnterActive(false);
+
+      const raf = requestAnimationFrame(() => {
+        setEnterActive(true);
+      });
+
+      animTimeoutRef.current = setTimeout(() => {
+        setDisplayedIdx(activeIdx);
+        setIncomingIdx(null);
+        setEnterActive(false);
+      }, 1120);
+
+      return () => {
+        cancelAnimationFrame(raf);
+      };
+    }
+  }, [activeIdx, displayedIdx, incomingIdx, prefersReduced]);
+
+  // Scroll position detection:
+  // Desktop: take the last row whose top is above 50% of the screen.
+  // Mobile: anchor line is the image bottom + 80px.
+  // Works when scrolling down and up. Set state only when index changes.
+  const updateActiveIndex = useCallback(() => {
+    const isMobile = window.innerWidth < 1024;
+    let triggerY = window.innerHeight * 0.5;
+
+    if (isMobile && mobileImageBoxRef.current) {
+      const boxRect = mobileImageBoxRef.current.getBoundingClientRect();
+      triggerY = boxRect.bottom + 80;
+    }
+
+    let matchedIdx = 0;
+    rowRefs.current.forEach((rowEl, idx) => {
+      if (!rowEl) return;
+      const rect = rowEl.getBoundingClientRect();
+      if (rect.top <= triggerY) {
+        matchedIdx = idx;
+      }
+    });
+
+    if (matchedIdx !== activeIdxRef.current) {
+      activeIdxRef.current = matchedIdx;
+      setActiveIdx(matchedIdx);
+    }
+  }, []);
+
+  useEffect(() => {
+    let rafId: number | null = null;
+
+    const onScroll = () => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        updateActiveIndex();
+      });
+    };
+
+    updateActiveIndex();
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+
+    let unsubscribeLenis: (() => void) | undefined;
+    const l = lenis;
+    if (l) {
+      const lenisHandler = () => onScroll();
+      l.on("scroll", lenisHandler);
+      unsubscribeLenis = () => {
+        l.off("scroll", lenisHandler);
+      };
+    }
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (unsubscribeLenis) unsubscribeLenis();
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      if (animTimeoutRef.current) clearTimeout(animTimeoutRef.current);
+    };
+  }, [updateActiveIndex]);
+
+  const note1 = sections.find((s) => s.title.includes("Framing")) || {
+    title: "Framing and Sheeting in the Parameters",
+    text: "Primary framing means the columns and rafters. Secondary framing means the purlins and girts that carry the sheets and brace the main frames. The sheeting is the roof and wall cover, usually hot-dip galvanized, zinc-aluminium coated steel.",
+  };
+
+  const note2 = sections.find((s) => s.title.includes("Data")) || {
+    title: "If You Do Not Have All the Data",
+    text: "Send what you have. The engineer will ask for the rest. A rough sketch or a photo of the site is enough to begin.",
+  };
+
+  const currentRatio = imageRatios[activeIdx] || 16 / 9;
+
+  // Render Image Box & Stack
+  const renderStackedImageBox = () => (
+    <div
+      className="relative w-full overflow-hidden bg-[#0A0A0A] rounded-none shadow-sm select-none"
+      style={{
+        aspectRatio: `${currentRatio}`,
+        transition: prefersReduced
+          ? "none"
+          : "aspect-ratio 600ms cubic-bezier(.16, 1, .3, 1)",
+      }}
+    >
+      {/* Hidden preloader and aspect ratio detector */}
+      <div className="hidden" aria-hidden="true">
+        {BASIC_PARAM_ITEMS.map((item, idx) => (
+          <img
+            key={idx}
+            src={cl(item.image, 1920)}
+            alt=""
+            loading="eager"
+            onLoad={(e) => {
+              const { naturalWidth, naturalHeight } = e.currentTarget;
+              if (naturalWidth && naturalHeight) {
+                const ratio = naturalWidth / naturalHeight;
+                setImageRatios((prev) => {
+                  if (Math.abs(prev[idx] - ratio) > 0.01) {
+                    const next = [...prev];
+                    next[idx] = ratio;
+                    return next;
+                  }
+                  return prev;
+                });
+              }
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Base (old) image - stays under it until the end */}
+      <div className="absolute inset-0 w-full h-full z-[1]">
+        <img
+          src={cl(BASIC_PARAM_ITEMS[displayedIdx].image, 1920)}
+          alt={BASIC_PARAM_ITEMS[displayedIdx].title}
+          className="w-full h-full object-cover block"
+          loading="eager"
+        />
+      </div>
+
+      {/* Active incoming image - enters with clip-path inset(0 0 100% 0) to inset(0) in 1100ms */}
+      {incomingIdx !== null && (
+        <div
+          className="absolute inset-0 w-full h-full z-[2] overflow-hidden pointer-events-none"
+          style={{
+            clipPath: enterActive ? "inset(0 0 0% 0)" : "inset(0 0 100% 0)",
+            transition: prefersReduced
+              ? "none"
+              : "clip-path 1100ms cubic-bezier(.16, 1, .3, 1)",
+            willChange: "clip-path",
+          }}
+        >
+          <img
+            src={cl(BASIC_PARAM_ITEMS[incomingIdx].image, 1920)}
+            alt={BASIC_PARAM_ITEMS[incomingIdx].title}
+            className="w-full h-full object-cover block"
+            style={{
+              transform: enterActive ? "scale(1)" : "scale(1.04)",
+              transition: prefersReduced
+                ? "none"
+                : "transform 1100ms cubic-bezier(.16, 1, .3, 1)",
+              willChange: "transform",
+            }}
+            loading="eager"
+          />
+        </div>
+      )}
+    </div>
+  );
+
+  // Render 9 thin indicator bars
+  const renderIndicatorBars = () => (
+    <div className="flex items-center gap-[8px] w-full mt-4">
+      {BASIC_PARAM_ITEMS.map((_, idx) => (
+        <div
+          key={idx}
+          className="h-[2px] flex-1 transition-colors duration-500"
+          style={{
+            backgroundColor:
+              activeIdx === idx
+                ? "var(--blue)"
+                : "rgba(30, 58, 138, 0.18)",
+          }}
+        />
+      ))}
+    </div>
+  );
 
   return (
-    <article className="w-full bg-white">
-      <HeroBand
-        variant="immersive"
-        imageSrc="https://res.cloudinary.com/cyfb9slf/image/upload/v1792033593/Basic-parameters-hero.jpg"
-        imageAlt={data.h1}
-        h1={data.h1}
+    <article className="w-full bg-white text-[var(--ink)] overflow-x-clip">
+      {/* 1. HERO BANNER: One-Step Solution style SubpageHero */}
+      <SubpageHero
+        title={data.h1}
         subtitle={data.quickAnswer}
+        image="https://res.cloudinary.com/cyfb9slf/image/upload/v1792033593/Basic-parameters-hero.jpg"
+        quoteUrl="/contact-us/#quote"
+        compact={true}
       />
 
-      <section className="container py-[var(--sec-y-lg)] text-left">
-        <h2 className="text-[28px] lg:text-[44px] font-[500] text-[var(--ink)] mb-4 tracking-[-0.025em]">
-          <TwoTone text={sections[0]?.title || "Why These Parameters Matter"} />
-        </h2>
-        <div className="w-full h-[1px] bg-[rgba(15,23,42,0.12)] my-6" />
-        <p className="text-[17px] lg:text-[20px] font-medium text-[var(--ink)] leading-[1.6] max-w-[880px]">
-          {sections[0]?.text || introPs[0]}
-        </p>
-      </section>
-
-      {/* StageSwap section for 9 parameters */}
-      <section className="container pb-[var(--sec-y-lg)]">
-        <StageSwap rows={stageRows} ratio={3 / 2} />
-      </section>
-
-      {/* Two columns notes without tint, with 1px top hairline and TwoTone titles */}
-      <section className="container pb-[var(--sec-y-lg)]">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 text-left">
-          {note1 && (
-            <div className="pt-6 border-t border-[rgba(15,23,42,0.12)] space-y-3">
-              <h3 className="text-[24px] font-[500] text-[var(--ink)]">
-                <TwoTone text={note1.title} />
-              </h3>
-              <p className="text-[#1E3A8A] text-[16px] leading-[1.65]">
-                {note1.text}
-              </p>
-            </div>
-          )}
-          {note2 && (
-            <div className="pt-6 border-t border-[rgba(15,23,42,0.12)] space-y-3">
-              <h3 className="text-[24px] font-[500] text-[var(--ink)]">
-                <TwoTone text={note2.title} />
-              </h3>
-              <p className="text-[#1E3A8A] text-[16px] leading-[1.65]">
-                {note2.text}
-              </p>
-            </div>
-          )}
+      {/* 2. INTRO: "WHY THESE PARAMETERS MATTER" using exact TEXT STYLE */}
+      <section className="w-full bg-white py-12 lg:py-20 border-b border-[#E5E5E5]">
+        <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] text-left">
+          <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em]">
+            WHY THESE PARAMETERS MATTER
+          </h2>
+          <div className="w-full h-[1px] bg-[#E5E5E5] my-6" />
+          <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[880px]">
+            {sections[0]?.text ||
+              introPs[0] ||
+              "Every design starts with a few numbers. If they are correct, the quote is accurate and the design is fast. If they are wrong, the structure may be too weak or too costly. Collect the items below before you request a quote."}
+          </p>
         </div>
       </section>
 
+      {/* 3. MOBILE STICKY IMAGE BOX:
+             Sticky under header, z-index 5, white background, 9 bars, 20px white fade under it.
+             Nothing drawn over the image. */}
+      <div
+        ref={mobileImageBoxRef}
+        className="lg:hidden sticky z-[5] bg-white w-full pt-2"
+        style={{ top: "var(--nav-offset, 60px)" }}
+      >
+        <div className="px-4">
+          {renderStackedImageBox()}
+          {renderIndicatorBars()}
+        </div>
+        {/* 20px white fade under it */}
+        <div
+          className="w-full h-[20px] pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(to bottom, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%)",
+          }}
+        />
+      </div>
+
+      {/* 4. PARAMETERS RAIL SECTION */}
+      <section className="w-full bg-white py-8 lg:py-20 border-b border-[#E5E5E5]">
+        <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[88px] items-start">
+            {/* Desktop Left: Sticky image box holding all 9 images stacked + 9 thin bars */}
+            <div
+              className="hidden lg:block lg:col-span-6 sticky"
+              style={{ top: "calc(var(--nav-offset, 80px) + 24px)" }}
+            >
+              {renderStackedImageBox()}
+              {renderIndicatorBars()}
+            </div>
+
+            {/* Right: The 9 parameters on a rail (Desktop & Mobile) */}
+            <div className="col-span-1 lg:col-span-6 relative">
+              {/* 2px blue vertical rail line */}
+              <div
+                className="absolute top-0 bottom-0 w-[2px] pointer-events-none"
+                style={{
+                  left: "12px",
+                  backgroundColor: "var(--blue)",
+                }}
+              />
+
+              {/* The 9 parameter rows */}
+              <div className="flex flex-col">
+                {BASIC_PARAM_ITEMS.map((item, idx) => {
+                  const isActive = activeIdx === idx;
+
+                  return (
+                    <div
+                      key={idx}
+                      ref={(el) => {
+                        rowRefs.current[idx] = el;
+                      }}
+                      className="relative min-h-[52svh] flex flex-col justify-center text-left py-6 lg:py-8 pl-[36px]"
+                    >
+                      {/* 10px dot: active is filled blue; other dots are hollow (2px blue border, white fill) */}
+                      <div
+                        className="absolute rounded-full transition-colors duration-300 z-10"
+                        style={{
+                          left: "12px",
+                          top: "calc(50% - 20px)",
+                          width: "10px",
+                          height: "10px",
+                          transform: "translate(-50%, -50%)",
+                          backgroundColor: isActive ? "var(--blue)" : "#FFFFFF",
+                          border: "2px solid var(--blue)",
+                        }}
+                      />
+
+                      {/* Number: solid, bold, var(--blue), placed above its title, like One-Step */}
+                      <div className="text-[40px] lg:text-[64px] font-[800] text-[var(--blue)] leading-none select-none">
+                        {item.num}
+                      </div>
+
+                      {/* Title: bold, ink colour, sentence case */}
+                      <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mt-3 mb-2">
+                        {item.title}
+                      </h3>
+
+                      {/* Text: the blue of the One-Step body text (var(--blue)), regular weight, full colour */}
+                      <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[540px]">
+                        {item.text}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. BELOW NOTES: Two columns (gap 64px on desktop), stacked on mobile, 1px top line that draws, title, text. No box, no tint, no side line. */}
+      <section className="w-full bg-white py-12 lg:py-20 border-b border-[#E5E5E5]">
+        <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] text-left">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-[64px]">
+            {note1 && (
+              <div className="relative pt-6">
+                <div className="w-full h-[1px] bg-[#E5E5E5] absolute top-0 left-0" />
+                <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mb-3">
+                  {note1.title}
+                </h3>
+                <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
+                  {note1.text}
+                </p>
+              </div>
+            )}
+
+            {note2 && (
+              <div className="relative pt-6">
+                <div className="w-full h-[1px] bg-[#E5E5E5] absolute top-0 left-0" />
+                <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mb-3">
+                  {note2.title}
+                </h3>
+                <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
+                  {note2.text}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. FAQ */}
       {data.faq && data.faq.length > 0 && (
-        <section className="container py-[var(--sec-y)]">
-          <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="text-[22px] lg:text-[36px] font-[600] text-[var(--ink)] mb-8">
-              Frequently Asked Questions
+        <section className="w-full bg-white py-12 lg:py-20 border-b border-[#E5E5E5]">
+          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] text-left">
+            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
+              FREQUENTLY ASKED QUESTIONS
             </h2>
-            <Accordion items={data.faq} size="large" />
+            <div className="max-w-[860px]">
+              <Accordion items={data.faq} size="large" />
+            </div>
           </div>
         </section>
       )}
 
-      <NextBand
+      {/* 7. NEXT BANNER: SubpageNextBanner with exact next image */}
+      <SubpageNextBanner
+        heading="Next in Pre-Engineered Buildings"
+        title="Sub Structures"
+        url="/pre-engineered-buildings-pakistan/sub-structures/"
         image="https://res.cloudinary.com/cyfb9slf/image/upload/v1792033595/basic-parameters-next.jpg"
-        nextUrl="/pre-engineered-buildings-pakistan/sub-structures/"
-        nextTitle="Sub Structures"
       />
     </article>
   );
