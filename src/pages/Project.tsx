@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "../components/ui/TransitionLink.tsx";
 import { ContentData, ContentBlock } from "../content/types.ts";
-import { ProjectData } from "../data/projects.ts";
-import { ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react";
+import { ProjectData, PROJECTS } from "../data/projects.ts";
+import { HeroBand } from "../components/ui/HeroBand.tsx";
+import { Canvas } from "../components/ui/Canvas.tsx";
+import { Accordion } from "../components/ui/Accordion.tsx";
+import { NextBand } from "../components/ui/NextBand.tsx";
+import { Lightbox } from "../components/ui/Lightbox.tsx";
+import { UI } from "../data/ui.ts";
 
 export interface ProjectProps {
   data: ContentData;
@@ -10,367 +15,295 @@ export interface ProjectProps {
 }
 
 export const Project: React.FC<ProjectProps> = ({ data, project }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
-  const images =
-    project.images && project.images.length > 0 ? project.images : [];
-  const firstImage = images[0] || "";
-  const total = images.length;
+  // Next project in published list (loop around)
+  const publishedList = PROJECTS.filter((p) => p.published);
+  const currentIdx = publishedList.findIndex((p) => p.id === project.id);
+  const nextProject = publishedList[(currentIdx + 1) % publishedList.length];
 
-  const nextSlide = () => {
-    if (total <= 1) return;
-    setActiveIndex((prev) => (prev + 1) % total);
-  };
-
-  const prevSlide = () => {
-    if (total <= 1) return;
-    setActiveIndex((prev) => (prev - 1 + total) % total);
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStart === null) return;
-    const touchEnd = e.changedTouches[0].clientX;
-    const diff = touchStart - touchEnd;
-    if (diff > 50) {
-      nextSlide();
-    } else if (diff < -50) {
-      prevSlide();
-    }
-    setTouchStart(null);
-  };
-
-  // Find About the Project text block
-  const aboutBlock = data.blocks?.find(
-    (b: ContentBlock) =>
-      b.title === "About the Project" || (b.text && !b.title)
+  // Blocks
+  const aboutBlock = data.blocks.find(
+    (b: ContentBlock) => b.title === "About the Project" || (b.text && !b.title)
+  );
+  const designPointsBlock = data.blocks.find(
+    (b: ContentBlock) => b.title === "Design Points"
+  );
+  const whatItShowsBlock = data.blocks.find(
+    (b: ContentBlock) => b.title === "What This Project Shows"
   );
 
-  const prevIndex = total > 0 ? (activeIndex - 1 + total) % total : 0;
-  const nextIndex = total > 0 ? (activeIndex + 1) % total : 0;
+  const mainImage = project.images.find((img) => /main[-_]?image/i.test(img)) || project.images[0];
+  const otherImages = project.images.filter((img) => img !== mainImage);
+  const img1 = mainImage;
+  const img2 = otherImages[0] || mainImage;
+  const img3 = otherImages[1] || mainImage;
 
   return (
-    <div className="w-full bg-white overflow-x-hidden">
-      {/* 1. HERO BANNER: First image of project as background, dark gradient, title/description/quote button at bottom left */}
-      <section data-hero className="relative w-full overflow-hidden bg-[#0A0A0A]">
-        <div className="relative w-full h-[60svh] lg:h-[70vh] min-h-[460px] md:min-h-[540px] flex flex-col justify-end">
-          {/* Background Image: First photo of this specific project */}
-          {firstImage && (
-            <div className="absolute inset-0 z-0 overflow-hidden">
-              <img
-                src={firstImage}
-                alt={project.title}
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-                className="w-full h-full object-cover object-center"
-              />
-            </div>
-          )}
+    <div className="w-full bg-white">
+      {/* Block A — Hero Band (Immersive) */}
+      <HeroBand
+        variant="immersive"
+        imageSrc={img1}
+        imageAlt={data.alt || project.title}
+        breadcrumbItems={[
+          { label: "Home", href: "/" },
+          { label: "Our Projects", href: "/projects/" },
+          { label: project.title },
+        ]}
+        h1={data.h1}
+        subtitle={data.quickAnswer}
+      />
 
-          {/* Dark Gradient Overlay */}
-          <div
-            className="absolute inset-0 z-[1] pointer-events-none"
-            style={{
-              background:
-                "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0.45) 100%)",
-            }}
-          />
-
-          {/* Bottom Left Content: Exactly like main site banners */}
-          <div className="max-w-[1340px] w-full mx-auto px-[var(--pad-x)] relative z-[2] pb-10 lg:pb-14 text-left">
-            {/* Back to Projects Link & Breadcrumbs */}
-            <div className="flex flex-wrap items-center gap-3 mb-4">
-              <Link
-                to="/projects/"
-                className="inline-flex items-center gap-1.5 text-white/90 hover:text-white text-[13px] font-medium transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span>Back to Projects</span>
-              </Link>
-              <span className="text-white/40">|</span>
-              <nav aria-label="Breadcrumb">
-                <ol className="flex items-center space-x-2 text-[12px] text-white/80">
-                  <li>
-                    <Link to="/" className="hover:text-white transition-colors">
-                      Home
-                    </Link>
-                  </li>
-                  <li>/</li>
-                  <li>
-                    <Link
-                      to="/projects/"
-                      className="hover:text-white transition-colors"
-                    >
-                      Our Projects
-                    </Link>
-                  </li>
-                  <li>/</li>
-                  <li className="text-white font-medium truncate max-w-[200px] sm:max-w-none">
-                    {project.title}
-                  </li>
-                </ol>
-              </nav>
-            </div>
-
-            {/* Project Title */}
-            <h1 className="text-[26px] sm:text-[34px] md:text-[44px] lg:text-[50px] font-bold text-white uppercase tracking-[-0.02em] max-w-[860px] leading-[1.12]">
-              {project.title}
-            </h1>
-
-            {/* Short Description */}
-            {(project.subtitle || data.quickAnswer) && (
-              <p className="mt-3.5 text-[14px] md:text-[15px] lg:text-[16px] text-white/90 max-w-[640px] leading-[1.6]">
-                {project.subtitle || data.quickAnswer}
-              </p>
-            )}
-
-            {/* Request a Quote Button */}
-            <div className="mt-6">
-              <Link
-                to="/contact-us/#quote"
-                className="btn btn--light btn-sm inline-flex items-center gap-2"
-              >
-                <span>Request a Quote</span>
-                <span className="btn-arrow inline-block" aria-hidden="true">
-                  &rarr;
-                </span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 2. BLUE INTRO PANEL & CAROUSEL: Full-width blue section, White title and description, Carousel below */}
-      <section
-        style={{ backgroundColor: "var(--blue)" }}
-        className="w-full py-12 lg:py-16 text-white"
-      >
+      {/* Block B — Spec Panel (Left: Spec Grid, Right: Project's Main Image) */}
+      <section className="py-12 lg:py-20 bg-white border-b border-[#E5E5E5]">
         <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-          {/* Top text: Title and description are WHITE */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-start mb-8 lg:mb-12">
-            <div className="lg:col-span-5">
-              <h2 className="text-[24px] lg:text-[38px] font-bold text-white leading-[1.15] tracking-tight">
-                {project.title}
-              </h2>
-            </div>
-            <div className="lg:col-span-7">
-              <p className="text-[15px] lg:text-[16px] text-white/90 leading-[1.7] max-w-[680px]">
-                {project.subtitle || data.quickAnswer}
-              </p>
-            </div>
-          </div>
-
-          {/* Image Carousel (Main project image included in the carousel) */}
-          {total > 0 && (
-            <div className="relative mt-4">
-              {/* Desktop View: Center slide large, previous and next slides peeking from sides (dimmed) */}
-              <div className="hidden md:flex items-center justify-center gap-4 lg:gap-6 overflow-hidden py-4">
-                {/* Left peek (Previous) */}
-                <div
-                  onClick={prevSlide}
-                  aria-label="Previous slide"
-                  className="w-[20%] aspect-[16/10] overflow-hidden opacity-40 hover:opacity-75 transition-all duration-300 scale-90 cursor-pointer shadow-md select-none shrink-0 border border-white/10"
-                >
-                  <img
-                    src={images[prevIndex]}
-                    alt={`${project.title} - Preview`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                {/* Center Slide (Active, large) */}
-                <div className="w-[60%] max-w-[850px] aspect-[16/10] overflow-hidden opacity-100 scale-100 shadow-2xl transition-all duration-300 relative select-none shrink-0 border border-white/20">
-                  <img
-                    src={images[activeIndex]}
-                    alt={`${project.title} - Active Slide`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                {/* Right peek (Next) */}
-                <div
-                  onClick={nextSlide}
-                  aria-label="Next slide"
-                  className="w-[20%] aspect-[16/10] overflow-hidden opacity-40 hover:opacity-75 transition-all duration-300 scale-90 cursor-pointer shadow-md select-none shrink-0 border border-white/10"
-                >
-                  <img
-                    src={images[nextIndex]}
-                    alt={`${project.title} - Next Preview`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
+            {/* Left Column: Spec Grid */}
+            <div className="lg:col-span-6 space-y-6">
+              <div>
+                <h2 className="text-[22px] lg:text-[48px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em]">
+                  {project.title}
+                </h2>
               </div>
 
-              {/* Mobile View: Full width single slide, touch swipeable */}
-              <div
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-                className="md:hidden w-full aspect-[16/10] overflow-hidden shadow-xl border border-white/20 select-none relative"
-              >
-                <img
-                  src={images[activeIndex]}
-                  alt={`${project.title} - Mobile Slide ${activeIndex + 1}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {/* Carousel Controls & Indicators */}
-              {total > 1 && (
-                <div className="flex items-center justify-between mt-6 max-w-[850px] mx-auto px-2">
-                  <button
-                    type="button"
-                    onClick={prevSlide}
-                    aria-label="Previous slide"
-                    className="w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 active:scale-95 flex items-center justify-center text-white transition-all cursor-pointer"
-                  >
-                    <ChevronLeft className="w-5 h-5 text-white" />
-                  </button>
-
-                  {/* Dot Indicators */}
-                  <div className="flex items-center space-x-2">
-                    {images.map((_, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onClick={() => setActiveIndex(idx)}
-                        aria-label={`Go to slide ${idx + 1}`}
-                        className={`h-2 transition-all duration-300 rounded-full cursor-pointer ${
-                          idx === activeIndex
-                            ? "w-8 bg-white"
-                            : "w-2 bg-white/40 hover:bg-white/70"
-                        }`}
-                      />
-                    ))}
+              <div className="grid grid-cols-2 gap-x-6 gap-y-4 pt-2 border-t border-[#E5E5E5]">
+                <div>
+                  <span className="block text-[12px] font-medium text-[var(--blue)] tracking-[0.02em]">
+                    {UI.client}
+                  </span>
+                  <div className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] mt-0.5">
+                    {project.client}
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={nextSlide}
-                    aria-label="Next slide"
-                    className="w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 active:scale-95 flex items-center justify-center text-white transition-all cursor-pointer"
-                  >
-                    <ChevronRight className="w-5 h-5 text-white" />
-                  </button>
                 </div>
-              )}
-            </div>
-          )}
-        </div>
-      </section>
 
-      {/* 3. PROJECT OVERVIEW (WHITE BACKGROUND, BLACK HEADINGS & TEXT) */}
-      <section className="py-14 lg:py-24 bg-white">
-        <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
-            {/* Left: "About the Project" heading in BLACK, full text in BLACK */}
-            <div className="lg:col-span-6 space-y-4">
-              <h2 className="text-[22px] lg:text-[34px] font-bold text-[#0A0A0A] tracking-tight leading-[1.2]">
-                About the Project
-              </h2>
-              <div className="text-[15px] font-normal leading-[1.75] text-[#374151] space-y-3 pt-2">
-                <p>
-                  {aboutBlock?.text ||
-                    `Steel Mind Engineers executed this ${project.type} for ${project.client} at ${project.location}. The structure covers an approximate area of ${project.area.toLocaleString()} square feet and incorporates high-strength structural engineering, tailored load distribution, and durable fabrication specifications.`}
-                </p>
-                {data.quickAnswer && data.quickAnswer !== aboutBlock?.text && (
-                  <p>{data.quickAnswer}</p>
+                <div>
+                  <span className="block text-[12px] font-medium text-[var(--blue)] tracking-[0.02em]">
+                    {UI.location}
+                  </span>
+                  <div className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] mt-0.5">
+                    {project.location}
+                  </div>
+                </div>
+
+                <div>
+                  <span className="block text-[12px] font-medium text-[var(--blue)] tracking-[0.02em]">
+                    {UI.type}
+                  </span>
+                  <div className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] mt-0.5">
+                    {project.type}
+                  </div>
+                </div>
+
+                {project.height && (
+                  <div>
+                    <span className="block text-[12px] font-medium text-[var(--blue)] tracking-[0.02em]">
+                      {UI.height}
+                    </span>
+                    <div className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] mt-0.5">
+                      {project.height}
+                    </div>
+                  </div>
+                )}
+
+                {project.width && (
+                  <div>
+                    <span className="block text-[12px] font-medium text-[var(--blue)] tracking-[0.02em]">
+                      {UI.width}
+                    </span>
+                    <div className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] mt-0.5">
+                      {project.width}
+                    </div>
+                  </div>
+                )}
+
+                {project.length && (
+                  <div>
+                    <span className="block text-[12px] font-medium text-[var(--blue)] tracking-[0.02em]">
+                      {UI.length}
+                    </span>
+                    <div className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] mt-0.5">
+                      {project.length}
+                    </div>
+                  </div>
                 )}
               </div>
+
+              {/* Area */}
+              <div className="border-t border-[#E5E5E5] pt-4 flex items-baseline space-x-2">
+                <span className="text-[12px] font-medium text-[var(--blue)] tracking-[0.02em]">
+                  {UI.area}:
+                </span>
+                <span className="text-[16px] font-bold text-[#1E3A8A] tabular-nums tracking-[0.06em]">
+                  {project.area.toLocaleString()}
+                </span>
+                <span className="text-[12px] font-medium text-[var(--blue)]">sq ft</span>
+              </div>
             </div>
 
-            {/* Right: Specification Table (1px blue line above each row, table text black, area blue & bold) */}
+            {/* Right Column: Project's main image */}
             <div className="lg:col-span-6">
-              <div className="border-b border-[var(--blue)]">
-                <h3 className="text-[17px] lg:text-[19px] font-bold text-[#0A0A0A] tracking-tight mb-4">
-                  Project Specifications
-                </h3>
-
-                <div className="divide-y-0">
-                  {/* Client */}
-                  <div className="border-t border-[var(--blue)] py-3.5 flex items-center justify-between text-[13px] lg:text-[14px]">
-                    <span className="text-[#4B5563] font-medium">Client</span>
-                    <span className="font-semibold text-[#0A0A0A] text-right">
-                      {project.client}
-                    </span>
-                  </div>
-
-                  {/* Location */}
-                  <div className="border-t border-[var(--blue)] py-3.5 flex items-center justify-between text-[13px] lg:text-[14px]">
-                    <span className="text-[#4B5563] font-medium">Location</span>
-                    <span className="font-semibold text-[#0A0A0A] text-right">
-                      {project.location}
-                    </span>
-                  </div>
-
-                  {/* Type */}
-                  <div className="border-t border-[var(--blue)] py-3.5 flex items-center justify-between text-[13px] lg:text-[14px]">
-                    <span className="text-[#4B5563] font-medium">
-                      Building Type
-                    </span>
-                    <span className="font-semibold text-[#0A0A0A] text-right">
-                      {project.type}
-                    </span>
-                  </div>
-
-                  {/* Height */}
-                  {project.height && (
-                    <div className="border-t border-[var(--blue)] py-3.5 flex items-center justify-between text-[13px] lg:text-[14px]">
-                      <span className="text-[#4B5563] font-medium">
-                        Clear Height
-                      </span>
-                      <span className="font-semibold text-[#0A0A0A] text-right tabular-nums">
-                        {project.height}
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Width */}
-                  {project.width && (
-                    <div className="border-t border-[var(--blue)] py-3.5 flex items-center justify-between text-[13px] lg:text-[14px]">
-                      <span className="text-[#4B5563] font-medium">
-                        Width (Span)
-                      </span>
-                      <span className="font-semibold text-[#0A0A0A] text-right tabular-nums">
-                        {project.width}
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Length */}
-                  {project.length && (
-                    <div className="border-t border-[var(--blue)] py-3.5 flex items-center justify-between text-[13px] lg:text-[14px]">
-                      <span className="text-[#4B5563] font-medium">Length</span>
-                      <span className="font-semibold text-[#0A0A0A] text-right tabular-nums">
-                        {project.length}
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Area (Blue and Bold) */}
-                  <div className="border-t border-[var(--blue)] py-3.5 flex items-center justify-between text-[13px] lg:text-[14px]">
-                    <span className="text-[#4B5563] font-medium">
-                      Covered Area
-                    </span>
-                    <span
-                      style={{ color: "var(--blue)" }}
-                      className="font-bold text-[16px] lg:text-[18px] tabular-nums text-right"
-                    >
-                      {project.area.toLocaleString()} sq ft
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <Canvas slot="spec-main" ratio="4/3" src={img1} alt={project.title} />
             </div>
           </div>
         </div>
       </section>
 
-      {/* 4. The page ends immediately after the Overview section per instructions */}
+      {/* Block C — "About the Project" as one image-text pair */}
+      {aboutBlock && (
+        <section className="py-14 lg:py-20 w-full bg-white border-b border-[#E5E5E5]">
+          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
+              <div className="order-2 lg:order-1 lg:col-span-6 space-y-4 max-w-[600px]">
+                <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
+                  {aboutBlock.title || "About the Project"}
+                </h3>
+                <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)]">
+                  {aboutBlock.text}
+                </p>
+              </div>
+
+              <div className="order-1 lg:order-2 lg:col-span-6">
+                <Canvas slot="about-project" ratio="4/3" src={img2} alt="About the Project" />
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Block C — "Design Points" as one image-text pair */}
+      {designPointsBlock && (
+        <section className="py-14 lg:py-20 w-full bg-white border-b border-[#E5E5E5]">
+          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
+              <div className="order-1 lg:col-span-6">
+                <Canvas slot="design-points" ratio="4/3" src={img3} alt="Design Points" />
+              </div>
+
+              <div className="order-2 lg:col-span-6 space-y-4 max-w-[600px]">
+                <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
+                  {designPointsBlock.title || "Design Points"}
+                </h3>
+                <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)]">
+                  {designPointsBlock.text}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Gallery Band: first image full-width (16:9), second and third side by side (1:1 each) */}
+      <section className="py-14 lg:py-20 bg-white border-b border-[var(--line)]">
+        <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] space-y-6">
+          <div className="mb-6">
+            <h2 className="text-[22px] lg:text-[48px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em]">
+              Structure & Construction Details
+            </h2>
+          </div>
+
+          {/* First image full-width 16:9 */}
+          <div
+            onClick={() => {
+              setLightboxIndex(0);
+              setLightboxOpen(true);
+            }}
+            className="cursor-pointer overflow-hidden group"
+          >
+            <Canvas
+              slot="gallery-1"
+              ratio="16/9"
+              src={project.images[0]}
+              alt={`${project.title} - Full Overview`}
+              className="transition-transform duration-500 group-hover:scale-[1.01]"
+            />
+          </div>
+
+          {/* Second and third side by side 1:1 each */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div
+              onClick={() => {
+                setLightboxIndex(1);
+                setLightboxOpen(true);
+              }}
+              className="cursor-pointer overflow-hidden group"
+            >
+              <Canvas
+                slot="gallery-2"
+                ratio="1/1"
+                src={project.images[1] || project.images[0]}
+                alt={`${project.title} - Detail 1`}
+                className="transition-transform duration-500 group-hover:scale-[1.01]"
+              />
+            </div>
+
+            <div
+              onClick={() => {
+                setLightboxIndex(2);
+                setLightboxOpen(true);
+              }}
+              className="cursor-pointer overflow-hidden group"
+            >
+              <Canvas
+                slot="gallery-3"
+                ratio="1/1"
+                src={project.images[2] || project.images[0]}
+                alt={`${project.title} - Detail 2`}
+                className="transition-transform duration-500 group-hover:scale-[1.01]"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* "What This Project Shows" — Royal Blue band, centered, H3 size, white text */}
+      {whatItShowsBlock && (
+        <section
+          style={{
+            backgroundColor: "var(--blue)",
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.15)",
+          }}
+          className="py-16 lg:py-20 bg-[var(--blue)] text-white w-full"
+        >
+          <div className="max-w-[800px] mx-auto px-[var(--pad-x)] text-center space-y-3">
+            <h3 className="text-[17px] lg:text-[22px] font-semibold leading-[1.25] tracking-[-0.01em] text-white">
+              {whatItShowsBlock.text}
+            </h3>
+          </div>
+        </section>
+      )}
+
+      {/* Lightbox for gallery */}
+      {lightboxOpen && (
+        <Lightbox
+          images={project.images}
+          initialIndex={lightboxIndex}
+          isOpen={lightboxOpen}
+          onClose={() => setLightboxOpen(false)}
+        />
+      )}
+
+      {/* FAQ */}
+      {data.faq && data.faq.length > 0 && (
+        <section className="py-12 lg:py-16 bg-white border-b border-[#E5E5E5]">
+          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
+            <h2 className="text-[22px] lg:text-[48px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] mb-6">
+              Frequently Asked Questions
+            </h2>
+            <Accordion items={data.faq} />
+          </div>
+        </section>
+      )}
+
+      {/* Next Band */}
+      {nextProject && (
+        <NextBand
+          heading={`Next Project: ${nextProject.title}`}
+          nextUrl={`/projects/${nextProject.slug}/`}
+          nextTitle={nextProject.title}
+        />
+      )}
     </div>
   );
 };

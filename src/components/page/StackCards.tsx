@@ -11,12 +11,14 @@ export interface StackCardsProps {
   cards: StackCardItem[];
   className?: string;
   dotRail?: React.ReactNode;
+  marginBottom?: string;
 }
 
 export const StackCards: React.FC<StackCardsProps> = ({
   cards,
   className = "",
   dotRail,
+  marginBottom = "38svh",
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -88,14 +90,14 @@ export const StackCards: React.FC<StackCardsProps> = ({
               <div
                 className="w-full"
                 style={{
-                  marginBottom: isLast ? "0" : "clamp(14svh, 25svh, 38svh)",
+                  marginBottom: isLast ? "0" : marginBottom,
                 }}
               >
                 <div
                   ref={(el) => {
                     innerRefs.current[i] = el;
                   }}
-                  className="relative w-full overflow-hidden transition-transform will-change-transform"
+                  className="relative w-full overflow-hidden will-change-transform"
                   style={{
                     transformOrigin: "center top",
                   }}
@@ -108,7 +110,7 @@ export const StackCards: React.FC<StackCardsProps> = ({
                       ref={(el) => {
                         overlayRefs.current[i] = el;
                       }}
-                      className="absolute inset-0 bg-[#0A0A0A] pointer-events-none opacity-0 transition-opacity"
+                      className="absolute inset-0 bg-[#0A0A0A] pointer-events-none opacity-0"
                     />
                   )}
                 </div>
