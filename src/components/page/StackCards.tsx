@@ -30,25 +30,34 @@ export const StackCards: React.FC<StackCardsProps> = ({
 
     const triggers: ScrollTrigger[] = [];
 
-    // Card i scrubs down when card i+1 approaches
+    // Compute nav offset dynamically
+    const getNavOffset = () => {
+      const raw = getComputedStyle(document.documentElement).getPropertyValue("--nav-offset");
+      const parsed = parseInt(raw || "60", 10);
+      return isNaN(parsed) ? 60 : parsed;
+    };
+
+    // Scrub (1.4) inner wrapper of card i to scale(.95) and overlay to opacity .32 as nextCard rises
     for (let i = 0; i < cards.length - 1; i++) {
       const nextCard = cardRefs.current[i + 1];
       const currentInner = innerRefs.current[i];
       const currentOverlay = overlayRefs.current[i];
 
       if (nextCard && currentInner) {
+        const nextStickyTop = getNavOffset() + 12 + (i + 1) * 10;
+
         const tr = ScrollTrigger.create({
           trigger: nextCard,
-          start: "top bottom",
-          end: "top top",
+          start: "top 85%",
+          end: `top ${nextStickyTop}px`,
           scrub: 1.4,
           onUpdate: (self) => {
             const p = self.progress;
-            const scale = 1 - 0.05 * p;
+            const scale = 1 - 0.05 * p; // scale down to 0.95
             const y = -12 * p;
             currentInner.style.transform = `scale(${scale}) translateY(${y}px)`;
             if (currentOverlay) {
-              currentOverlay.style.opacity = String(0.32 * p);
+              currentOverlay.style.opacity = String(0.32 * p); // dark overlay to opacity .32
             }
           },
         });
@@ -68,7 +77,7 @@ export const StackCards: React.FC<StackCardsProps> = ({
           {dotRail}
         </div>
       )}
-      <div className="w-full flex flex-col">
+      <div className="w-full flex flex-col items-center">
         {cards.map((card, i) => {
           const isLast = i === cards.length - 1;
 
@@ -78,40 +87,33 @@ export const StackCards: React.FC<StackCardsProps> = ({
               ref={(el) => {
                 cardRefs.current[i] = el;
               }}
-              className="sticky w-full"
+              className="sticky w-full rounded-none"
               style={{
-                top: `calc(var(--nav-offset, 80px) + 12px + ${i * 10}px)`,
-                marginBottom: isLast ? "0svh" : undefined,
+                top: `calc(var(--nav-offset, 60px) + 12px + ${i * 10}px)`,
+                marginBottom: isLast ? "0svh" : "14svh",
                 zIndex: i + 1,
               }}
             >
               <div
-                className="w-full"
+                ref={(el) => {
+                  innerRefs.current[i] = el;
+                }}
+                className="relative w-full overflow-hidden transition-transform will-change-transform bg-white rounded-none border-0 shadow-[0_10px_30px_rgba(0,0,0,0.08)]"
                 style={{
-                  marginBottom: isLast ? "0" : "clamp(14svh, 25svh, 38svh)",
+                  transformOrigin: "center top",
                 }}
               >
-                <div
-                  ref={(el) => {
-                    innerRefs.current[i] = el;
-                  }}
-                  className="relative w-full overflow-hidden transition-transform will-change-transform"
-                  style={{
-                    transformOrigin: "center top",
-                  }}
-                >
-                  {card.content}
+                {card.content}
 
-                  {/* Dark overlay for stacking dim effect */}
-                  {!isLast && (
-                    <div
-                      ref={(el) => {
-                        overlayRefs.current[i] = el;
-                      }}
-                      className="absolute inset-0 bg-[#0A0A0A] pointer-events-none opacity-0 transition-opacity"
-                    />
-                  )}
-                </div>
+                {/* Dark overlay for slow scrub stacking dim effect (max 0.32) */}
+                {!isLast && (
+                  <div
+                    ref={(el) => {
+                      overlayRefs.current[i] = el;
+                    }}
+                    className="absolute inset-0 bg-[#0A0A0A] pointer-events-none opacity-0 transition-opacity rounded-none"
+                  />
+                )}
               </div>
             </div>
           );
