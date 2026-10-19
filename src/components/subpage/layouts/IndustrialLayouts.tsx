@@ -375,9 +375,6 @@ export const WorkshopShedsLayout: React.FC<{ data: ContentData }> = ({ data }) =
                   isOtherHovered ? "opacity-40" : "opacity-100"
                 }`}
               >
-                <div className="col-span-1">
-                  <OutlineNum num={r.num} active={isHovered} />
-                </div>
                 <div className="col-span-5">
                   <h3
                     className={`font-bold transition-transform duration-300 ${
@@ -388,7 +385,7 @@ export const WorkshopShedsLayout: React.FC<{ data: ContentData }> = ({ data }) =
                     {r.title}
                   </h3>
                 </div>
-                <div className="col-span-6">
+                <div className="col-span-7">
                   <p className="text-[var(--grey-strong)] leading-[1.7]" style={{ fontSize: "var(--fs-body)" }}>
                     {r.text}
                   </p>

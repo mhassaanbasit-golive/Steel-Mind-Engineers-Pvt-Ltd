@@ -5,6 +5,7 @@ import { CONTENT_BY_URL } from "../content/index.ts";
 import { divisionImages, cl } from "../data/images.ts";
 import { TransitionLink } from "../components/ui/TransitionLink.tsx";
 import { useMediaQuery } from "../hooks/useMediaQuery.ts";
+import { DotRail } from "../components/page/DotRail.tsx";
 
 export interface HubProps {
   data: ContentData;
@@ -61,6 +62,14 @@ const DIVISION_CONFIGS: Record<
       "See the seven services Steel Mind Engineers runs from design to after sale support.",
     nextUrl: "/services/",
     nextTitle: "Services",
+  },
+  "/services/": {
+    key: "services",
+    divisionTitle: "SERVICES",
+    nextHeading:
+      "See the buildings and structures Steel Mind Engineers has delivered.",
+    nextUrl: "/projects/",
+    nextTitle: "Projects",
   },
 };
 
@@ -194,6 +203,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState(-1);
   const [isFlipping, setIsFlipping] = useState(false);
+  const [stageProgress, setStageProgress] = useState(0);
 
   const activeIndexRef = useRef(0);
   activeIndexRef.current = activeIndex;
@@ -250,6 +260,8 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
         const trackRect = trackRef.current.getBoundingClientRect();
         const maxScroll = trackRef.current.offsetHeight - pinRef.current.offsetHeight;
         if (maxScroll <= 0) return;
+        const rawP = Math.max(0, Math.min(1, -(trackRect.top - navH) / maxScroll));
+        setStageProgress(rawP);
         const p = Math.max(
           0,
           Math.min(0.9999, -(trackRect.top - navH) / maxScroll)
@@ -377,7 +389,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
           - Mobile (<768px): overlay is exact nav blue at alpha 0.20 only. Image shows alone.
             Headline and button go BELOW image on solid nav blue, white text, 24px side padding, 32px top/bottom padding.
       ======================================================== */}
-      <section className="w-full pt-[64px] lg:pt-[88px] bg-white">
+      <section data-hero className="w-full bg-white">
         {/* Aspect Ratio Box: defaults to 16/9, updates dynamically based on natural image aspect ratio */}
         <div
           className="relative w-full overflow-hidden bg-[#0F172A]"
@@ -440,9 +452,10 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
             <div className="mt-5">
               <TransitionLink
                 to="/contact-us/#quote"
-                className="inline-flex items-center justify-center font-semibold text-[10px] uppercase tracking-[0.06em] min-h-[38px] px-5 py-2.5 bg-white text-[var(--blue)] hover:bg-white/90 transition-colors cursor-pointer select-none"
+                className="btn btn--light btn-sm"
               >
-                Request a Quote
+                <span>Request a Quote</span>
+                <span className="btn-arrow inline-block" aria-hidden="true">&rarr;</span>
               </TransitionLink>
             </div>
           </div>
@@ -456,9 +469,10 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
           <div className="mt-5">
             <TransitionLink
               to="/contact-us/#quote"
-              className="inline-flex items-center justify-center font-semibold text-[10px] uppercase tracking-[0.06em] min-h-[38px] px-5 py-2.5 bg-white text-[var(--blue)] hover:bg-white/90 transition-colors cursor-pointer select-none"
+              className="btn btn--light btn-sm"
             >
-              Request a Quote
+              <span>Request a Quote</span>
+              <span className="btn-arrow inline-block" aria-hidden="true">&rarr;</span>
             </TransitionLink>
           </div>
         </div>
@@ -586,61 +600,102 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
             }}
           >
             {/* LEFT: Image Stage (link to active sub-page) */}
-            <div className="w-full flex items-center justify-center">
-              <TransitionLink
-                to={items[activeIndex]?.url || "#"}
-                className="block relative w-full overflow-hidden select-none cursor-pointer"
+            <div className="w-full relative flex flex-col items-center justify-center">
+              <div
+                className="relative w-full"
                 style={{
                   width: "min(100%, calc((100vh - var(--nav-h, 88px) - 96px) * 1.5))",
-                  aspectRatio: "3 / 2",
-                  backgroundColor: "#0F172A",
                 }}
-                aria-label={`View ${items[activeIndex]?.title || "division details"}`}
               >
-                {items.map((item, idx) => {
-                  const isActive = activeIndex === idx;
-                  const isLeaving = prevIndex === idx;
-                  const hasErr = failedImages[item.image];
-                  const hasImage = item.image && !hasErr;
+                <TransitionLink
+                  to={items[activeIndex]?.url || "#"}
+                  className="block relative w-full overflow-hidden select-none cursor-pointer"
+                  style={{
+                    aspectRatio: "3 / 2",
+                    backgroundColor: "#0F172A",
+                  }}
+                  aria-label={`View ${items[activeIndex]?.title || "division details"}`}
+                >
+                  {items.map((item, idx) => {
+                    const isActive = activeIndex === idx;
+                    const isLeaving = prevIndex === idx;
+                    const hasErr = failedImages[item.image];
+                    const hasImage = item.image && !hasErr;
 
-                  return (
-                    <div
-                      key={item.url || idx}
-                      className="absolute inset-0 w-full h-full bg-[#0F172A] overflow-hidden"
-                      style={{
-                        opacity: isActive ? 1 : 0,
-                        zIndex: isActive ? 10 : isLeaving ? 5 : 0,
-                        pointerEvents: isActive ? "auto" : "none",
-                        transition: prefersReduced
-                          ? "opacity 200ms ease"
-                          : "opacity 800ms cubic-bezier(0.22, 1, 0.36, 1)",
-                        willChange: isFlipping ? "opacity, transform" : "auto",
-                      }}
-                    >
-                      {hasImage ? (
-                        <img
-                          src={cl(item.image, 1400)}
-                          alt={item.title}
-                          loading="eager"
-                          onError={() => handleImageError(item.image)}
-                          className={`absolute inset-0 w-full h-full object-cover object-center block ${
-                            isActive && !prefersReduced
-                              ? "animate-[enterScale_1000ms_cubic-bezier(0.22,1,0.36,1)_forwards]"
-                              : ""
-                          }`}
-                          style={{
-                            objectFit: "cover",
-                            objectPosition: "center",
-                            transform: isLeaving || prefersReduced ? "scale(1)" : undefined,
-                          }}
-                        />
-                      ) : (
-                        <div className="absolute inset-0 w-full h-full bg-[#0F172A]" />
-                      )}
-                    </div>
-                  );
-                })}
-              </TransitionLink>
+                    return (
+                      <div
+                        key={item.url || idx}
+                        className="absolute inset-0 w-full h-full bg-[#0F172A] overflow-hidden"
+                        style={{
+                          opacity: isActive ? 1 : 0,
+                          zIndex: isActive ? 10 : isLeaving ? 5 : 0,
+                          pointerEvents: isActive ? "auto" : "none",
+                          transition: prefersReduced
+                            ? "opacity 200ms ease"
+                            : "opacity 800ms cubic-bezier(0.22, 1, 0.36, 1)",
+                          willChange: isFlipping ? "opacity, transform" : "auto",
+                        }}
+                      >
+                        {hasImage ? (
+                          <img
+                            src={cl(item.image, 1400)}
+                            alt={item.title}
+                            loading="eager"
+                            onError={() => handleImageError(item.image)}
+                            className={`absolute inset-0 w-full h-full object-cover object-center block ${
+                              isActive && !prefersReduced
+                                ? "animate-[enterScale_1000ms_cubic-bezier(0.22,1,0.36,1)_forwards]"
+                                : ""
+                            }`}
+                            style={{
+                              objectFit: "cover",
+                              objectPosition: "center",
+                              transform: isLeaving || prefersReduced ? "scale(1)" : undefined,
+                            }}
+                          />
+                        ) : (
+                          <div className="absolute inset-0 w-full h-full bg-[#0F172A]" />
+                        )}
+                      </div>
+                    );
+                  })}
+                </TransitionLink>
+
+                {/* 2px progress line under the stage that fills with the scroll in that section */}
+                <div className="w-full h-[2px] bg-[rgba(10,10,10,0.12)] mt-3 overflow-hidden rounded-full">
+                  <div
+                    className="h-full bg-[var(--blue, #1E3A8A)] transition-all duration-150 ease-out"
+                    style={{ width: `${Math.round(stageProgress * 100)}%` }}
+                  />
+                </div>
+
+                {/* DotRail on the right edge of the sticky stage */}
+                <div className="absolute right-[-44px] top-1/2 -translate-y-1/2 z-20">
+                  <DotRail
+                    count={N}
+                    active={activeIndex}
+                    onSelect={(idx) => {
+                      targetIndexRef.current = idx;
+                      triggerStep();
+                      if (trackRef.current && pinRef.current) {
+                        const navH =
+                          parseFloat(
+                            getComputedStyle(document.documentElement).getPropertyValue("--nav-h")
+                          ) || 88;
+                        const maxScroll = trackRef.current.offsetHeight - pinRef.current.offsetHeight;
+                        const scrollTarget =
+                          window.scrollY +
+                          trackRef.current.getBoundingClientRect().top -
+                          navH +
+                          (idx / Math.max(1, N - 1)) * maxScroll;
+                        window.scrollTo({ top: scrollTarget, behavior: "smooth" });
+                      }
+                    }}
+                    orientation="vertical"
+                    itemNames={items.map((it) => it.title)}
+                  />
+                </div>
+              </div>
             </div>
 
             {/* RIGHT: Text Slides stacked in same grid cell */}
@@ -684,26 +739,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
                       aria-hidden={!isActive}
                       inert={!isActive ? true : undefined}
                     >
-                      {/* 1. Number */}
-                      <div
-                        className="text-[14px] lg:text-[16px] font-bold text-[#1E3A8A] mb-3 tracking-[0.06em]"
-                        style={{
-                          fontVariantNumeric: "tabular-nums",
-                          opacity: isActive ? 1 : 0,
-                          transform: prefersReduced
-                            ? "none"
-                            : isActive
-                            ? "translateY(0)"
-                            : "translateY(12px)",
-                          transition: prefersReduced
-                            ? "none"
-                            : "opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) 200ms, transform 800ms cubic-bezier(0.22, 1, 0.36, 1) 200ms",
-                        }}
-                      >
-                        {item.number}
-                      </div>
-
-                      {/* 2. Title */}
+                      {/* Title */}
                       <h3
                         className="font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.01em] mb-4"
                         style={{
@@ -727,7 +763,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
                         </TransitionLink>
                       </h3>
 
-                      {/* 3. Description (full text, max-width 440px, no ellipsis) */}
+                      {/* Description */}
                       {item.desc && (
                         <p
                           className="text-[14px] lg:text-[15px] text-[#6B7280] leading-[1.7] max-w-[440px] mb-6"
@@ -747,11 +783,11 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
                         </p>
                       )}
 
-                      {/* 4. Link View → */}
+                      {/* Link View → */}
                       <div>
                         <TransitionLink
                           to={item.url}
-                          className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#1E3A8A] hover:underline"
+                          className="link-arrow text-[14px] font-semibold text-[#1E3A8A]"
                           style={{
                             opacity: isActive ? 1 : 0,
                             transform: prefersReduced
@@ -765,7 +801,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
                           }}
                         >
                           <span>View</span>
-                          <span>&rarr;</span>
+                          <span className="btn-arrow inline-block" aria-hidden="true">&rarr;</span>
                         </TransitionLink>
                       </div>
                     </div>
@@ -773,10 +809,10 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
                 })}
               </div>
 
-              {/* Progress Line Under the slide: 1px grey line with 1px blue scale line */}
-              <div className="w-full h-[1px] bg-[#E5E5E5] mt-10 relative overflow-hidden">
+              {/* Progress Line Under the slide: 2px grey line with 2px blue scale line */}
+              <div className="w-full h-[2px] bg-[#E5E5E5] mt-10 relative overflow-hidden">
                 <div
-                  className="absolute inset-y-0 left-0 w-full h-[1px] bg-[#1E3A8A]"
+                  className="absolute inset-y-0 left-0 w-full h-[2px] bg-[#1E3A8A]"
                   style={{
                     transform: `scaleX(${(activeIndex + 1) / N})`,
                     transformOrigin: "left",
@@ -820,19 +856,11 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
                     )}
                   </div>
 
-                  {/* Row with number, title, and arrow */}
+                  {/* Row with title and arrow (no number) */}
                   <div className="flex items-center justify-between gap-3 mt-4">
-                    <div className="flex items-center gap-3 min-w-0">
-                      <span
-                        className="text-[14px] font-bold text-[#1E3A8A] tracking-[0.06em] flex-shrink-0"
-                        style={{ fontVariantNumeric: "tabular-nums" }}
-                      >
-                        {item.number}
-                      </span>
-                      <h3 className="text-[18px] font-bold text-[#0A0A0A] leading-[1.2] truncate">
-                        {item.title}
-                      </h3>
-                    </div>
+                    <h3 className="text-[18px] font-bold text-[#0A0A0A] leading-[1.2] truncate">
+                      {item.title}
+                    </h3>
                     <span className="text-[#1E3A8A] text-[18px] flex-shrink-0 transition-transform duration-300 group-hover:translate-x-1">
                       &rarr;
                     </span>

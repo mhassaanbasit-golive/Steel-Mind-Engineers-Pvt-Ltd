@@ -11,7 +11,7 @@ import surveyHandler from "./api/survey.ts";
 import newsletterHandler from "./api/newsletter.ts";
 
 const app = express();
-const PORT = Number(process.env.PORT) || 3000;
+const PORT = 3000;
 const isProd = process.env.NODE_ENV === "production";
 
 app.use(express.json({ limit: "15mb" }));

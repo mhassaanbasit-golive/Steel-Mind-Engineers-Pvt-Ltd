@@ -62,7 +62,7 @@ export const HeroBand: React.FC<HeroBandProps> = ({
   // Variant: immersive (PART 7.1)
   if (variant === "immersive") {
     return (
-      <section ref={containerRef} className="relative w-full bg-[#0A0A0A] overflow-hidden">
+      <section ref={containerRef} data-hero className="relative w-full bg-[#0A0A0A] overflow-hidden">
         {/* Desktop (768px and up) */}
         <div
           className="hidden md:flex relative w-full overflow-hidden flex-col justify-end"
@@ -124,10 +124,10 @@ export const HeroBand: React.FC<HeroBandProps> = ({
             <div className="mt-6">
               <TransitionLink
                 to="/contact-us/#quote"
-                className="btn btn-light btn-sm"
+                className="btn btn--light btn-sm"
               >
                 <span>Request a Quote</span>
-                <span className="btn-arrow">→</span>
+                <span className="btn-arrow inline-block" aria-hidden="true">&rarr;</span>
               </TransitionLink>
             </div>
 
@@ -185,10 +185,10 @@ export const HeroBand: React.FC<HeroBandProps> = ({
             <div className="mt-5">
               <TransitionLink
                 to="/contact-us/#quote"
-                className="btn btn-light btn-sm"
+                className="btn btn--light btn-sm"
               >
                 <span>Request a Quote</span>
-                <span className="btn-arrow">→</span>
+                <span className="btn-arrow inline-block" aria-hidden="true">&rarr;</span>
               </TransitionLink>
             </div>
 
@@ -215,7 +215,7 @@ export const HeroBand: React.FC<HeroBandProps> = ({
   // Article variant
   if (variant === "article") {
     return (
-      <section className="relative w-full bg-[#0A0A0A]">
+      <section data-hero className="relative w-full bg-[#0A0A0A]">
         <div className="hidden md:block relative w-full h-[60svh] lg:h-[70vh] overflow-hidden bg-[#0A0A0A]">
           <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
             <img
@@ -278,7 +278,7 @@ export const HeroBand: React.FC<HeroBandProps> = ({
 
   // Classic default variant
   return (
-    <section className="relative w-full h-[60svh] lg:h-[70vh] overflow-hidden bg-[#0A0A0A]">
+    <section data-hero className="relative w-full h-[60svh] lg:h-[70vh] overflow-hidden bg-[#0A0A0A]">
       <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
         <img
           src={cld(bgImage, 2560)}

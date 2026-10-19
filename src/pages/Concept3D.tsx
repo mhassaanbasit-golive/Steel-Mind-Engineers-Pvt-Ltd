@@ -355,13 +355,10 @@ export const Concept3D: React.FC<Concept3DProps> = ({ data }) => {
                           marginBottom: "16px",
                           color: isActive
                             ? "var(--blue, #1E3A8A)"
-                            : "transparent",
-                          WebkitTextStroke: isActive
-                            ? "0px transparent"
-                            : "1px rgba(30, 58, 138, 0.45)",
+                            : "rgba(10, 10, 10, 0.18)",
                           transition: prefersReduced
                             ? "none"
-                            : "color 500ms ease, -webkit-text-stroke 500ms ease",
+                            : "color 500ms ease",
                         }}
                       >
                         {block.num}

@@ -8,6 +8,7 @@ import { SplitIntro } from "../../page/SplitIntro.tsx";
 import { HeroBand } from "../../ui/HeroBand.tsx";
 import { Accordion } from "../../ui/Accordion.tsx";
 import { NextBand } from "../../ui/NextBand.tsx";
+import { TwoTone } from "../../page/TwoTone.tsx";
 import { SITE } from "../../../data/site.ts";
 import {
   Wrench,
@@ -20,8 +21,20 @@ import {
 } from "lucide-react";
 
 function extractSections(data: ContentData) {
-  const sections: { title: string; text: string; paragraphs: string[]; items?: { name: string; text: string }[] }[] = [];
-  let current: { title: string; text: string; paragraphs: string[]; items?: { name: string; text: string }[] } | null = null;
+  const sections: {
+    title: string;
+    text: string;
+    paragraphs: string[];
+    items?: { name: string; text: string }[];
+    bullets?: string[];
+  }[] = [];
+  let current: {
+    title: string;
+    text: string;
+    paragraphs: string[];
+    items?: { name: string; text: string }[];
+    bullets?: string[];
+  } | null = null;
   const introPs: string[] = [];
 
   data.blocks.forEach((b: ContentBlock) => {
@@ -34,6 +47,12 @@ function extractSections(data: ContentData) {
         current.text = current.text ? `${current.text} ${b.text}` : b.text;
       } else {
         introPs.push(b.text);
+      }
+    } else if (b.type === "bullets" && b.bullets) {
+      if (current) {
+        current.bullets = b.bullets;
+        current.paragraphs.push(...b.bullets);
+        current.text = current.text ? `${current.text} ${b.bullets.join(" ")}` : b.bullets.join(" ");
       }
     } else if ((b.type === "defs" || b.type === "steps") && b.items) {
       if (current) current.items = b.items;
@@ -398,9 +417,20 @@ export const CleaningLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                 </div>
                 <h3 className="text-[22px] font-bold text-[var(--ink)]">{sec.title}</h3>
               </div>
-              <p className="text-[var(--grey-strong)] leading-[1.7]" style={{ fontSize: "var(--fs-body)" }}>
-                {sec.text}
-              </p>
+              {sec.bullets && sec.bullets.length > 0 ? (
+                <ul className="space-y-2 text-[var(--grey-strong)] leading-[1.65]" style={{ fontSize: "var(--fs-body)" }}>
+                  {sec.bullets.map((b, bIdx) => (
+                    <li key={bIdx} className="flex items-start gap-2.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--blue)] mt-2 flex-shrink-0" />
+                      <span>{b}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-[var(--grey-strong)] leading-[1.7]" style={{ fontSize: "var(--fs-body)" }}>
+                  {sec.text}
+                </p>
+              )}
             </div>
           ))}
         </div>
@@ -583,8 +613,12 @@ export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                   <div className={`col-span-5 ${isEven ? "order-1 text-right" : "order-1"}`}>
                     {!isEven && (
                       <div className="space-y-3">
-                        <OutlineNum num={idx + 1} />
-                        <h3 className="text-[26px] font-bold text-[var(--ink)]">{st.name}</h3>
+                        <span className="text-[13px] font-mono font-semibold text-[var(--blue)] tracking-wider">
+                          STEP {String(idx + 1).padStart(2, "0")}
+                        </span>
+                        <h3 className="text-[26px] font-[600] tracking-[-0.025em] text-[var(--ink)] leading-[1.1]">
+                          <TwoTone text={st.name} />
+                        </h3>
                         <p className="text-[var(--grey-strong)] leading-[1.7]" style={{ fontSize: "var(--fs-body)" }}>{st.text}</p>
                       </div>
                     )}
@@ -595,8 +629,12 @@ export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                   <div className={`col-span-5 ${isEven ? "order-3" : "order-3"}`}>
                     {isEven && (
                       <div className="space-y-3">
-                        <OutlineNum num={idx + 1} />
-                        <h3 className="text-[26px] font-bold text-[var(--ink)]">{st.name}</h3>
+                        <span className="text-[13px] font-mono font-semibold text-[var(--blue)] tracking-wider">
+                          STEP {String(idx + 1).padStart(2, "0")}
+                        </span>
+                        <h3 className="text-[26px] font-[600] tracking-[-0.025em] text-[var(--ink)] leading-[1.1]">
+                          <TwoTone text={st.name} />
+                        </h3>
                         <p className="text-[var(--grey-strong)] leading-[1.7]" style={{ fontSize: "var(--fs-body)" }}>{st.text}</p>
                       </div>
                     )}
@@ -612,8 +650,12 @@ export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
           {steps.map((st, idx) => (
             <div key={idx} className="relative space-y-2">
               <div className="absolute -left-[41px] top-1 w-4 h-4 rounded-full bg-[var(--blue)] ring-4 ring-white" />
-              <OutlineNum num={idx + 1} />
-              <h3 className="text-[20px] font-bold text-[var(--ink)]">{st.name}</h3>
+              <span className="text-[12px] font-mono font-semibold text-[var(--blue)] tracking-wider block">
+                STEP {String(idx + 1).padStart(2, "0")}
+              </span>
+              <h3 className="text-[20px] font-[600] tracking-[-0.025em] text-[var(--ink)] leading-[1.2]">
+                <TwoTone text={st.name} />
+              </h3>
               <p className="text-[var(--grey-strong)] text-[14px] leading-[1.65]">{st.text}</p>
             </div>
           ))}

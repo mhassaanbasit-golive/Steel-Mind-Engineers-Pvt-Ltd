@@ -511,18 +511,18 @@ export const CraneGantryLayout: React.FC<{ data: ContentData }> = ({ data }) => 
 
       {/* 4. Compare Band: Gantry or Crane Shed? */}
       {compareSec && (
-        <section className="w-full bg-[var(--blue)] text-white py-[var(--sec-y-lg)]">
-          <div className="container text-left space-y-6">
-            <h2 className="text-[28px] lg:text-[36px] font-bold text-white">
+        <section className="w-full bg-[var(--blue)] text-white py-12 lg:py-[var(--sec-y-lg)]">
+          <div className="container px-4 sm:px-6 lg:px-8 text-left space-y-5">
+            <h2 className="text-[24px] sm:text-[28px] lg:text-[36px] font-[600] tracking-[-0.025em] text-white leading-[1.15]">
               {compareSec.title}
             </h2>
-            <p className="text-white/90 text-[18px] leading-[1.7] max-w-[760px]">
+            <p className="text-white/90 text-[15px] sm:text-[17px] lg:text-[18px] leading-[1.65] max-w-[760px]">
               {compareSec.text}
             </p>
             <div className="pt-2">
               <TransitionLink
                 to="/industrial-sheds-pakistan/crane-sheds/"
-                className="btn btn-light btn-sm"
+                className="btn btn-light btn-sm inline-flex items-center gap-2"
               >
                 <span>Explore Crane Sheds</span>
                 <span className="btn-arrow">→</span>

@@ -63,6 +63,9 @@ export const PageShell: React.FC<PageShellProps> = ({
       <main
         id="main"
         ref={mainRef}
+        style={{
+          paddingTop: hasDarkHero ? 0 : "var(--nav-h, 80px)",
+        }}
         className="flex-1 w-full flow-root m-0 p-0"
       >
         <div key={location.pathname} className="w-full">

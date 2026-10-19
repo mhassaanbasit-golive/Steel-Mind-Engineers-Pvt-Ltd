@@ -12,9 +12,9 @@ export interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ hasDarkHero = true }) => {
   const location = useLocation();
-  const isHomepage = location.pathname === "/";
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [overHero, setOverHero] = useState<boolean>(hasDarkHero);
   const headerRef = useRef<HTMLElement>(null);
   const lastScrollYRef = useRef(0);
   const isHiddenRef = useRef(false);
@@ -37,11 +37,39 @@ export const Header: React.FC<HeaderProps> = ({ hasDarkHero = true }) => {
     };
   }, []);
 
-  // Smart scroll: hide on fast scroll down, reveal on scroll up
+  // On route change: reset visible state & detect [data-hero]
+  useEffect(() => {
+    isHiddenRef.current = false;
+    headerRef.current?.removeAttribute("data-hidden");
+    const navH = headerRef.current?.offsetHeight || (window.innerWidth < 1024 ? 60 : 80);
+    document.documentElement.style.setProperty("--nav-offset", `${navH}px`);
+
+    setScrolled(window.scrollY > 24);
+
+    let r1: number;
+    let r2: number;
+    r1 = requestAnimationFrame(() => {
+      r2 = requestAnimationFrame(() => {
+        const heroEl = document.querySelector("[data-hero]");
+        const hasHero = !!heroEl || hasDarkHero;
+        setOverHero(hasHero);
+        if (headerRef.current) {
+          headerRef.current.setAttribute("data-over-hero", String(hasHero));
+        }
+      });
+    });
+
+    return () => {
+      cancelAnimationFrame(r1);
+      cancelAnimationFrame(r2);
+    };
+  }, [location.pathname, hasDarkHero]);
+
+  // Smart scroll: hide on fast scroll down, reveal on scroll up, turns solid blue after 24px
   useEffect(() => {
     const handleScrollUpdate = (scrollY: number) => {
-      const isPast50 = scrollY > 50;
-      setScrolled(isPast50);
+      const isPast24 = scrollY > 24;
+      setScrolled(isPast24);
 
       // Never hide if mobile menu is open or focused inside header
       if (mobileMenuOpen || headerRef.current?.contains(document.activeElement)) {
@@ -86,13 +114,14 @@ export const Header: React.FC<HeaderProps> = ({ hasDarkHero = true }) => {
     }
   }, [mobileMenuOpen]);
 
-  // Visual state: transparent on hero if hasDarkHero and not scrolled; otherwise solid Royal Blue
-  const isSolidBlue = !hasDarkHero || scrolled || mobileMenuOpen;
+  // Solid blue: when not over hero, or scrolled past 24px, or mobile menu is open
+  const isSolidBlue = !overHero || scrolled || mobileMenuOpen;
 
   return (
     <>
       <header
         ref={headerRef}
+        data-over-hero={String(overHero)}
         style={{
           backgroundColor: isSolidBlue ? "#1E3A8A" : "transparent",
           borderColor: isSolidBlue ? "rgba(255, 255, 255, 0.12)" : "transparent",

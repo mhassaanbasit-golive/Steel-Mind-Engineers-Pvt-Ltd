@@ -28,16 +28,11 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   // Text link variant
   if (variant === "link") {
-    const linkBase = `link-arrow relative inline-flex items-center gap-1.5 text-[var(--blue)] font-semibold text-[12px] lg:text-[13px] cursor-pointer group rounded-none select-none ${className}`;
+    const linkBase = `link-arrow text-[var(--blue)] font-medium text-[13px] ${className}`;
     const linkInner = (
       <>
-        <span className="relative">
-          {children}
-          <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[var(--blue)] transition-all duration-300 group-hover:w-full" />
-        </span>
-        <span className="arrow-icon inline-block transition-transform duration-300 group-hover:translate-x-[4px]">
-          &rarr;
-        </span>
+        <span>{children}</span>
+        <span className="btn-arrow inline-block" aria-hidden="true">&rarr;</span>
       </>
     );
 
@@ -68,28 +63,19 @@ export const Button: React.FC<ButtonProps> = ({
     );
   }
 
-  // Button classes with interactive hover and micro-animation
-  let variantClass = "bg-[var(--blue)] text-white hover:bg-[var(--blue-dark)] hover:shadow-[0_6px_20px_rgba(30,58,138,0.28)]";
-  if (variant === "secondary") {
-    variantClass = "bg-transparent border border-[var(--blue)] text-[var(--blue)] hover:bg-[var(--blue)] hover:text-white hover:shadow-[0_6px_20px_rgba(30,58,138,0.2)]";
-  } else if (variant === "hero-white" || variant === "light") {
-    variantClass = "bg-white text-[var(--blue)] border border-white hover:bg-white/95 hover:shadow-[0_8px_24px_rgba(0,0,0,0.22)]";
-  } else if (variant === "ghost" || variant === "hero") {
-    variantClass = "bg-transparent border border-white text-white hover:bg-white hover:text-[var(--blue)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)]";
-  }
+  // Standard Button styles with .btn and .btn--light
+  const isLight = variant === "hero-white" || variant === "light";
+  const lightClass = isLight ? "btn--light" : "";
+  const sizeClass = size === "sm" ? "btn-sm" : "";
 
-  const sizeClass = size === "sm" ? "min-h-[36px] px-4 py-2 text-[10px]" : "min-h-[42px] px-6 py-2.5 text-[11px]";
-
-  const baseStyle = `group relative inline-flex items-center justify-center font-semibold uppercase tracking-[0.08em] select-none transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[1px] active:translate-y-0 active:scale-[0.98] cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--blue)] focus-visible:outline-offset-2 ${sizeClass} ${variantClass} ${
+  const baseStyle = `btn ${lightClass} ${sizeClass} ${
     disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
   } ${className}`;
 
   const content = (
     <>
-      <span className="relative z-10">{children}</span>
-      <span className="relative z-10 inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[4px] ml-2">
-        &rarr;
-      </span>
+      <span>{children}</span>
+      <span className="btn-arrow inline-block" aria-hidden="true">&rarr;</span>
     </>
   );
 

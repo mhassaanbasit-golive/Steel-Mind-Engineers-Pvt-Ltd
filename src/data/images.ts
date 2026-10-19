@@ -65,4 +65,17 @@ export const divisionImages = {
       { number: "05", title: "Steel Stairs", image: B + "v1791924831/csf-steel-stairs.jpg" },
     ],
   },
+  "services": {
+    hero: B + "v1792202525/after-sale-wide.jpg",
+    next: B + "v1792202572/Projects-next.jpg",
+    list: [
+      { number: "01", title: "Design", image: B + "v1792202525/Design-hero.jpg" },
+      { number: "02", title: "Detailing", image: B + "v1792202526/Detailing-hero.jpg" },
+      { number: "03", title: "Fabrication", image: B + "v1792202554/Fabrication-hero.jpg" },
+      { number: "04", title: "Cleaning", image: B + "v1792202526/Cleaning-hero.jpg" },
+      { number: "05", title: "Painting", image: B + "v1792202584/Painting-hero.jpg" },
+      { number: "06", title: "Erection", image: B + "v1792202554/Fabrication-hero.jpg" },
+      { number: "07", title: "After Sale Services", image: B + "v1792202522/After-sale-services-hero.jpg" },
+    ],
+  },
 };

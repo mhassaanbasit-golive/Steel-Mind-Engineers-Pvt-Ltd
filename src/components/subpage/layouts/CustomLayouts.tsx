@@ -58,7 +58,7 @@ export const MachineFramesLayout: React.FC<{ data: ContentData }> = ({ data }) =
             </h2>
           </div>
           <div className="lg:col-span-7">
-            <p className="text-[18px] lg:text-[24px] text-[var(--ink)] font-normal leading-[1.45] text-pretty">
+            <p className="text-[16px] sm:text-[17px] lg:text-[24px] text-[var(--ink)] font-normal leading-[1.65] lg:leading-[1.45] text-pretty">
               {sections[0]?.text || introPs.join(" ")}
             </p>
           </div>

@@ -25,7 +25,7 @@ export const SubpageHero: React.FC<SubpageHeroProps> = ({
   const heroUrl = image ? cl(image, 2560) : "";
 
   return (
-    <section className="relative w-full bg-[#0A0A0A] overflow-hidden">
+    <section data-hero className="relative w-full bg-[#0A0A0A] overflow-hidden">
       {/* Desktop (768px and up): Cinematic full-width hero extending under transparent header */}
       <div
         className="hidden md:block relative w-full overflow-hidden bg-[#0A0A0A]"
@@ -93,10 +93,10 @@ export const SubpageHero: React.FC<SubpageHeroProps> = ({
           <div className="mt-6">
             <TransitionLink
               to={quoteUrl}
-              className="inline-flex items-center justify-center font-semibold text-[11px] uppercase tracking-[0.08em] min-h-[42px] px-6 py-2.5 bg-white text-[var(--blue)] hover:bg-white/90 active:scale-95 transition-all duration-300 cursor-pointer select-none shadow-sm hover:shadow-md"
+              className="btn btn--light btn-sm"
             >
               <span>Request a Quote</span>
-              <span className="ml-2 inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+              <span className="btn-arrow inline-block" aria-hidden="true">&rarr;</span>
             </TransitionLink>
           </div>
         </div>
@@ -151,10 +151,10 @@ export const SubpageHero: React.FC<SubpageHeroProps> = ({
           <div className="mt-5">
             <TransitionLink
               to={quoteUrl}
-              className="inline-flex items-center justify-center font-semibold text-[10px] uppercase tracking-[0.08em] min-h-[38px] px-5 py-2.5 bg-white text-[var(--blue)] hover:bg-white/90 active:scale-95 transition-all cursor-pointer select-none"
+              className="btn btn--light btn-sm"
             >
               <span>Request a Quote</span>
-              <span className="ml-1.5 inline-block">→</span>
+              <span className="btn-arrow inline-block" aria-hidden="true">&rarr;</span>
             </TransitionLink>
           </div>
         </div>

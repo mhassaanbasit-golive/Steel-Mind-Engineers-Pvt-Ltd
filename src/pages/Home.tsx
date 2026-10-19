@@ -243,7 +243,7 @@ export const Home: React.FC = () => {
   return (
     <div className="w-full">
       {/* 1. Hero Video Section — 100svh mobile / 100vh desktop, min 600px, overflow hidden */}
-      <section className="relative w-full h-[100svh] lg:h-[100vh] min-h-[600px] overflow-hidden bg-[var(--blue)]">
+      <section data-hero className="relative w-full h-[100svh] lg:h-[100vh] min-h-[600px] overflow-hidden bg-[var(--blue)]">
         {/* Video Wrapper */}
         <div className="absolute inset-0 w-full h-full overflow-hidden">
           <img
@@ -358,11 +358,11 @@ export const Home: React.FC = () => {
                   borderRadius: 0,
                   lineHeight: 1,
                 }}
-                className="group inline-flex items-center justify-center whitespace-nowrap select-none cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.3)] active:translate-y-0 active:scale-[0.98]"
+                className="btn btn--light btn-sm group inline-flex items-center justify-center whitespace-nowrap select-none cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.3)] active:translate-y-0 active:scale-[0.98]"
               >
                 <span>Request a Quote</span>
-                <span className="ml-1.5 inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1">
-                  →
+                <span className="btn-arrow ml-1.5 inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1" aria-hidden="true">
+                  &rarr;
                 </span>
               </Link>
 
@@ -382,11 +382,11 @@ export const Home: React.FC = () => {
                   borderRadius: 0,
                   lineHeight: 1,
                 }}
-                className="group inline-flex items-center justify-center whitespace-nowrap select-none cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-white hover:text-[var(--blue)] hover:border-white hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.25)] active:translate-y-0 active:scale-[0.98]"
+                className="btn btn-sm group inline-flex items-center justify-center whitespace-nowrap select-none cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-white hover:text-[var(--blue)] hover:border-white hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.25)] active:translate-y-0 active:scale-[0.98]"
               >
                 <span>View Our Projects</span>
-                <span className="ml-1.5 inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1">
-                  →
+                <span className="btn-arrow ml-1.5 inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1" aria-hidden="true">
+                  &rarr;
                 </span>
               </Link>
             </div>

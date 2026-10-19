@@ -4,6 +4,7 @@ import { NAV, NavItem } from "../../data/nav.ts";
 import { Button } from "../ui/Button.tsx";
 import { SITE } from "../../data/site.ts";
 import { TransitionLink } from "../ui/TransitionLink.tsx";
+import { RollText } from "../common/RollText.tsx";
 
 export const DesktopNav: React.FC = () => {
   const location = useLocation();
@@ -67,30 +68,17 @@ export const DesktopNav: React.FC = () => {
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group/navlink relative py-2 px-1 flex items-center transition-all duration-300 text-white/85 hover:text-white"
+                className="nav-link py-2 px-1 flex items-center text-white"
               >
-                <span className="relative z-10 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/navlink:-translate-y-[1px]">
-                  {item.label}
-                </span>
-                <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-white transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] scale-x-0 opacity-0 group-hover/navlink:scale-x-100 group-hover/navlink:opacity-100 origin-center" />
+                <RollText text={item.label} />
               </a>
             ) : (
               <TransitionLink
                 to={item.url}
-                className={`group/navlink relative py-2 px-1 flex items-center transition-all duration-300 ${
-                  isActive ? "text-white font-semibold" : "text-white/85 hover:text-white"
-                }`}
+                aria-current={isActive ? "page" : undefined}
+                className="nav-link py-2 px-1 flex items-center text-white"
               >
-                <span className="relative z-10 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/navlink:-translate-y-[1px]">
-                  {item.label}
-                </span>
-                <span
-                  className={`absolute bottom-0 left-0 right-0 h-[2px] bg-white transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                    isActive
-                      ? "scale-x-100 opacity-100"
-                      : "scale-x-0 opacity-0 group-hover/navlink:scale-x-100 group-hover/navlink:opacity-100 origin-center"
-                  }`}
-                />
+                <RollText text={item.label} />
               </TransitionLink>
             )}
 
@@ -99,11 +87,11 @@ export const DesktopNav: React.FC = () => {
               <div
                 className={`absolute top-full left-0 ${
                   isAbout ? "min-w-[200px]" : "w-[280px]"
-                } bg-white text-[var(--ink)] border border-[var(--line,#E5E5E5)] p-2 z-50 animate-[fadeDrop8_250ms_cubic-bezier(0.16,1,0.3,1)_forwards] shadow-lg`}
+                } bg-white text-[var(--ink)] border border-[var(--line,#E5E5E5)] p-2 z-50 shadow-lg dropdown-panel`}
                 onMouseEnter={() => setActiveDropdown(item.label)}
                 onMouseLeave={() => setActiveDropdown(null)}
               >
-                {item.children.map((child) => {
+                {item.children.map((child, idx) => {
                   const isChildActive =
                     child.url === "/services/" || child.url === "/about" || child.url === "/about/"
                       ? location.pathname === child.url || location.pathname === child.url.replace(/\/$/, "")
@@ -115,7 +103,8 @@ export const DesktopNav: React.FC = () => {
                       key={child.url}
                       to={child.url}
                       onClick={() => setActiveDropdown(null)}
-                      className={`group/drop flex items-center justify-between px-4 py-2.5 text-[13px] transition-all duration-200 ease-out border-b border-[var(--line,#E5E5E5)] last:border-b-0 ${
+                      style={{ animationDelay: `${idx * 35}ms` }}
+                      className={`group/drop flex items-center justify-between px-4 py-2.5 text-[13px] transition-all duration-200 ease-out border-b border-[var(--line,#E5E5E5)] last:border-b-0 dropdown-item ${
                         isChildActive
                           ? "bg-[var(--blue,#1E3A8A)] text-white font-semibold pl-5"
                           : "text-[var(--ink,#0A0A0A)] hover:bg-[var(--blue,#1E3A8A)] hover:text-white hover:pl-5"
@@ -131,19 +120,23 @@ export const DesktopNav: React.FC = () => {
               </div>
             )}
 
-            {/* Mega Panel: Main Divisions (5 columns across container with proper sub-pages) */}
+            {/* Mega Panel: Main Divisions (5 columns across container) */}
             {isMega && activeDropdown === item.label && item.divisions && (
               <div
-                className="fixed top-[var(--nav-h,88px)] left-0 w-screen bg-white text-[var(--ink)] border-b border-[var(--line)] shadow-xl z-50 animate-[fadeDrop_0.25s_cubic-bezier(0.16,1,0.3,1)_forwards] max-h-[calc(100vh-var(--nav-h,88px))] overflow-y-auto"
+                className="fixed top-[var(--nav-h,80px)] left-0 w-screen bg-white text-[var(--ink)] border-b border-[var(--line)] shadow-xl z-50 max-h-[calc(100vh-var(--nav-h,80px))] overflow-y-auto dropdown-panel"
                 onMouseEnter={() => setActiveDropdown(item.label)}
                 onMouseLeave={() => setActiveDropdown(null)}
               >
                 <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] py-8 grid grid-cols-5 gap-6">
-                  {item.divisions.map((div) => {
+                  {item.divisions.map((div, dIdx) => {
                     const isDivActive = location.pathname.startsWith(div.url);
 
                     return (
-                      <div key={div.label} className="flex flex-col text-left">
+                      <div
+                        key={div.label}
+                        className="flex flex-col text-left dropdown-item"
+                        style={{ animationDelay: `${dIdx * 35}ms` }}
+                      >
                         {/* Division Header & Thumbnail */}
                         <TransitionLink
                           to={div.url}
@@ -171,7 +164,7 @@ export const DesktopNav: React.FC = () => {
                           </span>
                         </TransitionLink>
 
-                        {/* Proper Sub-pages list */}
+                        {/* Sub-pages list */}
                         <div className="flex flex-col space-y-1 pt-2 border-t border-[var(--line)]">
                           {div.children.map((child) => {
                             const isChildActive = location.pathname === child.url;
@@ -208,20 +201,30 @@ export const DesktopNav: React.FC = () => {
           variant="hero-white"
           size="sm"
           href="/contact-us/#quote"
-          className="!bg-white !text-[var(--blue)] hover:!bg-white/90 hover:!text-[var(--blue)] border border-white"
+          className="btn--light btn-sm"
         >
           {SITE.cta.primary}
         </Button>
       </div>
 
       <style>{`
-        @keyframes fadeDrop {
-          0% { opacity: 0; transform: translateY(6px); }
-          100% { opacity: 1; transform: translateY(0); }
+        .dropdown-panel {
+          clip-path: inset(0 0 100% 0);
+          transform: translateY(8px);
+          animation: dropReveal 380ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        @keyframes fadeDrop8 {
-          0% { opacity: 0; transform: translateY(8px); }
-          100% { opacity: 1; transform: translateY(0); }
+        @keyframes dropReveal {
+          to {
+            clip-path: inset(0 0 0 0);
+            transform: translateY(0);
+          }
+        }
+        .dropdown-item {
+          opacity: 0;
+          animation: itemFadeIn 300ms ease forwards;
+        }
+        @keyframes itemFadeIn {
+          to { opacity: 1; }
         }
       `}</style>
     </nav>
