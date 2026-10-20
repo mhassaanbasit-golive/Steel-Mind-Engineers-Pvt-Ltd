@@ -1,5 +1,5 @@
 // Custom Steel Fabrication Signature Layouts (9.23 - 9.27)
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { ContentData, ContentBlock } from "../../../content/types.ts";
 import { IMG } from "../../../data/subpageImages.ts";
 import { PhotoBox } from "../../page/PhotoBox.tsx";
@@ -8,6 +8,7 @@ import { HeroBand } from "../../ui/HeroBand.tsx";
 import { Accordion } from "../../ui/Accordion.tsx";
 import { NextBand } from "../../ui/NextBand.tsx";
 import { Check } from "lucide-react";
+import { gsap, ScrollTrigger } from "../../../lib/gsap.ts";
 
 function extractSections(data: ContentData) {
   const sections: { title: string; text: string; paragraphs: string[]; items?: { name: string; text: string }[] }[] = [];
@@ -36,28 +37,92 @@ function extractSections(data: ContentData) {
 
 // 9.23 Machine Frames — signature: "Statement + ruler + checklist"
 export const MachineFramesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
+  const rootRef = useRef<HTMLElement>(null);
+  const mobileBlockRef = useRef<HTMLDivElement>(null);
+  const mobileHeadingRef = useRef<HTMLHeadingElement>(null);
+  const mobileTextRef = useRef<HTMLParagraphElement>(null);
+
   const { introPs, sections } = extractSections(data);
   const checklistSecs = sections.slice(1, 4);
 
+  // Motion for Machine Frames:
+  // "Only that block: heading and text RISE once (stagger 90ms); if the ruler already animates, leave it exactly as it is. No other motion is added or changed."
+  useLayoutEffect(() => {
+    if (!rootRef.current) return;
+
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+
+      // Mobile: (max-width: 1023px)
+      mm.add("(max-width: 1023px)", () => {
+        if (mobileBlockRef.current && mobileHeadingRef.current && mobileTextRef.current) {
+          const els = [mobileHeadingRef.current, mobileTextRef.current];
+          gsap.set(els, { y: 24, opacity: 0 });
+
+          gsap.to(els, {
+            y: 0,
+            opacity: 1,
+            duration: 0.9,
+            ease: "E1",
+            stagger: 0.09,
+            clearProps: "transform,opacity",
+            scrollTrigger: {
+              trigger: mobileBlockRef.current,
+              start: "top 90%",
+              once: true,
+              invalidateOnRefresh: true,
+            },
+            onStart: () => {
+              els.forEach((el) => {
+                if (el) gsap.set(el, { willChange: "transform, opacity" });
+              });
+            },
+            onComplete: () => {
+              els.forEach((el) => {
+                if (el) gsap.set(el, { clearProps: "willChange" });
+              });
+            },
+          });
+        }
+      });
+
+      // Reduced motion
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        if (mobileHeadingRef.current && mobileTextRef.current) {
+          gsap.set([mobileHeadingRef.current, mobileTextRef.current], { y: 0, opacity: 1 });
+        }
+      });
+    }, rootRef);
+
+    const refreshTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 200);
+
+    return () => {
+      clearTimeout(refreshTimer);
+      ctx.revert();
+    };
+  }, []);
+
   return (
-    <article className="w-full bg-white">
+    <article ref={rootRef} className="w-full bg-white">
       <HeroBand
         variant="immersive"
         imageSrc={IMG.custom.machineFrames.hero}
-        imageAlt={data.h1}
-        h1={data.h1}
+        imageAlt={data.h1.toUpperCase()}
+        h1={data.h1.toUpperCase()}
         subtitle={data.quickAnswer}
       />
 
-      {/* Statement Section */}
-      <section className="container py-[var(--sec-y-lg)] text-left">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-baseline">
-          <div className="lg:col-span-5">
-            <h2 className="text-[26px] lg:text-[34px] font-bold text-[var(--ink)] leading-[1.2]">
-              {sections[0]?.title || "What a Machine Frame Does"}
+      {/* Desktop Statement Section */}
+      <section className="hidden lg:block container py-[var(--sec-y-lg)] text-left">
+        <div className="grid grid-cols-12 gap-10 items-baseline">
+          <div className="col-span-5">
+            <h2 className="text-[26px] lg:text-[34px] font-bold text-[var(--ink)] uppercase leading-[1.2]">
+              {(sections[0]?.title || "What a Machine Frame Does").toUpperCase()}
             </h2>
           </div>
-          <div className="lg:col-span-7">
+          <div className="col-span-7">
             <p className="text-[16px] sm:text-[17px] lg:text-[24px] text-[var(--ink)] font-normal leading-[1.65] lg:leading-[1.45] text-pretty">
               {sections[0]?.text || introPs.join(" ")}
             </p>
@@ -65,13 +130,17 @@ export const MachineFramesLayout: React.FC<{ data: ContentData }> = ({ data }) =
         </div>
       </section>
 
-      {/* Wide Image with SVG Precision Ruler */}
-      <section className="container pb-[var(--sec-y-lg)]">
+      {/* Desktop Wide Image with SVG Precision Ruler */}
+      <section className="hidden lg:block container pb-[var(--sec-y-lg)]">
         <div className="w-full aspect-[64/27] overflow-hidden bg-slate-900 shadow-md">
           <img
             src={IMG.custom.machineFrames.wide}
             alt="Precision Machine Frame Fabrication"
-            className="w-full h-full object-cover"
+            width={2560}
+            height={1080}
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover block"
           />
         </div>
         {/* SVG Engineering Ruler */}
@@ -85,6 +154,51 @@ export const MachineFramesLayout: React.FC<{ data: ContentData }> = ({ data }) =
         </div>
       </section>
 
+      {/* Mobile Block: "What a Machine Frame Does" (Heading 16px bold uppercase, 20px gap, Text 15px / 1.6 var(--blue), 40px gap, Image, Ruler) */}
+      <section className="block lg:hidden container py-12 text-left">
+        <div ref={mobileBlockRef}>
+          {/* Heading: mobile size of TEXT STYLE (16px, bold, uppercase, ink) */}
+          <h2
+            ref={mobileHeadingRef}
+            className="text-[16px] font-bold text-[#0A0A0A] uppercase tracking-[-0.02em] leading-tight mb-[20px]"
+          >
+            {(sections[0]?.title || "What a Machine Frame Does").toUpperCase()}
+          </h2>
+
+          {/* Text: mobile size of TEXT STYLE (15px / 1.6, regular weight, var(--blue)), 40px under to image */}
+          <p
+            ref={mobileTextRef}
+            className="text-[15px] font-normal text-[var(--blue)] leading-[1.6] mb-[40px]"
+          >
+            {sections[0]?.text || introPs.join(" ")}
+          </p>
+        </div>
+
+        {/* Wide Image with SVG Precision Ruler */}
+        <div>
+          <div className="w-full aspect-[64/27] overflow-hidden bg-slate-900 shadow-md">
+            <img
+              src={IMG.custom.machineFrames.wide}
+              alt="Precision Machine Frame Fabrication"
+              width={1920}
+              height={810}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover block"
+            />
+          </div>
+          {/* SVG Engineering Ruler */}
+          <div className="w-full h-6 border-b border-[var(--blue)] flex justify-between items-end px-2 pt-2">
+            {Array.from({ length: 40 }).map((_, i) => (
+              <div
+                key={i}
+                className={`w-[1px] bg-[var(--blue)] ${i % 5 === 0 ? "h-4" : "h-2"}`}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Checklist Section (3 columns with 40px circle & check icon) */}
       <section className="container pb-[var(--sec-y-lg)] text-left">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -93,8 +207,10 @@ export const MachineFramesLayout: React.FC<{ data: ContentData }> = ({ data }) =
               <div className="w-10 h-10 rounded-full border border-[var(--blue)] bg-white text-[var(--blue)] flex items-center justify-center transition-colors duration-300 group-hover:bg-[var(--blue)] group-hover:text-white">
                 <Check size={20} />
               </div>
-              <h3 className="text-[22px] font-bold text-[var(--ink)]">{sec.title}</h3>
-              <p className="text-[var(--grey-strong)] leading-[1.7]" style={{ fontSize: "var(--fs-body)" }}>
+              <h3 className="text-[20px] lg:text-[22px] font-bold text-[var(--ink)] uppercase leading-snug">
+                {sec.title.toUpperCase()}
+              </h3>
+              <p className="text-[16px] text-[var(--blue)] font-normal leading-[1.7]">
                 {sec.text}
               </p>
             </div>
@@ -106,8 +222,8 @@ export const MachineFramesLayout: React.FC<{ data: ContentData }> = ({ data }) =
       {data.faq && data.faq.length > 0 && (
         <section className="container py-[var(--sec-y)]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="font-bold text-[var(--ink)] mb-8" style={{ fontSize: "var(--fs-h2)" }}>
-              Frequently Asked Questions
+            <h2 className="font-bold text-[var(--ink)] mb-8 uppercase" style={{ fontSize: "var(--fs-h2)" }}>
+              {"Frequently Asked Questions".toUpperCase()}
             </h2>
             <Accordion items={data.faq} size="large" />
           </div>
@@ -119,6 +235,7 @@ export const MachineFramesLayout: React.FC<{ data: ContentData }> = ({ data }) =
         image={IMG.custom.machineFrames.next}
         nextUrl="/custom-steel-fabrication-pakistan/storage-tanks/"
         nextTitle="Storage Tanks"
+        heading="CUSTOM-DESIGNED STORAGE TANKS IN PAKISTAN"
       />
     </article>
   );

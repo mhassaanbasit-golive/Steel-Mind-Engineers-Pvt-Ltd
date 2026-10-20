@@ -2435,83 +2435,694 @@ export const MezzanineFloorsLayout: React.FC<{ data: ContentData }> = ({ data })
 
 // 9.21 Steel Bridges — signature: "Span diagram"
 export const SteelBridgesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
-  const { introPs, sections } = extractSections(data);
-  const remaining = sections.slice(1, 4);
+  const rootRef = useRef<HTMLElement>(null);
+
+  // Desktop refs
+  const desktopIntroHeadingRef = useRef<HTMLHeadingElement>(null);
+  const desktopIntroTextRef = useRef<HTMLParagraphElement>(null);
+  const desktopWideWrapperRef = useRef<HTMLDivElement>(null);
+  const desktopWideBoxRef = useRef<HTMLDivElement>(null);
+  const desktopWideImgRef = useRef<HTMLImageElement>(null);
+  const desktopSpanRef = useRef<HTMLDivElement>(null);
+  const girderPathRef = useRef<SVGPathElement>(null);
+  const girderDetailsRef = useRef<HTMLDivElement>(null);
+  const desktopColRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Mobile refs
+  const mobileIntroHeadingRef = useRef<HTMLHeadingElement>(null);
+  const mobileIntroTextRef = useRef<HTMLParagraphElement>(null);
+  const mobileWideBoxRef = useRef<HTMLDivElement>(null);
+  const mobileWideImgRef = useRef<HTMLImageElement>(null);
+  const mobileRailContainerRef = useRef<HTMLDivElement>(null);
+  const mobileRailFillRef = useRef<HTMLDivElement>(null);
+  const mobileBottomDiamondRef = useRef<HTMLDivElement>(null);
+  const mobileBlockRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const mobileDotRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // FAQ state
+  const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(null);
+
+  const HERO_IMAGE = "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202967/bridges-hero.jpg";
+  const WIDE_IMAGE = "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202975/bridges-wide.jpg";
+  const NEXT_IMAGE = "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202974/bridges-next.jpg";
+
+  const introTitle = "WHY STEEL FOR BRIDGES";
+  const introText =
+    "Steel bridges are light, strong and quick to install. The parts are made in a factory and lifted into place, which reduces road closures and site work.";
+
+  const blocks = [
+    {
+      num: "01",
+      title: "What Steel Mind Engineers fabricates",
+      text: "Pedestrian footbridges span roads, canals and drains. Plant and conveyor bridges are steel walkways and supports between buildings. Girder bridges use steel girders with a deck for light vehicle or equipment loads.",
+    },
+    {
+      num: "02",
+      title: "Design points",
+      text: "The span and width set the depth of the girders. Choose the load from the people, vehicles or equipment that will use the bridge. Bridges stay outdoors, so the coating system matters. See Painting. The crane size and the lift plan must also fit the site.",
+    },
+    {
+      num: "03",
+      title: "Project reference",
+      text: "Steel Mind Engineers built a water requirement bridge at Petaro Cantt, Sindh. The bridge is 150 feet long, 6 feet wide and 30 feet high, with an area of 900 square feet.",
+    },
+  ];
+
+  // GSAP Animations with Setup Rules and Motion Recipes
+  useLayoutEffect(() => {
+    if (!rootRef.current) return;
+    const E1 = "cubic-bezier(0.16, 1, 0.3, 1)";
+    const E2 = "cubic-bezier(0.76, 0, 0.24, 1)";
+
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+
+      // ==========================================
+      // DESKTOP: (min-width: 1024px)
+      // ==========================================
+      mm.add("(min-width: 1024px)", () => {
+        // 1. Desktop Intro: RISE (y 24 to 0, opacity 0 to 1, 900ms E1, stagger 90ms)
+        if (desktopIntroHeadingRef.current && desktopIntroTextRef.current) {
+          const introElements = [desktopIntroHeadingRef.current, desktopIntroTextRef.current];
+          gsap.set(introElements, { y: 24, opacity: 0 });
+
+          gsap.to(introElements, {
+            y: 0,
+            opacity: 1,
+            duration: 0.9,
+            ease: E1,
+            stagger: 0.09,
+            clearProps: "transform,opacity",
+            scrollTrigger: {
+              trigger: desktopIntroHeadingRef.current,
+              start: "top 85%",
+              once: true,
+              invalidateOnRefresh: true,
+            },
+          });
+        }
+
+        // 2. Wide band: CURTAIN 1200ms; wrapper drifts y 0 to -24px (scrub 1.4, desktop only)
+        if (desktopWideBoxRef.current && desktopWideImgRef.current && desktopWideWrapperRef.current) {
+          const box = desktopWideBoxRef.current;
+          const img = desktopWideImgRef.current;
+          const wrapper = desktopWideWrapperRef.current;
+
+          gsap.set(box, { clipPath: "inset(0 0 100% 0)" });
+          gsap.set(img, { scale: 1.06 });
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: box,
+              start: "top 85%",
+              once: true,
+              invalidateOnRefresh: true,
+            },
+            onStart: () => {
+              gsap.set(box, { willChange: "clip-path" });
+              gsap.set(img, { willChange: "transform" });
+            },
+            onComplete: () => {
+              gsap.set(box, { clearProps: "willChange,clipPath" });
+              gsap.set(img, { clearProps: "willChange,transform" });
+            },
+          });
+
+          // CURTAIN: clip-path inset(0 0 100% 0) to inset(0 0 0% 0) over 1200ms with E2
+          tl.to(box, { clipPath: "inset(0 0 0% 0)", duration: 1.2, ease: E2 }, 0);
+          // Inner img scale 1.06 to 1 over d x 1.3 (1560ms) with E1
+          tl.to(img, { scale: 1, duration: 1.56, ease: E1 }, 0);
+
+          // Wrapper drifts y 0 to -24px (scrub 1.4, desktop only)
+          gsap.fromTo(
+            wrapper,
+            { y: 0 },
+            {
+              y: -24,
+              ease: "none",
+              scrollTrigger: {
+                trigger: wrapper,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1.4,
+                invalidateOnRefresh: true,
+              },
+            }
+          );
+        }
+
+        // 3. Desktop Span Diagram: lines DRAW (stroke-dashoffset 1800ms E2); supports/labels fade 500ms after; 3 cols RISE
+        if (desktopSpanRef.current) {
+          const cols = desktopColRefs.current.filter(Boolean) as HTMLElement[];
+          gsap.set(cols, { y: 24, opacity: 0 });
+
+          const path = girderPathRef.current;
+          let pathLen = 1200;
+          if (path) {
+            try {
+              pathLen = path.getTotalLength() || 1200;
+            } catch {
+              pathLen = 1200;
+            }
+            gsap.set(path, {
+              strokeDasharray: pathLen,
+              strokeDashoffset: pathLen,
+            });
+          }
+
+          if (girderDetailsRef.current) {
+            gsap.set(girderDetailsRef.current, { opacity: 0 });
+          }
+
+          const spanTl = gsap.timeline({
+            scrollTrigger: {
+              trigger: desktopSpanRef.current,
+              start: "top 85%",
+              once: true,
+              invalidateOnRefresh: true,
+            },
+            onStart: () => {
+              if (path) gsap.set(path, { willChange: "stroke-dashoffset" });
+              cols.forEach((c) => gsap.set(c, { willChange: "transform,opacity" }));
+            },
+            onComplete: () => {
+              if (path) gsap.set(path, { clearProps: "willChange" });
+              cols.forEach((c) => gsap.set(c, { clearProps: "willChange,transform,opacity" }));
+            },
+          });
+
+          // Lines DRAW (stroke-dashoffset 1800ms E2)
+          if (path) {
+            spanTl.to(path, { strokeDashoffset: 0, duration: 1.8, ease: E2 }, 0);
+          }
+
+          // Supports & end bearings fade in 500ms after draw starts
+          if (girderDetailsRef.current) {
+            spanTl.to(girderDetailsRef.current, { opacity: 1, duration: 0.5, ease: E1 }, 0.5);
+          }
+
+          // 3 Columns RISE (y 24 to 0, opacity 0 to 1, 900ms E1, stagger 90ms)
+          spanTl.to(cols, { y: 0, opacity: 1, duration: 0.9, ease: E1, stagger: 0.09 }, 0.6);
+        }
+      });
+
+      // ==========================================
+      // MOBILE: (max-width: 1023px)
+      // ==========================================
+      mm.add("(max-width: 1023px)", () => {
+        // 1. Mobile Intro: RISE (y 24 to 0, opacity 0 to 1, 900ms E1, stagger 90ms)
+        if (mobileIntroHeadingRef.current && mobileIntroTextRef.current) {
+          const introEls = [mobileIntroHeadingRef.current, mobileIntroTextRef.current];
+          gsap.set(introEls, { y: 24, opacity: 0 });
+
+          gsap.to(introEls, {
+            y: 0,
+            opacity: 1,
+            duration: 0.9,
+            ease: E1,
+            stagger: 0.09,
+            clearProps: "transform,opacity",
+            scrollTrigger: {
+              trigger: mobileIntroHeadingRef.current,
+              start: "top 90%",
+              once: true,
+              invalidateOnRefresh: true,
+            },
+          });
+        }
+
+        // 2. Mobile Wide Image: CURTAIN 1200ms
+        if (mobileWideBoxRef.current && mobileWideImgRef.current) {
+          const box = mobileWideBoxRef.current;
+          const img = mobileWideImgRef.current;
+
+          gsap.set(box, { clipPath: "inset(0 0 100% 0)" });
+          gsap.set(img, { scale: 1.06 });
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: box,
+              start: "top 90%",
+              once: true,
+              invalidateOnRefresh: true,
+            },
+            onStart: () => {
+              gsap.set(box, { willChange: "clip-path" });
+              gsap.set(img, { willChange: "transform" });
+            },
+            onComplete: () => {
+              gsap.set(box, { clearProps: "willChange,clipPath" });
+              gsap.set(img, { clearProps: "willChange,transform" });
+            },
+          });
+
+          tl.to(box, { clipPath: "inset(0 0 0% 0)", duration: 1.2, ease: E2 }, 0);
+          tl.to(img, { scale: 1, duration: 1.56, ease: E1 }, 0);
+        }
+
+        // 3. Mobile Vertical Span Line (Rail) & Blocks RISE
+        if (mobileRailContainerRef.current) {
+          const blocksEls = mobileBlockRefs.current.filter(Boolean) as HTMLElement[];
+          gsap.set(blocksEls, { y: 24, opacity: 0 });
+
+          // Blocks RISE once (y 24 to 0, opacity 0 to 1, 900ms E1, stagger 90ms)
+          gsap.to(blocksEls, {
+            y: 0,
+            opacity: 1,
+            duration: 0.9,
+            ease: E1,
+            stagger: 0.09,
+            clearProps: "transform,opacity",
+            scrollTrigger: {
+              trigger: mobileRailContainerRef.current,
+              start: "top 90%",
+              once: true,
+              invalidateOnRefresh: true,
+            },
+          });
+
+          // RAIL(fill) vertical, scrub 1.2; start "top 60%", end "bottom 60%" of the rail container
+          if (mobileRailFillRef.current) {
+            const fill = mobileRailFillRef.current;
+            const container = mobileRailContainerRef.current;
+            const bottomDiamond = mobileBottomDiamondRef.current;
+            const dots = mobileDotRefs.current.filter(Boolean) as HTMLElement[];
+
+            gsap.set(fill, { scaleY: 0, transformOrigin: "top center" });
+
+            ScrollTrigger.create({
+              trigger: container,
+              start: "top 60%",
+              end: "bottom 60%",
+              scrub: 1.2,
+              invalidateOnRefresh: true,
+              onUpdate: (self) => {
+                const p = self.progress;
+                gsap.set(fill, { scaleY: p });
+
+                // Bottom diamond fills when the fill reaches it
+                if (bottomDiamond) {
+                  if (p >= 0.98) {
+                    bottomDiamond.classList.add("bg-[var(--blue)]");
+                    bottomDiamond.classList.remove("bg-white");
+                  } else {
+                    bottomDiamond.classList.remove("bg-[var(--blue)]");
+                    bottomDiamond.classList.add("bg-white");
+                  }
+                }
+
+                // Each block dot fills as the line passes
+                const containerRect = container.getBoundingClientRect();
+                const containerH = containerRect.height;
+                const fillY = containerH * p;
+
+                dots.forEach((dot) => {
+                  const dotTop = dot.offsetTop + dot.offsetHeight / 2;
+                  if (fillY >= dotTop) {
+                    dot.classList.add("bg-[var(--blue)]");
+                    dot.classList.remove("bg-white");
+                  } else {
+                    dot.classList.remove("bg-[var(--blue)]");
+                    dot.classList.add("bg-white");
+                  }
+                });
+              },
+            });
+          }
+        }
+      });
+
+      // ==========================================
+      // REDUCED MOTION: (prefers-reduced-motion: reduce)
+      // ==========================================
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        const boxes = rootRef.current?.querySelectorAll(
+          ".wide-box, .mobile-wide-box"
+        );
+        const imgs = rootRef.current?.querySelectorAll(
+          ".wide-img, .mobile-wide-img"
+        );
+        const textItems = rootRef.current?.querySelectorAll(
+          ".intro-item, .span-col, .rail-block"
+        );
+        const path = girderPathRef.current;
+        const girderDetails = girderDetailsRef.current;
+        const fill = mobileRailFillRef.current;
+        const bottomDiamond = mobileBottomDiamondRef.current;
+        const dots = mobileDotRefs.current.filter(Boolean) as HTMLElement[];
+
+        if (boxes) gsap.set(boxes, { clipPath: "none" });
+        if (imgs) gsap.set(imgs, { scale: 1 });
+        if (textItems) gsap.set(textItems, { y: 0, opacity: 1 });
+        if (path) gsap.set(path, { strokeDashoffset: 0 });
+        if (girderDetails) gsap.set(girderDetails, { opacity: 1 });
+        if (fill) gsap.set(fill, { scaleY: 1 });
+        if (bottomDiamond) {
+          bottomDiamond.classList.add("bg-[var(--blue)]");
+          bottomDiamond.classList.remove("bg-white");
+        }
+        dots.forEach((dot) => {
+          dot.classList.add("bg-[var(--blue)]");
+          dot.classList.remove("bg-white");
+        });
+      });
+    }, rootRef);
+
+    // Refresh ScrollTrigger after debounced delay
+    const refreshTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 200);
+
+    return () => {
+      clearTimeout(refreshTimer);
+      ctx.revert();
+    };
+  }, []);
 
   return (
-    <article className="w-full bg-white">
+    <article ref={rootRef} className="w-full bg-white text-left">
+      {/* 1. HERO BAND (Capitalized Heading, solid white on photo) */}
       <HeroBand
         variant="immersive"
-        imageSrc={IMG.structural.bridges.hero}
-        imageAlt={data.h1}
-        h1={data.h1}
+        imageSrc={HERO_IMAGE}
+        imageAlt={data.h1.toUpperCase()}
+        h1={data.h1.toUpperCase()}
         subtitle={data.quickAnswer}
       />
 
-      {/* Centered Intro */}
-      <section className="container py-[var(--sec-y-lg)] text-center max-w-[760px] mx-auto">
-        <h2 className="font-bold text-[var(--ink)] mb-6" style={{ fontSize: "var(--fs-h2)" }}>
-          {sections[0]?.title || "Why Steel for Bridges"}
-        </h2>
-        <p className="text-[var(--grey-strong)] leading-[1.75]" style={{ fontSize: "var(--fs-lead)" }}>
-          {sections[0]?.text || introPs.join(" ")}
-        </p>
-      </section>
-
-      {/* Wide Band (100vw) */}
-      <section className="w-full overflow-hidden bg-slate-900" style={{ height: "clamp(300px, 42vw, 600px)" }}>
-        <img
-          src={IMG.structural.bridges.wide}
-          alt="Steel Bridge Girder Fabrication"
-          className="w-full h-full object-cover"
-        />
-      </section>
-
-      {/* Span Diagram Section: 3 columns hanging from bridge girder line */}
-      <section className="container py-[var(--sec-y-lg)] text-left">
-        {/* SVG Bridge Girder Line */}
-        <div className="hidden lg:block relative w-full mb-12">
-          <div className="w-full h-[3px] bg-[var(--blue)] relative flex justify-between items-center">
-            <div className="w-4 h-4 bg-[var(--blue)] rotate-45 -mt-[1px]" />
-            <div className="w-4 h-4 bg-[var(--blue)] rotate-45 -mt-[1px]" />
+      {/* 2. INTRO SECTION: Left-aligned, UPPERCASE Heading, var(--blue) body text */}
+      {/* Desktop Intro (1024px and up) */}
+      <section className="hidden lg:block w-full bg-white py-[72px] lg:py-[96px] px-8 lg:px-12 border-b border-[var(--rule)]">
+        <div className="max-w-[1280px] mx-auto text-left">
+          <div className="max-w-[760px] text-left">
+            <h2
+              ref={desktopIntroHeadingRef}
+              className="intro-item text-[44px] font-bold text-[#0A0A0A] uppercase tracking-[-0.02em] leading-[1.15] mb-6"
+            >
+              {introTitle}
+            </h2>
+            <p
+              ref={desktopIntroTextRef}
+              className="intro-item text-[16px] font-normal text-[var(--blue)] leading-[1.7]"
+            >
+              {introText}
+            </p>
           </div>
-          <div className="grid grid-cols-3">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className="flex justify-center">
-                <div className="w-[1px] h-12 bg-[var(--blue)]" />
+        </div>
+      </section>
+
+      {/* Mobile Intro (below 1024px) */}
+      <section className="block lg:hidden w-full bg-white py-12 px-5 border-b border-[var(--rule)] text-left">
+        <div className="w-full text-left">
+          <h2
+            ref={mobileIntroHeadingRef}
+            className="intro-item text-[16px] font-bold text-[#0A0A0A] uppercase tracking-[-0.02em] leading-tight mb-4"
+          >
+            {introTitle}
+          </h2>
+          <p
+            ref={mobileIntroTextRef}
+            className="intro-item text-[15px] font-normal text-[var(--blue)] leading-[1.6]"
+          >
+            {introText}
+          </p>
+        </div>
+      </section>
+
+      {/* 3. WIDE BAND: 100vw, aspect-ratio: 64 / 27, no crop */}
+      {/* Desktop Wide Band (with drift scrub 1.4) */}
+      <section className="hidden lg:block w-full overflow-hidden bg-[#0A0A0A]">
+        <div ref={desktopWideWrapperRef} className="w-full">
+          <div
+            ref={desktopWideBoxRef}
+            className="wide-box relative w-full overflow-hidden"
+            style={{ aspectRatio: "64 / 27" }}
+          >
+            <img
+              ref={desktopWideImgRef}
+              src={cl(WIDE_IMAGE, 2560)}
+              alt="Steel Bridge Girder Fabrication at Steel Mind Engineers"
+              width={2560}
+              height={1080}
+              loading="lazy"
+              decoding="async"
+              className="wide-img w-full h-full object-cover block"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Mobile Wide Band: full width at 64:27 */}
+      <section className="block lg:hidden w-full overflow-hidden bg-[#0A0A0A]">
+        <div
+          ref={mobileWideBoxRef}
+          className="mobile-wide-box relative w-full overflow-hidden"
+          style={{ aspectRatio: "64 / 27" }}
+        >
+          <img
+            ref={mobileWideImgRef}
+            src={cl(WIDE_IMAGE, 1920)}
+            alt="Steel Bridge Girder Fabrication at Steel Mind Engineers"
+            width={1920}
+            height={810}
+            loading="lazy"
+            decoding="async"
+            className="mobile-wide-img w-full h-full object-cover block"
+          />
+        </div>
+      </section>
+
+      {/* 4. DESKTOP SPAN DIAGRAM & 3 COLUMNS */}
+      <section
+        ref={desktopSpanRef}
+        className="hidden lg:block w-full bg-white py-[96px] lg:py-[120px] px-8 lg:px-12 border-b border-[var(--rule)]"
+      >
+        <div className="max-w-[1280px] mx-auto text-left">
+          {/* Bridge Girder SVG Span Diagram (DRAW: stroke-dashoffset 1800ms E2) */}
+          <div className="relative w-full mb-16">
+            <svg
+              viewBox="0 0 1200 64"
+              fill="none"
+              className="w-full h-[64px] overflow-visible"
+              aria-hidden="true"
+            >
+              {/* Girder Structure Path: Top chord, bottom chord, diagonal truss webbing */}
+              <path
+                ref={girderPathRef}
+                d="M 10 18 L 1190 18 M 10 38 L 1190 38 M 10 18 L 60 38 L 110 18 L 160 38 L 200 18 L 200 38 L 240 18 L 280 38 L 330 18 L 380 38 L 430 18 L 480 38 L 530 18 L 580 38 L 600 18 L 600 38 L 620 38 L 670 18 L 720 38 L 770 18 L 820 38 L 870 18 L 920 38 L 970 18 L 1000 38 L 1000 18 L 1030 38 L 1080 18 L 1130 38 L 1190 18"
+                stroke="var(--blue)"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+
+            {/* Supports, end bearings, and vertical drop lines connecting to the 3 columns (fade in 500ms after) */}
+            <div ref={girderDetailsRef} className="absolute inset-0 pointer-events-none">
+              {/* Left End Bearing Diamond (10px diamond rotated 45deg) */}
+              <div
+                className="absolute w-[10px] h-[10px] bg-[var(--blue)] rotate-45"
+                style={{ left: "10px", top: "18px", transform: "translate(-50%, -50%) rotate(45deg)" }}
+              />
+              {/* Right End Bearing Diamond */}
+              <div
+                className="absolute w-[10px] h-[10px] bg-[var(--blue)] rotate-45"
+                style={{ right: "10px", top: "18px", transform: "translate(50%, -50%) rotate(45deg)" }}
+              />
+
+              {/* 3 Column Drop Connection Points */}
+              <div className="w-full grid grid-cols-3">
+                {[0, 1, 2].map((i) => (
+                  <div key={i} className="flex flex-col items-center">
+                    {/* Vertical hanger line dropping down from girder to columns */}
+                    <div className="w-[2px] h-[26px] bg-[var(--blue)] mt-[38px]" />
+                    {/* 10px circular bearing dot */}
+                    <div className="w-[10px] h-[10px] rounded-full bg-[var(--blue)] -mt-[1px]" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* 3 Columns: Solid bold number, Title, Text in One-Step Text Style */}
+          <div className="grid grid-cols-3 gap-12 lg:gap-16 items-start">
+            {blocks.map((b, idx) => (
+              <div
+                key={b.num}
+                ref={(el) => {
+                  desktopColRefs.current[idx] = el;
+                }}
+                className="span-col flex flex-col items-start text-left"
+              >
+                {/* Number: solid, bold, var(--blue), placed above title. Desktop: 64px, weight 800 */}
+                <div className="text-[64px] font-extrabold text-[var(--blue)] leading-none select-none mb-3">
+                  {b.num}
+                </div>
+
+                {/* Title: bold, ink colour, sentence case. Desktop: 20px, weight 700 */}
+                <h3 className="text-[20px] font-bold text-[#0A0A0A] leading-snug mb-3">
+                  {b.title}
+                </h3>
+
+                {/* Text: the blue of the One-Step body text (var(--blue)), regular weight, 16px / 1.7 */}
+                <p className="text-[16px] font-normal text-[var(--blue)] leading-[1.7]">
+                  {b.text}
+                </p>
               </div>
             ))}
           </div>
         </div>
+      </section>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          {remaining.map((sec, idx) => (
-            <div key={idx} className="border-t lg:border-t-0 border-[var(--rule)] pt-6 lg:pt-0 space-y-4">
-              <OutlineNum num={idx + 1} />
-              <h3 className="text-[22px] font-bold text-[var(--ink)]">{sec.title}</h3>
-              <p className="text-[var(--grey-strong)] leading-[1.7]" style={{ fontSize: "var(--fs-body)" }}>{sec.text}</p>
-            </div>
-          ))}
+      {/* 5. MOBILE SPAN LINE (RAIL): 2px blue, 12px from left edge, 10px diamonds, 10px dots, padding-left: 36px, 48px gap */}
+      <section className="block lg:hidden w-full bg-white py-12 px-5 border-b border-[var(--rule)]">
+        <div
+          ref={mobileRailContainerRef}
+          className="relative w-full text-left"
+          style={{ paddingLeft: "36px" }}
+        >
+          {/* Vertical Rail Line: 12px from left edge */}
+          {/* Top Diamond: 10px diamond, center at left: 12px, top: 0, filled at load (bg-[var(--blue)]) */}
+          <div
+            className="absolute w-[10px] h-[10px] bg-[var(--blue)] z-10"
+            style={{
+              left: "12px",
+              top: "0px",
+              transform: "translate(-50%, -50%) rotate(45deg)",
+            }}
+            aria-hidden="true"
+          />
+
+          {/* Background Rail Track: 2px wide, centered at left: 12px */}
+          <div
+            className="absolute top-0 bottom-0 w-[2px] bg-[#E5E5E5] pointer-events-none"
+            style={{ left: "12px", transform: "translateX(-50%)" }}
+            aria-hidden="true"
+          />
+
+          {/* Active Rail Fill Line: 2px blue, scaleY scrubbed with ScrollTrigger */}
+          <div
+            ref={mobileRailFillRef}
+            className="absolute top-0 bottom-0 w-[2px] bg-[var(--blue)] pointer-events-none origin-top"
+            style={{ left: "12px", transform: "translateX(-50%) scaleY(0)" }}
+            aria-hidden="true"
+          />
+
+          {/* Bottom Diamond: 10px diamond, center at left: 12px, bottom: 0, fills when fill reaches it */}
+          <div
+            ref={mobileBottomDiamondRef}
+            className="absolute w-[10px] h-[10px] bg-white border-2 border-[var(--blue)] z-10 transition-colors duration-200"
+            style={{
+              left: "12px",
+              bottom: "0px",
+              transform: "translate(-50%, 50%) rotate(45deg)",
+            }}
+            aria-hidden="true"
+          />
+
+          {/* 3 Blocks: sitting right of line, 48px between blocks */}
+          <div className="space-y-[48px]">
+            {blocks.map((b, idx) => (
+              <div
+                key={b.num}
+                ref={(el) => {
+                  mobileBlockRefs.current[idx] = el;
+                }}
+                className="rail-block relative flex flex-col items-start"
+              >
+                {/* Dot on the rail line: 10px circle, centered at left: 12px (which is -24px relative to padding-left 36px) */}
+                <div
+                  ref={(el) => {
+                    mobileDotRefs.current[idx] = el;
+                  }}
+                  className="absolute w-[10px] h-[10px] rounded-full bg-white border-2 border-[var(--blue)] z-10 transition-colors duration-200"
+                  style={{
+                    left: "-24px",
+                    top: "20px",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                  aria-hidden="true"
+                />
+
+                {/* Number: 40px, weight 800, solid bold var(--blue) */}
+                <div className="text-[40px] font-extrabold text-[var(--blue)] leading-none select-none mb-2">
+                  {b.num}
+                </div>
+
+                {/* Title: 17px, weight 700, ink colour, sentence case */}
+                <h3 className="text-[17px] font-bold text-[#0A0A0A] leading-snug mb-2">
+                  {b.title}
+                </h3>
+
+                {/* Text: 15px / 1.6, regular weight, var(--blue) */}
+                <p className="text-[15px] font-normal text-[var(--blue)] leading-[1.6]">
+                  {b.text}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* 6. FREQUENTLY ASKED QUESTIONS (CAPITALIZED HEADING, ACCORDION RECIPE) */}
       {data.faq && data.faq.length > 0 && (
-        <section className="container py-[var(--sec-y)]">
+        <section className="w-full bg-white py-12 lg:py-20 px-6 lg:px-8 border-b border-[var(--rule)]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="font-bold text-[var(--ink)] mb-8" style={{ fontSize: "var(--fs-h2)" }}>
-              Frequently Asked Questions
+            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] uppercase tracking-[-0.02em] leading-tight mb-8">
+              FREQUENTLY ASKED QUESTIONS
             </h2>
-            <Accordion items={data.faq} size="large" />
+
+            <div className="divide-y divide-[var(--rule)] border-t border-b border-[var(--rule)]">
+              {data.faq.map((item, idx) => {
+                const isOpen = openFaqIdx === idx;
+                return (
+                  <div key={idx} className="py-5 lg:py-6">
+                    <button
+                      type="button"
+                      onClick={() => setOpenFaqIdx(isOpen ? null : idx)}
+                      className="w-full min-h-[48px] flex items-center justify-between text-left group cursor-pointer focus:outline-none"
+                      aria-expanded={isOpen}
+                    >
+                      <span className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] pr-4 leading-snug transition-colors group-hover:text-[var(--blue)]">
+                        {item.q}
+                      </span>
+                      <span
+                        className="flex-shrink-0 w-8 h-8 flex items-center justify-center text-[var(--blue)] font-bold text-xl transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                        style={{
+                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
+                        }}
+                      >
+                        +
+                      </span>
+                    </button>
+                    <div
+                      className={`grid transition-[grid-template-rows] duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                        isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                      }`}
+                    >
+                      <div className="min-h-0 overflow-hidden">
+                        <p
+                          className="pt-3 text-[15px] lg:text-[16px] font-normal text-[var(--blue)] leading-[1.6] lg:leading-[1.7] transition-opacity duration-400 delay-150"
+                          style={{ opacity: isOpen ? 1 : 0 }}
+                        >
+                          {item.a}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
       )}
 
-      {/* Next Banner */}
+      {/* 7. NEXT BANNER (CAPITALIZED HEADING, EXACT URL) */}
       <NextBand
-        image={IMG.structural.bridges.next}
+        image={NEXT_IMAGE}
         nextUrl="/structural-steel-fabrication-pakistan/crane-gantry-structures/"
         nextTitle="Crane Gantry Structures"
+        heading="CUSTOM-DESIGNED CRANE GANTRY STRUCTURES IN PAKISTAN"
       />
     </article>
   );
@@ -2529,15 +3140,15 @@ export const CraneGantryLayout: React.FC<{ data: ContentData }> = ({ data }) => 
       <HeroBand
         variant="immersive"
         imageSrc={IMG.structural.gantry.hero}
-        imageAlt={data.h1}
-        h1={data.h1}
+        imageAlt={data.h1.toUpperCase()}
+        h1={data.h1.toUpperCase()}
         subtitle={data.quickAnswer}
       />
 
       {/* 1. Intro + Full image g3 */}
       <section className="container py-[var(--sec-y-lg)] text-left">
         <SplitIntro
-          title={sections[0]?.title || "What a Gantry Structure Is"}
+          title={(sections[0]?.title || "What a Gantry Structure Is").toUpperCase()}
           lead={introPs[0]}
           text={sections[0]?.text || introPs.slice(1)}
         />
@@ -2548,8 +3159,8 @@ export const CraneGantryLayout: React.FC<{ data: ContentData }> = ({ data }) => 
 
       {/* 2. Parts Triptych: 2 tall image tiles + 1 Royal Blue tile */}
       <section className="container pb-[var(--sec-y-lg)] text-left">
-        <h2 className="font-bold text-[var(--ink)] mb-8" style={{ fontSize: "var(--fs-h2)" }}>
-          {partsSec?.title || "Parts of a Gantry"}
+        <h2 className="font-bold text-[var(--ink)] mb-8 uppercase" style={{ fontSize: "var(--fs-h2)" }}>
+          {(partsSec?.title || "Parts of a Gantry").toUpperCase()}
         </h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
@@ -2566,10 +3177,10 @@ export const CraneGantryLayout: React.FC<{ data: ContentData }> = ({ data }) => 
             </div>
           </div>
           <div className="bg-[var(--blue)] text-white p-8 lg:p-10 flex flex-col justify-center space-y-4 shadow-md">
-            <h3 className="text-[24px] font-bold text-white leading-[1.2]">
-              {partsSec?.title || "Integrated Engineering"}
+            <h3 className="text-[24px] font-bold text-white uppercase leading-[1.2]">
+              {(partsSec?.title || "Integrated Engineering").toUpperCase()}
             </h3>
-            <p className="text-white/85 text-[15px] leading-[1.7]">
+            <p className="text-white text-[15px] leading-[1.7]">
               {partsSec?.text}
             </p>
           </div>
@@ -2579,8 +3190,8 @@ export const CraneGantryLayout: React.FC<{ data: ContentData }> = ({ data }) => 
       {/* 3. Design Points Ledger */}
       {designSec && (
         <section className="container pb-[var(--sec-y-lg)] text-left">
-          <h2 className="font-bold text-[var(--ink)] mb-8" style={{ fontSize: "var(--fs-h2)" }}>
-            {designSec.title}
+          <h2 className="font-bold text-[var(--ink)] mb-8 uppercase" style={{ fontSize: "var(--fs-h2)" }}>
+            {designSec.title.toUpperCase()}
           </h2>
           <div className="divide-y divide-[var(--rule)] border-t border-b border-[var(--rule)]">
             {designSec.text.split(/(?<=[.!?])\s+/).filter((s) => s.trim().length > 0).map((sentence, sIdx) => (
@@ -2603,15 +3214,38 @@ export const CraneGantryLayout: React.FC<{ data: ContentData }> = ({ data }) => 
 
       {/* 4. Compare Band: Gantry or Crane Shed? */}
       {compareSec && (
-        <section className="w-full bg-[var(--blue)] text-white py-12 lg:py-[var(--sec-y-lg)]">
-          <div className="container px-4 sm:px-6 lg:px-8 text-left space-y-5">
-            <h2 className="text-[24px] sm:text-[28px] lg:text-[36px] font-[600] tracking-[-0.025em] text-white leading-[1.15]">
-              {compareSec.title}
+        <section className="w-full bg-[var(--blue)] text-white">
+          {/* Desktop Band */}
+          <div className="hidden lg:block container px-4 sm:px-6 lg:px-8 text-left space-y-5 py-12 lg:py-[var(--sec-y-lg)]">
+            <h2 className="text-[24px] sm:text-[28px] lg:text-[36px] font-[600] tracking-[-0.025em] text-white leading-[1.15] uppercase">
+              {compareSec.title.toUpperCase()}
             </h2>
-            <p className="text-white/90 text-[15px] sm:text-[17px] lg:text-[18px] leading-[1.65] max-w-[760px]">
+            <p className="text-white text-[15px] sm:text-[17px] lg:text-[18px] leading-[1.65] max-w-[760px]">
               {compareSec.text}
             </p>
             <div className="pt-2">
+              <TransitionLink
+                to="/industrial-sheds-pakistan/crane-sheds/"
+                className="btn btn-light btn-sm inline-flex items-center gap-2"
+              >
+                <span>Explore Crane Sheds</span>
+                <span className="btn-arrow">→</span>
+              </TransitionLink>
+            </div>
+          </div>
+
+          {/* Mobile Band: padding 48px 24px, heading & text mobile sizes of TEXT STYLE, white, max-w 32ch, button 24px under text, left aligned */}
+          <div
+            className="block lg:hidden text-left"
+            style={{ padding: "48px 24px" }}
+          >
+            <h2 className="text-[16px] font-bold text-white uppercase tracking-[-0.02em] leading-tight">
+              {compareSec.title.toUpperCase()}
+            </h2>
+            <p className="text-[15px] font-normal text-white leading-[1.6] max-w-[32ch] mt-3">
+              {compareSec.text}
+            </p>
+            <div className="mt-[24px]">
               <TransitionLink
                 to="/industrial-sheds-pakistan/crane-sheds/"
                 className="btn btn-light btn-sm inline-flex items-center gap-2"
@@ -2628,8 +3262,8 @@ export const CraneGantryLayout: React.FC<{ data: ContentData }> = ({ data }) => 
       {data.faq && data.faq.length > 0 && (
         <section className="container py-[var(--sec-y)]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="font-bold text-[var(--ink)] mb-8" style={{ fontSize: "var(--fs-h2)" }}>
-              Frequently Asked Questions
+            <h2 className="font-bold text-[var(--ink)] mb-8 uppercase" style={{ fontSize: "var(--fs-h2)" }}>
+              {"Frequently Asked Questions".toUpperCase()}
             </h2>
             <Accordion items={data.faq} size="large" />
           </div>
@@ -2641,6 +3275,7 @@ export const CraneGantryLayout: React.FC<{ data: ContentData }> = ({ data }) => 
         image={IMG.structural.gantry.next}
         nextUrl="/custom-steel-fabrication-pakistan/machine-frames/"
         nextTitle="Machine Frames"
+        heading="CUSTOM-DESIGNED MACHINE FRAMES IN PAKISTAN"
       />
     </article>
   );

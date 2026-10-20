@@ -434,7 +434,7 @@ export const pages21to44: ContentData[] = [
       { type: "h2", title: "Design Points" },
       { type: "p", text: "The span and width set the depth of the girders. Choose the load from the people, vehicles or equipment that will use the bridge. Bridges stay outdoors, so the coating system matters. See Painting. The crane size and the lift plan must also fit the site." },
       { type: "h2", title: "Project Reference" },
-      { type: "p", text: "Steel Mind Engineers built a water requirement bridge for M/S Yascon at Petaro Cantt, Sindh. The bridge is 150 feet long, 6 feet wide and 30 feet high, with an area of 900 square feet." }
+      { type: "p", text: "Steel Mind Engineers built a water requirement bridge at Petaro Cantt, Sindh. The bridge is 150 feet long, 6 feet wide and 30 feet high, with an area of 900 square feet." }
     ]
   },
   {
