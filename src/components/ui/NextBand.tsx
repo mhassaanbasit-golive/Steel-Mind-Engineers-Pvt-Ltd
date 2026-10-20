@@ -111,7 +111,7 @@ export const NextBand: React.FC<NextBandProps> = ({
             <span className="block text-[11px] uppercase tracking-[0.14em] font-semibold text-white/80 mb-2.5">
               NEXT
             </span>
-            <h2 className="text-[26px] lg:text-[38px] font-bold text-white tracking-[-0.02em] leading-[1.18] mb-5">
+            <h2 className="text-[26px] lg:text-[38px] font-bold uppercase text-white tracking-[-0.02em] leading-[1.18] mb-5">
               {descriptiveHeading}
             </h2>
             <div className="inline-flex items-center gap-2.5 text-[15px] lg:text-[17px] font-semibold text-white">
@@ -149,7 +149,7 @@ export const NextBand: React.FC<NextBandProps> = ({
               NEXT
             </span>
             <h2
-              className="font-bold text-white tracking-[-0.02em] mb-4"
+              className="font-bold uppercase text-white tracking-[-0.02em] mb-4"
               style={{
                 fontSize: "clamp(17px, 4.8vw, 22px)",
                 lineHeight: 1.25,

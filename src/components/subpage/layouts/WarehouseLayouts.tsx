@@ -2154,7 +2154,7 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
         overwrite: "auto",
         onComplete: () => {
           titles.forEach((el) => {
-            el.textContent = slides[nextIdx].title.toUpperCase();
+            el.textContent = slides[nextIdx].title;
           });
           texts.forEach((el) => {
             el.textContent = slides[nextIdx].text;
@@ -2213,11 +2213,11 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
         });
 
         if (desktopCaptionTitleRef.current)
-          desktopCaptionTitleRef.current.textContent = slides[nextIdx].title.toUpperCase();
+          desktopCaptionTitleRef.current.textContent = slides[nextIdx].title;
         if (desktopCaptionTextRef.current)
           desktopCaptionTextRef.current.textContent = slides[nextIdx].text;
         if (mobileCaptionTitleRef.current)
-          mobileCaptionTitleRef.current.textContent = slides[nextIdx].title.toUpperCase();
+          mobileCaptionTitleRef.current.textContent = slides[nextIdx].title;
         if (mobileCaptionTextRef.current)
           mobileCaptionTextRef.current.textContent = slides[nextIdx].text;
 
@@ -2581,9 +2581,9 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
             <div className="col-span-5">
               <h3
                 ref={desktopCaptionTitleRef}
-                className="font-bold uppercase text-[#0A0A0A] text-[20px] lg:text-[22px] leading-[1.25] tracking-[-0.01em]"
+                className="font-bold text-[#0A0A0A] text-[20px] lg:text-[22px] leading-[1.25] tracking-[-0.01em]"
               >
-                {slides[0]?.title.toUpperCase()}
+                {slides[0]?.title}
               </h3>
             </div>
             <div className="col-span-7">
@@ -2606,9 +2606,9 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
                 }}
                 type="button"
                 onClick={() => goToSlide(idx, true)}
-                className="pb-3 px-4 first:pl-0 font-bold uppercase text-[18px] lg:text-[20px] text-[#0A0A0A] cursor-pointer whitespace-nowrap bg-transparent border-0 transition-colors focus-visible:outline-none"
+                className="pb-3 px-4 first:pl-0 font-bold text-[18px] lg:text-[20px] text-[#0A0A0A] cursor-pointer whitespace-nowrap bg-transparent border-0 transition-colors focus-visible:outline-none"
               >
-                {s.title.toUpperCase()}
+                {s.title}
               </button>
             ))}
 
@@ -2683,9 +2683,9 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
           <div className="mt-6 flex flex-col gap-2 text-left">
             <h3
               ref={mobileCaptionTitleRef}
-              className="font-bold uppercase text-[#0A0A0A] text-[17px] leading-snug tracking-[-0.01em]"
+              className="font-bold text-[#0A0A0A] text-[17px] leading-snug tracking-[-0.01em]"
             >
-              {slides[0]?.title.toUpperCase()}
+              {slides[0]?.title}
             </h3>
             <p
               ref={mobileCaptionTextRef}
@@ -2706,9 +2706,9 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
                 }}
                 type="button"
                 onClick={() => goToSlide(idx, true)}
-                className="pb-2.5 font-bold uppercase text-[15px] sm:text-[17px] text-[#0A0A0A] cursor-pointer whitespace-nowrap bg-transparent border-0 transition-colors focus-visible:outline-none flex-shrink-0"
+                className="pb-2.5 font-bold text-[15px] sm:text-[17px] text-[#0A0A0A] cursor-pointer whitespace-nowrap bg-transparent border-0 transition-colors focus-visible:outline-none flex-shrink-0"
               >
-                {s.title.toUpperCase()}
+                {s.title}
               </button>
             ))}
 
@@ -2832,7 +2832,6 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
   const [currentPhoto, setCurrentPhoto] = useState(items[0].img);
   const [incomingPhoto, setIncomingPhoto] = useState<string | null>(null);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
-  const [isDesktop, setIsDesktop] = useState(false);
 
   const activeIdxRef = useRef(0);
   const currentPhotoRef = useRef(items[0].img);
@@ -2842,8 +2841,16 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
   const slatTimelineRef = useRef<gsap.core.Timeline | null>(null);
 
   const desktopTabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const desktopTimerRef = useRef<HTMLDivElement | null>(null);
+  const desktopTimerRefs = useRef<(HTMLDivElement | null)[]>([]);
   const desktopSlatBoxRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const mobileTimerRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const mobileFrameRef = useRef<HTMLDivElement | null>(null);
+  const mobileSlatBoxRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const mobileTouchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const mobileIsDraggingRef = useRef(false);
+  const mobileHasHorizontalIntentRef = useRef<boolean | null>(null);
 
   const prefersReducedRef = useRef(false);
 
@@ -2853,42 +2860,65 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }, []);
 
-  // Desktop media query check (isolating motion, tweens & timers to desktop)
+  // Preload and decode images and refresh ScrollTrigger on decode
   useEffect(() => {
-    const mql = window.matchMedia("(min-width: 1024px)");
-    setIsDesktop(mql.matches);
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-    mql.addEventListener("change", handler);
-    return () => mql.removeEventListener("change", handler);
-  }, []);
+    let timer: NodeJS.Timeout;
+    const debouncedRefresh = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 200);
+    };
 
-  // Preload and decode images
-  useEffect(() => {
-    dockImages.forEach((src) => {
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(debouncedRefresh);
+    }
+
+    const allUrls = [
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202368/loading-docks-hero.jpg",
+      ...dockImages,
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202368/loading-docks-next.jpg",
+    ];
+
+    allUrls.forEach((src) => {
       const img = new Image();
       img.src = cl(src, 1920);
-      img.decode().catch(() => {});
+      if (img.decode) {
+        img.decode().then(debouncedRefresh).catch(() => {});
+      } else {
+        img.onload = debouncedRefresh;
+      }
     });
+
+    return () => clearTimeout(timer);
   }, []);
 
-  // Start 7000ms timer — strictly isolated to desktop
+  // Timer line: 2px line of active item goes scaleX 0 to 1 over 7000ms, ease "none", origin left
   const startTimer = useCallback(
     (idx: number) => {
-      if (!isDesktop) return;
-
       if (timerTweenRef.current) {
         timerTweenRef.current.kill();
       }
 
+      // Reset all timer lines
+      [desktopTimerRefs.current, mobileTimerRefs.current].forEach((group) => {
+        group.forEach((bar) => {
+          if (bar) gsap.set(bar, { scaleX: 0 });
+        });
+      });
+
       if (prefersReducedRef.current) return;
 
-      const targetTimerBar = desktopTimerRef.current;
-      if (!targetTimerBar) return;
+      const targetTimerBars = [
+        desktopTimerRefs.current[idx],
+        mobileTimerRefs.current[idx],
+      ].filter(Boolean) as HTMLElement[];
+      if (!targetTimerBars.length) return;
 
-      gsap.set(targetTimerBar, { scaleX: 0 });
+      targetTimerBars.forEach((bar) => gsap.set(bar, { scaleX: 0 }));
 
       timerTweenRef.current = gsap.fromTo(
-        targetTimerBar,
+        targetTimerBars,
         { scaleX: 0 },
         {
           scaleX: 1,
@@ -2903,14 +2933,14 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
         }
       );
     },
-    [isDesktop, items.length]
+    [items.length]
   );
 
-  // Trigger Slat Reveal with E2 easing — strictly isolated to desktop
+  // Trigger Slat Reveal
+  // Desktop: 6 horizontal slats, 700ms, stagger 70ms, E2
+  // Mobile: 6 horizontal slats, 500ms, stagger 50ms, E2
   const triggerSlatReveal = useCallback(
-    (nextImgUrl: string) => {
-      if (!isDesktop) return;
-
+    (nextImgUrl: string, isMobile = false) => {
       if (slatTimelineRef.current) {
         slatTimelineRef.current.progress(1);
       }
@@ -2924,9 +2954,11 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
 
       setIncomingPhoto(nextImgUrl);
 
-      // Next tick after DOM renders the 6 slats
       requestAnimationFrame(() => {
-        const slatBoxes = desktopSlatBoxRefs.current.filter(Boolean);
+        const slatBoxes = [
+          ...desktopSlatBoxRefs.current,
+          ...mobileSlatBoxRefs.current,
+        ].filter(Boolean) as HTMLElement[];
 
         if (slatBoxes.length === 0) {
           currentPhotoRef.current = nextImgUrl;
@@ -2935,10 +2967,12 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
           return;
         }
 
-        gsap.set(slatBoxes, { scaleY: 0, transformOrigin: "top center" });
+        slatBoxes.forEach((box) => {
+          gsap.set(box, { scaleY: 0, transformOrigin: "top center" });
+        });
 
-        const duration = 0.7;
-        const stagger = 0.07;
+        const duration = isMobile ? 0.5 : 0.7;
+        const stagger = isMobile ? 0.05 : 0.07;
 
         slatTimelineRef.current = gsap.timeline({
           onComplete: () => {
@@ -2958,69 +2992,62 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
         });
       });
     },
-    [isDesktop]
+    []
   );
 
-  // Select Item (desktop only)
+  // Select Item
   const selectItem = useCallback(
-    (nextIdx: number) => {
-      if (!isDesktop) return;
+    (nextIdx: number, isMobile = false) => {
       if (nextIdx === activeIdxRef.current) return;
       activeIdxRef.current = nextIdx;
       setActiveIdx(nextIdx);
 
       const nextImg = items[nextIdx].img;
-      triggerSlatReveal(nextImg);
+      triggerSlatReveal(nextImg, isMobile);
       startTimer(nextIdx);
     },
-    [isDesktop, items, triggerSlatReveal, startTimer]
+    [items, triggerSlatReveal, startTimer]
   );
 
-  // Initial timer start — desktop only
+  // Initial timer start
   useEffect(() => {
-    if (!isDesktop) return;
     startTimer(0);
     return () => {
       if (timerTweenRef.current) timerTweenRef.current.kill();
       if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
     };
-  }, [isDesktop, startTimer]);
+  }, [startTimer]);
 
   // Hover handlers for 120ms delay on desktop
   const handleItemMouseEnter = (idx: number) => {
-    if (!isDesktop) return;
     isHoveredRef.current = true;
     if (timerTweenRef.current) timerTweenRef.current.pause();
 
     if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
     if (idx !== activeIdxRef.current) {
       hoverTimeoutRef.current = setTimeout(() => {
-        selectItem(idx);
+        selectItem(idx, false);
       }, 120);
     }
   };
 
   const handleItemMouseLeave = () => {
-    if (!isDesktop) return;
     if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
   };
 
   const handleContainerMouseEnter = () => {
-    if (!isDesktop) return;
     isHoveredRef.current = true;
     if (timerTweenRef.current) timerTweenRef.current.pause();
   };
 
   const handleContainerMouseLeave = () => {
-    if (!isDesktop) return;
     isHoveredRef.current = false;
     if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
     if (timerTweenRef.current) timerTweenRef.current.resume();
   };
 
-  // Keyboard navigation for tablist (desktop only)
+  // Keyboard navigation for tablist (desktop)
   const handleKeyDown = (e: React.KeyboardEvent, currentIdx: number) => {
-    if (!isDesktop) return;
     let nextIdx = currentIdx;
     if (e.key === "ArrowDown" || e.key === "ArrowRight") {
       e.preventDefault();
@@ -3037,19 +3064,66 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
     }
 
     if (nextIdx !== currentIdx) {
-      selectItem(nextIdx);
+      selectItem(nextIdx, false);
       desktopTabRefs.current[nextIdx]?.focus();
     }
   };
 
+  // Mobile Swipe Gestures
+  const onMobilePointerDown = (e: React.PointerEvent) => {
+    mobileTouchStartRef.current = { x: e.clientX, y: e.clientY };
+    mobileIsDraggingRef.current = true;
+    mobileHasHorizontalIntentRef.current = null;
+    isHoveredRef.current = true;
+    if (timerTweenRef.current) timerTweenRef.current.pause();
+  };
+
+  const onMobilePointerMove = (e: React.PointerEvent) => {
+    if (!mobileIsDraggingRef.current || !mobileTouchStartRef.current) return;
+    const dx = e.clientX - mobileTouchStartRef.current.x;
+    const dy = e.clientY - mobileTouchStartRef.current.y;
+
+    if (mobileHasHorizontalIntentRef.current === null) {
+      if (Math.abs(dx) > 7 || Math.abs(dy) > 7) {
+        mobileHasHorizontalIntentRef.current = Math.abs(dx) >= Math.abs(dy);
+      }
+    }
+
+    if (mobileHasHorizontalIntentRef.current && mobileFrameRef.current) {
+      gsap.set(mobileFrameRef.current, { x: dx });
+    }
+  };
+
+  const onMobilePointerUp = (e: React.PointerEvent) => {
+    if (!mobileIsDraggingRef.current || !mobileTouchStartRef.current) return;
+    const dx = e.clientX - mobileTouchStartRef.current.x;
+    mobileIsDraggingRef.current = false;
+    isHoveredRef.current = false;
+    if (timerTweenRef.current) timerTweenRef.current.resume();
+
+    if (mobileHasHorizontalIntentRef.current && Math.abs(dx) >= 40) {
+      if (mobileFrameRef.current) gsap.set(mobileFrameRef.current, { x: 0 });
+      if (dx < 0) {
+        selectItem((activeIdxRef.current + 1) % items.length, true);
+      } else {
+        selectItem((activeIdxRef.current - 1 + items.length) % items.length, true);
+      }
+    } else if (mobileFrameRef.current) {
+      gsap.to(mobileFrameRef.current, { x: 0, duration: 0.3, ease: "E1" });
+    }
+
+    mobileTouchStartRef.current = null;
+    mobileHasHorizontalIntentRef.current = null;
+  };
+
   return (
     <article className="w-full bg-white text-[var(--ink)]">
-      {/* 1. Hero Band */}
+      {/* 1. Hero Band (Capitalized Heading) */}
       <HeroBand
         variant="immersive"
         imageSrc="https://res.cloudinary.com/cyfb9slf/image/upload/v1792202368/loading-docks-hero.jpg"
-        imageAlt={data.h1}
-        h1={data.h1}
+        imageAlt={data.h1.toUpperCase()}
+        h1={data.h1.toUpperCase()}
         subtitle={data.quickAnswer}
       />
 
@@ -3067,7 +3141,7 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
         >
           {/* Left Column (7fr / col-span-7): Real photo shape (aspect-[1024/687]) with 6-slat reveal */}
           <div className="col-span-7">
-            <div className="relative w-full aspect-[1024/687] overflow-hidden bg-slate-950 select-none">
+            <div className="relative w-full aspect-[1024/687] overflow-hidden bg-slate-950 select-none shadow-none">
               {/* Base Photo */}
               <img
                 src={cl(currentPhoto, 1920)}
@@ -3137,7 +3211,7 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
                     aria-selected={isActive}
                     tabIndex={isActive ? 0 : -1}
                     type="button"
-                    onClick={() => selectItem(idx)}
+                    onClick={() => selectItem(idx, false)}
                     onMouseEnter={() => handleItemMouseEnter(idx)}
                     onMouseLeave={handleItemMouseLeave}
                     onKeyDown={(e) => handleKeyDown(e, idx)}
@@ -3150,9 +3224,9 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
                       }`}
                     />
 
-                    {/* Title Style: bold, ink colour, uppercase */}
-                    <span className="font-bold uppercase text-[18px] lg:text-[20px] text-[#0A0A0A] leading-snug">
-                      {item.title.toUpperCase()}
+                    {/* Title Style: bold, ink colour, sentence case */}
+                    <span className="font-bold text-[18px] lg:text-[20px] text-[#0A0A0A] leading-snug">
+                      {item.title}
                     </span>
                   </button>
 
@@ -3161,7 +3235,7 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
                     id={`panel-desktop-${idx}`}
                     role="tabpanel"
                     aria-labelledby={`tab-desktop-${idx}`}
-                    hidden={!isActive}
+                    aria-hidden={!isActive}
                     className="grid transition-[grid-template-rows] duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] pl-[22px]"
                     style={{
                       gridTemplateRows: isActive ? "1fr" : "0fr",
@@ -3173,15 +3247,15 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
                       </p>
 
                       {/* 2px blue line that draws over 7000ms (autoplay timer) */}
-                      {isActive && (
-                        <div className="w-full h-[2px] bg-[#E5E5E5] mt-4 overflow-hidden rounded-full">
-                          <div
-                            ref={desktopTimerRef}
-                            className="h-full bg-[var(--blue)] origin-left transform-gpu"
-                            style={{ transform: "scaleX(0)" }}
-                          />
-                        </div>
-                      )}
+                      <div className="w-full h-[2px] bg-[#E5E5E5] mt-4 overflow-hidden rounded-full">
+                        <div
+                          ref={(el) => {
+                            desktopTimerRefs.current[idx] = el;
+                          }}
+                          className="h-full bg-[var(--blue)] origin-left transform-gpu"
+                          style={{ transform: "scaleX(0)" }}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -3191,42 +3265,131 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
         </div>
 
         {/* ========================================================
-            MOBILE VIEW:
-            Each card for each image and heading (ALL CAPS) and subheading:
-            Card 1: Image 1 -> Heading 1 in all caps -> Subheading 1
-            Card 2: Image 2 -> Heading 2 in all caps -> Subheading 2
-            Card 3: Image 3 -> Heading 3 in all caps -> Subheading 3
+            MOBILE VIEW (max-width: 1023px):
+            The image on top (full width, swipe changes the item).
+            Under it the 3 titles as rows (64px, plus icon).
+            Only the active row shows its text.
+            The 2px timer line sits under the active row.
         ======================================================== */}
-        <div className="lg:hidden flex flex-col gap-6 sm:gap-8 max-w-[640px] mx-auto text-left">
-          {items.map((item, idx) => (
-            <div
-              key={idx}
-              className="w-full bg-white border border-[#E5E5E5] overflow-hidden flex flex-col"
-            >
-              {/* Image at natural aspect ratio */}
-              <div className="relative w-full aspect-[1024/687] overflow-hidden bg-slate-950">
-                <img
-                  src={cl(item.img, 1080)}
-                  alt={item.title}
-                  width={1024}
-                  height={687}
-                  loading={idx === 0 ? "eager" : "lazy"}
-                  decoding="async"
-                  className="w-full h-full object-cover object-center block"
-                />
-              </div>
+        <div className="lg:hidden flex flex-col max-w-[640px] mx-auto text-left">
+          {/* Top Image: Full-width, real shape, swipeable with Slat Reveal */}
+          <div
+            ref={mobileFrameRef}
+            onPointerDown={onMobilePointerDown}
+            onPointerMove={onMobilePointerMove}
+            onPointerUp={onMobilePointerUp}
+            onPointerCancel={onMobilePointerUp}
+            style={{ touchAction: "pan-y" }}
+            className="relative w-full aspect-[1024/687] overflow-hidden bg-slate-950 select-none cursor-grab active:cursor-grabbing shadow-none"
+          >
+            {/* Base Photo */}
+            <img
+              src={cl(currentPhoto, 1920)}
+              alt={items[activeIdx]?.title || ""}
+              width={1024}
+              height={687}
+              loading="eager"
+              decoding="async"
+              className="absolute inset-0 w-full h-full object-cover object-center block pointer-events-none"
+            />
 
-              {/* Heading in ALL CAPS and then Subheading */}
-              <div className="p-5 sm:p-6 flex flex-col text-left">
-                <h3 className="font-bold uppercase text-[16px] sm:text-[18px] text-[#0A0A0A] leading-snug tracking-[-0.01em] mb-2.5 sm:mb-3">
-                  {item.title.toUpperCase()}
-                </h3>
-                <p className="text-[15px] text-[var(--blue)] leading-[1.6] font-normal">
-                  {item.text}
-                </p>
+            {/* 6 Horizontal Slats Overlay during reveal */}
+            {incomingPhoto && (
+              <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
+                {[0, 1, 2, 3, 4, 5].map((i) => (
+                  <div
+                    key={i}
+                    ref={(el) => {
+                      mobileSlatBoxRefs.current[i] = el;
+                    }}
+                    className="absolute left-0 right-0 overflow-hidden transform-gpu origin-top"
+                    style={{
+                      top: `${(i * 100) / 6}%`,
+                      height: `${100 / 6}%`,
+                      transform: "scaleY(0)",
+                    }}
+                  >
+                    <img
+                      src={cl(incomingPhoto, 1920)}
+                      alt=""
+                      width={1024}
+                      height={687}
+                      className="absolute left-0 right-0 w-full pointer-events-none"
+                      style={{
+                        height: "600%",
+                        top: `${-i * 100}%`,
+                        objectFit: "cover",
+                        objectPosition: "center",
+                      }}
+                    />
+                  </div>
+                ))}
               </div>
-            </div>
-          ))}
+            )}
+          </div>
+
+          {/* Under image: 3 titles as rows (64px, plus icon). Only the active row shows its text. */}
+          <div className="mt-6 divide-y divide-[#E5E5E5] border-y border-[#E5E5E5] w-full">
+            {items.map((item, idx) => {
+              const isActive = activeIdx === idx;
+
+              return (
+                <div key={idx} className="w-full">
+                  <button
+                    type="button"
+                    aria-expanded={isActive}
+                    onClick={() => selectItem(idx, true)}
+                    className="w-full min-h-[64px] py-4 flex items-center justify-between text-left cursor-pointer focus-visible:outline-none bg-transparent border-0 p-0"
+                  >
+                    {/* Title Style: bold, ink colour, sentence case */}
+                    <span className="font-bold text-[16px] sm:text-[17px] text-[#0A0A0A] leading-snug pr-4">
+                      {item.title}
+                    </span>
+
+                    {/* Plus Icon: rotates 0 to 45deg over 400ms E1 */}
+                    <span
+                      className="relative flex-shrink-0 w-6 h-6 flex items-center justify-center transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                      style={{
+                        transform: isActive ? "rotate(45deg)" : "rotate(0deg)",
+                      }}
+                      aria-hidden="true"
+                    >
+                      <span className="absolute w-[16px] h-[2px] bg-[var(--blue)]" />
+                      <span className="absolute h-[16px] w-[2px] bg-[var(--blue)]" />
+                    </span>
+                  </button>
+
+                  {/* Text panel: Only active row shows its text (opens with ACCORDION 600ms E1) */}
+                  <div
+                    className="grid transition-[grid-template-rows] duration-600 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                    style={{
+                      gridTemplateRows: isActive ? "1fr" : "0fr",
+                    }}
+                  >
+                    <div className="overflow-hidden">
+                      <p
+                        className="pt-1 pb-3 text-[15px] text-[var(--blue)] leading-[1.6] font-normal transition-opacity duration-400 delay-150"
+                        style={{ opacity: isActive ? 1 : 0 }}
+                      >
+                        {item.text}
+                      </p>
+
+                      {/* The 2px timer line sits under the active row */}
+                      <div className="w-full h-[2px] bg-[#E5E5E5] mb-4 overflow-hidden rounded-full">
+                        <div
+                          ref={(el) => {
+                            mobileTimerRefs.current[idx] = el;
+                          }}
+                          className="h-full bg-[var(--blue)] origin-left transform-gpu"
+                          style={{ transform: "scaleX(0)" }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 
@@ -3294,9 +3457,10 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
 
       {/* 4. Next Banner */}
       <NextBand
+        heading="PRECISION-CUT, WELDED STEEL STRUCTURAL SECTIONS BUILT TO DRAWING."
         image="https://res.cloudinary.com/cyfb9slf/image/upload/v1792202368/loading-docks-next.jpg"
         nextUrl="/structural-steel-fabrication-pakistan/columns-and-beams/"
-        nextTitle="Columns and Beams"
+        nextTitle="COLUMNS AND BEAMS"
       />
     </article>
   );
