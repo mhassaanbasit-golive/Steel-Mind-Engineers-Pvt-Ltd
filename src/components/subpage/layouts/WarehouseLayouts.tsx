@@ -2154,7 +2154,7 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
         overwrite: "auto",
         onComplete: () => {
           titles.forEach((el) => {
-            el.textContent = slides[nextIdx].title;
+            el.textContent = slides[nextIdx].title.toUpperCase();
           });
           texts.forEach((el) => {
             el.textContent = slides[nextIdx].text;
@@ -2213,11 +2213,11 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
         });
 
         if (desktopCaptionTitleRef.current)
-          desktopCaptionTitleRef.current.textContent = slides[nextIdx].title;
+          desktopCaptionTitleRef.current.textContent = slides[nextIdx].title.toUpperCase();
         if (desktopCaptionTextRef.current)
           desktopCaptionTextRef.current.textContent = slides[nextIdx].text;
         if (mobileCaptionTitleRef.current)
-          mobileCaptionTitleRef.current.textContent = slides[nextIdx].title;
+          mobileCaptionTitleRef.current.textContent = slides[nextIdx].title.toUpperCase();
         if (mobileCaptionTextRef.current)
           mobileCaptionTextRef.current.textContent = slides[nextIdx].text;
 
@@ -2581,9 +2581,9 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
             <div className="col-span-5">
               <h3
                 ref={desktopCaptionTitleRef}
-                className="font-bold text-[#0A0A0A] text-[20px] lg:text-[22px] leading-[1.25] tracking-[-0.01em]"
+                className="font-bold uppercase text-[#0A0A0A] text-[20px] lg:text-[22px] leading-[1.25] tracking-[-0.01em]"
               >
-                {slides[0]?.title}
+                {slides[0]?.title.toUpperCase()}
               </h3>
             </div>
             <div className="col-span-7">
@@ -2606,9 +2606,9 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
                 }}
                 type="button"
                 onClick={() => goToSlide(idx, true)}
-                className="pb-3 px-4 first:pl-0 font-bold text-[18px] lg:text-[20px] text-[#0A0A0A] cursor-pointer whitespace-nowrap bg-transparent border-0 transition-colors focus-visible:outline-none"
+                className="pb-3 px-4 first:pl-0 font-bold uppercase text-[18px] lg:text-[20px] text-[#0A0A0A] cursor-pointer whitespace-nowrap bg-transparent border-0 transition-colors focus-visible:outline-none"
               >
-                {s.title}
+                {s.title.toUpperCase()}
               </button>
             ))}
 
@@ -2683,9 +2683,9 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
           <div className="mt-6 flex flex-col gap-2 text-left">
             <h3
               ref={mobileCaptionTitleRef}
-              className="font-bold text-[#0A0A0A] text-[17px] leading-snug tracking-[-0.01em]"
+              className="font-bold uppercase text-[#0A0A0A] text-[17px] leading-snug tracking-[-0.01em]"
             >
-              {slides[0]?.title}
+              {slides[0]?.title.toUpperCase()}
             </h3>
             <p
               ref={mobileCaptionTextRef}
@@ -2706,9 +2706,9 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
                 }}
                 type="button"
                 onClick={() => goToSlide(idx, true)}
-                className="pb-2.5 font-bold text-[15px] sm:text-[17px] text-[#0A0A0A] cursor-pointer whitespace-nowrap bg-transparent border-0 transition-colors focus-visible:outline-none flex-shrink-0"
+                className="pb-2.5 font-bold uppercase text-[15px] sm:text-[17px] text-[#0A0A0A] cursor-pointer whitespace-nowrap bg-transparent border-0 transition-colors focus-visible:outline-none flex-shrink-0"
               >
-                {s.title}
+                {s.title.toUpperCase()}
               </button>
             ))}
 
@@ -3224,9 +3224,9 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
                       }`}
                     />
 
-                    {/* Title Style: bold, ink colour, sentence case */}
-                    <span className="font-bold text-[18px] lg:text-[20px] text-[#0A0A0A] leading-snug">
-                      {item.title}
+                    {/* Title Style: bold, ink colour, uppercase */}
+                    <span className="font-bold uppercase text-[18px] lg:text-[20px] text-[#0A0A0A] leading-snug">
+                      {item.title.toUpperCase()}
                     </span>
                   </button>
 
@@ -3341,9 +3341,9 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
                     onClick={() => selectItem(idx, true)}
                     className="w-full min-h-[64px] py-4 flex items-center justify-between text-left cursor-pointer focus-visible:outline-none bg-transparent border-0 p-0"
                   >
-                    {/* Title Style: bold, ink colour, sentence case */}
-                    <span className="font-bold text-[16px] sm:text-[17px] text-[#0A0A0A] leading-snug pr-4">
-                      {item.title}
+                    {/* Title Style: bold, ink colour, uppercase */}
+                    <span className="font-bold uppercase text-[16px] sm:text-[17px] text-[#0A0A0A] leading-snug pr-4">
+                      {item.title.toUpperCase()}
                     </span>
 
                     {/* Plus Icon: rotates 0 to 45deg over 400ms E1 */}

@@ -51,81 +51,683 @@ export const ColumnsBeamsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
     { name: "Built-up sections", text: "Plates welded into I-shaped members of any depth and thickness, giving an efficient shape for each load." },
     { name: "Box sections", text: "Hollow members for heavy loads or where appearance matters." },
   ];
+
+  const heroImg = "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202922/Columns-Beams-hero.jpg";
   const typeImages = [
-    IMG.structural.columnsBeams.c1,
-    IMG.structural.columnsBeams.c2,
-    IMG.structural.columnsBeams.c3,
+    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202918/Columns-beams-1.jpg",
+    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202919/columns-beams-2.jpg",
+    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202920/Columns-beams-3.jpg",
   ];
+  const splitImg1 = "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202922/Columns-beams-4.jpg";
+  const splitImg2 = "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202920/columns-beams-5.jpg";
+  const nextImg = "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202920/columns-beams-next.jpg";
 
   const splitSec1 = sections[2] || sections[0];
   const splitSec2 = sections[3] || sections[1];
 
-  // Mobile types selector state & swipe
+  // Mobile types selector state & refs
   const [activeTypeIdx, setActiveTypeIdx] = useState(0);
-  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const activeTypeIdxRef = useRef(0);
+  const mobileTabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const mobileUnderlineRef = useRef<HTMLDivElement>(null);
+  const mobileLayerRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const mobileImgRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const mobileTitleRef = useRef<HTMLHeadingElement>(null);
+  const mobileTextRef = useRef<HTMLParagraphElement>(null);
+  const mobileCaptionContainerRef = useRef<HTMLDivElement>(null);
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStartX(e.touches[0].clientX);
-  };
+  const swapTimelineRef = useRef<gsap.core.Timeline | null>(null);
+  const textFadeTweenRef = useRef<gsap.core.Tween | null>(null);
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX === null) return;
-    const diff = e.changedTouches[0].clientX - touchStartX;
-    if (diff > 40) {
-      // Swipe Right -> previous
-      setActiveTypeIdx((prev) => (prev > 0 ? prev - 1 : typeCards.length - 1));
-    } else if (diff < -40) {
-      // Swipe Left -> next
-      setActiveTypeIdx((prev) => (prev < typeCards.length - 1 ? prev + 1 : 0));
-    }
-    setTouchStartX(null);
-  };
+  // Swipe gesture tracking on mobile
+  const mobileSwipeStartRef = useRef<{ x: number; y: number } | null>(null);
+  const mobileHasHorizontalIntentRef = useRef<boolean | null>(null);
 
   // FAQ accordion state
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
-  const cbRootRef = useRef<HTMLElement>(null);
 
+  // DOM Refs for animations
+  const cbRootRef = useRef<HTMLElement>(null);
+  const desktopColsRef = useRef<HTMLDivElement>(null);
+  const desktopColRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const desktopColPhotoRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const desktopColImgRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const desktopColTextRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const desktopSplit1PhotoRef = useRef<HTMLDivElement>(null);
+  const desktopSplit1ImgRef = useRef<HTMLImageElement>(null);
+  const desktopSplit1TextRef = useRef<HTMLDivElement>(null);
+
+  const desktopSplit2PhotoRef = useRef<HTMLDivElement>(null);
+  const desktopSplit2ImgRef = useRef<HTMLImageElement>(null);
+  const desktopSplit2TextRef = useRef<HTMLDivElement>(null);
+
+  const mobileSplit1PhotoRef = useRef<HTMLDivElement>(null);
+  const mobileSplit1ImgRef = useRef<HTMLImageElement>(null);
+  const mobileSplit1TextRef = useRef<HTMLDivElement>(null);
+
+  const mobileSplit2PhotoRef = useRef<HTMLDivElement>(null);
+  const mobileSplit2ImgRef = useRef<HTMLImageElement>(null);
+  const mobileSplit2TextRef = useRef<HTMLDivElement>(null);
+
+  const prefersReducedRef = useRef(false);
+
+  useEffect(() => {
+    prefersReducedRef.current =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }, []);
+
+  // Preload and decode images and refresh ScrollTrigger on decode
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    const debouncedRefresh = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 200);
+    };
+
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(debouncedRefresh);
+    }
+
+    const allUrls = [heroImg, ...typeImages, splitImg1, splitImg2, nextImg];
+    allUrls.forEach((src) => {
+      const img = new Image();
+      img.src = cl(src, 1920);
+      if (img.decode) {
+        img.decode().then(debouncedRefresh).catch(() => {});
+      } else {
+        img.onload = debouncedRefresh;
+      }
+    });
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Update mobile sliding underline (translateX and width)
+  const updateMobileUnderline = useCallback((idx: number) => {
+    const tab = mobileTabRefs.current[idx];
+    const underline = mobileUnderlineRef.current;
+    if (!tab || !underline) return;
+
+    const left = tab.offsetLeft;
+    const width = tab.offsetWidth;
+
+    gsap.to(underline, {
+      x: left,
+      width: width,
+      duration: 0.4,
+      ease: "E1",
+      overwrite: "auto",
+    });
+  }, []);
+
+  // Initial mobile setup
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      // CURTAIN image reveals on desktop and mobile
-      const curtainEls = cbRootRef.current?.querySelectorAll(".cb-curtain");
-      curtainEls?.forEach((el) => {
-        const img = el.querySelector("img");
+    // Initial states for mobile layers: slide 0 visible, 1 & 2 hidden
+    mobileLayerRefs.current.forEach((layer, i) => {
+      if (!layer) return;
+      if (i === 0) {
+        gsap.set(layer, {
+          clipPath: "inset(0 0 0% 0)",
+          zIndex: 1,
+          visibility: "visible",
+        });
+      } else {
+        gsap.set(layer, {
+          clipPath: "inset(0 0 100% 0)",
+          zIndex: 0,
+          visibility: "hidden",
+        });
+      }
+    });
+
+    const initTab = mobileTabRefs.current[0];
+    const underline = mobileUnderlineRef.current;
+    if (initTab && underline) {
+      gsap.set(underline, { x: initTab.offsetLeft, width: initTab.offsetWidth });
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      updateMobileUnderline(activeTypeIdxRef.current);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [updateMobileUnderline]);
+
+  // SWAP recipe for mobile photo change (wipe 1100ms E2, inner img scale 1.08 to 1 1600ms E1, text cross-fade 500ms)
+  const selectType = useCallback(
+    (nextIdx: number) => {
+      if (nextIdx === activeTypeIdxRef.current) return;
+      const prevIdx = activeTypeIdxRef.current;
+      activeTypeIdxRef.current = nextIdx;
+      setActiveTypeIdx(nextIdx);
+
+      updateMobileUnderline(nextIdx);
+
+      const activeTabEl = mobileTabRefs.current[nextIdx];
+      if (activeTabEl) {
+        activeTabEl.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+      }
+
+      if (prefersReducedRef.current) {
+        mobileLayerRefs.current.forEach((layer, i) => {
+          if (!layer) return;
+          if (i === nextIdx) {
+            gsap.set(layer, { clipPath: "inset(0 0 0% 0)", zIndex: 1, visibility: "visible" });
+          } else {
+            gsap.set(layer, { zIndex: 0, visibility: "hidden" });
+          }
+        });
+        if (mobileTitleRef.current) mobileTitleRef.current.textContent = typeCards[nextIdx].name.toUpperCase();
+        if (mobileTextRef.current) mobileTextRef.current.textContent = typeCards[nextIdx].text;
+        return;
+      }
+
+      if (swapTimelineRef.current) {
+        swapTimelineRef.current.progress(1);
+      }
+
+      const inLayer = mobileLayerRefs.current[nextIdx];
+      const inImg = mobileImgRefs.current[nextIdx];
+      const outLayer = mobileLayerRefs.current[prevIdx];
+
+      if (inLayer && inImg) {
+        if (outLayer) {
+          gsap.set(outLayer, { zIndex: 1, visibility: "visible" });
+        }
+        gsap.set(inLayer, {
+          zIndex: 2,
+          visibility: "visible",
+          clipPath: "inset(0 0 100% 0)",
+        });
+        gsap.set(inImg, {
+          scale: 1.08,
+          transformOrigin: "center center",
+        });
+
         const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: el,
-            start: "top 88%",
-            once: true,
+          onStart: () => {
+            gsap.set(inLayer, { willChange: "clip-path" });
+            gsap.set(inImg, { willChange: "transform" });
+          },
+          onComplete: () => {
+            gsap.set(inLayer, { zIndex: 1, clearProps: "willChange" });
+            gsap.set(inImg, { clearProps: "willChange,scale" });
+            if (outLayer) {
+              gsap.set(outLayer, { visibility: "hidden", zIndex: 0 });
+            }
+            swapTimelineRef.current = null;
           },
         });
-        tl.fromTo(
-          el,
-          { clipPath: "inset(0 0 100% 0)" },
-          { clipPath: "inset(0 0 0% 0)", duration: 1.1, ease: "E2" }
+
+        tl.to(
+          inLayer,
+          {
+            clipPath: "inset(0 0 0% 0)",
+            duration: 1.1,
+            ease: "E2",
+            overwrite: "auto",
+          },
+          0
         );
-        if (img) {
-          tl.fromTo(img, { scale: 1.06 }, { scale: 1, duration: 1.4, ease: "E1" }, 0);
+
+        tl.to(
+          inImg,
+          {
+            scale: 1,
+            duration: 1.6,
+            ease: "E1",
+            overwrite: "auto",
+          },
+          0
+        );
+
+        swapTimelineRef.current = tl;
+      }
+
+      // Text cross-fade 500ms
+      if (mobileCaptionContainerRef.current) {
+        if (textFadeTweenRef.current) textFadeTweenRef.current.kill();
+        const el = mobileCaptionContainerRef.current;
+
+        textFadeTweenRef.current = gsap.to(el, {
+          opacity: 0,
+          duration: 0.2,
+          ease: "E1",
+          onComplete: () => {
+            if (mobileTitleRef.current) mobileTitleRef.current.textContent = typeCards[nextIdx].name.toUpperCase();
+            if (mobileTextRef.current) mobileTextRef.current.textContent = typeCards[nextIdx].text;
+
+            gsap.to(el, {
+              opacity: 1,
+              duration: 0.3,
+              ease: "E1",
+              clearProps: "opacity",
+            });
+          },
+        });
+      }
+    },
+    [typeCards, updateMobileUnderline]
+  );
+
+  // Swipe Gestures on Mobile Photo Box (threshold 40px, touch-action: pan-y)
+  const onMobilePointerDown = (e: React.PointerEvent) => {
+    mobileSwipeStartRef.current = { x: e.clientX, y: e.clientY };
+    mobileHasHorizontalIntentRef.current = null;
+  };
+
+  const onMobilePointerMove = (e: React.PointerEvent) => {
+    if (!mobileSwipeStartRef.current) return;
+    const dx = e.clientX - mobileSwipeStartRef.current.x;
+    const dy = e.clientY - mobileSwipeStartRef.current.y;
+
+    if (mobileHasHorizontalIntentRef.current === null) {
+      if (Math.abs(dx) > 7 || Math.abs(dy) > 7) {
+        mobileHasHorizontalIntentRef.current = Math.abs(dx) >= Math.abs(dy);
+      }
+    }
+  };
+
+  const onMobilePointerUp = (e: React.PointerEvent) => {
+    if (!mobileSwipeStartRef.current) return;
+    const dx = e.clientX - mobileSwipeStartRef.current.x;
+
+    if (mobileHasHorizontalIntentRef.current && Math.abs(dx) >= 40) {
+      if (dx < 0) {
+        selectType((activeTypeIdxRef.current + 1) % typeCards.length);
+      } else {
+        selectType((activeTypeIdxRef.current - 1 + typeCards.length) % typeCards.length);
+      }
+    }
+
+    mobileSwipeStartRef.current = null;
+    mobileHasHorizontalIntentRef.current = null;
+  };
+
+  // Hover handlers for Desktop Types columns
+  const handleColMouseEnter = (hoveredIdx: number) => {
+    if (typeof window === "undefined") return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+    desktopColRefs.current.forEach((col, idx) => {
+      if (!col) return;
+      if (idx !== hoveredIdx) {
+        gsap.to(col, { opacity: 0.6, duration: 0.9, ease: "E1", overwrite: "auto" });
+      } else {
+        gsap.to(col, { opacity: 1, duration: 0.9, ease: "E1", overwrite: "auto" });
+      }
+    });
+
+    const hoveredImg = desktopColImgRefs.current[hoveredIdx];
+    if (hoveredImg) {
+      gsap.to(hoveredImg, { scale: 1.03, duration: 0.9, ease: "E1", overwrite: "auto" });
+    }
+  };
+
+  const handleColsMouseLeave = () => {
+    if (typeof window === "undefined") return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+    desktopColRefs.current.forEach((col) => {
+      if (col) gsap.to(col, { opacity: 1, duration: 0.9, ease: "E1", overwrite: "auto" });
+    });
+
+    desktopColImgRefs.current.forEach((img) => {
+      if (img) gsap.to(img, { scale: 1, duration: 0.9, ease: "E1", overwrite: "auto" });
+    });
+  };
+
+  // Motion Setup: Desktop & Mobile MatchMedia
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+
+      // ==========================================
+      // DESKTOP: (min-width: 1024px)
+      // ==========================================
+      mm.add("(min-width: 1024px)", () => {
+        // 1. Desktop Types: 3 columns CURTAIN 1200ms, stagger 150ms; number, title, text RISE after.
+        if (desktopColsRef.current) {
+          const photoBoxes = desktopColPhotoRefs.current.filter(Boolean) as HTMLElement[];
+          const innerImgs = desktopColImgRefs.current.filter(Boolean) as HTMLElement[];
+          const textGroups = desktopColTextRefs.current.filter(Boolean) as HTMLElement[];
+
+          gsap.set(photoBoxes, { clipPath: "inset(0 0 100% 0)" });
+          gsap.set(innerImgs, { scale: 1.06 });
+          gsap.set(textGroups, { y: 24, opacity: 0 });
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: desktopColsRef.current,
+              start: "top 85%",
+              once: true,
+              invalidateOnRefresh: true,
+            },
+            onStart: () => {
+              photoBoxes.forEach((b) => gsap.set(b, { willChange: "clip-path" }));
+              innerImgs.forEach((img) => gsap.set(img, { willChange: "transform" }));
+              textGroups.forEach((t) => gsap.set(t, { willChange: "transform, opacity" }));
+            },
+            onComplete: () => {
+              photoBoxes.forEach((b) => gsap.set(b, { clearProps: "willChange" }));
+              innerImgs.forEach((img) => gsap.set(img, { clearProps: "willChange" }));
+              textGroups.forEach((t) => gsap.set(t, { clearProps: "willChange" }));
+            },
+          });
+
+          // CURTAIN 1200ms with E2, stagger 150ms
+          tl.to(
+            photoBoxes,
+            {
+              clipPath: "inset(0 0 0% 0)",
+              duration: 1.2,
+              ease: "E2",
+              stagger: 0.15,
+            },
+            0
+          );
+
+          // Inner img scale 1.06 to 1 over 1.56s with E1
+          tl.to(
+            innerImgs,
+            {
+              scale: 1,
+              duration: 1.56,
+              ease: "E1",
+              stagger: 0.15,
+            },
+            0
+          );
+
+          // Number, title, text RISE after (start at 0.5s into timeline)
+          tl.to(
+            textGroups,
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.9,
+              ease: "E1",
+              stagger: 0.09,
+            },
+            0.5
+          );
+        }
+
+        // 2. Desktop Split Row 1: CURTAIN from the text side (row 1 from the right edge), 1200ms; text RISE 300ms after.
+        if (desktopSplit1PhotoRef.current && desktopSplit1TextRef.current) {
+          const photoBox = desktopSplit1PhotoRef.current;
+          const innerImg = desktopSplit1ImgRef.current;
+          const textGroup = desktopSplit1TextRef.current;
+
+          gsap.set(photoBox, { clipPath: "inset(0 0 0 100%)" });
+          if (innerImg) gsap.set(innerImg, { scale: 1.06 });
+          gsap.set(textGroup, { y: 24, opacity: 0 });
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: photoBox,
+              start: "top 85%",
+              once: true,
+              invalidateOnRefresh: true,
+            },
+            onStart: () => {
+              gsap.set(photoBox, { willChange: "clip-path" });
+              if (innerImg) gsap.set(innerImg, { willChange: "transform" });
+              gsap.set(textGroup, { willChange: "transform, opacity" });
+            },
+            onComplete: () => {
+              gsap.set(photoBox, { clearProps: "willChange" });
+              if (innerImg) gsap.set(innerImg, { clearProps: "willChange" });
+              gsap.set(textGroup, { clearProps: "willChange" });
+            },
+          });
+
+          tl.to(
+            photoBox,
+            {
+              clipPath: "inset(0 0 0 0%)",
+              duration: 1.2,
+              ease: "E2",
+            },
+            0
+          );
+
+          if (innerImg) {
+            tl.to(
+              innerImg,
+              {
+                scale: 1,
+                duration: 1.56,
+                ease: "E1",
+              },
+              0
+            );
+          }
+
+          tl.to(
+            textGroup,
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.9,
+              ease: "E1",
+            },
+            0.3
+          );
+        }
+
+        // 3. Desktop Split Row 2: CURTAIN from the text side (row 2 from the left edge), 1200ms; text RISE 300ms after.
+        if (desktopSplit2PhotoRef.current && desktopSplit2TextRef.current) {
+          const photoBox = desktopSplit2PhotoRef.current;
+          const innerImg = desktopSplit2ImgRef.current;
+          const textGroup = desktopSplit2TextRef.current;
+
+          gsap.set(photoBox, { clipPath: "inset(0 100% 0 0)" });
+          if (innerImg) gsap.set(innerImg, { scale: 1.06 });
+          gsap.set(textGroup, { y: 24, opacity: 0 });
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: photoBox,
+              start: "top 85%",
+              once: true,
+              invalidateOnRefresh: true,
+            },
+            onStart: () => {
+              gsap.set(photoBox, { willChange: "clip-path" });
+              if (innerImg) gsap.set(innerImg, { willChange: "transform" });
+              gsap.set(textGroup, { willChange: "transform, opacity" });
+            },
+            onComplete: () => {
+              gsap.set(photoBox, { clearProps: "willChange" });
+              if (innerImg) gsap.set(innerImg, { clearProps: "willChange" });
+              gsap.set(textGroup, { clearProps: "willChange" });
+            },
+          });
+
+          tl.to(
+            photoBox,
+            {
+              clipPath: "inset(0 0% 0 0)",
+              duration: 1.2,
+              ease: "E2",
+            },
+            0
+          );
+
+          if (innerImg) {
+            tl.to(
+              innerImg,
+              {
+                scale: 1,
+                duration: 1.56,
+                ease: "E1",
+              },
+              0
+            );
+          }
+
+          tl.to(
+            textGroup,
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.9,
+              ease: "E1",
+            },
+            0.3
+          );
         }
       });
 
-      // RISE text reveals on desktop and mobile
-      const riseEls = cbRootRef.current?.querySelectorAll(".cb-rise");
-      riseEls?.forEach((el) => {
-        gsap.fromTo(
-          el,
-          { y: 24, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.9,
-            ease: "E1",
+      // ==========================================
+      // MOBILE: (max-width: 1023px)
+      // ==========================================
+      mm.add("(max-width: 1023px)", () => {
+        // Mobile Split Row 1: CURTAIN 900ms, then heading and text RISE
+        if (mobileSplit1PhotoRef.current && mobileSplit1TextRef.current) {
+          const photoBox = mobileSplit1PhotoRef.current;
+          const innerImg = mobileSplit1ImgRef.current;
+          const textGroup = mobileSplit1TextRef.current;
+
+          gsap.set(photoBox, { clipPath: "inset(0 0 100% 0)" });
+          if (innerImg) gsap.set(innerImg, { scale: 1.06 });
+          gsap.set(textGroup, { y: 24, opacity: 0 });
+
+          const tl = gsap.timeline({
             scrollTrigger: {
-              trigger: el,
+              trigger: photoBox,
               start: "top 90%",
               once: true,
+              invalidateOnRefresh: true,
             },
+            onStart: () => {
+              gsap.set(photoBox, { willChange: "clip-path" });
+              if (innerImg) gsap.set(innerImg, { willChange: "transform" });
+              gsap.set(textGroup, { willChange: "transform, opacity" });
+            },
+            onComplete: () => {
+              gsap.set(photoBox, { clearProps: "willChange" });
+              if (innerImg) gsap.set(innerImg, { clearProps: "willChange" });
+              gsap.set(textGroup, { clearProps: "willChange" });
+            },
+          });
+
+          tl.to(
+            photoBox,
+            {
+              clipPath: "inset(0 0 0% 0)",
+              duration: 0.9,
+              ease: "E2",
+            },
+            0
+          );
+
+          if (innerImg) {
+            tl.to(
+              innerImg,
+              {
+                scale: 1,
+                duration: 1.17,
+                ease: "E1",
+              },
+              0
+            );
           }
-        );
+
+          tl.to(
+            textGroup,
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.9,
+              ease: "E1",
+            },
+            0.25
+          );
+        }
+
+        // Mobile Split Row 2: CURTAIN 900ms, then heading and text RISE
+        if (mobileSplit2PhotoRef.current && mobileSplit2TextRef.current) {
+          const photoBox = mobileSplit2PhotoRef.current;
+          const innerImg = mobileSplit2ImgRef.current;
+          const textGroup = mobileSplit2TextRef.current;
+
+          gsap.set(photoBox, { clipPath: "inset(0 0 100% 0)" });
+          if (innerImg) gsap.set(innerImg, { scale: 1.06 });
+          gsap.set(textGroup, { y: 24, opacity: 0 });
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: photoBox,
+              start: "top 90%",
+              once: true,
+              invalidateOnRefresh: true,
+            },
+            onStart: () => {
+              gsap.set(photoBox, { willChange: "clip-path" });
+              if (innerImg) gsap.set(innerImg, { willChange: "transform" });
+              gsap.set(textGroup, { willChange: "transform, opacity" });
+            },
+            onComplete: () => {
+              gsap.set(photoBox, { clearProps: "willChange" });
+              if (innerImg) gsap.set(innerImg, { clearProps: "willChange" });
+              gsap.set(textGroup, { clearProps: "willChange" });
+            },
+          });
+
+          tl.to(
+            photoBox,
+            {
+              clipPath: "inset(0 0 0% 0)",
+              duration: 0.9,
+              ease: "E2",
+            },
+            0
+          );
+
+          if (innerImg) {
+            tl.to(
+              innerImg,
+              {
+                scale: 1,
+                duration: 1.17,
+                ease: "E1",
+              },
+              0
+            );
+          }
+
+          tl.to(
+            textGroup,
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.9,
+              ease: "E1",
+            },
+            0.25
+          );
+        }
+      });
+
+      // ==========================================
+      // REDUCED MOTION: (prefers-reduced-motion: reduce)
+      // ==========================================
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        const photoBoxes = cbRootRef.current?.querySelectorAll(".cb-photo-box");
+        const photoImgs = cbRootRef.current?.querySelectorAll(".cb-photo-img");
+        const textBlocks = cbRootRef.current?.querySelectorAll(".cb-text-block");
+
+        if (photoBoxes) gsap.set(photoBoxes, { clipPath: "inset(0 0 0% 0)" });
+        if (photoImgs) gsap.set(photoImgs, { scale: 1 });
+        if (textBlocks) gsap.set(textBlocks, { y: 0, opacity: 1 });
       });
     }, cbRootRef);
 
@@ -134,16 +736,16 @@ export const ColumnsBeamsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
 
   return (
     <article ref={cbRootRef} className="w-full bg-white text-left">
-      {/* Hero */}
+      {/* 1. Hero Band (Capitalized Heading) */}
       <HeroBand
         variant="immersive"
-        imageSrc={IMG.structural.columnsBeams.hero}
-        imageAlt={data.h1}
+        imageSrc={heroImg}
+        imageAlt={data.h1.toUpperCase()}
         h1={data.h1.toUpperCase()}
         subtitle={data.quickAnswer}
       />
 
-      {/* Intro: The Role of Columns and Beams (One-Step TEXT STYLE: Heading UPPERCASE, ink; Text var(--blue)) */}
+      {/* 2. Intro: The Role of Columns and Beams (One-Step TEXT STYLE: Heading UPPERCASE, ink; Text var(--blue)) */}
       <section className="w-full bg-white py-12 lg:py-20 px-6 lg:px-8 border-b border-[var(--rule)]">
         <div className="max-w-[1280px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-16 items-start">
           <div className="lg:col-span-5">
@@ -171,7 +773,7 @@ export const ColumnsBeamsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
         </div>
       </section>
 
-      {/* Types Fabricated Section */}
+      {/* 3. Types Fabricated Section */}
       <section className="w-full bg-white py-12 lg:py-20 px-6 lg:px-8">
         <div className="max-w-[1280px] mx-auto">
           {/* Section Heading: UPPERCASE, bold, ink colour */}
@@ -179,29 +781,47 @@ export const ColumnsBeamsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
             {(typesSec?.title || "Types Fabricated").toUpperCase()}
           </h2>
 
-          {/* Desktop: 3 columns (gap 40px); each photo box has the real photo shape (1024/687, not 3:4); number, title, text under it */}
-          <div className="hidden lg:grid grid-cols-3 gap-10">
+          {/* Desktop: Types Fabricated stays 3 columns (gap 40px); each photo box has the real photo shape (1024/687, not 3:4); number, title, text under it */}
+          <div
+            ref={desktopColsRef}
+            onMouseLeave={handleColsMouseLeave}
+            className="hidden lg:grid grid-cols-3 gap-10"
+          >
             {typeCards.map((tc, idx) => (
-              <div key={idx} className="flex flex-col text-left">
-                {/* Real photo shape (1024 / 687, aspect ratio ~1.4905) */}
+              <div
+                key={idx}
+                ref={(el) => {
+                  desktopColRefs.current[idx] = el;
+                }}
+                onMouseEnter={() => handleColMouseEnter(idx)}
+                className="flex flex-col text-left transition-opacity duration-900 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              >
+                {/* Real photo shape (1024 / 687) with CURTAIN reveal */}
                 <div
-                  className="cb-curtain w-full overflow-hidden mb-6 bg-slate-100"
-                  style={{ aspectRatio: "1024 / 687" }}
+                  ref={(el) => {
+                    desktopColPhotoRefs.current[idx] = el;
+                  }}
+                  className="w-full aspect-[1024/687] overflow-hidden mb-6 bg-slate-100"
                 >
                   <img
-                    src={typeImages[idx] || typeImages[0]}
+                    ref={(el) => {
+                      desktopColImgRefs.current[idx] = el;
+                    }}
+                    src={cl(typeImages[idx] || typeImages[0], 1920)}
                     alt={tc.name}
-                    className="w-full h-full object-cover block transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.02]"
+                    width={1024}
+                    height={687}
                     loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover block"
                   />
                 </div>
 
-                <div className="cb-rise">
-                  {/* Number: solid, bold, var(--blue), placed above its title, like One-Step. No outline, no stroke. 64px, weight 800 */}
-                  <div className="text-[64px] font-extrabold text-[var(--blue)] leading-none select-none mb-3">
-                    {String(idx + 1).padStart(2, "0")}
-                  </div>
-
+                <div
+                  ref={(el) => {
+                    desktopColTextRefs.current[idx] = el;
+                  }}
+                >
                   {/* Title: bold, ink colour, uppercase, 20px, weight 700 */}
                   <h3 className="text-[20px] font-bold uppercase text-[#0A0A0A] leading-snug mb-2">
                     {tc.name.toUpperCase()}
@@ -218,9 +838,9 @@ export const ColumnsBeamsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
 
           {/* Mobile: Types as a selector: a row of 3 tabs (type names in the title style). Under it a full-width photo that changes, and the text of the active type. Swipe changes the type. */}
           <div className="lg:hidden">
-            {/* Tabs Row: 3 tabs with 1px border under row and 2px blue line under active tab */}
+            {/* Tabs Row: 3 tabs with 1px border under row and 2px blue line under active tab. Thin 2px scrollbar in between */}
             <div
-              className="flex border-b border-[#E5E7EB] mb-6 overflow-x-auto no-scrollbar"
+              className="relative border-b border-[#E5E5E5] flex justify-between gap-6 pb-2 mb-6 overflow-x-auto [scrollbar-width:thin] [scrollbar-color:#94A3B8_#E5E5E5] [&::-webkit-scrollbar]:h-[2px] [&::-webkit-scrollbar-track]:bg-[#E5E5E5] [&::-webkit-scrollbar-thumb]:bg-[#94A3B8] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-button]:hidden"
               role="tablist"
               aria-label="Types Fabricated"
             >
@@ -229,85 +849,124 @@ export const ColumnsBeamsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
                 return (
                   <button
                     key={idx}
+                    ref={(el) => {
+                      mobileTabRefs.current[idx] = el;
+                    }}
                     role="tab"
+                    id={`tab-type-${idx}`}
+                    aria-controls={`panel-type-${idx}`}
                     aria-selected={isActive}
-                    onClick={() => setActiveTypeIdx(idx)}
-                    className={`flex-1 min-w-[100px] pb-3 text-center transition-colors cursor-pointer text-[17px] font-bold uppercase leading-snug border-b-2 ${
-                      isActive
-                        ? "border-[var(--blue)] text-[#0A0A0A]"
-                        : "border-transparent text-[#0A0A0A] opacity-60 hover:opacity-100"
-                    }`}
+                    onClick={() => selectType(idx)}
+                    type="button"
+                    className="pb-2 text-left transition-colors cursor-pointer text-[17px] font-bold uppercase text-[#0A0A0A] leading-snug whitespace-nowrap bg-transparent border-0 p-0 focus-visible:outline-none"
                   >
                     {tc.name.toUpperCase()}
                   </button>
                 );
               })}
-            </div>
 
-            {/* Under tabs: Full-width photo that changes, with swipe gesture */}
-            <div
-              className="w-full overflow-hidden bg-slate-100 touch-pan-y"
-              style={{ aspectRatio: "1024 / 687" }}
-              onTouchStart={handleTouchStart}
-              onTouchEnd={handleTouchEnd}
-            >
-              <img
-                key={activeTypeIdx}
-                src={typeImages[activeTypeIdx] || typeImages[0]}
-                alt={typeCards[activeTypeIdx]?.name}
-                className="w-full h-full object-cover block animate-fade-in"
-                loading="lazy"
+              {/* 2px sliding blue line under active tab */}
+              <div
+                ref={mobileUnderlineRef}
+                className="absolute bottom-2 left-0 h-[2px] bg-[var(--blue)] transform-gpu origin-left pointer-events-none"
+                style={{ width: "1px" }}
               />
             </div>
 
-            {/* Under photo: Number, Title, Text of the active type */}
-            <div className="mt-5 text-left">
-              {/* Number: 40px solid bold var(--blue) */}
-              <div className="text-[40px] font-extrabold text-[var(--blue)] leading-none select-none mb-2">
-                {String(activeTypeIdx + 1).padStart(2, "0")}
-              </div>
+            {/* Under tabs: Full-width photo that changes with SWAP recipe and swipe gesture */}
+            <div
+              onPointerDown={onMobilePointerDown}
+              onPointerMove={onMobilePointerMove}
+              onPointerUp={onMobilePointerUp}
+              onPointerCancel={onMobilePointerUp}
+              style={{ touchAction: "pan-y" }}
+              className="relative w-full aspect-[1024/687] overflow-hidden bg-slate-950 select-none cursor-grab active:cursor-grabbing mb-6"
+            >
+              {typeCards.map((tc, idx) => (
+                <div
+                  key={idx}
+                  ref={(el) => {
+                    mobileLayerRefs.current[idx] = el;
+                  }}
+                  className="absolute inset-0 w-full h-full overflow-hidden"
+                >
+                  <img
+                    ref={(el) => {
+                      mobileImgRefs.current[idx] = el;
+                    }}
+                    src={cl(typeImages[idx], 1920)}
+                    alt={tc.name}
+                    width={1024}
+                    height={687}
+                    loading={idx === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                    className="w-full h-full object-cover object-center pointer-events-none"
+                  />
+                </div>
+              ))}
+            </div>
 
-              {/* Title: 17px bold uppercase ink colour */}
-              <h3 className="text-[17px] font-bold uppercase text-[#0A0A0A] leading-snug mb-2">
-                {typeCards[activeTypeIdx]?.name.toUpperCase()}
+            {/* Under photo: Title, Text of the active type with cross-fade (no numbering) */}
+            <div
+              ref={mobileCaptionContainerRef}
+              id={`panel-type-${activeTypeIdx}`}
+              role="tabpanel"
+              aria-labelledby={`tab-type-${activeTypeIdx}`}
+              className="text-left"
+            >
+              {/* Title: 17px bold ink colour, uppercase */}
+              <h3
+                ref={mobileTitleRef}
+                className="text-[17px] font-bold uppercase text-[#0A0A0A] leading-snug mb-2"
+              >
+                {typeCards[0]?.name.toUpperCase()}
               </h3>
 
               {/* Text: 15px / 1.6 var(--blue) */}
-              <p className="text-[15px] font-normal text-[var(--blue)] leading-[1.6]">
-                {typeCards[activeTypeIdx]?.text}
+              <p
+                ref={mobileTextRef}
+                className="text-[15px] font-normal text-[var(--blue)] leading-[1.6]"
+              >
+                {typeCards[0]?.text}
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* The Two Split Rows:
+      {/* ========================================================
+          SPLIT ROW 1: How Steel Mind Engineers Fabricates
           Desktop:
-            - photo half has the real photo shape, flush to the screen edge (row 1 left, row 2 right);
+            - photo half has real photo shape (1024/687), flush to screen edge (row 1 left);
             - row height follows the photo (no fixed min-height);
-            - text half is vertically centered, max width 480px;
-            - delete the grey background of the text half.
+            - text half is vertically centered, max width 480px, no grey background;
+            - CURTAIN from the text side (from the right edge), 1200ms; text RISE 300ms after.
           Mobile:
-            - The two split rows stacked: full-width photo, heading, text.
-      */}
-
-      {/* Split Row 1: How Steel Mind Engineers Fabricates (Row 1 left photo flush, right text max-w 480px) */}
+            - Stacked: full-width photo, heading, text; CURTAIN 900ms, then heading and text RISE.
+      ======================================================== */}
       <section className="w-full bg-white border-t border-[var(--rule)]">
         {/* Desktop View */}
         <div className="hidden lg:grid grid-cols-2 items-center w-full">
-          {/* Photo half flush to the left screen edge, real shape 1024/687 */}
-          <div className="cb-curtain w-full overflow-hidden" style={{ aspectRatio: "1024 / 687" }}>
+          {/* Photo half flush to left edge */}
+          <div
+            ref={desktopSplit1PhotoRef}
+            className="w-full aspect-[1024/687] overflow-hidden bg-slate-100"
+          >
             <img
-              src={IMG.structural.columnsBeams.c4}
-              alt={splitSec1?.title || "How Steel Mind Engineers Fabricates"}
-              className="w-full h-full object-cover block"
+              ref={desktopSplit1ImgRef}
+              src={cl(splitImg1, 1920)}
+              alt={(splitSec1?.title || "How Steel Mind Engineers Fabricates").toUpperCase()}
+              width={1024}
+              height={687}
               loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover block"
             />
           </div>
 
-          {/* Text half vertically centered, max width 480px, no grey background */}
+          {/* Text half vertically centered, max-w 480px, no grey background */}
           <div className="flex justify-center items-center px-12 xl:px-16 py-12">
-            <div className="cb-rise max-w-[480px] w-full text-left">
+            <div ref={desktopSplit1TextRef} className="max-w-[480px] w-full text-left">
               <h2 className="text-[44px] font-bold text-[#0A0A0A] uppercase tracking-[-0.02em] leading-tight mb-4">
                 {(splitSec1?.title || "How Steel Mind Engineers Fabricates").toUpperCase()}
               </h2>
@@ -321,15 +980,22 @@ export const ColumnsBeamsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
 
         {/* Mobile View: Stacked full-width photo, heading, text */}
         <div className="lg:hidden w-full px-6 py-10">
-          <div className="cb-curtain w-full overflow-hidden mb-4" style={{ aspectRatio: "1024 / 687" }}>
+          <div
+            ref={mobileSplit1PhotoRef}
+            className="w-full aspect-[1024/687] overflow-hidden mb-6 bg-slate-100"
+          >
             <img
-              src={IMG.structural.columnsBeams.c4}
-              alt={splitSec1?.title || "How Steel Mind Engineers Fabricates"}
-              className="w-full h-full object-cover block"
+              ref={mobileSplit1ImgRef}
+              src={cl(splitImg1, 1920)}
+              alt={(splitSec1?.title || "How Steel Mind Engineers Fabricates").toUpperCase()}
+              width={1024}
+              height={687}
               loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover block"
             />
           </div>
-          <div className="cb-rise">
+          <div ref={mobileSplit1TextRef} className="text-left">
             <h2 className="text-[16px] font-bold text-[#0A0A0A] uppercase tracking-[-0.02em] leading-tight mb-3">
               {(splitSec1?.title || "How Steel Mind Engineers Fabricates").toUpperCase()}
             </h2>
@@ -341,13 +1007,22 @@ export const ColumnsBeamsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
         </div>
       </section>
 
-      {/* Split Row 2: Accuracy Matters (Row 2 text left max-w 480px, photo right flush) */}
+      {/* ========================================================
+          SPLIT ROW 2: Accuracy Matters
+          Desktop:
+            - text half on left, vertically centered, max width 480px, no grey background;
+            - photo half on right, flush to screen edge, real shape 1024/687;
+            - row height follows the photo;
+            - CURTAIN from the text side (from the left edge), 1200ms; text RISE 300ms after.
+          Mobile:
+            - Stacked: full-width photo, heading, text; CURTAIN 900ms, then heading and text RISE.
+      ======================================================== */}
       <section className="w-full bg-white border-t border-b border-[var(--rule)]">
         {/* Desktop View */}
         <div className="hidden lg:grid grid-cols-2 items-center w-full">
-          {/* Text half vertically centered, max width 480px, no grey background */}
+          {/* Text half vertically centered, max-w 480px, no grey background */}
           <div className="flex justify-center items-center px-12 xl:px-16 py-12">
-            <div className="cb-rise max-w-[480px] w-full text-left">
+            <div ref={desktopSplit2TextRef} className="max-w-[480px] w-full text-left">
               <h2 className="text-[44px] font-bold text-[#0A0A0A] uppercase tracking-[-0.02em] leading-tight mb-4">
                 {(splitSec2?.title || "Accuracy Matters").toUpperCase()}
               </h2>
@@ -358,28 +1033,42 @@ export const ColumnsBeamsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
             </div>
           </div>
 
-          {/* Photo half flush to the right screen edge, real shape 1024/687 */}
-          <div className="cb-curtain w-full overflow-hidden" style={{ aspectRatio: "1024 / 687" }}>
+          {/* Photo half flush to right edge */}
+          <div
+            ref={desktopSplit2PhotoRef}
+            className="w-full aspect-[1024/687] overflow-hidden bg-slate-100"
+          >
             <img
-              src={IMG.structural.columnsBeams.c5}
-              alt={splitSec2?.title || "Accuracy Matters"}
-              className="w-full h-full object-cover block"
+              ref={desktopSplit2ImgRef}
+              src={cl(splitImg2, 1920)}
+              alt={(splitSec2?.title || "Accuracy Matters").toUpperCase()}
+              width={1024}
+              height={687}
               loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover block"
             />
           </div>
         </div>
 
         {/* Mobile View: Stacked full-width photo, heading, text */}
         <div className="lg:hidden w-full px-6 py-10">
-          <div className="cb-curtain w-full overflow-hidden mb-4" style={{ aspectRatio: "1024 / 687" }}>
+          <div
+            ref={mobileSplit2PhotoRef}
+            className="w-full aspect-[1024/687] overflow-hidden mb-6 bg-slate-100"
+          >
             <img
-              src={IMG.structural.columnsBeams.c5}
-              alt={splitSec2?.title || "Accuracy Matters"}
-              className="w-full h-full object-cover block"
+              ref={mobileSplit2ImgRef}
+              src={cl(splitImg2, 1920)}
+              alt={(splitSec2?.title || "Accuracy Matters").toUpperCase()}
+              width={1024}
+              height={687}
               loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover block"
             />
           </div>
-          <div className="cb-rise">
+          <div ref={mobileSplit2TextRef} className="text-left">
             <h2 className="text-[16px] font-bold text-[#0A0A0A] uppercase tracking-[-0.02em] leading-tight mb-3">
               {(splitSec2?.title || "Accuracy Matters").toUpperCase()}
             </h2>
@@ -391,11 +1080,11 @@ export const ColumnsBeamsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
         </div>
       </section>
 
-      {/* Frequently Asked Questions: Reduced mobile size (16px heading, 17px Q, 15px A) / Desktop (44px heading, 20px Q, 16px A); All text uses TEXT STYLE */}
+      {/* Frequently Asked Questions: One-Step TEXT STYLE and ACCORDION recipe */}
       {data.faq && data.faq.length > 0 && (
         <section className="w-full bg-white py-12 lg:py-20 px-6 lg:px-8 border-b border-[var(--rule)]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] uppercase tracking-[-0.02em] leading-tight mb-8">
+            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] uppercase tracking-[-0.02em] leading-tight mb-8 lg:mb-10">
               FREQUENTLY ASKED QUESTIONS
             </h2>
 
@@ -403,26 +1092,40 @@ export const ColumnsBeamsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
               {data.faq.map((item, idx) => {
                 const isOpen = openFaqIdx === idx;
                 return (
-                  <div key={idx} className="py-5 lg:py-6">
+                  <div key={idx} className="w-full">
                     <button
+                      type="button"
                       onClick={() => setOpenFaqIdx(isOpen ? null : idx)}
-                      className="w-full flex items-center justify-between text-left group cursor-pointer focus:outline-none"
+                      className="w-full min-h-[48px] py-4 lg:py-5 flex items-center justify-between text-left cursor-pointer focus-visible:outline-none"
                       aria-expanded={isOpen}
                     >
-                      <span className="text-[17px] lg:text-[20px] font-bold uppercase text-[#0A0A0A] pr-4 leading-snug transition-colors group-hover:text-[var(--blue)]">
-                        {item.q.toUpperCase()}
+                      <span className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] pr-4 leading-snug">
+                        {item.q}
                       </span>
-                      <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center text-[var(--blue)] font-bold text-lg">
-                        {isOpen ? "−" : "+"}
+                      {/* Plus icon rotates 0 to 45deg over 400ms E1 */}
+                      <span
+                        className="relative flex-shrink-0 w-6 h-6 flex items-center justify-center transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                        style={{
+                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
+                        }}
+                        aria-hidden="true"
+                      >
+                        <span className="absolute w-[16px] h-[2px] bg-[var(--blue)]" />
+                        <span className="absolute h-[16px] w-[2px] bg-[var(--blue)]" />
                       </span>
                     </button>
+                    {/* ACCORDION panel: grid-template-rows 0fr to 1fr over 600ms E1 */}
                     <div
-                      className={`grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                        isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-                      }`}
+                      className="grid transition-[grid-template-rows] duration-600 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                      style={{
+                        gridTemplateRows: isOpen ? "1fr" : "0fr",
+                      }}
                     >
                       <div className="overflow-hidden">
-                        <p className="pt-3 text-[15px] lg:text-[16px] font-normal text-[var(--blue)] leading-[1.6] lg:leading-[1.7]">
+                        <p
+                          className="pt-1.5 pb-5 text-[15px] lg:text-[16px] font-normal text-[var(--blue)] leading-[1.6] lg:leading-[1.7] transition-opacity duration-400 delay-150"
+                          style={{ opacity: isOpen ? 1 : 0 }}
+                        >
                           {item.a}
                         </p>
                       </div>
@@ -437,7 +1140,8 @@ export const ColumnsBeamsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
 
       {/* Next Banner */}
       <NextBand
-        image={IMG.structural.columnsBeams.next}
+        heading="ENGINEERED OPEN-WEB STEEL TRUSSES FOR LONG SPANS AND HIGH ROOF LOADS."
+        image={nextImg}
         nextUrl="/structural-steel-fabrication-pakistan/trusses/"
         nextTitle="TRUSSES"
       />
