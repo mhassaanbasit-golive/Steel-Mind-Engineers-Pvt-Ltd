@@ -1,5 +1,5 @@
 // Steel Warehouses Division Signature Layouts (9.13 - 9.17)
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { ContentData, ContentBlock } from "../../../content/types.ts";
 import { IMG } from "../../../data/subpageImages.ts";
 import { PhotoBox } from "../../page/PhotoBox.tsx";
@@ -1926,112 +1926,636 @@ export const ColdStorageLayout: React.FC<{ data: ContentData }> = ({ data }) => 
 // 9.16 Grain and Wheat Warehouses — signature: "Story slideshow"
 export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
   const { sections } = extractSections(data);
-  const images = [IMG.warehouses.grain.g1, IMG.warehouses.grain.g2, IMG.warehouses.grain.g3];
-  const slides = sections.slice(0, 3).map((sec, idx) => ({
-    num: String(idx + 1).padStart(2, "0"),
-    title: sec.title,
-    text: sec.text,
-    img: images[idx] || images[0],
-  }));
+  const grainImages = [
+    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202372/grain-1.jpg",
+    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202372/grain-2.jpg",
+    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202374/grain-3.jpg",
+  ];
 
+  const slides = [
+    {
+      title: sections[0]?.title || "What Grain Storage Needs",
+      text:
+        sections[0]?.text ||
+        "Grain must stay dry and cool. Moisture causes mold, insects and heat inside the pile. The building needs a tight roof, good ventilation and strong walls that can hold the sideways push of grain.",
+      img: grainImages[0],
+    },
+    {
+      title: sections[1]?.title || "Design Points",
+      text:
+        sections[1]?.text ||
+        "Stored grain pushes on the walls, so the wall frames and bracing are designed for this load. Ridge vents and louvers keep air moving above the grain. A leak-free roof with good sheet laps and trims keeps the wheat dry. A raised, sealed floor limits moisture from the ground. Wide doors and driveways allow trucks and loaders to enter. Grain dust and moisture can attack steel, so a good coating extends the life of the frame. See Painting.",
+      img: grainImages[1],
+    },
+    {
+      title: sections[2]?.title || "Why Steel",
+      text:
+        sections[2]?.text ||
+        "A steel grain warehouse is quick to build, which matters before the harvest and procurement seasons. Large clear spans give you the volume you need without inner columns.",
+      img: grainImages[2],
+    },
+  ];
+
+  const AUTOPLAY_MS = 6000;
   const [activeIdx, setActiveIdx] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const [isDesktop, setIsDesktop] = useState(false);
 
+  const activeIdxRef = useRef(0);
+  const isPausedRef = useRef(false);
+  const layerRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const imgRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const underlineRef = useRef<HTMLDivElement | null>(null);
+  const captionTitleRef = useRef<HTMLHeadingElement | null>(null);
+  const captionTextRef = useRef<HTMLParagraphElement | null>(null);
+  const frameRef = useRef<HTMLDivElement | null>(null);
+
+  const desktopProgressRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const swapTimelineRef = useRef<gsap.core.Timeline | null>(null);
+  const captionTweenRef = useRef<gsap.core.Tween | null>(null);
+  const autoplayProgressTweenRef = useRef<gsap.core.Tween | null>(null);
+
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const isDraggingRef = useRef(false);
+  const hasHorizontalIntentRef = useRef<boolean | null>(null);
+
+  const prefersReducedRef = useRef(false);
+
+  // Check reduced motion
   useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveIdx((prev: number) => (prev + 1) % slides.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, [slides.length]);
+    prefersReducedRef.current =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }, []);
+
+  // Desktop media query check (isolating motion, tweens & timers to desktop)
+  useEffect(() => {
+    const mql = window.matchMedia("(min-width: 768px)");
+    setIsDesktop(mql.matches);
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, []);
+
+  // Preload and decode images before first swap
+  useEffect(() => {
+    grainImages.forEach((src) => {
+      const img = new Image();
+      img.src = cl(src, 1920);
+      img.decode().catch(() => {});
+    });
+  }, []);
+
+  // Update tab underline position (desktop only)
+  const updateUnderline = useCallback(
+    (targetIdx: number) => {
+      if (!isDesktop) return;
+      const tabEl = tabRefs.current[targetIdx];
+      const underlineEl = underlineRef.current;
+      if (!tabEl || !underlineEl) return;
+
+      const x = tabEl.offsetLeft;
+      const width = tabEl.offsetWidth;
+      if (width === 0) return;
+
+      if (prefersReducedRef.current) {
+        gsap.set(underlineEl, { x, scaleX: width });
+      } else {
+        gsap.to(underlineEl, {
+          x,
+          scaleX: width,
+          duration: 0.4,
+          ease: "E1",
+          overwrite: "auto",
+        });
+      }
+    },
+    [isDesktop]
+  );
+
+  // Update progress bars (desktop only)
+  const updateProgressBars = useCallback(
+    (idx: number, isManual: boolean) => {
+      if (!isDesktop) return;
+      if (autoplayProgressTweenRef.current) {
+        autoplayProgressTweenRef.current.kill();
+      }
+
+      desktopProgressRefs.current.forEach((bar, i) => {
+        if (!bar) return;
+        if (i < idx) {
+          gsap.set(bar, { scaleX: 1 });
+        } else if (i > idx) {
+          gsap.set(bar, { scaleX: 0 });
+        }
+      });
+
+      const activeBar = desktopProgressRefs.current[idx];
+      if (!activeBar) return;
+
+      if (prefersReducedRef.current) {
+        gsap.set(activeBar, { scaleX: 1 });
+        return;
+      }
+
+      const duration = isManual ? 0.6 : AUTOPLAY_MS / 1000;
+      const ease = isManual ? "E1" : "none";
+
+      gsap.set(activeBar, { scaleX: 0 });
+      autoplayProgressTweenRef.current = gsap.to(activeBar, {
+        scaleX: 1,
+        duration,
+        ease,
+        overwrite: "auto",
+      });
+    },
+    [isDesktop]
+  );
+
+  // Caption cross-fade: old out 250ms E1, new in 500ms E1 with y 12 to 0 (desktop only)
+  const animateCaption = useCallback(
+    (nextIdx: number) => {
+      if (!isDesktop) return;
+      const titleEl = captionTitleRef.current;
+      const textEl = captionTextRef.current;
+      if (!titleEl || !textEl) return;
+
+      if (prefersReducedRef.current) {
+        titleEl.textContent = slides[nextIdx].title.toUpperCase();
+        textEl.textContent = slides[nextIdx].text;
+        return;
+      }
+
+      if (captionTweenRef.current) {
+        captionTweenRef.current.kill();
+      }
+
+      gsap.to([titleEl, textEl], {
+        opacity: 0,
+        duration: 0.25,
+        ease: "E1",
+        overwrite: "auto",
+        onComplete: () => {
+          titleEl.textContent = slides[nextIdx].title.toUpperCase();
+          textEl.textContent = slides[nextIdx].text;
+          gsap.fromTo(
+            [titleEl, textEl],
+            { opacity: 0, y: 12 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.5,
+              ease: "E1",
+              overwrite: "auto",
+              clearProps: "transform",
+            }
+          );
+        },
+      });
+    },
+    [isDesktop, slides]
+  );
+
+  // SWAP recipe for slide change (desktop only)
+  const goToSlide = useCallback(
+    (nextIdx: number, isManual = true) => {
+      if (!isDesktop) return;
+      if (nextIdx === activeIdxRef.current) return;
+      const prevIdx = activeIdxRef.current;
+      activeIdxRef.current = nextIdx;
+      setActiveIdx(nextIdx);
+
+      if (prefersReducedRef.current) {
+        layerRefs.current.forEach((layer, i) => {
+          if (!layer) return;
+          if (i === nextIdx) {
+            gsap.set(layer, {
+              clipPath: "inset(0 0 0% 0)",
+              zIndex: 1,
+              visibility: "visible",
+            });
+          } else {
+            gsap.set(layer, { zIndex: 0, visibility: "hidden" });
+          }
+        });
+        if (captionTitleRef.current) captionTitleRef.current.textContent = slides[nextIdx].title.toUpperCase();
+        if (captionTextRef.current) captionTextRef.current.textContent = slides[nextIdx].text;
+        updateUnderline(nextIdx);
+        updateProgressBars(nextIdx, isManual);
+        return;
+      }
+
+      // If a wipe is running: finish it instantly
+      if (swapTimelineRef.current) {
+        swapTimelineRef.current.progress(1);
+      }
+
+      const incomingLayer = layerRefs.current[nextIdx];
+      const incomingImg = imgRefs.current[nextIdx];
+      const outgoingLayer = layerRefs.current[prevIdx];
+
+      if (!incomingLayer || !incomingImg || !outgoingLayer) return;
+
+      // Outgoing layer stays fully visible underneath until wipe ends
+      gsap.set(outgoingLayer, { zIndex: 1, visibility: "visible" });
+
+      // Incoming layer is above (z-index 2), starts with clipPath inset(0 0 100% 0)
+      gsap.set(incomingLayer, {
+        zIndex: 2,
+        visibility: "visible",
+        clipPath: "inset(0 0 100% 0)",
+      });
+      gsap.set(incomingImg, {
+        scale: 1.08,
+        transformOrigin: "center center",
+      });
+
+      const tl = gsap.timeline({
+        onStart: () => {
+          gsap.set(incomingLayer, { willChange: "clip-path" });
+          gsap.set(incomingImg, { willChange: "transform" });
+        },
+        onComplete: () => {
+          gsap.set(incomingLayer, { zIndex: 1, clearProps: "willChange" });
+          gsap.set(incomingImg, { clearProps: "willChange,scale" });
+          gsap.set(outgoingLayer, { visibility: "hidden", zIndex: 0 });
+          swapTimelineRef.current = null;
+        },
+      });
+
+      // Wipe: 1100ms E2
+      tl.to(
+        incomingLayer,
+        {
+          clipPath: "inset(0 0 0% 0)",
+          duration: 1.1,
+          ease: "E2",
+          overwrite: "auto",
+        },
+        0
+      );
+
+      // Inner img: scale 1.08 to 1 over 1600ms E1
+      tl.to(
+        incomingImg,
+        {
+          scale: 1,
+          duration: 1.6,
+          ease: "E1",
+          overwrite: "auto",
+        },
+        0
+      );
+
+      swapTimelineRef.current = tl;
+
+      // Caption cross-fade at same moment
+      animateCaption(nextIdx);
+
+      // Tab underline
+      updateUnderline(nextIdx);
+
+      // Progress bars
+      updateProgressBars(nextIdx, isManual);
+    },
+    [isDesktop, slides, animateCaption, updateUnderline, updateProgressBars]
+  );
+
+  // Initial layout & resize measurement (desktop only)
+  useIsomorphicLayoutEffect(() => {
+    if (!isDesktop) return;
+
+    // Initial states: slide 0 visible, others hidden
+    layerRefs.current.forEach((layer, i) => {
+      if (!layer) return;
+      if (i === 0) {
+        gsap.set(layer, {
+          clipPath: "inset(0 0 0% 0)",
+          zIndex: 1,
+          visibility: "visible",
+        });
+      } else {
+        gsap.set(layer, {
+          clipPath: "inset(0 0 100% 0)",
+          zIndex: 0,
+          visibility: "hidden",
+        });
+      }
+    });
+
+    // Set initial underline position and active bar
+    const tabEl = tabRefs.current[0];
+    const underlineEl = underlineRef.current;
+    if (tabEl && underlineEl) {
+      gsap.set(underlineEl, {
+        x: tabEl.offsetLeft,
+        scaleX: tabEl.offsetWidth,
+      });
+    }
+
+    updateProgressBars(0, false);
+
+    const onResize = () => {
+      updateUnderline(activeIdxRef.current);
+    };
+
+    window.addEventListener("resize", onResize);
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(onResize);
+    }
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
+  }, [isDesktop, updateUnderline, updateProgressBars]);
+
+  // Autoplay loop strictly isolated to desktop
+  useEffect(() => {
+    if (!isDesktop) return;
+    isPausedRef.current = isPaused;
+    if (prefersReducedRef.current) return;
+
+    if (isPaused) {
+      if (autoplayProgressTweenRef.current) {
+        autoplayProgressTweenRef.current.pause();
+      }
+      return;
+    }
+
+    if (autoplayProgressTweenRef.current) {
+      autoplayProgressTweenRef.current.resume();
+    }
+
+    const interval = setInterval(() => {
+      if (!isPausedRef.current) {
+        const next = (activeIdxRef.current + 1) % slides.length;
+        goToSlide(next, false);
+      }
+    }, AUTOPLAY_MS);
+
+    return () => clearInterval(interval);
+  }, [isDesktop, isPaused, slides.length, goToSlide]);
+
+  // Pointer swipe gestures (threshold 40px, touch-action: pan-y)
+  const onPointerDown = (e: React.PointerEvent) => {
+    touchStartRef.current = { x: e.clientX, y: e.clientY };
+    isDraggingRef.current = true;
+    hasHorizontalIntentRef.current = null;
+    setIsPaused(true);
+  };
+
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!isDraggingRef.current || !touchStartRef.current) return;
+    const dx = e.clientX - touchStartRef.current.x;
+    const dy = e.clientY - touchStartRef.current.y;
+
+    if (hasHorizontalIntentRef.current === null) {
+      if (Math.abs(dx) > 7 || Math.abs(dy) > 7) {
+        hasHorizontalIntentRef.current = Math.abs(dx) >= Math.abs(dy);
+      }
+    }
+
+    if (hasHorizontalIntentRef.current && frameRef.current) {
+      gsap.set(frameRef.current, { x: dx });
+    }
+  };
+
+  const onPointerUp = (e: React.PointerEvent) => {
+    if (!isDraggingRef.current || !touchStartRef.current) return;
+    const dx = e.clientX - touchStartRef.current.x;
+    isDraggingRef.current = false;
+    setIsPaused(false);
+
+    if (hasHorizontalIntentRef.current && Math.abs(dx) >= 40) {
+      if (frameRef.current) gsap.set(frameRef.current, { x: 0 });
+      if (dx < 0) {
+        goToSlide((activeIdxRef.current + 1) % slides.length, true);
+      } else {
+        goToSlide((activeIdxRef.current - 1 + slides.length) % slides.length, true);
+      }
+    } else if (frameRef.current) {
+      gsap.to(frameRef.current, { x: 0, duration: 0.3, ease: "E1" });
+    }
+
+    touchStartRef.current = null;
+    hasHorizontalIntentRef.current = null;
+  };
 
   return (
-    <article className="w-full bg-white">
+    <article className="w-full bg-white text-[var(--ink)]">
+      {/* 1. Hero Band */}
       <HeroBand
         variant="immersive"
-        imageSrc={IMG.warehouses.grain.hero}
+        imageSrc="https://res.cloudinary.com/cyfb9slf/image/upload/v1792202373/grain-hero.jpg"
         imageAlt={data.h1}
         h1={data.h1}
         subtitle={data.quickAnswer}
       />
 
+      {/* 2. Content & Slideshow Section */}
       <section className="container py-[var(--sec-y-lg)]">
-        {/* Slideshow Frame */}
-        <div className="relative w-full max-w-[1040px] mx-auto aspect-[16/10] overflow-hidden bg-slate-950 shadow-xl">
-          {slides.map((s, idx) => (
-            <img
-              key={s.num}
-              src={s.img}
-              alt={s.title}
-              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-                activeIdx === idx ? "opacity-100 scale-100" : "opacity-0 scale-105"
-              }`}
-            />
-          ))}
-
-          {/* Top Progress Bars */}
-          <div className="absolute top-4 inset-x-6 z-20 flex gap-2">
-            {slides.map((_, idx) => (
-              <div key={idx} className="h-1 flex-1 bg-white/40 overflow-hidden rounded-full">
-                <div
-                  className={`h-full bg-white transition-all duration-300 ${
-                    idx < activeIdx ? "w-full" : idx === activeIdx ? "w-full animate-pulse" : "w-0"
-                  }`}
+        {/* Desktop View: Keep same interactive slideshow (hidden on mobile) */}
+        <div
+          className="hidden md:block max-w-[1040px] mx-auto"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {/* Slideshow Frame (Aspect 1024/687 matches natural photo dimensions; NO drop shadow) */}
+          <div
+            ref={frameRef}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
+            style={{ touchAction: "pan-y" }}
+            className="relative w-full aspect-[1024/687] overflow-hidden bg-slate-950 select-none cursor-grab active:cursor-grabbing"
+          >
+            {slides.map((s, idx) => (
+              <div
+                key={idx}
+                ref={(el) => {
+                  layerRefs.current[idx] = el;
+                }}
+                className="absolute inset-0 w-full h-full overflow-hidden"
+              >
+                <img
+                  ref={(el) => {
+                    imgRefs.current[idx] = el;
+                  }}
+                  src={cl(s.img, 1920)}
+                  alt={s.title}
+                  width={1024}
+                  height={687}
+                  loading={idx === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                  className="w-full h-full object-cover object-center pointer-events-none"
                 />
               </div>
             ))}
+
+            {/* Desktop Top Progress Bars inside frame (clean line, no boxes) */}
+            <div className="absolute top-4 inset-x-6 z-20 flex gap-2 pointer-events-none">
+              {slides.map((_, idx) => (
+                <div key={idx} className="h-[3px] flex-1 bg-white/30 overflow-hidden rounded-full">
+                  <div
+                    ref={(el) => {
+                      desktopProgressRefs.current[idx] = el;
+                    }}
+                    className="h-full bg-white origin-left"
+                    style={{ transform: "scaleX(0)" }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop Caption (Title left, text right; NO box; One-Step TEXT STYLE) */}
+          <div className="mt-8 grid grid-cols-12 gap-8 text-left items-start">
+            <div className="col-span-5">
+              <h3
+                ref={captionTitleRef}
+                className="font-bold uppercase text-[#0A0A0A] text-[20px] lg:text-[22px] leading-[1.25] tracking-[-0.01em]"
+              >
+                {slides[0]?.title.toUpperCase()}
+              </h3>
+            </div>
+            <div className="col-span-7">
+              <p
+                ref={captionTextRef}
+                className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal"
+              >
+                {slides[0]?.text}
+              </p>
+            </div>
+          </div>
+
+          {/* Desktop Plain Text Tabs in one horizontal row: 1px line under row, 2px sliding blue line under active tab. No boxes! */}
+          <div className="mt-8 border-b border-[#E5E5E5] relative flex overflow-x-auto scrollbar-none gap-6">
+            {slides.map((s, idx) => (
+              <button
+                key={idx}
+                ref={(el) => {
+                  tabRefs.current[idx] = el;
+                }}
+                type="button"
+                onClick={() => goToSlide(idx, true)}
+                className="pb-3 px-4 first:pl-0 font-bold uppercase text-[18px] lg:text-[20px] text-[#0A0A0A] cursor-pointer whitespace-nowrap bg-transparent border-0 transition-colors focus-visible:outline-none"
+              >
+                {s.title.toUpperCase()}
+              </button>
+            ))}
+
+            {/* 2px sliding blue underline (width: 1px, scaleX: width, x: offsetLeft) */}
+            <div
+              ref={underlineRef}
+              className="absolute bottom-0 left-0 h-[2px] bg-[var(--blue)] transform-gpu origin-left pointer-events-none"
+              style={{ width: "1px" }}
+            />
           </div>
         </div>
 
-        {/* Captions below frame */}
-        <div className="max-w-[1040px] mx-auto mt-8 grid grid-cols-1 md:grid-cols-12 gap-8 text-left items-start">
-          <div className="md:col-span-4">
-            <span className="text-[12px] font-mono text-[var(--blue)] font-bold block mb-1">
-              0{activeIdx + 1} / 03
-            </span>
-            <h3 className="text-[24px] lg:text-[28px] font-bold text-[var(--ink)]">
-              {slides[activeIdx]?.title}
-            </h3>
-          </div>
-          <div className="md:col-span-8">
-            <p className="text-[var(--grey-strong)] leading-[1.7]" style={{ fontSize: "var(--fs-body)" }}>
-              {slides[activeIdx]?.text}
-            </p>
-          </div>
-        </div>
-
-        {/* Slide Selector Buttons */}
-        <div className="max-w-[1040px] mx-auto mt-8 flex flex-wrap gap-3">
+        {/* Mobile View: Each card for each image, heading in all caps, and subheading */}
+        <div className="md:hidden flex flex-col gap-8 text-left">
           {slides.map((s, idx) => (
-            <button
-              key={s.num}
-              type="button"
-              onClick={() => setActiveIdx(idx)}
-              className={`px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.06em] border transition-colors cursor-pointer ${
-                activeIdx === idx
-                  ? "bg-[var(--blue)] text-white border-[var(--blue)]"
-                  : "bg-white text-[var(--ink)] border-[var(--rule)] hover:border-[var(--blue)]"
-              }`}
-            >
-              {s.title}
-            </button>
+            <div key={idx} className="border border-[#E5E5E5] bg-white overflow-hidden flex flex-col">
+              {/* Image */}
+              <div className="w-full aspect-[1024/687] overflow-hidden bg-slate-950">
+                <img
+                  src={cl(s.img, 1080)}
+                  alt={s.title}
+                  width={1024}
+                  height={687}
+                  loading={idx === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                  className="w-full h-full object-cover object-center block"
+                />
+              </div>
+
+              {/* Content Area */}
+              <div className="p-5 flex flex-col">
+                {/* Heading in all caps */}
+                <h3 className="font-bold text-[#0A0A0A] uppercase text-[17px] leading-[1.3] tracking-[-0.01em] mb-2.5">
+                  {s.title.toUpperCase()}
+                </h3>
+
+                {/* Subheading / Text */}
+                <p className="text-[14px] sm:text-[15px] text-[var(--blue)] leading-[1.65] font-normal">
+                  {s.text}
+                </p>
+              </div>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* 3. FAQ Section: Size according to other pages */}
       {data.faq && data.faq.length > 0 && (
         <section className="container py-[var(--sec-y)]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="font-bold text-[var(--ink)] mb-8" style={{ fontSize: "var(--fs-h2)" }}>
-              Frequently Asked Questions
+            <h2 className="font-bold text-[#0A0A0A] uppercase text-[16px] lg:text-[44px] leading-[1.15] tracking-[-0.02em] mb-8 md:mb-10">
+              FREQUENTLY ASKED QUESTIONS
             </h2>
-            <Accordion items={data.faq} size="large" />
+
+            <div className="w-full divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
+              {data.faq.map((item, idx) => {
+                const isOpen = openFaqIndex === idx;
+
+                return (
+                  <div key={idx} className="w-full">
+                    <button
+                      type="button"
+                      aria-expanded={isOpen}
+                      onClick={() =>
+                        setOpenFaqIndex((prev) => (prev === idx ? null : idx))
+                      }
+                      className="w-full min-h-[48px] py-4 lg:py-5 flex items-center justify-between text-left cursor-pointer group focus-visible:outline-none"
+                    >
+                      <span className="font-bold text-[#0A0A0A] text-[15px] lg:text-[18px] pr-6 leading-snug">
+                        {item.q}
+                      </span>
+
+                      {/* Rotating Plus Icon (0 to 45deg over 400ms E1) */}
+                      <span
+                        className="relative flex-shrink-0 w-6 h-6 flex items-center justify-center transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                        style={{
+                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
+                        }}
+                      >
+                        <span className="absolute w-[16px] h-[2px] bg-[var(--blue)]" />
+                        <span className="absolute h-[16px] w-[2px] bg-[var(--blue)]" />
+                      </span>
+                    </button>
+
+                    {/* Accordion panel: grid-template-rows 0fr to 1fr over 600ms E1 */}
+                    <div
+                      className="grid transition-[grid-template-rows] duration-600 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                      style={{
+                        gridTemplateRows: isOpen ? "1fr" : "0fr",
+                      }}
+                    >
+                      <div className="overflow-hidden">
+                        <p
+                          className="pt-2 pb-5 text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal max-w-[800px] transition-opacity duration-400 delay-150"
+                          style={{ opacity: isOpen ? 1 : 0 }}
+                        >
+                          {item.a}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
       )}
 
-      {/* Next Banner */}
+      {/* 4. Next Banner */}
       <NextBand
-        image={IMG.warehouses.grain.next}
+        image="https://res.cloudinary.com/cyfb9slf/image/upload/v1792202373/grain-next.jpg"
         nextUrl="/steel-warehouses-pakistan/warehouses-with-loading-docks/"
         nextTitle="Warehouses with Loading Docks"
       />
@@ -2039,84 +2563,506 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
   );
 };
 
-// 9.17 Warehouses with Loading Docks — signature: "Tabs"
+// 9.17 Warehouses with Loading Docks — signature: "Two-column list with Slat Reveal"
 export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) => {
   const { sections } = extractSections(data);
-  const images = [IMG.warehouses.loadingDocks.d1, IMG.warehouses.loadingDocks.d2, IMG.warehouses.loadingDocks.d3];
+  const dockImages = [
+    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202367/loading-docks-1.jpg",
+    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202367/loading-docks-2.jpg",
+    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202368/loading-docks-3.jpg",
+  ];
 
-  const tabs = sections.slice(0, 3).map((sec, idx) => ({
-    title: sec.title,
-    text: sec.text,
-    img: images[idx] || images[0],
-  }));
+  const items = [
+    {
+      title: sections[0]?.title || "Why Dock Design Matters",
+      text:
+        sections[0]?.text ||
+        "Slow loading wastes time and money. A good dock lets a truck back in, load quickly and leave. It also keeps the goods dry and the workers safe.",
+      img: dockImages[0],
+    },
+    {
+      title: sections[1]?.title || "Design Points",
+      text:
+        sections[1]?.text ||
+        "The dock floor should match the truck bed height, and the engineer sets the floor level from your fleet. A steel canopy covers trucks against rain and sun. Choose the door size and number from the count of trucks you load at the same time. Allow enough yard depth for trucks to turn and back in. The frame spacing should match the dock door spacing. Bumpers, wheel guides and clear marking reduce accidents.",
+      img: dockImages[1],
+    },
+    {
+      title: sections[2]?.title || "Combine With Other Warehouse Types",
+      text:
+        sections[2]?.text ||
+        "Loading docks suit logistics hubs, cold stores and general stores. Tell the engineer how many trucks you expect each day.",
+      img: dockImages[2],
+    },
+  ];
 
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [currentPhoto, setCurrentPhoto] = useState(items[0].img);
+  const [incomingPhoto, setIncomingPhoto] = useState<string | null>(null);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  const activeIdxRef = useRef(0);
+  const currentPhotoRef = useRef(items[0].img);
+  const isHoveredRef = useRef(false);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timerTweenRef = useRef<gsap.core.Tween | null>(null);
+  const slatTimelineRef = useRef<gsap.core.Timeline | null>(null);
+
+  const desktopTabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const desktopTimerRef = useRef<HTMLDivElement | null>(null);
+  const desktopSlatBoxRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const prefersReducedRef = useRef(false);
+
+  useEffect(() => {
+    prefersReducedRef.current =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }, []);
+
+  // Desktop media query check (isolating motion, tweens & timers to desktop)
+  useEffect(() => {
+    const mql = window.matchMedia("(min-width: 1024px)");
+    setIsDesktop(mql.matches);
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, []);
+
+  // Preload and decode images
+  useEffect(() => {
+    dockImages.forEach((src) => {
+      const img = new Image();
+      img.src = cl(src, 1920);
+      img.decode().catch(() => {});
+    });
+  }, []);
+
+  // Start 7000ms timer — strictly isolated to desktop
+  const startTimer = useCallback(
+    (idx: number) => {
+      if (!isDesktop) return;
+
+      if (timerTweenRef.current) {
+        timerTweenRef.current.kill();
+      }
+
+      if (prefersReducedRef.current) return;
+
+      const targetTimerBar = desktopTimerRef.current;
+      if (!targetTimerBar) return;
+
+      gsap.set(targetTimerBar, { scaleX: 0 });
+
+      timerTweenRef.current = gsap.fromTo(
+        targetTimerBar,
+        { scaleX: 0 },
+        {
+          scaleX: 1,
+          duration: 7,
+          ease: "none",
+          transformOrigin: "left center",
+          paused: isHoveredRef.current,
+          onComplete: () => {
+            const next = (activeIdxRef.current + 1) % items.length;
+            selectItem(next);
+          },
+        }
+      );
+    },
+    [isDesktop, items.length]
+  );
+
+  // Trigger Slat Reveal with E2 easing — strictly isolated to desktop
+  const triggerSlatReveal = useCallback(
+    (nextImgUrl: string) => {
+      if (!isDesktop) return;
+
+      if (slatTimelineRef.current) {
+        slatTimelineRef.current.progress(1);
+      }
+
+      if (prefersReducedRef.current) {
+        currentPhotoRef.current = nextImgUrl;
+        setCurrentPhoto(nextImgUrl);
+        setIncomingPhoto(null);
+        return;
+      }
+
+      setIncomingPhoto(nextImgUrl);
+
+      // Next tick after DOM renders the 6 slats
+      requestAnimationFrame(() => {
+        const slatBoxes = desktopSlatBoxRefs.current.filter(Boolean);
+
+        if (slatBoxes.length === 0) {
+          currentPhotoRef.current = nextImgUrl;
+          setCurrentPhoto(nextImgUrl);
+          setIncomingPhoto(null);
+          return;
+        }
+
+        gsap.set(slatBoxes, { scaleY: 0, transformOrigin: "top center" });
+
+        const duration = 0.7;
+        const stagger = 0.07;
+
+        slatTimelineRef.current = gsap.timeline({
+          onComplete: () => {
+            currentPhotoRef.current = nextImgUrl;
+            setCurrentPhoto(nextImgUrl);
+            setIncomingPhoto(null);
+            slatTimelineRef.current = null;
+          },
+        });
+
+        slatTimelineRef.current.to(slatBoxes, {
+          scaleY: 1,
+          duration,
+          stagger,
+          ease: "E2",
+          overwrite: "auto",
+        });
+      });
+    },
+    [isDesktop]
+  );
+
+  // Select Item (desktop only)
+  const selectItem = useCallback(
+    (nextIdx: number) => {
+      if (!isDesktop) return;
+      if (nextIdx === activeIdxRef.current) return;
+      activeIdxRef.current = nextIdx;
+      setActiveIdx(nextIdx);
+
+      const nextImg = items[nextIdx].img;
+      triggerSlatReveal(nextImg);
+      startTimer(nextIdx);
+    },
+    [isDesktop, items, triggerSlatReveal, startTimer]
+  );
+
+  // Initial timer start — desktop only
+  useEffect(() => {
+    if (!isDesktop) return;
+    startTimer(0);
+    return () => {
+      if (timerTweenRef.current) timerTweenRef.current.kill();
+      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    };
+  }, [isDesktop, startTimer]);
+
+  // Hover handlers for 120ms delay on desktop
+  const handleItemMouseEnter = (idx: number) => {
+    if (!isDesktop) return;
+    isHoveredRef.current = true;
+    if (timerTweenRef.current) timerTweenRef.current.pause();
+
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    if (idx !== activeIdxRef.current) {
+      hoverTimeoutRef.current = setTimeout(() => {
+        selectItem(idx);
+      }, 120);
+    }
+  };
+
+  const handleItemMouseLeave = () => {
+    if (!isDesktop) return;
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+  };
+
+  const handleContainerMouseEnter = () => {
+    if (!isDesktop) return;
+    isHoveredRef.current = true;
+    if (timerTweenRef.current) timerTweenRef.current.pause();
+  };
+
+  const handleContainerMouseLeave = () => {
+    if (!isDesktop) return;
+    isHoveredRef.current = false;
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    if (timerTweenRef.current) timerTweenRef.current.resume();
+  };
+
+  // Keyboard navigation for tablist (desktop only)
+  const handleKeyDown = (e: React.KeyboardEvent, currentIdx: number) => {
+    if (!isDesktop) return;
+    let nextIdx = currentIdx;
+    if (e.key === "ArrowDown" || e.key === "ArrowRight") {
+      e.preventDefault();
+      nextIdx = (currentIdx + 1) % items.length;
+    } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+      e.preventDefault();
+      nextIdx = (currentIdx - 1 + items.length) % items.length;
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      nextIdx = 0;
+    } else if (e.key === "End") {
+      e.preventDefault();
+      nextIdx = items.length - 1;
+    }
+
+    if (nextIdx !== currentIdx) {
+      selectItem(nextIdx);
+      desktopTabRefs.current[nextIdx]?.focus();
+    }
+  };
 
   return (
-    <article className="w-full bg-white">
+    <article className="w-full bg-white text-[var(--ink)]">
+      {/* 1. Hero Band */}
       <HeroBand
         variant="immersive"
-        imageSrc={IMG.warehouses.loadingDocks.hero}
+        imageSrc="https://res.cloudinary.com/cyfb9slf/image/upload/v1792202368/loading-docks-hero.jpg"
         imageAlt={data.h1}
         h1={data.h1}
         subtitle={data.quickAnswer}
       />
 
+      {/* 2. Interactive Section */}
       <section className="container py-[var(--sec-y-lg)]">
-        {/* Tab List */}
-        <div className="flex border-b border-[var(--rule)] gap-8 overflow-x-auto scrollbar-none mb-12">
-          {tabs.map((t, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => setActiveTab(idx)}
-              className={`pb-4 text-[16px] lg:text-[18px] font-bold whitespace-nowrap transition-colors relative cursor-pointer ${
-                activeTab === idx ? "text-[var(--blue)]" : "text-[var(--grey)] hover:text-[var(--ink)]"
-              }`}
-            >
-              {t.title}
-              {activeTab === idx && (
-                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--blue)]" />
+        {/* ========================================================
+            DESKTOP VIEW: Two columns (7fr / 5fr, gap 72px, centered)
+            Left: real photo shape holding the 3 photos with Slat Reveal
+            Right: list of 3 titles with 1px lines between, blue dot, ACCORDION text, and 2px timer line
+        ======================================================== */}
+        <div
+          className="hidden lg:grid grid-cols-12 gap-[72px] items-center max-w-[1280px] mx-auto text-left"
+          onMouseEnter={handleContainerMouseEnter}
+          onMouseLeave={handleContainerMouseLeave}
+        >
+          {/* Left Column (7fr / col-span-7): Real photo shape (aspect-[1024/687]) with 6-slat reveal */}
+          <div className="col-span-7">
+            <div className="relative w-full aspect-[1024/687] overflow-hidden bg-slate-950 select-none">
+              {/* Base Photo */}
+              <img
+                src={cl(currentPhoto, 1920)}
+                alt={items[activeIdx]?.title || ""}
+                width={1024}
+                height={687}
+                loading="eager"
+                decoding="async"
+                className="absolute inset-0 w-full h-full object-cover object-center block"
+              />
+
+              {/* 6 Horizontal Slats Overlay during reveal */}
+              {incomingPhoto && (
+                <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
+                  {[0, 1, 2, 3, 4, 5].map((i) => (
+                    <div
+                      key={i}
+                      ref={(el) => {
+                        desktopSlatBoxRefs.current[i] = el;
+                      }}
+                      className="absolute left-0 right-0 overflow-hidden transform-gpu origin-top"
+                      style={{
+                        top: `${(i * 100) / 6}%`,
+                        height: `${100 / 6}%`,
+                        transform: "scaleY(0)",
+                      }}
+                    >
+                      <img
+                        src={cl(incomingPhoto, 1920)}
+                        alt=""
+                        width={1024}
+                        height={687}
+                        className="absolute left-0 right-0 w-full pointer-events-none"
+                        style={{
+                          height: "600%",
+                          top: `${-i * 100}%`,
+                          objectFit: "cover",
+                          objectPosition: "center",
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
               )}
-            </button>
-          ))}
+            </div>
+          </div>
+
+          {/* Right Column (5fr / col-span-5): 3 titles list with 1px lines between, role="tablist" */}
+          <div
+            role="tablist"
+            aria-orientation="vertical"
+            className="col-span-5 divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]"
+          >
+            {items.map((item, idx) => {
+              const isActive = activeIdx === idx;
+
+              return (
+                <div key={idx} className="py-6">
+                  {/* Title Button (Tab) */}
+                  <button
+                    ref={(el) => {
+                      desktopTabRefs.current[idx] = el;
+                    }}
+                    role="tab"
+                    id={`tab-desktop-${idx}`}
+                    aria-controls={`panel-desktop-${idx}`}
+                    aria-selected={isActive}
+                    tabIndex={isActive ? 0 : -1}
+                    type="button"
+                    onClick={() => selectItem(idx)}
+                    onMouseEnter={() => handleItemMouseEnter(idx)}
+                    onMouseLeave={handleItemMouseLeave}
+                    onKeyDown={(e) => handleKeyDown(e, idx)}
+                    className="w-full flex items-center gap-3 text-left cursor-pointer focus-visible:outline-none group select-none bg-transparent border-0 p-0"
+                  >
+                    {/* Active Title Blue Dot at Left */}
+                    <span
+                      className={`w-2.5 h-2.5 rounded-full shrink-0 transition-opacity duration-300 ${
+                        isActive ? "bg-[var(--blue)] opacity-100" : "opacity-0"
+                      }`}
+                    />
+
+                    {/* Title Style: bold, ink colour, uppercase */}
+                    <span className="font-bold uppercase text-[18px] lg:text-[20px] text-[#0A0A0A] leading-snug">
+                      {item.title.toUpperCase()}
+                    </span>
+                  </button>
+
+                  {/* Active Text Panel: opens with ACCORDION (600ms), text RISE */}
+                  <div
+                    id={`panel-desktop-${idx}`}
+                    role="tabpanel"
+                    aria-labelledby={`tab-desktop-${idx}`}
+                    hidden={!isActive}
+                    className="grid transition-[grid-template-rows] duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] pl-[22px]"
+                    style={{
+                      gridTemplateRows: isActive ? "1fr" : "0fr",
+                    }}
+                  >
+                    <div className="overflow-hidden">
+                      <p className="pt-3 text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal">
+                        {item.text}
+                      </p>
+
+                      {/* 2px blue line that draws over 7000ms (autoplay timer) */}
+                      {isActive && (
+                        <div className="w-full h-[2px] bg-[#E5E5E5] mt-4 overflow-hidden rounded-full">
+                          <div
+                            ref={desktopTimerRef}
+                            className="h-full bg-[var(--blue)] origin-left transform-gpu"
+                            style={{ transform: "scaleX(0)" }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Active Tab Panel */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center text-left">
-          <div className="lg:col-span-6">
-            <PhotoBox
-              src={tabs[activeTab]?.img || ""}
-              alt={tabs[activeTab]?.title || ""}
-              ratio="4/3"
-            />
-          </div>
-          <div className="lg:col-span-6 space-y-4">
-            <h3 className="text-[26px] lg:text-[32px] font-bold text-[var(--ink)]">
-              {tabs[activeTab]?.title}
-            </h3>
-            <p className="text-[var(--grey-strong)] leading-[1.75]" style={{ fontSize: "var(--fs-body)" }}>
-              {tabs[activeTab]?.text}
-            </p>
-          </div>
+        {/* ========================================================
+            MOBILE VIEW:
+            Each card for each image and heading (ALL CAPS) and subheading:
+            Card 1: Image 1 -> Heading 1 in all caps -> Subheading 1
+            Card 2: Image 2 -> Heading 2 in all caps -> Subheading 2
+            Card 3: Image 3 -> Heading 3 in all caps -> Subheading 3
+        ======================================================== */}
+        <div className="lg:hidden flex flex-col gap-6 sm:gap-8 max-w-[640px] mx-auto text-left">
+          {items.map((item, idx) => (
+            <div
+              key={idx}
+              className="w-full bg-white border border-[#E5E5E5] overflow-hidden flex flex-col"
+            >
+              {/* Image at natural aspect ratio */}
+              <div className="relative w-full aspect-[1024/687] overflow-hidden bg-slate-950">
+                <img
+                  src={cl(item.img, 1080)}
+                  alt={item.title}
+                  width={1024}
+                  height={687}
+                  loading={idx === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                  className="w-full h-full object-cover object-center block"
+                />
+              </div>
+
+              {/* Heading in ALL CAPS and then Subheading */}
+              <div className="p-5 sm:p-6 flex flex-col text-left">
+                <h3 className="font-bold uppercase text-[16px] sm:text-[18px] text-[#0A0A0A] leading-snug tracking-[-0.01em] mb-2.5 sm:mb-3">
+                  {item.title.toUpperCase()}
+                </h3>
+                <p className="text-[15px] text-[var(--blue)] leading-[1.6] font-normal">
+                  {item.text}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* 3. FAQ Section: size according to other pages */}
       {data.faq && data.faq.length > 0 && (
-        <section className="container py-[var(--sec-y)]">
-          <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="font-bold text-[var(--ink)] mb-8" style={{ fontSize: "var(--fs-h2)" }}>
-              Frequently Asked Questions
+        <section className="container py-[var(--sec-y-lg)] border-t border-[#E5E5E5] text-left max-w-[1340px] mx-auto">
+          <div className="max-w-[800px] mx-auto">
+            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
+              FREQUENTLY ASKED QUESTIONS
             </h2>
-            <Accordion items={data.faq} size="large" />
+
+            <div className="w-full divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
+              {data.faq.map((item, idx) => {
+                const isOpen = openFaqIndex === idx;
+
+                return (
+                  <div key={idx} className="group overflow-hidden">
+                    <button
+                      type="button"
+                      aria-expanded={isOpen}
+                      onClick={() =>
+                        setOpenFaqIndex((prev) => (prev === idx ? null : idx))
+                      }
+                      className="w-full min-h-[48px] py-5 lg:py-6 flex items-center justify-between text-left cursor-pointer transition-colors focus-visible:outline-none"
+                    >
+                      <span className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug pr-4">
+                        {item.q}
+                      </span>
+
+                      {/* Rotating Plus Icon (0 to 45deg over 400ms E1) */}
+                      <span
+                        className="relative flex-shrink-0 w-6 h-6 flex items-center justify-center transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                        style={{
+                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
+                        }}
+                      >
+                        <span className="absolute w-[16px] h-[2px] bg-[var(--blue)]" />
+                        <span className="absolute h-[16px] w-[2px] bg-[var(--blue)]" />
+                      </span>
+                    </button>
+
+                    {/* Accordion panel: grid-template-rows 0fr to 1fr over 600ms E1 */}
+                    <div
+                      className="grid transition-[grid-template-rows] duration-600 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                      style={{
+                        gridTemplateRows: isOpen ? "1fr" : "0fr",
+                      }}
+                    >
+                      <div className="overflow-hidden">
+                        <p
+                          className="pt-1.5 pb-5 text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal max-w-[800px] transition-opacity duration-400 delay-150"
+                          style={{ opacity: isOpen ? 1 : 0 }}
+                        >
+                          {item.a}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
       )}
 
-      {/* Next Banner */}
+      {/* 4. Next Banner */}
       <NextBand
-        image={IMG.warehouses.loadingDocks.next}
+        image="https://res.cloudinary.com/cyfb9slf/image/upload/v1792202368/loading-docks-next.jpg"
         nextUrl="/structural-steel-fabrication-pakistan/columns-and-beams/"
         nextTitle="Columns and Beams"
       />
