@@ -78,9 +78,9 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
   if (data.url.includes("crane-sheds")) return <CraneShedsLayout data={data} />;
 
   // 3. Steel Warehouses Division Signature Layouts (9.13 - 9.17)
-  if (data.url.includes("storage-warehouses")) return <StorageWarehousesLayout data={data} />;
-  if (data.url.includes("logistics-warehouses")) return <LogisticsWarehousesLayout data={data} />;
   if (data.url.includes("cold-storage")) return <ColdStorageLayout data={data} />;
+  if (data.url.includes("/storage-warehouses/")) return <StorageWarehousesLayout data={data} />;
+  if (data.url.includes("logistics-warehouses")) return <LogisticsWarehousesLayout data={data} />;
   if (data.url.includes("grain-and-wheat")) return <GrainWarehousesLayout data={data} />;
   if (data.url.includes("warehouses-with-loading-docks")) return <LoadingDocksLayout data={data} />;
 
