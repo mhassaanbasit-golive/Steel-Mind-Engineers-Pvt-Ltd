@@ -29,61 +29,93 @@ export const SmePolicy: React.FC = () => {
     }
   }, [location.hash]);
 
-  // Extract Page 6 Content (SME Policy 5 strips)
-  const p6Strips = page6.blocks
-    .filter(
-      (b) => b.type === "h2" && b.title !== "Why Steel Mind Engineers Has This Policy"
-    )
-    .map((h2Block, idx) => {
-      const nextP = page6.blocks[page6.blocks.indexOf(h2Block) + 1];
-      return {
-        num: String(idx + 1).padStart(2, "0"),
-        title: h2Block.title || "",
-        desc: nextP?.text || "",
-      };
-    });
+  // Extract Page 6 Content (SME Policy 5 strips, sentence case titles)
+  const p6Strips = [
+    {
+      num: "01",
+      title: "Quality management",
+      desc: "Steel Mind Engineers inspects material when it arrives, checks dimensions after cutting, examines welds before assembly and checks alignment during erection. When a result falls short of the specification, the correction is recorded.",
+    },
+    {
+      num: "02",
+      title: "Health and safety",
+      desc: "Every employee is trained before working on site. Workers wear certified protective equipment and follow written site rules. Risk reviews take place regularly so that hazards are removed instead of tolerated.",
+    },
+    {
+      num: "03",
+      title: "Environmental care",
+      desc: "Cutting layouts are planned to reduce scrap, and offcuts are sent for recycling. Welding fumes and paint overspray are controlled. Working methods are chosen to limit noise, dust and waste at the workshop and on client premises.",
+    },
+    {
+      num: "04",
+      title: "Legal compliance",
+      desc: "Steel Mind Engineers follows the quality, environmental and workplace safety rules that apply to its operations. It keeps the records needed to show that compliance to clients and authorities.",
+    },
+    {
+      num: "05",
+      title: "Improvement and responsibility",
+      desc: "Feedback from clients, supervisors and workers is collected after each project and turned into changes in procedure. Management is responsible for applying the policy. Every employee has the right and the duty to stop work that looks unsafe and to report it.",
+    },
+  ];
 
-  // Extract Page 7 Content (Committed To 5 columns)
+  // Extract Page 7 Content (Committed To 5 columns, sentence case titles)
   const p7Commitments = [
     {
       num: "01",
-      title: "The Steel Matches the Drawing",
+      title: "The steel matches the drawing",
       desc: "Every structure is built to approved drawings. Steel Mind Engineers checks material on arrival, checks dimensions after cutting and checks alignment during erection.",
     },
     {
       num: "02",
-      title: "A Schedule You Can Plan Around",
+      title: "A schedule you can plan around",
       desc: "You receive a written schedule before work starts showing design approval, fabrication, delivery and erection. Early notices are given for any adjustments.",
     },
     {
       num: "03",
-      title: "Safe Work on Every Site",
+      title: "Safe work on every site",
       desc: "Workers wear certified protective equipment and follow written lifting plans. Any worker may stop a job that looks unsafe.",
     },
     {
       num: "04",
-      title: "One Point of Contact",
+      title: "One point of contact",
       desc: "You deal with one project coordinator from contract to handover who coordinates design, workshop and site teams seamlessly.",
     },
     {
       num: "05",
-      title: "Support After Handover",
+      title: "Support after handover",
       desc: "Steel buildings need repairs, additions and extensions over the years. Steel Mind Engineers stays available for long-term support.",
     },
   ];
 
   return (
-    <div className="relative w-full bg-white text-[var(--ink)]">
-      {/* Hero with 20% overlay — headline is existing SME Policy section title word for word */}
+    <div className="sme-policy-page relative w-full bg-white text-[var(--ink)]">
+      {/* Mobile banner overlap fix scoped to SME Policy: push headline down and ensure back arrow sits cleanly above */}
+      <style>{`
+        @media (max-width: 767px) {
+          .sme-policy-page [data-hero] .md\\:hidden > div:last-child {
+            padding-top: 2rem !important;
+          }
+          .sme-policy-page [data-hero] h1 {
+            margin-top: 10px !important;
+            padding-top: 8px !important;
+          }
+          button[aria-label="Go back"] {
+            top: 66px !important;
+            left: 16px !important;
+          }
+        }
+      `}</style>
+
+      {/* Hero with 20% overlay — headline is existing SME Policy section title in ALL CAPITALS */}
       <SubpageHero
-        title={page6.h1}
+        title="SME POLICY: QUALITY, HEALTH, SAFETY AND ENVIRONMENT AT STEEL MIND ENGINEERS"
         image={aboutImages.smePolicy.hero}
         quoteUrl="/contact-us/#quote"
         overlay={true}
       />
 
       {/* ========================================================= */}
-      {/* 1. SME POLICY SECTION (5 rows) — title already shown in hero */}
+      {/* 1. SME POLICY SECTION (5 rows with numbers above title)   */}
       {/* ========================================================= */}
       <section
         id="sme-policy"
@@ -91,25 +123,36 @@ export const SmePolicy: React.FC = () => {
         className="w-full bg-white text-[var(--ink)] py-[72px] lg:py-[112px]"
       >
         <div className="max-w-[1340px] mx-auto px-5 lg:px-10">
-          <p className="text-[14px] lg:text-[15px] text-[var(--blue)] font-normal max-w-[600px] leading-[1.7]">
+          {/* Section Heading: ALL CAPITALS bold ink colour (One-Step size: 16px mobile, 44px desktop) */}
+          <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] uppercase leading-[1.15] tracking-[-0.02em] mb-4 lg:mb-6">
+            WHY STEEL MIND ENGINEERS HAS THIS POLICY
+          </h2>
+
+          <p className="text-[15px] lg:text-[16px] text-[var(--blue)] font-normal max-w-[760px] leading-[1.6] lg:leading-[1.7]">
             {page6.quickAnswer}
           </p>
 
-          <div className="divide-y divide-[#E5E5E5] border-y border-[#E5E5E5] mt-12">
+          <div className="divide-y divide-[#E5E5E5] border-y border-[#E5E5E5] mt-12 lg:mt-16">
             {p6Strips.map((strip) => (
               <div
                 key={strip.num}
-                className="grid grid-cols-1 lg:grid-cols-[64px_1fr_1.8fr] gap-4 lg:gap-8 py-6 px-3 items-baseline"
+                className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-8 lg:py-12 items-start"
               >
-                <div className="text-[16px] font-bold text-[#1E3A8A] tabular-nums tracking-[0.06em]">
-                  {strip.num}
+                {/* Number placed above its title, like One-Step */}
+                <div className="lg:col-span-5">
+                  <span className="block text-[40px] lg:text-[64px] font-[800] text-[var(--blue)] leading-none select-none mb-3">
+                    {strip.num}
+                  </span>
+                  <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
+                    {strip.title}
+                  </h3>
                 </div>
-                <h2 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
-                  {strip.title}
-                </h2>
-                <p className="text-[14px] lg:text-[15px] text-[var(--blue)] leading-[1.7] max-w-[600px]">
-                  {strip.desc}
-                </p>
+
+                <div className="lg:col-span-7">
+                  <p className="text-[15px] lg:text-[16px] text-[var(--blue)] font-normal leading-[1.6] lg:leading-[1.7] max-w-[680px]">
+                    {strip.desc}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
@@ -128,53 +171,48 @@ export const SmePolicy: React.FC = () => {
         className="w-full bg-[var(--blue)] text-white py-[72px] lg:py-[112px] border-t border-white/20"
       >
         <div className="max-w-[1340px] mx-auto px-5 lg:px-10">
-          <h2 className="text-[22px] lg:text-[48px] font-bold text-white leading-[1.15] tracking-[-0.02em]">
-            {page7.h1}
+          {/* Section Heading: ALL CAPITALS bold white (One-Step size: 16px mobile, 44px desktop) */}
+          <h2 className="text-[16px] lg:text-[44px] font-bold text-white uppercase leading-[1.15] tracking-[-0.02em] mb-4 lg:mb-6">
+            COMMITTED TO: ACCURATE STEEL, SAFE SITES AND HONEST SCHEDULES
           </h2>
 
-          <div className="w-[40px] h-[1px] bg-white/40 mt-4" />
+          <div className="w-[40px] h-[1px] bg-white/40 mb-5" />
 
-          <p className="text-[14px] lg:text-[15px] text-white/90 font-normal max-w-[600px] mt-5 leading-[1.7]">
+          {/* Intro text: solid white, no opacity reduction, no early ragged wrap */}
+          <p className="text-[15px] lg:text-[16px] text-white font-normal max-w-[760px] leading-[1.6] lg:leading-[1.7]">
             {page7.quickAnswer}
           </p>
 
-          {/* Desktop: Horizontal Timeline */}
-          <div className="hidden lg:block mt-16 relative">
-            <div className="absolute top-[3px] left-0 right-0 h-[1px] bg-white/30 z-0" />
-
-            <div className="grid grid-cols-5 gap-6 relative z-10">
-              {p7Commitments.map((com) => (
-                <div key={com.num} className="pt-6">
-                  <div className="w-[7px] h-[7px] rounded-full bg-white -mt-[28px] mb-6" />
-
-                  <div className="text-[16px] font-bold text-white tabular-nums tracking-[0.06em]">
-                    {com.num}
-                  </div>
-                  <h3 className="text-[17px] lg:text-[22px] font-semibold text-white leading-[1.25] tracking-[-0.01em] mt-2">
-                    {com.title}
-                  </h3>
-                  <p className="text-[14px] lg:text-[15px] text-white/80 leading-[1.7] max-w-[600px] mt-2">
-                    {com.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Mobile: Vertical Timeline */}
-          <div className="block lg:hidden mt-12 relative pl-8 space-y-8">
-            <div className="absolute left-[4px] top-1 bottom-1 w-[2px] bg-white/40" />
-
+          {/* Desktop: 5 Columns with numbers above titles */}
+          <div className="hidden lg:grid grid-cols-5 gap-6 lg:gap-8 mt-16 pt-8 border-t border-white/20">
             {p7Commitments.map((com) => (
-              <div key={com.num} className="relative">
-                <div className="absolute -left-[32px] top-1 w-[10px] h-[10px] rounded-full bg-white" />
-                <div className="text-[16px] font-bold text-white tabular-nums tracking-[0.06em]">
+              <div key={com.num} className="flex flex-col items-start">
+                {/* Number placed above its title, like One-Step */}
+                <span className="block text-[40px] lg:text-[64px] font-[800] text-white leading-none select-none mb-3">
                   {com.num}
-                </div>
-                <h3 className="text-[17px] font-semibold text-white leading-[1.25] tracking-[-0.01em] mt-1">
+                </span>
+                <h3 className="text-[17px] lg:text-[20px] font-bold text-white leading-[1.25] tracking-[-0.01em] mb-2">
                   {com.title}
                 </h3>
-                <p className="text-[14px] text-white/80 leading-[1.7] mt-1">
+                <p className="text-[15px] lg:text-[16px] text-white font-normal leading-[1.6] lg:leading-[1.7] w-full">
+                  {com.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile: 5 blocks with numbers above titles, no restrictive max-width to prevent ragged wrap */}
+          <div className="block lg:hidden mt-12 space-y-10">
+            {p7Commitments.map((com) => (
+              <div key={com.num} className="w-full pt-6 border-t border-white/20 first:border-t-0 first:pt-0">
+                {/* Number placed above its title, like One-Step */}
+                <span className="block text-[40px] font-[800] text-white leading-none select-none mb-3">
+                  {com.num}
+                </span>
+                <h3 className="text-[17px] font-bold text-white leading-[1.25] tracking-[-0.01em] mb-2">
+                  {com.title}
+                </h3>
+                <p className="text-[15px] text-white font-normal leading-[1.6] w-full max-w-none">
                   {com.desc}
                 </p>
               </div>
@@ -183,9 +221,9 @@ export const SmePolicy: React.FC = () => {
         </div>
       </section>
 
-      {/* Next Banner to Factory with 20% overlay */}
+      {/* Next Banner to Factory with ALL CAPITALS heading */}
       <SubpageNextBanner
-        heading="Factory Tour: Inside the Steel Mind Engineers Fabrication Factory in Lahore"
+        heading="FACTORY TOUR: INSIDE THE STEEL MIND ENGINEERS FABRICATION FACTORY IN LAHORE"
         title="Factory"
         url="/about/factory"
         image={aboutImages.smePolicy.nextFactory}

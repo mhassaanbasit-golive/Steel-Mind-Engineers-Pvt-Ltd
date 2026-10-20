@@ -1151,21 +1151,42 @@ export const ColumnsBeamsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
 
 // 9.19 Trusses — signature: "Sticky 7fr/5fr viewer on rail (Desktop) + editorial flow with tick rail (Mobile)"
 export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
-  const { sections } = extractSections(data);
-  const images = [
-    IMG.structural.trusses.t1,
-    IMG.structural.trusses.t2,
-    IMG.structural.trusses.t3,
-    IMG.structural.trusses.t4,
-    IMG.structural.trusses.t5,
-  ];
+  // Exact Image URLs specified in brief
+  const HERO_IMAGE = "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202995/trusses-hero.jpg";
+  const NEXT_IMAGE = "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202999/Trusses-next.jpg";
 
-  const blocks = sections.slice(0, 5).map((sec, idx) => ({
-    num: String(idx + 1).padStart(2, "0"),
-    title: sec.title || "",
-    text: sec.text || "",
-    img: images[idx] || images[0],
-  }));
+  const blocks = [
+    {
+      num: "01",
+      title: "What a truss is",
+      text: "A truss is a frame made of straight members arranged in triangles. The triangles share the load, so each member carries only tension or compression. This lets a truss span a long distance with little steel.",
+      img: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792203006/truusses-1.jpg",
+    },
+    {
+      num: "02",
+      title: "Where trusses are used",
+      text: "Trusses support the roofs of sheds, workshops, halls, stadium stands, petrol stations and farms. They suit open-sided buildings, where their shape is also visible and attractive.",
+      img: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202981/trusses-2.jpg",
+    },
+    {
+      num: "03",
+      title: "Common truss types",
+      text: "A pitched truss has a top chord that slopes to both sides, the usual shape for sheds. A parallel-chord truss has parallel top and bottom chords and suits flat roofs and floor systems. A space truss is a three-dimensional frame for very large roofs.",
+      img: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202988/Trusses-3.jpg",
+    },
+    {
+      num: "04",
+      title: "Tubes or angles",
+      text: "Trusses can use steel tubes or angle sections. Tubes look clean and resist weather well. Angles are easy to connect and often cost less. The engineer will recommend one based on span, load and budget.",
+      img: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202990/Trusses-4.jpg",
+    },
+    {
+      num: "05",
+      title: "Delivery and erection",
+      text: "Long trusses are made in parts, delivered on trucks and joined on site. Steel Mind Engineers plans the splice points so that each part can travel and be lifted safely.",
+      img: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202997/Trusses-5.jpg",
+    },
+  ];
 
   // Active item tracking (ACTIVE 50% rule)
   const [activeIdx, setActiveIdx] = useState(0);
@@ -1177,6 +1198,7 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
   // Animation & DOM refs
   const rootRef = useRef<HTMLElement>(null);
   const desktopLayersRef = useRef<(HTMLDivElement | null)[]>([]);
+  const desktopImgRefs = useRef<(HTMLImageElement | null)[]>([]);
   const barFillsRef = useRef<(HTMLDivElement | null)[]>([]);
   const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
   const mobileBlockRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -1188,14 +1210,31 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
 
   // 5. Preload and decode all 5 photos before the first swap
   useEffect(() => {
-    images.forEach((src) => {
+    let timer: NodeJS.Timeout;
+    const debouncedRefresh = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 200);
+    };
+
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(debouncedRefresh);
+    }
+
+    const allUrls = [HERO_IMAGE, ...blocks.map((b) => b.img), NEXT_IMAGE];
+    allUrls.forEach((src) => {
       const img = new Image();
-      img.src = src;
+      img.src = cl(src, 1920);
       if (img.decode) {
-        img.decode().catch(() => {});
+        img.decode().then(debouncedRefresh).catch(() => {});
+      } else {
+        img.onload = debouncedRefresh;
       }
     });
-  }, [images]);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // SWAP recipe for Desktop:
   // "slower for this page: wipe 1400ms E2, inner scale 1.05 to 1 over 2000ms E1. Bars: PROGRESS BARS 600ms. Dot: 300ms."
@@ -1212,9 +1251,9 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
 
     const currentLayer = desktopLayersRef.current[currentIdx];
     const nextLayer = desktopLayersRef.current[nextIdx];
+    const nextImg = desktopImgRefs.current[nextIdx];
     if (!nextLayer) return;
 
-    const nextImg = nextLayer.querySelector("img");
     displayedIdxRef.current = nextIdx;
 
     if (currentLayer) {
@@ -1230,11 +1269,16 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
     }
 
     const tl = gsap.timeline({
+      onStart: () => {
+        gsap.set(nextLayer, { willChange: "clip-path" });
+        if (nextImg) gsap.set(nextImg, { willChange: "transform" });
+      },
       onComplete: () => {
+        gsap.set(nextLayer, { zIndex: 1, clearProps: "willChange" });
+        if (nextImg) gsap.set(nextImg, { clearProps: "willChange,scale" });
         if (currentLayer) {
           gsap.set(currentLayer, { visibility: "hidden", zIndex: 0 });
         }
-        gsap.set(nextLayer, { zIndex: 1 });
         activeSwapTweenRef.current = null;
       },
     });
@@ -1326,6 +1370,9 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
     }
     window.addEventListener("scroll", onScroll, { passive: true });
 
+    // Initial check on mount
+    onScroll();
+
     return () => {
       if (lenis) {
         lenis.off("scroll", onScroll);
@@ -1339,7 +1386,8 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
   // "pointerenter on a block starts a 150ms timer; if pointer stays, SWAP to that block photo and mark hover-controlled; scroll hands control back"
   const handlePointerEnter = useCallback(
     (idx: number) => {
-      if (window.innerWidth < 1024) return;
+      if (typeof window === "undefined") return;
+      if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
       if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
 
       hoverTimerRef.current = setTimeout(() => {
@@ -1364,7 +1412,9 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
 
-      // Desktop: RAIL(fill) scrub and RISE on blocks
+      // ==========================================
+      // DESKTOP: (min-width: 1024px)
+      // ==========================================
       mm.add("(min-width: 1024px)", () => {
         if (railFillRef.current) {
           gsap.fromTo(
@@ -1385,7 +1435,7 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
           );
         }
 
-        // RISE text on enter
+        // RISE text on enter (transform and opacity only)
         blockRefs.current.forEach((el) => {
           if (!el) return;
           const textGroup = el.querySelectorAll(".block-content");
@@ -1402,12 +1452,20 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                 start: "top 85%",
                 once: true,
               },
+              onStart: () => {
+                textGroup.forEach((t) => gsap.set(t, { willChange: "transform, opacity" }));
+              },
+              onComplete: () => {
+                textGroup.forEach((t) => gsap.set(t, { clearProps: "willChange" }));
+              },
             }
           );
         });
       });
 
-      // Mobile: each photo CURTAIN 900ms, text RISE
+      // ==========================================
+      // MOBILE: (max-width: 1023px)
+      // ==========================================
       mm.add("(max-width: 1023px)", () => {
         mobileBlockRefs.current.forEach((el) => {
           if (!el) return;
@@ -1421,6 +1479,14 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                 trigger: el,
                 start: "top 90%",
                 once: true,
+              },
+              onStart: () => {
+                gsap.set(photoBox, { willChange: "clip-path" });
+                if (photoImg) gsap.set(photoImg, { willChange: "transform" });
+              },
+              onComplete: () => {
+                gsap.set(photoBox, { clearProps: "willChange" });
+                if (photoImg) gsap.set(photoImg, { clearProps: "willChange,scale" });
               },
             });
             tl.fromTo(
@@ -1453,13 +1519,21 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                   start: "top 90%",
                   once: true,
                 },
+                onStart: () => {
+                  textGroup.forEach((t) => gsap.set(t, { willChange: "transform, opacity" }));
+                },
+                onComplete: () => {
+                  textGroup.forEach((t) => gsap.set(t, { clearProps: "willChange" }));
+                },
               }
             );
           }
         });
       });
 
-      // Reduced motion: show final state at once
+      // ==========================================
+      // REDUCED MOTION: Show final state at once
+      // ==========================================
       mm.add("(prefers-reduced-motion: reduce)", () => {
         if (railFillRef.current) gsap.set(railFillRef.current, { scaleY: 1 });
         desktopLayersRef.current.forEach((layer, idx) => {
@@ -1478,22 +1552,123 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
 
   return (
     <article ref={rootRef} className="w-full bg-white text-left">
-      {/* Hero */}
-      <HeroBand
-        variant="immersive"
-        imageSrc={IMG.structural.trusses.hero}
-        imageAlt={data.h1}
-        h1={data.h1.toUpperCase()}
-        subtitle={data.quickAnswer}
-      />
+      {/* 1. HERO SECTION: Full photo shape (1024/572), UPPERCASE capitalized bold headings, NO subheading in banner */}
+      <section data-hero className="relative w-full bg-[#0A0A0A] overflow-hidden">
+        {/* Desktop Hero */}
+        <div
+          className="hidden md:flex relative w-full overflow-hidden flex-col justify-end"
+          style={{
+            height: "min(calc(100svh - 40px), 640px)",
+            minHeight: "480px",
+          }}
+        >
+          <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+            <img
+              src={cl(HERO_IMAGE, 2560)}
+              alt="Steel roof trusses in Pakistan"
+              width={1024}
+              height={572}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              className="w-full h-full object-cover object-[center_45%]"
+            />
+          </div>
 
-      {/* Main Section */}
-      <section className="w-full bg-white py-12 lg:py-24 px-6 lg:px-8 border-b border-[var(--rule)]">
+          {/* Flat nav blue tint 28% + Dark Contrast Gradients */}
+          <div
+            className="absolute inset-0 z-[1] pointer-events-none"
+            style={{ backgroundColor: "rgba(30, 58, 138, 0.28)" }}
+          />
+          <div
+            className="absolute inset-0 z-[2] pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.30) 45%, rgba(0,0,0,0) 100%)",
+            }}
+          />
+          <div
+            className="absolute inset-0 z-[2] pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 65%)",
+            }}
+          />
+
+          {/* Bottom text block: Title + CTA button ONLY */}
+          <div className="max-w-[1280px] mx-auto w-full px-6 lg:px-8 relative z-[3] pb-12 lg:pb-16 text-left">
+            <h1
+              className="text-[28px] lg:text-[44px] font-bold text-white uppercase tracking-[-0.02em] leading-[1.15] max-w-[860px]"
+            >
+              STEEL ROOF TRUSSES IN PAKISTAN: LIGHT, STRONG MEMBERS FOR LONG SPANS
+            </h1>
+
+            <div className="mt-6">
+              <TransitionLink
+                to="/contact-us/#quote"
+                className="btn btn--light btn-sm"
+              >
+                <span>Request a Quote</span>
+                <span className="btn-arrow inline-block" aria-hidden="true">&rarr;</span>
+              </TransitionLink>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Hero: Compact, tight, zero empty space */}
+        <div className="md:hidden w-full flex flex-col">
+          <div
+            className="relative w-full overflow-hidden bg-[#0A0A0A]"
+            style={{ aspectRatio: "1024 / 572" }}
+          >
+            <img
+              src={cl(HERO_IMAGE, 1080)}
+              alt="Steel roof trusses in Pakistan"
+              width={1024}
+              height={572}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              className="w-full h-full object-cover object-center"
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{ backgroundColor: "rgba(30, 58, 138, 0.25)" }}
+            />
+          </div>
+
+          <div
+            className="w-full text-white text-left px-6 py-6"
+            style={{ backgroundColor: "var(--blue)" }}
+          >
+            <h1 className="text-[16px] font-bold text-white uppercase tracking-[-0.02em] leading-tight">
+              STEEL ROOF TRUSSES IN PAKISTAN: LIGHT, STRONG MEMBERS FOR LONG SPANS
+            </h1>
+            <div className="mt-5">
+              <TransitionLink
+                to="/contact-us/#quote"
+                className="btn btn--light btn-sm"
+              >
+                <span>Request a Quote</span>
+                <span className="btn-arrow inline-block" aria-hidden="true">&rarr;</span>
+              </TransitionLink>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. MAIN SECTION: Two columns (7fr / 5fr, gap 88px) Desktop + Editorial Flow Mobile */}
+      <section className="w-full bg-white py-12 lg:py-24 px-6 lg:px-8 border-b border-[var(--rule)] relative">
         <div className="max-w-[1360px] mx-auto">
-          {/* Section Heading: UPPERCASE bold ink color */}
-          <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] uppercase tracking-[-0.02em] leading-tight mb-10 lg:mb-16">
+          {/* Section Heading: UPPERCASE bold ink color (Mobile 16px, Desktop 44px) */}
+          <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] uppercase tracking-[-0.02em] leading-tight mb-4 lg:mb-6">
             STEEL ROOF TRUSSES SPECIFICATIONS
           </h2>
+
+          {/* Subheading placed directly below main heading */}
+          <p className="text-[15px] lg:text-[16px] font-normal text-[var(--blue)] leading-[1.6] lg:leading-[1.7] max-w-[840px] mb-10 lg:mb-16">
+            A truss is a frame of straight members arranged in triangles, so it spans long distances with little steel. Steel Mind Engineers fabricates pitched, parallel-chord and space trusses for roofs and sheds.
+          </p>
 
           {/* Desktop View: Two columns (7fr / 5fr, gap 88px) */}
           <div
@@ -1520,6 +1695,9 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                     }}
                   >
                     <img
+                      ref={(el) => {
+                        desktopImgRefs.current[idx] = el;
+                      }}
                       src={cl(b.img, 1920)}
                       alt={b.title}
                       width={1024}
@@ -1532,7 +1710,7 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                 ))}
               </div>
 
-              {/* Under the box: 5 thin bars (active = blue, 600ms E1) */}
+              {/* Under the box: 5 thin bars (active = blue, PROGRESS BARS 600ms E1) */}
               <div className="mt-4 flex gap-2 w-full" aria-hidden="true">
                 {blocks.map((_, idx) => (
                   <div
@@ -1552,12 +1730,16 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
             </div>
 
             {/* Right Column (5fr): 5 blocks on a rail, each min-height 72svh, content centered */}
-            <div id="trusses-rail-container" className="relative pl-12">
-              {/* Rail Vertical Lines (2px line, dot turns blue when fill passes) */}
-              <div className="absolute left-[6px] top-[5%] bottom-[5%] w-[2px] bg-[#E5E7EB]" />
+            <div id="trusses-rail-container" className="relative w-full">
+              {/* Rail Vertical Lines: 2px wide, centered at exactly left: 24px */}
+              <div
+                className="absolute top-0 bottom-0 w-[2px] bg-[rgba(30,58,138,0.18)] pointer-events-none"
+                style={{ left: "24px", transform: "translateX(-50%)" }}
+              />
               <div
                 ref={railFillRef}
-                className="absolute left-[6px] top-[5%] bottom-[5%] w-[2px] bg-[var(--blue)] origin-top transform-gpu"
+                className="absolute top-0 bottom-0 w-[2px] bg-[var(--blue)] origin-top transform-gpu pointer-events-none"
+                style={{ left: "24px", transform: "translateX(-50%)" }}
               />
 
               {blocks.map((b, idx) => {
@@ -1570,27 +1752,33 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                     }}
                     onPointerEnter={() => handlePointerEnter(idx)}
                     onPointerLeave={handlePointerLeave}
-                    className="min-h-[72svh] flex flex-col justify-center py-12 relative text-left group"
+                    className="min-h-[72svh] flex flex-col justify-center py-12 relative text-left"
+                    style={{ paddingLeft: "64px" }}
                   >
-                    {/* Rail Dot (10px circle aligned with 2px line at center left: 6px) */}
+                    {/* Rail Dot: 10px circle perfectly centered at left: 24px and top: 50% */}
                     <div
-                      className={`absolute left-[-47px] top-[calc(50%-5px)] w-[10px] h-[10px] rounded-full transition-colors duration-300 ${
+                      className={`absolute w-[10px] h-[10px] rounded-full z-10 transition-colors duration-300 ${
                         isActive
-                          ? "bg-[var(--blue)] border-2 border-[var(--blue)] shadow-[0_0_8px_rgba(30,58,138,0.35)]"
+                          ? "bg-[var(--blue)] border-2 border-[var(--blue)]"
                           : "bg-white border-2 border-[var(--blue)]"
                       }`}
+                      style={{
+                        left: "24px",
+                        top: "50%",
+                        transform: "translate(-50%, -50%)",
+                      }}
                     />
 
-                    {/* Block Content (RISE once, full color kept on all blocks) */}
+                    {/* Block Content (RISE once, full colour kept on all blocks) */}
                     <div className="block-content">
                       {/* Number: solid, bold, var(--blue), placed above title, like One-Step. 64px, weight 800 */}
                       <div className="text-[64px] font-extrabold text-[var(--blue)] leading-none select-none mb-3">
                         {b.num}
                       </div>
 
-                      {/* Title: bold, ink colour, uppercase. 20px, weight 700 */}
-                      <h3 className="text-[20px] font-bold uppercase text-[#0A0A0A] leading-snug mb-3">
-                        {b.title.toUpperCase()}
+                      {/* Title: bold, ink colour, sentence case. 20px, weight 700 */}
+                      <h3 className="text-[20px] font-bold text-[#0A0A0A] leading-snug mb-3">
+                        {b.title}
                       </h3>
 
                       {/* Text: the blue of the One-Step body text (var(--blue)), regular weight, 16px / 1.7 */}
@@ -1604,30 +1792,32 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
             </div>
           </div>
 
-          {/* Mobile View: Editorial flow with right-edge sticky tick rail */}
-          <div className="lg:hidden relative">
-            {/* Vertical tick rail of 5 tick bars fixed/sticky at right edge (2px x 18px inactive, active 44px blue) */}
+          {/* Mobile View: Editorial flow with non-intrusive right-edge sticky tick rail */}
+          <div className="lg:hidden relative w-full">
+            {/* Vertical tick rail of 5 tick bars fixed at right edge of the section (2px x 18px inactive, active 44px blue) */}
             <div
-              className="sticky top-[50svh] -translate-y-1/2 float-right ml-2 w-[6px] flex flex-col items-end gap-2.5 pointer-events-none z-20"
+              className="absolute right-0 top-0 bottom-0 w-[14px] pointer-events-none z-20 flex justify-end"
               aria-hidden="true"
             >
-              {blocks.map((_, idx) => {
-                const isActive = activeIdx === idx;
-                return (
-                  <div
-                    key={idx}
-                    className={`w-[2px] h-[44px] origin-center transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                      isActive
-                        ? "scale-y-100 bg-[var(--blue)]"
-                        : "scale-y-[0.41] bg-[rgba(30,58,138,0.18)]"
-                    }`}
-                  />
-                );
-              })}
+              <div className="sticky top-1/2 -translate-y-1/2 flex flex-col items-center gap-2">
+                {blocks.map((_, idx) => {
+                  const isActive = activeIdx === idx;
+                  return (
+                    <div
+                      key={idx}
+                      className={`w-[2px] h-[44px] origin-center transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                        isActive
+                          ? "scale-y-100 bg-[var(--blue)]"
+                          : "scale-y-[0.41] bg-[rgba(30,58,138,0.18)]"
+                      }`}
+                    />
+                  );
+                })}
+              </div>
             </div>
 
             {/* Blocks: full-width photo, number, title, text, 56px between blocks */}
-            <div className="space-y-[56px] text-left">
+            <div className="space-y-[56px] text-left pr-5 pb-24">
               {blocks.map((b, idx) => (
                 <div
                   key={b.num}
@@ -1642,7 +1832,7 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                     style={{ aspectRatio: "1024 / 687" }}
                   >
                     <img
-                      src={cl(b.img, 1080)}
+                      src={cl(b.img, 1920)}
                       alt={b.title}
                       width={1024}
                       height={687}
@@ -1653,18 +1843,18 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                   </div>
 
                   {/* Under photo: number, title, text (RISE) */}
-                  <div className="mobile-text-group mt-4 pr-6">
-                    {/* Number: 40px solid bold var(--blue) */}
+                  <div className="mobile-text-group mt-4">
+                    {/* Number: 40px solid bold var(--blue), weight 800 */}
                     <div className="text-[40px] font-extrabold text-[var(--blue)] leading-none select-none mb-2">
                       {b.num}
                     </div>
 
-                    {/* Title: 17px bold uppercase ink colour */}
-                    <h3 className="text-[17px] font-bold uppercase text-[#0A0A0A] leading-snug mb-2">
-                      {b.title.toUpperCase()}
+                    {/* Title: 17px bold sentence case ink colour, weight 700 */}
+                    <h3 className="text-[17px] font-bold text-[#0A0A0A] leading-snug mb-2">
+                      {b.title}
                     </h3>
 
-                    {/* Text: 15px / 1.6 var(--blue) */}
+                    {/* Text: 15px / 1.6 var(--blue), regular weight */}
                     <p className="text-[15px] font-normal text-[var(--blue)] leading-[1.6]">
                       {b.text}
                     </p>
@@ -1676,7 +1866,7 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         </div>
       </section>
 
-      {/* Frequently Asked Questions: Reduced mobile size (16px heading, 17px Q, 15px A) / Desktop (44px heading, 20px Q, 16px A); All text uses TEXT STYLE */}
+      {/* 3. FREQUENTLY ASKED QUESTIONS: One-Step style, ACCORDION recipe */}
       {data.faq && data.faq.length > 0 && (
         <section className="w-full bg-white py-12 lg:py-20 px-6 lg:px-8 border-b border-[var(--rule)]">
           <div className="max-w-[800px] mx-auto text-left">
@@ -1691,23 +1881,31 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                   <div key={idx} className="py-5 lg:py-6">
                     <button
                       onClick={() => setOpenFaqIdx(isOpen ? null : idx)}
-                      className="w-full flex items-center justify-between text-left group cursor-pointer focus:outline-none"
+                      className="w-full min-h-[48px] flex items-center justify-between text-left group cursor-pointer focus:outline-none"
                       aria-expanded={isOpen}
                     >
-                      <span className="text-[17px] lg:text-[20px] font-bold uppercase text-[#0A0A0A] pr-4 leading-snug transition-colors group-hover:text-[var(--blue)]">
-                        {item.q.toUpperCase()}
+                      <span className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] pr-4 leading-snug transition-colors group-hover:text-[var(--blue)]">
+                        {item.q}
                       </span>
-                      <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center text-[var(--blue)] font-bold text-lg">
-                        {isOpen ? "−" : "+"}
+                      <span
+                        className="flex-shrink-0 w-8 h-8 flex items-center justify-center text-[var(--blue)] font-bold text-xl transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                        style={{
+                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
+                        }}
+                      >
+                        +
                       </span>
                     </button>
                     <div
-                      className={`grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                      className={`grid transition-[grid-template-rows] duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                         isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
                       }`}
                     >
-                      <div className="overflow-hidden">
-                        <p className="pt-3 text-[15px] lg:text-[16px] font-normal text-[var(--blue)] leading-[1.6] lg:leading-[1.7]">
+                      <div className="min-h-0 overflow-hidden">
+                        <p
+                          className="pt-3 text-[15px] lg:text-[16px] font-normal text-[var(--blue)] leading-[1.6] lg:leading-[1.7] transition-opacity duration-400 delay-150"
+                          style={{ opacity: isOpen ? 1 : 0 }}
+                        >
                           {item.a}
                         </p>
                       </div>
@@ -1720,79 +1918,516 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         </section>
       )}
 
-      {/* Next Banner */}
-      <NextBand
-        image={IMG.structural.trusses.next}
-        nextUrl="/structural-steel-fabrication-pakistan/mezzanine-floors/"
-        nextTitle="MEZZANINE FLOORS"
-      />
+      {/* 4. NEXT BANNER: Real photo shape (1024/434), UPPERCASE capitalized heading */}
+      <section className="w-full bg-[#0A0A0A] border-t border-[#E5E5E5]/20 overflow-hidden">
+        <TransitionLink
+          to="/structural-steel-fabrication-pakistan/mezzanine-floors/"
+          className="group block w-full no-underline select-none cursor-pointer"
+        >
+          {/* Desktop Next Banner */}
+          <div className="hidden md:block relative w-full h-[380px] lg:h-[440px] overflow-hidden bg-[#0A0A0A]">
+            <img
+              src={cl(NEXT_IMAGE, 2560)}
+              alt="Mezzanine Floors"
+              width={1024}
+              height={434}
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 w-full h-full object-cover object-center block transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.05]"
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{ backgroundColor: "rgba(30, 58, 138, 0.25)" }}
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.35) 50%, rgba(0,0,0,0.15) 100%)",
+              }}
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "linear-gradient(to right, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0) 75%)",
+              }}
+            />
+            <div className="absolute bottom-10 lg:bottom-14 left-6 lg:left-12 max-w-[840px] text-left z-10">
+              <span className="block text-[11px] uppercase tracking-[0.14em] font-semibold text-white/80 mb-2.5">
+                NEXT
+              </span>
+              <h2 className="text-[26px] lg:text-[44px] font-bold uppercase text-white tracking-[-0.02em] leading-[1.18] mb-5">
+                CUSTOM-DESIGNED STRUCTURAL STEEL MEZZANINE FLOORS
+              </h2>
+              <div className="inline-flex items-center gap-2.5 text-[15px] lg:text-[17px] font-semibold text-white">
+                <span>MEZZANINE FLOORS</span>
+                <span className="inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-2 text-[20px]">
+                  &rarr;
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Next Banner */}
+          <div className="md:hidden w-full flex flex-col">
+            <div
+              className="relative w-full overflow-hidden bg-[#0A0A0A]"
+              style={{ aspectRatio: "1024 / 434" }}
+            >
+              <img
+                src={cl(NEXT_IMAGE, 1080)}
+                alt="Mezzanine Floors"
+                width={1024}
+                height={434}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover object-center block"
+              />
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{ backgroundColor: "rgba(30, 58, 138, 0.22)" }}
+              />
+            </div>
+            <div
+              style={{ backgroundColor: "var(--blue)" }}
+              className="w-full text-white px-6 py-8 text-left"
+            >
+              <span className="block text-[10px] uppercase tracking-[0.14em] font-semibold text-white/80 mb-2">
+                NEXT
+              </span>
+              <h2 className="text-[16px] font-bold uppercase text-white tracking-[-0.02em] leading-tight mb-4">
+                CUSTOM-DESIGNED STRUCTURAL STEEL MEZZANINE FLOORS
+              </h2>
+              <div className="inline-flex items-center gap-2 text-[14px] font-semibold text-white">
+                <span>MEZZANINE FLOORS</span>
+                <span className="inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5 text-[17px]">
+                  &rarr;
+                </span>
+              </div>
+            </div>
+          </div>
+        </TransitionLink>
+      </section>
     </article>
   );
 };
 
-// 9.20 Mezzanine Floors — signature: "Sliding floor bands"
+// 9.20 Mezzanine Floors — signature: "5 alternating rows with real photo ratio"
 export const MezzanineFloorsLayout: React.FC<{ data: ContentData }> = ({ data }) => {
-  const { sections } = extractSections(data);
-  const images = [IMG.structural.mezzFloors.m1, IMG.structural.mezzFloors.m2, IMG.structural.mezzFloors.m3, IMG.structural.mezzFloors.m4, IMG.structural.mezzFloors.m5];
-  const bands = sections.slice(0, 5).map((sec, idx) => ({
-    num: String(idx + 1).padStart(2, "0"),
-    title: sec.title,
-    text: sec.text,
-    img: images[idx] || images[0],
-  }));
+  const rootRef = useRef<HTMLElement>(null);
+
+  const MEZZ_IMAGES = [
+    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202949/mezz-floors-1.jpg",
+    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202953/mezz-floors-2.jpg",
+    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202954/mezz-floors-3.jpg",
+    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202958/mezz-floors-4.jpg",
+    "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202960/mezz-floors-5.jpg",
+  ];
+
+  const blocks = [
+    {
+      num: "01",
+      title: "What This Page Covers",
+      text: "This page covers mezzanine floors as stand-alone steel work, for existing buildings, for concrete buildings and for new buildings of any type. For mezzanines inside a new PEB, see Mezzanine System.",
+      img: MEZZ_IMAGES[0],
+    },
+    {
+      num: "02",
+      title: "Where Mezzanines Help",
+      text: "A mezzanine adds floor area without a new building. Factories use them for offices and light assembly. Warehouses use them for small-item picking. Showrooms use them for display and meetings.",
+      img: MEZZ_IMAGES[1],
+    },
+    {
+      num: "03",
+      title: "What Steel Mind Engineers Provides",
+      text: "Steel Mind Engineers designs the columns, beams and deck, fabricates them in Lahore and erects the floor on site. It can also add the staircase, the handrails and the access gate. See Steel Stairs.",
+      img: MEZZ_IMAGES[2],
+    },
+    {
+      num: "04",
+      title: "Project Reference",
+      text: "Steel Mind Engineers built a mezzanine floor of 32,400 square feet for Haier at Raiwind, 12 feet high, 180 feet wide and 180 feet long. It also built a PEB mezzanine floor of 7,020 square feet for Maria B in Lahore, 12 feet high, 90 feet wide and 78 feet long.",
+      img: MEZZ_IMAGES[3],
+    },
+    {
+      num: "05",
+      title: "What to Send for a Quote",
+      text: "Send the floor area, the height between floors, the use and the heaviest load. Send a sketch of the existing building if there is one.",
+      img: MEZZ_IMAGES[4],
+    },
+  ];
+
+  // GSAP Animations with Setup Rules and Motion Recipes
+  useLayoutEffect(() => {
+    if (!rootRef.current) return;
+    const E1 = "cubic-bezier(0.16, 1, 0.3, 1)";
+    const E2 = "cubic-bezier(0.76, 0, 0.24, 1)";
+
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+
+      // ==========================================
+      // DESKTOP: (min-width: 1024px)
+      // ==========================================
+      mm.add("(min-width: 1024px)", () => {
+        const rows = rootRef.current?.querySelectorAll<HTMLElement>(".mezz-row");
+        if (!rows) return;
+
+        rows.forEach((row, idx) => {
+          const line = row.querySelector<HTMLElement>(".mezz-line");
+          const photoWrapper = row.querySelector<HTMLElement>(".mezz-photo-wrapper");
+          const photoBox = row.querySelector<HTMLElement>(".mezz-photo-box");
+          const photoImg = row.querySelector<HTMLElement>(".mezz-photo-img");
+          const textItems = row.querySelectorAll<HTMLElement>(".mezz-text-item");
+
+          const isOddRow = idx % 2 === 0; // 0, 2, 4 = rows 1, 3, 5: photo left, text right
+          // Curtain variant from text side:
+          // Odd rows: text is on right -> curtain starts from right edge of photo
+          // Even rows: text is on left -> curtain starts from left edge of photo
+          const initialClip = isOddRow ? "inset(0 0 0 100%)" : "inset(0 100% 0 0)";
+
+          // Set hidden start states before paint
+          if (line) gsap.set(line, { scaleX: 0, transformOrigin: "left" });
+          if (photoBox) gsap.set(photoBox, { clipPath: initialClip });
+          if (photoImg) gsap.set(photoImg, { scale: 1.06 });
+          if (textItems.length > 0) gsap.set(textItems, { y: 24, opacity: 0 });
+
+          // 1. Reveal timeline triggered at top 85%
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: row,
+              start: "top 85%",
+              once: true,
+              invalidateOnRefresh: true,
+            },
+          });
+
+          // Line DRAW (1000ms E2)
+          if (line) {
+            tl.to(
+              line,
+              {
+                scaleX: 1,
+                duration: 1.0,
+                ease: E2,
+                clearProps: "transform",
+              },
+              0
+            );
+          }
+
+          // Photo CURTAIN 1200ms with E2; inner img scale 1.06 to 1 over 1560ms with E1
+          if (photoBox) {
+            tl.to(
+              photoBox,
+              {
+                clipPath: "inset(0 0 0 0%)",
+                duration: 1.2,
+                ease: E2,
+                clearProps: "clipPath",
+              },
+              0
+            );
+          }
+          if (photoImg) {
+            tl.to(
+              photoImg,
+              {
+                scale: 1,
+                duration: 1.56,
+                ease: E1,
+                clearProps: "transform",
+              },
+              0
+            );
+          }
+
+          // number, heading, text RISE 300ms after (stagger 90ms, 900ms E1)
+          if (textItems.length > 0) {
+            tl.to(
+              textItems,
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.9,
+                ease: E1,
+                stagger: 0.09,
+                clearProps: "transform,opacity",
+              },
+              0.3
+            );
+          }
+
+          // Photo WRAPPER drifts y 0 to -20px (scrub 1.4); photo inside never moves
+          if (photoWrapper) {
+            gsap.fromTo(
+              photoWrapper,
+              { y: 0 },
+              {
+                y: -20,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: row,
+                  start: "top bottom",
+                  end: "bottom top",
+                  scrub: 1.4,
+                  invalidateOnRefresh: true,
+                },
+              }
+            );
+          }
+        });
+      });
+
+      // ==========================================
+      // MOBILE: (max-width: 1023px)
+      // ==========================================
+      mm.add("(max-width: 1023px)", () => {
+        const blocks = rootRef.current?.querySelectorAll<HTMLElement>(".mezz-m-block");
+        if (!blocks) return;
+
+        blocks.forEach((block) => {
+          const photoBox = block.querySelector<HTMLElement>(".mezz-m-photo-box");
+          const photoImg = block.querySelector<HTMLElement>(".mezz-m-photo-img");
+          const textItems = block.querySelectorAll<HTMLElement>(".mezz-m-text-item");
+
+          // Hidden start states
+          if (photoBox) gsap.set(photoBox, { clipPath: "inset(0 0 100% 0)" });
+          if (photoImg) gsap.set(photoImg, { scale: 1.06 });
+          if (textItems.length > 0) gsap.set(textItems, { y: 24, opacity: 0 });
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: block,
+              start: "top 90%",
+              once: true,
+              invalidateOnRefresh: true,
+            },
+          });
+
+          // CURTAIN 900ms with E2; inner img scale 1.06 to 1 over 1170ms with E1
+          if (photoBox) {
+            tl.to(
+              photoBox,
+              {
+                clipPath: "inset(0 0 0 0%)",
+                duration: 0.9,
+                ease: E2,
+                clearProps: "clipPath",
+              },
+              0
+            );
+          }
+          if (photoImg) {
+            tl.to(
+              photoImg,
+              {
+                scale: 1,
+                duration: 1.17,
+                ease: E1,
+                clearProps: "transform",
+              },
+              0
+            );
+          }
+
+          // Heading & body text RISE after curtain begins (350ms delay, 90ms stagger, 900ms E1)
+          if (textItems.length > 0) {
+            tl.to(
+              textItems,
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.9,
+                ease: E1,
+                stagger: 0.09,
+                clearProps: "transform,opacity",
+              },
+              0.35
+            );
+          }
+        });
+      });
+
+      // ==========================================
+      // REDUCED MOTION: (prefers-reduced-motion: reduce)
+      // ==========================================
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        const photoBoxes = rootRef.current?.querySelectorAll(".mezz-photo-box, .mezz-m-photo-box");
+        const photoImgs = rootRef.current?.querySelectorAll(".mezz-photo-img, .mezz-m-photo-img");
+        const textItems = rootRef.current?.querySelectorAll(".mezz-text-item, .mezz-m-text-item");
+        const lines = rootRef.current?.querySelectorAll(".mezz-line");
+
+        if (photoBoxes) gsap.set(photoBoxes, { clipPath: "inset(0 0 0 0%)" });
+        if (photoImgs) gsap.set(photoImgs, { scale: 1 });
+        if (textItems) gsap.set(textItems, { y: 0, opacity: 1 });
+        if (lines) gsap.set(lines, { scaleX: 1 });
+      });
+    }, rootRef);
+
+    // Refresh ScrollTrigger after debounced delay
+    const refreshTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 200);
+
+    return () => {
+      clearTimeout(refreshTimer);
+      ctx.revert();
+    };
+  }, []);
 
   return (
-    <article className="w-full bg-white">
+    <article ref={rootRef} className="w-full bg-white text-left">
+      {/* 1. Hero Band (Capitalized Heading, btn-sm matching Columns and Beams) */}
       <HeroBand
         variant="immersive"
-        imageSrc={IMG.structural.mezzFloors.hero}
-        imageAlt={data.h1}
-        h1={data.h1}
+        imageSrc="https://res.cloudinary.com/cyfb9slf/image/upload/v1792202962/mezz-floors-hero.jpg"
+        imageAlt={data.h1.toUpperCase()}
+        h1={data.h1.toUpperCase()}
         subtitle={data.quickAnswer}
       />
 
-      <section className="container py-[var(--sec-y-lg)] space-y-16">
-        {bands.map((b) => (
-          <div key={b.num} className="border-b border-[var(--rule)] pb-16 space-y-8 text-left">
-            <div className="w-full aspect-[21/9] overflow-hidden bg-slate-900 shadow-md">
+      {/* 2. Desktop: 5 Alternating Rows (Odd: photo 7fr, text 5fr; Even: text 5fr, photo 7fr) */}
+      <section className="hidden lg:block w-full max-w-[1360px] mx-auto px-8 lg:px-12">
+        {blocks.map((b, idx) => {
+          const isOddRow = idx % 2 === 0; // 0, 2, 4 = rows 1, 3, 5 (odd)
+          return (
+            <div key={b.num} className="mezz-row relative w-full">
+              {/* 1px DRAW line between rows */}
+              {idx > 0 && (
+                <div className="mezz-line absolute top-0 left-0 right-0 h-[1px] bg-[#E5E5E5] origin-left" />
+              )}
+
+              <div
+                className={`w-full py-[96px] grid items-center gap-[88px] ${
+                  isOddRow ? "grid-cols-[7fr_5fr]" : "grid-cols-[5fr_7fr]"
+                }`}
+              >
+                {isOddRow ? (
+                  <>
+                    {/* Photo Column (7fr) with real photo shape */}
+                    <div className="mezz-photo-wrapper relative w-full">
+                      <div
+                        className="mezz-photo-box relative w-full overflow-hidden"
+                        style={{ aspectRatio: "1024 / 687" }}
+                      >
+                        <img
+                          src={cl(b.img, 1920)}
+                          alt={b.title}
+                          width={1024}
+                          height={687}
+                          loading={idx === 0 ? "eager" : "lazy"}
+                          decoding="async"
+                          className="mezz-photo-img w-full h-full object-cover block"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Text Column (5fr, max width 440px) */}
+                    <div className="mezz-text-block max-w-[440px] text-left">
+                      <span className="mezz-text-item block text-[64px] font-[800] text-[var(--blue)] leading-none select-none mb-4">
+                        {b.num}
+                      </span>
+                      <h3 className="mezz-text-item text-[44px] font-bold text-[#0A0A0A] uppercase leading-[1.15] tracking-[-0.02em] mb-4">
+                        {b.title.toUpperCase()}
+                      </h3>
+                      <p className="mezz-text-item text-[16px] text-[var(--blue)] font-normal leading-[1.7]">
+                        {b.text}
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* Text Column (5fr, max width 440px) */}
+                    <div className="mezz-text-block max-w-[440px] text-left">
+                      <span className="mezz-text-item block text-[64px] font-[800] text-[var(--blue)] leading-none select-none mb-4">
+                        {b.num}
+                      </span>
+                      <h3 className="mezz-text-item text-[44px] font-bold text-[#0A0A0A] uppercase leading-[1.15] tracking-[-0.02em] mb-4">
+                        {b.title.toUpperCase()}
+                      </h3>
+                      <p className="mezz-text-item text-[16px] text-[var(--blue)] font-normal leading-[1.7]">
+                        {b.text}
+                      </p>
+                    </div>
+
+                    {/* Photo Column (7fr) with real photo shape */}
+                    <div className="mezz-photo-wrapper relative w-full">
+                      <div
+                        className="mezz-photo-box relative w-full overflow-hidden"
+                        style={{ aspectRatio: "1024 / 687" }}
+                      >
+                        <img
+                          src={cl(b.img, 1920)}
+                          alt={b.title}
+                          width={1024}
+                          height={687}
+                          loading="lazy"
+                          decoding="async"
+                          className="mezz-photo-img w-full h-full object-cover block"
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </section>
+
+      {/* 3. Mobile: Editorial Flow (Full-width photo, text kept OUT of image, 56px gap, no numbers) */}
+      <section className="block lg:hidden w-full px-5 py-12 space-y-[56px]">
+        {blocks.map((b, idx) => (
+          <div key={b.num} className="mezz-m-block w-full text-left">
+            {/* Real photo shape with NO text inside */}
+            <div
+              className="mezz-m-photo-box relative w-full overflow-hidden"
+              style={{ aspectRatio: "1024 / 687" }}
+            >
               <img
-                src={b.img}
+                src={cl(b.img, 1080)}
                 alt={b.title}
-                className="w-full h-full object-cover"
+                width={1024}
+                height={687}
+                loading={idx === 0 ? "eager" : "lazy"}
+                decoding="async"
+                className="mezz-m-photo-img w-full h-full object-cover block"
               />
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              <div className="lg:col-span-4 flex items-start gap-4">
-                <OutlineNum num={b.num} />
-                <h3 className="text-[26px] font-bold text-[var(--ink)] pt-1">{b.title}</h3>
-              </div>
-              <div className="lg:col-span-8">
-                <p className="text-[var(--grey-strong)] leading-[1.75]" style={{ fontSize: "var(--fs-body)" }}>
-                  {b.text}
-                </p>
-              </div>
+
+            {/* Content OUTSIDE the image: Heading + Body Text */}
+            <div className="mezz-m-content mt-4">
+              <h3 className="mezz-m-text-item text-[17px] font-bold text-[#0A0A0A] uppercase tracking-[-0.02em] leading-[1.25] mb-2">
+                {b.title.toUpperCase()}
+              </h3>
+              <p className="mezz-m-text-item text-[15px] text-[var(--blue)] font-normal leading-[1.6]">
+                {b.text}
+              </p>
             </div>
           </div>
         ))}
       </section>
 
-      {/* FAQ */}
+      {/* 4. FAQ (Capitalized Heading) */}
       {data.faq && data.faq.length > 0 && (
-        <section className="container py-[var(--sec-y)]">
+        <section className="container py-[var(--sec-y)] border-t border-[var(--rule)]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="font-bold text-[var(--ink)] mb-8" style={{ fontSize: "var(--fs-h2)" }}>
-              Frequently Asked Questions
+            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] uppercase leading-[1.15] tracking-[-0.02em] mb-8">
+              FREQUENTLY ASKED QUESTIONS
             </h2>
             <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}
 
-      {/* Next Banner */}
+      {/* 5. Next Banner (Capitalized Heading) */}
       <NextBand
-        image={IMG.structural.mezzFloors.next}
+        image="https://res.cloudinary.com/cyfb9slf/image/upload/v1792202966/mezz-floors-next.jpg"
         nextUrl="/structural-steel-fabrication-pakistan/steel-bridges/"
         nextTitle="Steel Bridges"
+        heading="CUSTOM-DESIGNED STRUCTURAL STEEL BRIDGES IN PAKISTAN"
       />
     </article>
   );
