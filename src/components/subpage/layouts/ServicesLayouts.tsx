@@ -1,5 +1,4 @@
-// Services Sub-pages Signature Layouts (9.28 - 9.34)
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from "react";
 import { ContentData, ContentBlock } from "../../../content/types.ts";
 import { IMG } from "../../../data/subpageImages.ts";
 import { PhotoBox } from "../../page/PhotoBox.tsx";
@@ -10,6 +9,8 @@ import { Accordion } from "../../ui/Accordion.tsx";
 import { NextBand } from "../../ui/NextBand.tsx";
 import { TwoTone } from "../../page/TwoTone.tsx";
 import { SITE } from "../../../data/site.ts";
+import { gsap, ScrollTrigger } from "../../../lib/gsap.ts";
+import { useMediaQuery } from "../../../hooks/useMediaQuery.ts";
 import {
   Wrench,
   PaintRoller,
@@ -18,6 +19,8 @@ import {
   ClipboardCheck,
   ArrowUpRight,
   CheckSquare2,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 function extractSections(data: ContentData) {
@@ -63,96 +66,514 @@ function extractSections(data: ContentData) {
   return { introPs, sections };
 }
 
-// 9.28 Design — signature: "Blueprint canvas"
+// 9.28 Design — signature: "Blueprint canvas & Process Rail"
 export const DesignLayout: React.FC<{ data: ContentData }> = ({ data }) => {
-  const { introPs, sections } = extractSections(data);
-  const row2Blocks = sections.slice(1, 4);
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const rootRef = useRef<HTMLElement>(null);
+  const curtainBoxRef = useRef<HTMLDivElement>(null);
+  const curtainImgRef = useRef<HTMLImageElement>(null);
+  const coverTextRef = useRef<HTMLDivElement>(null);
+  const railLineRef = useRef<HTMLDivElement>(null);
+  const stepColRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const mobileTabContainerRef = useRef<HTMLDivElement>(null);
+  const mobileTabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const panelMeasureRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // State
+  const [activeStep, setActiveStep] = useState(0);
+  const [tallestPanelHeight, setTallestPanelHeight] = useState<number>(180);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+
+  // Steps data strictly adhering to page-46.json
+  const steps = [
+    {
+      num: "01",
+      title: "THE DESIGN STEPS",
+      text: "Engineers study your use, size, site and budget. They set the loads from the structure, wind, rain, roof use, cranes and equipment. They choose the frame and size each column, rafter and brace. They prepare a 3D model for your review. A second engineer checks the design before release.",
+    },
+    {
+      num: "02",
+      title: "WHAT YOU RECEIVE",
+      text: "You receive a 3D model, general arrangement drawings and the anchor bolt plan for your foundation contractor.",
+    },
+    {
+      num: "03",
+      title: "DESIGN SUPPORT DURING CONSTRUCTION",
+      text: "The designer stays available during fabrication and erection and answers site questions the same day.",
+    },
+  ];
+
+  const coverText =
+    "The design stage decides what the building is: its frame type, its member sizes, its connections and its foundation loads. A good design uses steel where it is needed and nowhere else.";
+
+  // Measure tallest panel after fonts are ready so the page does not jump
+  const measureTallest = useCallback(() => {
+    let maxH = 0;
+    panelMeasureRefs.current.forEach((el) => {
+      if (el) {
+        const h = el.offsetHeight;
+        if (h > maxH) maxH = h;
+      }
+    });
+    if (maxH > 0) {
+      setTallestPanelHeight(maxH);
+    }
+  }, []);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    const debouncedMeasure = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        measureTallest();
+        ScrollTrigger.refresh();
+      }, 150);
+    };
+
+    debouncedMeasure();
+
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(debouncedMeasure).catch(() => {});
+    }
+
+    const img = new Image();
+    img.src = IMG.services.design.d1;
+    if (img.decode) {
+      img.decode().then(debouncedMeasure).catch(() => {});
+    } else {
+      img.onload = debouncedMeasure;
+    }
+
+    window.addEventListener("resize", debouncedMeasure);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", debouncedMeasure);
+    };
+  }, [measureTallest]);
+
+  // Center active tab on mobile
+  useEffect(() => {
+    if (!isDesktop) {
+      const activeBtn = mobileTabRefs.current[activeStep];
+      if (activeBtn && mobileTabContainerRef.current) {
+        activeBtn.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "center",
+        });
+      }
+    }
+  }, [activeStep, isDesktop]);
+
+  // GSAP Entrance Animations
+  useLayoutEffect(() => {
+    if (!rootRef.current) return;
+    const prefersReduced =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const ctx = gsap.context(() => {
+      if (prefersReduced) {
+        if (curtainBoxRef.current) gsap.set(curtainBoxRef.current, { clipPath: "none" });
+        if (curtainImgRef.current) gsap.set(curtainImgRef.current, { scale: 1 });
+        if (coverTextRef.current) gsap.set(coverTextRef.current, { opacity: 1, y: 0 });
+        if (railLineRef.current) gsap.set(railLineRef.current, { scaleX: 1 });
+        stepColRefs.current.forEach((col) => col && gsap.set(col, { opacity: 1, y: 0 }));
+        return;
+      }
+
+      // 1. Cover Curtain Reveal (1200ms E2) + Inner Photo subtle scale (1400ms E1)
+      if (curtainBoxRef.current && curtainImgRef.current) {
+        gsap.set(curtainBoxRef.current, { clipPath: "inset(0 0 100% 0)" });
+        gsap.set(curtainImgRef.current, { scale: 1.05 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: curtainBoxRef.current,
+            start: "top 85%",
+            once: true,
+          },
+        });
+
+        tl.to(
+          curtainBoxRef.current,
+          {
+            clipPath: "inset(0 0 0% 0)",
+            duration: 1.2,
+            ease: "E2",
+            clearProps: "clipPath",
+          },
+          0
+        );
+        tl.to(
+          curtainImgRef.current,
+          {
+            scale: 1,
+            duration: 1.4,
+            ease: "E1",
+          },
+          0
+        );
+      }
+
+      // 2. Cover Text RISE Reveal
+      if (coverTextRef.current) {
+        gsap.fromTo(
+          coverTextRef.current,
+          { opacity: 0, y: 28 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            ease: "E1",
+            scrollTrigger: {
+              trigger: coverTextRef.current,
+              start: "top 85%",
+              once: true,
+            },
+          }
+        );
+      }
+
+      // 3. Rail Line DRAW (1000ms E2) + Step items RISE
+      if (railLineRef.current) {
+        gsap.fromTo(
+          railLineRef.current,
+          { scaleX: 0 },
+          {
+            scaleX: 1,
+            duration: 1.0,
+            ease: "E2",
+            transformOrigin: "left center",
+            scrollTrigger: {
+              trigger: railLineRef.current,
+              start: "top 85%",
+              once: true,
+            },
+          }
+        );
+      }
+
+      const validCols = stepColRefs.current.filter(Boolean);
+      if (validCols.length > 0) {
+        gsap.fromTo(
+          validCols,
+          { opacity: 0, y: 24 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "E1",
+            scrollTrigger: {
+              trigger: validCols[0],
+              start: "top 85%",
+              once: true,
+            },
+          }
+        );
+      }
+    }, rootRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <article className="w-full bg-white">
+    <article ref={rootRef} className="w-full bg-white text-left pb-[96px] overflow-x-clip">
+      {/* 1. HERO BAND (strictly capitalized in desktop and mobile view) */}
       <HeroBand
         variant="immersive"
         imageSrc={IMG.services.design.hero}
-        imageAlt={data.h1}
-        h1={data.h1}
+        imageAlt={data.h1.toUpperCase()}
+        h1={data.h1.toUpperCase()}
         subtitle={data.quickAnswer}
       />
 
-      {/* Blueprint Grid Canvas Section */}
-      <section
-        className="w-full py-[var(--sec-y-lg)] relative"
-        style={{
-          backgroundImage:
-            "radial-gradient(rgba(30,58,138,0.12) 1px, transparent 1px), radial-gradient(rgba(30,58,138,0.06) 1px, #FFFFFF 1px)",
-          backgroundSize: "32px 32px",
-          backgroundPosition: "0 0, 16px 16px",
-        }}
-      >
-        <div className="container space-y-20 text-left">
-          {/* Row 1: 5fr / 7fr Grid with Framed Blueprint */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-5 space-y-4">
-              <h2 className="text-[28px] lg:text-[36px] font-bold text-[var(--ink)]">
-                {sections[0]?.title || "What Design Covers"}
-              </h2>
-              <p className="text-[var(--grey-strong)] leading-[1.75]" style={{ fontSize: "var(--fs-lead)" }}>
-                {sections[0]?.text || introPs.join(" ")}
-              </p>
-            </div>
-
-            <div className="lg:col-span-7 relative p-4">
-              <div className="relative border-2 border-[var(--blue)] p-3 bg-white shadow-xl">
-                <img
-                  src={IMG.services.design.d1}
-                  alt="3D BIM Structural Model and Plan"
-                  className="w-full aspect-[3/2] object-cover"
-                />
-                {/* 4 Corner Crosses */}
-                <span className="absolute -top-2.5 -left-2.5 text-[var(--blue)] text-[18px] font-mono leading-none">+</span>
-                <span className="absolute -top-2.5 -right-2.5 text-[var(--blue)] text-[18px] font-mono leading-none">+</span>
-                <span className="absolute -bottom-2.5 -left-2.5 text-[var(--blue)] text-[18px] font-mono leading-none">+</span>
-                <span className="absolute -bottom-2.5 -right-2.5 text-[var(--blue)] text-[18px] font-mono leading-none">+</span>
-              </div>
-            </div>
+      {/* 2. COVER SPLIT SECTION: "WHAT DESIGN COVERS" */}
+      <section className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px] border-b border-[#E5E5E5]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+          {/* Left Column: Heading & Text */}
+          <div ref={coverTextRef} className="lg:col-span-5 space-y-6">
+            <h2 className="text-[24px] sm:text-[32px] lg:text-[46px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
+              WHAT DESIGN COVERS
+            </h2>
+            <p className="text-[15px] lg:text-[17px] text-[var(--blue)] leading-[1.7] font-normal">
+              {coverText}
+            </p>
           </div>
 
-          {/* Row 2: 3 Columns with Corner Crosses */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {row2Blocks.map((blk, idx) => (
-              <div
-                key={idx}
-                className="relative bg-white border border-[var(--rule)] p-8 space-y-4 shadow-sm"
-              >
-                <span className="absolute -top-2 -left-2 text-[var(--blue)] text-[14px] font-mono leading-none">+</span>
-                <span className="absolute -top-2 -right-2 text-[var(--blue)] text-[14px] font-mono leading-none">+</span>
-                <OutlineNum num={idx + 1} />
-                <h3 className="text-[22px] font-bold text-[var(--ink)]">{blk.title}</h3>
-                <p className="text-[var(--grey-strong)] leading-[1.7]" style={{ fontSize: "var(--fs-body)" }}>
-                  {blk.text}
-                </p>
-              </div>
-            ))}
+          {/* Right Column: Photo Box with 1200ms E2 CURTAIN */}
+          <div className="lg:col-span-7">
+            <div
+              ref={curtainBoxRef}
+              className="w-full overflow-hidden bg-slate-900 shadow-md relative"
+              style={{
+                aspectRatio: "1024 / 559",
+                clipPath: "inset(0 0 100% 0)",
+              }}
+            >
+              <img
+                ref={curtainImgRef}
+                src={IMG.services.design.d1}
+                alt="3D BIM STRUCTURAL MODEL AND PLAN"
+                width={1024}
+                height={559}
+                loading="eager"
+                decoding="async"
+                className="w-full h-full object-cover block"
+                style={{ transform: "scale(1.05)" }}
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* 3. PROCESS INFOGRAPHIC WITH RAIL (ALL SCREEN SIZES) */}
+      <section className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px] border-b border-[#E5E5E5]">
+        {/* Section Heading: strictly capitalized in desktop and mobile view */}
+        <h2 className="text-[24px] sm:text-[32px] lg:text-[46px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-12 lg:mb-16">
+          THE DESIGN PROCESS & DELIVERABLES
+        </h2>
+
+        {/* DESKTOP VIEW (lg:block): 3 Columns connected with a 2px horizontal rail line */}
+        <div className="hidden lg:block relative pt-6">
+          {/* Continuous 2px Blue Rail Line across the 3 steps */}
+          <div className="relative w-full mb-10">
+            <div
+              ref={railLineRef}
+              className="absolute left-[5%] right-[5%] top-[5px] h-[2px] bg-[var(--blue)] z-0"
+              style={{ transformOrigin: "left center" }}
+            />
+
+            {/* 3 Step Columns */}
+            <div className="grid grid-cols-3 gap-12 relative z-10">
+              {steps.map((st, idx) => (
+                <div
+                  key={st.num}
+                  ref={(el) => {
+                    stepColRefs.current[idx] = el;
+                  }}
+                  className="flex flex-col items-start text-left"
+                >
+                  {/* 10px dot on the 2px blue rail line */}
+                  <div className="w-[10px] h-[10px] rounded-full bg-[var(--blue)] mb-6 shadow-sm ring-4 ring-white" />
+
+                  {/* Step Number: solid, bold, var(--blue), placed above title */}
+                  <span className="block text-[44px] lg:text-[64px] font-bold text-[var(--blue)] leading-none select-none mb-3">
+                    {st.num}
+                  </span>
+
+                  {/* Step Title: UPPERCASE, bold, ink colour */}
+                  <h3 className="text-[18px] lg:text-[22px] font-bold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em] uppercase mb-3">
+                    {st.title}
+                  </h3>
+
+                  {/* Step Text: One-Step body blue, regular weight, same size & line-height */}
+                  <p className="text-[15px] lg:text-[17px] text-[var(--blue)] leading-[1.7] font-normal">
+                    {st.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* MOBILE VIEW (lg:hidden): Horizontal Rail Tabs + Slide View with Fixed Min-Height to Prevent Jumps */}
+        <div className="lg:hidden">
+          {/* Rail Tab Navigation Bar */}
+          <div className="relative mb-8 pb-4">
+            {/* 2px Horizontal Rail Line */}
+            <div className="absolute left-6 right-6 top-[22px] h-[2px] bg-[var(--blue)] z-0" />
+
+            {/* Scrollable Tabs */}
+            <div
+              ref={mobileTabContainerRef}
+              className="flex items-center justify-between gap-4 overflow-x-auto scrollbar-none px-2 relative z-10"
+            >
+              {steps.map((st, idx) => {
+                const isActive = activeStep === idx;
+                return (
+                  <button
+                    key={st.num}
+                    ref={(el) => {
+                      mobileTabRefs.current[idx] = el;
+                    }}
+                    type="button"
+                    onClick={() => setActiveStep(idx)}
+                    className="flex flex-col items-center focus:outline-none cursor-pointer group px-2 py-1"
+                  >
+                    {/* 10px Blue Dot on Rail Line */}
+                    <div
+                      className={`w-[12px] h-[12px] rounded-full transition-all duration-300 ring-4 ring-white ${
+                        isActive
+                          ? "bg-[var(--blue)] scale-125"
+                          : "bg-[var(--blue)] opacity-60 group-hover:opacity-100"
+                      }`}
+                    />
+
+                    {/* Step Number */}
+                    <span
+                      className={`text-[28px] font-bold leading-none select-none mt-2 transition-all duration-300 ${
+                        isActive
+                          ? "text-[var(--blue)] scale-105"
+                          : "text-[var(--blue)] opacity-60"
+                      }`}
+                    >
+                      {st.num}
+                    </span>
+
+                    {/* Step Short Label */}
+                    <span
+                      className={`text-[12px] font-bold uppercase tracking-wider mt-1 transition-colors ${
+                        isActive ? "text-[#0A0A0A]" : "text-[#0A0A0A]/60"
+                      }`}
+                    >
+                      STEP {st.num}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Active Step Panel with Fixed Min-Height Equal to the Tallest Panel so the page does not jump */}
+          <div
+            className="w-full relative bg-white border border-[#E5E5E5] p-6 sm:p-8 transition-all duration-300 shadow-sm"
+            style={{ minHeight: `${tallestPanelHeight + 48}px` }}
+          >
+            {/* Step Number: solid, bold, var(--blue) */}
+            <span className="block text-[44px] font-bold text-[var(--blue)] leading-none select-none mb-2">
+              {steps[activeStep].num}
+            </span>
+
+            {/* Step Title: UPPERCASE bold ink */}
+            <h3 className="text-[18px] sm:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em] uppercase mb-3">
+              {steps[activeStep].title}
+            </h3>
+
+            {/* Step Text: One-Step blue */}
+            <p className="text-[15px] sm:text-[16px] text-[var(--blue)] leading-[1.7] font-normal">
+              {steps[activeStep].text}
+            </p>
+
+            {/* Navigation buttons: Prev / Next */}
+            <div className="flex items-center justify-between pt-6 mt-6 border-t border-[#E5E5E5]">
+              <button
+                type="button"
+                onClick={() => setActiveStep((prev) => Math.max(0, prev - 1))}
+                disabled={activeStep === 0}
+                className={`inline-flex items-center gap-1 text-[13px] font-bold uppercase tracking-wider transition-colors ${
+                  activeStep === 0
+                    ? "opacity-30 cursor-not-allowed text-[#0A0A0A]"
+                    : "text-[var(--blue)] hover:text-[#0A0A0A] cursor-pointer"
+                }`}
+              >
+                <ChevronLeft size={16} /> PREV
+              </button>
+              <div className="text-[12px] font-bold text-[var(--blue)]">
+                {steps[activeStep].num} / 03
+              </div>
+              <button
+                type="button"
+                onClick={() =>
+                  setActiveStep((prev) => Math.min(steps.length - 1, prev + 1))
+                }
+                disabled={activeStep === steps.length - 1}
+                className={`inline-flex items-center gap-1 text-[13px] font-bold uppercase tracking-wider transition-colors ${
+                  activeStep === steps.length - 1
+                    ? "opacity-30 cursor-not-allowed text-[#0A0A0A]"
+                    : "text-[var(--blue)] hover:text-[#0A0A0A] cursor-pointer"
+                }`}
+              >
+                NEXT <ChevronRight size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Hidden measurement container to accurately compute the tallest panel after fonts ready */}
+        <div
+          aria-hidden="true"
+          className="absolute -left-[9999px] top-0 pointer-events-none opacity-0 max-w-[480px] p-6 sm:p-8"
+        >
+          {steps.map((st, i) => (
+            <div
+              key={i}
+              ref={(el) => {
+                panelMeasureRefs.current[i] = el;
+              }}
+              className="space-y-3"
+            >
+              <div className="text-[44px] font-bold leading-none">{st.num}</div>
+              <div className="text-[18px] sm:text-[20px] font-bold uppercase">
+                {st.title}
+              </div>
+              <div className="text-[15px] sm:text-[16px] leading-[1.7]">{st.text}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 4. FREQUENTLY ASKED QUESTIONS (One-Step Style, No Grey Text, Uppercase Headings) */}
       {data.faq && data.faq.length > 0 && (
-        <section className="container py-[var(--sec-y)]">
+        <section className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="font-bold text-[var(--ink)] mb-8" style={{ fontSize: "var(--fs-h2)" }}>
-              Frequently Asked Questions
+            <h2 className="text-[24px] sm:text-[32px] lg:text-[46px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-10">
+              FREQUENTLY ASKED QUESTIONS
             </h2>
-            <Accordion items={data.faq} size="large" />
+
+            <div className="divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
+              {data.faq.map((faqItem, idx) => {
+                const isOpen = openFaqIndex === idx;
+                const panelId = `design-faq-panel-${idx}`;
+                const headerId = `design-faq-header-${idx}`;
+
+                return (
+                  <div key={idx} className="group overflow-hidden">
+                    <button
+                      id={headerId}
+                      type="button"
+                      aria-expanded={isOpen}
+                      aria-controls={panelId}
+                      onClick={() => setOpenFaqIndex((prev) => (prev === idx ? null : idx))}
+                      className="w-full flex items-center justify-between text-left cursor-pointer transition-colors hover:text-[var(--blue)] focus-visible:outline-none py-6 lg:py-8"
+                    >
+                      <span className="font-bold text-[#0A0A0A] uppercase pr-6 leading-[1.3] text-[16px] md:text-[20px] tracking-[-0.01em] group-hover:text-[var(--blue)] transition-colors">
+                        {faqItem.q.toUpperCase()}
+                      </span>
+
+                      {/* Plus icon rotating 45° to become × */}
+                      <span
+                        className="relative flex-shrink-0 flex items-center justify-center w-[22px] h-[22px] transition-transform duration-300 ease-out"
+                        style={{
+                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
+                        }}
+                      >
+                        <span className="absolute bg-[var(--blue)] w-[18px] h-[2px]" />
+                        <span className="absolute bg-[var(--blue)] h-[18px] w-[2px]" />
+                      </span>
+                    </button>
+
+                    {isOpen && (
+                      <div id={panelId} role="region" aria-labelledby={headerId}>
+                        <p className="text-[15px] lg:text-[17px] text-[var(--blue)] leading-[1.7] font-normal pt-1 pb-6 max-w-[700px]">
+                          {faqItem.a}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
       )}
 
-      {/* Next Banner */}
+      {/* 5. NEXT BANNER: DETAILING SERVICES (strictly capitalized) */}
       <NextBand
         image={IMG.services.design.next}
         nextUrl="/services/detailing/"
-        nextTitle="Detailing Services"
+        nextTitle="DETAILING SERVICES"
       />
     </article>
   );
