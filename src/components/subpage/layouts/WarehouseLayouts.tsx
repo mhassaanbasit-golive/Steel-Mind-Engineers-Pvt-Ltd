@@ -1960,27 +1960,42 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
   const [activeIdx, setActiveIdx] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
-  const [isDesktop, setIsDesktop] = useState(false);
 
   const activeIdxRef = useRef(0);
   const isPausedRef = useRef(false);
-  const layerRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const imgRefs = useRef<(HTMLImageElement | null)[]>([]);
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const underlineRef = useRef<HTMLDivElement | null>(null);
-  const captionTitleRef = useRef<HTMLHeadingElement | null>(null);
-  const captionTextRef = useRef<HTMLParagraphElement | null>(null);
-  const frameRef = useRef<HTMLDivElement | null>(null);
 
+  // Desktop refs
+  const desktopLayerRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const desktopImgRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const desktopTabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const desktopUnderlineRef = useRef<HTMLDivElement | null>(null);
+  const desktopCaptionTitleRef = useRef<HTMLHeadingElement | null>(null);
+  const desktopCaptionTextRef = useRef<HTMLParagraphElement | null>(null);
+  const desktopFrameRef = useRef<HTMLDivElement | null>(null);
   const desktopProgressRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Mobile refs
+  const mobileLayerRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const mobileImgRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const mobileTabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const mobileUnderlineRef = useRef<HTMLDivElement | null>(null);
+  const mobileCaptionTitleRef = useRef<HTMLHeadingElement | null>(null);
+  const mobileCaptionTextRef = useRef<HTMLParagraphElement | null>(null);
+  const mobileFrameRef = useRef<HTMLDivElement | null>(null);
+  const mobileProgressRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const swapTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const captionTweenRef = useRef<gsap.core.Tween | null>(null);
   const autoplayProgressTweenRef = useRef<gsap.core.Tween | null>(null);
 
+  // Pointer drag gestures
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const isDraggingRef = useRef(false);
   const hasHorizontalIntentRef = useRef<boolean | null>(null);
+
+  const mobileTouchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const mobileIsDraggingRef = useRef(false);
+  const mobileHasHorizontalIntentRef = useRef<boolean | null>(null);
 
   const prefersReducedRef = useRef(false);
 
@@ -1991,60 +2006,85 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }, []);
 
-  // Desktop media query check (isolating motion, tweens & timers to desktop)
+  // Preload and decode images before first swap, refresh triggers when fonts/images ready (RULE f)
   useEffect(() => {
-    const mql = window.matchMedia("(min-width: 768px)");
-    setIsDesktop(mql.matches);
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-    mql.addEventListener("change", handler);
-    return () => mql.removeEventListener("change", handler);
-  }, []);
+    let timer: NodeJS.Timeout;
+    const debouncedRefresh = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 200);
+    };
 
-  // Preload and decode images before first swap
-  useEffect(() => {
-    grainImages.forEach((src) => {
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(debouncedRefresh);
+    }
+
+    const allUrls = [
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202373/grain-hero.jpg",
+      ...grainImages,
+      "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202373/grain-next.jpg",
+    ];
+
+    allUrls.forEach((src) => {
       const img = new Image();
       img.src = cl(src, 1920);
-      img.decode().catch(() => {});
+      if (img.decode) {
+        img.decode().then(debouncedRefresh).catch(() => {});
+      } else {
+        img.onload = debouncedRefresh;
+      }
     });
+
+    return () => clearTimeout(timer);
   }, []);
 
-  // Update tab underline position (desktop only)
-  const updateUnderline = useCallback(
-    (targetIdx: number) => {
-      if (!isDesktop) return;
-      const tabEl = tabRefs.current[targetIdx];
-      const underlineEl = underlineRef.current;
-      if (!tabEl || !underlineEl) return;
-
-      const x = tabEl.offsetLeft;
-      const width = tabEl.offsetWidth;
-      if (width === 0) return;
-
+  // Synchronized update for tab underlines (Desktop & Mobile)
+  const updateBothUnderlines = useCallback((targetIdx: number) => {
+    // Desktop underline
+    const dTab = desktopTabRefs.current[targetIdx];
+    const dUnderline = desktopUnderlineRef.current;
+    if (dTab && dUnderline && dTab.offsetWidth > 0) {
       if (prefersReducedRef.current) {
-        gsap.set(underlineEl, { x, scaleX: width });
+        gsap.set(dUnderline, { x: dTab.offsetLeft, scaleX: dTab.offsetWidth });
       } else {
-        gsap.to(underlineEl, {
-          x,
-          scaleX: width,
+        gsap.to(dUnderline, {
+          x: dTab.offsetLeft,
+          scaleX: dTab.offsetWidth,
           duration: 0.4,
           ease: "E1",
           overwrite: "auto",
         });
       }
-    },
-    [isDesktop]
-  );
+    }
 
-  // Update progress bars (desktop only)
-  const updateProgressBars = useCallback(
-    (idx: number, isManual: boolean) => {
-      if (!isDesktop) return;
-      if (autoplayProgressTweenRef.current) {
-        autoplayProgressTweenRef.current.kill();
+    // Mobile underline
+    const mTab = mobileTabRefs.current[targetIdx];
+    const mUnderline = mobileUnderlineRef.current;
+    if (mTab && mUnderline && mTab.offsetWidth > 0) {
+      if (prefersReducedRef.current) {
+        gsap.set(mUnderline, { x: mTab.offsetLeft, scaleX: mTab.offsetWidth });
+      } else {
+        gsap.to(mUnderline, {
+          x: mTab.offsetLeft,
+          scaleX: mTab.offsetWidth,
+          duration: 0.4,
+          ease: "E1",
+          overwrite: "auto",
+        });
       }
+    }
+  }, []);
 
-      desktopProgressRefs.current.forEach((bar, i) => {
+  // Synchronized update for progress bars (Desktop & Mobile)
+  const updateProgressBars = useCallback((idx: number, isManual: boolean) => {
+    if (autoplayProgressTweenRef.current) {
+      autoplayProgressTweenRef.current.kill();
+    }
+
+    const allBarGroups = [desktopProgressRefs.current, mobileProgressRefs.current];
+    allBarGroups.forEach((group) => {
+      group.forEach((bar, i) => {
         if (!bar) return;
         if (i < idx) {
           gsap.set(bar, { scaleX: 1 });
@@ -2052,40 +2092,53 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
           gsap.set(bar, { scaleX: 0 });
         }
       });
+    });
 
-      const activeBar = desktopProgressRefs.current[idx];
-      if (!activeBar) return;
+    const activeBars = [
+      desktopProgressRefs.current[idx],
+      mobileProgressRefs.current[idx],
+    ].filter(Boolean) as HTMLElement[];
 
-      if (prefersReducedRef.current) {
-        gsap.set(activeBar, { scaleX: 1 });
-        return;
-      }
+    if (!activeBars.length) return;
 
-      const duration = isManual ? 0.6 : AUTOPLAY_MS / 1000;
-      const ease = isManual ? "E1" : "none";
+    if (prefersReducedRef.current) {
+      activeBars.forEach((bar) => gsap.set(bar, { scaleX: 1 }));
+      return;
+    }
 
-      gsap.set(activeBar, { scaleX: 0 });
-      autoplayProgressTweenRef.current = gsap.to(activeBar, {
-        scaleX: 1,
-        duration,
-        ease,
-        overwrite: "auto",
-      });
-    },
-    [isDesktop]
-  );
+    const duration = isManual ? 0.6 : AUTOPLAY_MS / 1000;
+    const ease = isManual ? "E1" : "none";
 
-  // Caption cross-fade: old out 250ms E1, new in 500ms E1 with y 12 to 0 (desktop only)
+    activeBars.forEach((bar) => gsap.set(bar, { scaleX: 0 }));
+    autoplayProgressTweenRef.current = gsap.to(activeBars, {
+      scaleX: 1,
+      duration,
+      ease,
+      overwrite: "auto",
+    });
+  }, []);
+
+  // Caption cross-fade: old out 250ms E1, new in 500ms E1 with y 12 to 0 (Desktop & Mobile)
   const animateCaption = useCallback(
     (nextIdx: number) => {
-      if (!isDesktop) return;
-      const titleEl = captionTitleRef.current;
-      const textEl = captionTextRef.current;
-      if (!titleEl || !textEl) return;
+      const titles = [
+        desktopCaptionTitleRef.current,
+        mobileCaptionTitleRef.current,
+      ].filter(Boolean) as HTMLElement[];
+      const texts = [
+        desktopCaptionTextRef.current,
+        mobileCaptionTextRef.current,
+      ].filter(Boolean) as HTMLElement[];
+
+      if (!titles.length && !texts.length) return;
 
       if (prefersReducedRef.current) {
-        titleEl.textContent = slides[nextIdx].title.toUpperCase();
-        textEl.textContent = slides[nextIdx].text;
+        titles.forEach((el) => {
+          el.textContent = slides[nextIdx].title.toUpperCase();
+        });
+        texts.forEach((el) => {
+          el.textContent = slides[nextIdx].text;
+        });
         return;
       }
 
@@ -2093,16 +2146,21 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
         captionTweenRef.current.kill();
       }
 
-      gsap.to([titleEl, textEl], {
+      const allCaptionEls = [...titles, ...texts];
+      captionTweenRef.current = gsap.to(allCaptionEls, {
         opacity: 0,
         duration: 0.25,
         ease: "E1",
         overwrite: "auto",
         onComplete: () => {
-          titleEl.textContent = slides[nextIdx].title.toUpperCase();
-          textEl.textContent = slides[nextIdx].text;
+          titles.forEach((el) => {
+            el.textContent = slides[nextIdx].title.toUpperCase();
+          });
+          texts.forEach((el) => {
+            el.textContent = slides[nextIdx].text;
+          });
           gsap.fromTo(
-            [titleEl, textEl],
+            allCaptionEls,
             { opacity: 0, y: 12 },
             {
               opacity: 1,
@@ -2116,20 +2174,20 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
         },
       });
     },
-    [isDesktop, slides]
+    [slides]
   );
 
-  // SWAP recipe for slide change (desktop only)
+  // SWAP recipe for slide change (Unified for Desktop and Mobile)
   const goToSlide = useCallback(
     (nextIdx: number, isManual = true) => {
-      if (!isDesktop) return;
       if (nextIdx === activeIdxRef.current) return;
       const prevIdx = activeIdxRef.current;
       activeIdxRef.current = nextIdx;
       setActiveIdx(nextIdx);
 
+      // Reduced motion fast path
       if (prefersReducedRef.current) {
-        layerRefs.current.forEach((layer, i) => {
+        desktopLayerRefs.current.forEach((layer, i) => {
           if (!layer) return;
           if (i === nextIdx) {
             gsap.set(layer, {
@@ -2141,74 +2199,116 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
             gsap.set(layer, { zIndex: 0, visibility: "hidden" });
           }
         });
-        if (captionTitleRef.current) captionTitleRef.current.textContent = slides[nextIdx].title.toUpperCase();
-        if (captionTextRef.current) captionTextRef.current.textContent = slides[nextIdx].text;
-        updateUnderline(nextIdx);
+        mobileLayerRefs.current.forEach((layer, i) => {
+          if (!layer) return;
+          if (i === nextIdx) {
+            gsap.set(layer, {
+              clipPath: "inset(0 0 0% 0)",
+              zIndex: 1,
+              visibility: "visible",
+            });
+          } else {
+            gsap.set(layer, { zIndex: 0, visibility: "hidden" });
+          }
+        });
+
+        if (desktopCaptionTitleRef.current)
+          desktopCaptionTitleRef.current.textContent = slides[nextIdx].title.toUpperCase();
+        if (desktopCaptionTextRef.current)
+          desktopCaptionTextRef.current.textContent = slides[nextIdx].text;
+        if (mobileCaptionTitleRef.current)
+          mobileCaptionTitleRef.current.textContent = slides[nextIdx].title.toUpperCase();
+        if (mobileCaptionTextRef.current)
+          mobileCaptionTextRef.current.textContent = slides[nextIdx].text;
+
+        updateBothUnderlines(nextIdx);
         updateProgressBars(nextIdx, isManual);
         return;
       }
 
-      // If a wipe is running: finish it instantly
+      // Finish running wipe instantly if user clicked or swiped fast
       if (swapTimelineRef.current) {
         swapTimelineRef.current.progress(1);
       }
 
-      const incomingLayer = layerRefs.current[nextIdx];
-      const incomingImg = imgRefs.current[nextIdx];
-      const outgoingLayer = layerRefs.current[prevIdx];
+      const dInLayer = desktopLayerRefs.current[nextIdx];
+      const dInImg = desktopImgRefs.current[nextIdx];
+      const dOutLayer = desktopLayerRefs.current[prevIdx];
 
-      if (!incomingLayer || !incomingImg || !outgoingLayer) return;
+      const mInLayer = mobileLayerRefs.current[nextIdx];
+      const mInImg = mobileImgRefs.current[nextIdx];
+      const mOutLayer = mobileLayerRefs.current[prevIdx];
 
-      // Outgoing layer stays fully visible underneath until wipe ends
-      gsap.set(outgoingLayer, { zIndex: 1, visibility: "visible" });
+      const incomingLayers = [dInLayer, mInLayer].filter(Boolean) as HTMLElement[];
+      const incomingImgs = [dInImg, mInImg].filter(Boolean) as HTMLElement[];
+      const outgoingLayers = [dOutLayer, mOutLayer].filter(Boolean) as HTMLElement[];
 
-      // Incoming layer is above (z-index 2), starts with clipPath inset(0 0 100% 0)
-      gsap.set(incomingLayer, {
-        zIndex: 2,
-        visibility: "visible",
-        clipPath: "inset(0 0 100% 0)",
+      // Outgoing layers stay fully visible underneath until wipe ends
+      outgoingLayers.forEach((layer) => {
+        gsap.set(layer, { zIndex: 1, visibility: "visible" });
       });
-      gsap.set(incomingImg, {
-        scale: 1.08,
-        transformOrigin: "center center",
+
+      // Incoming layers start with clipPath inset(0 0 100% 0), z-index 2
+      incomingLayers.forEach((layer) => {
+        gsap.set(layer, {
+          zIndex: 2,
+          visibility: "visible",
+          clipPath: "inset(0 0 100% 0)",
+        });
+      });
+      incomingImgs.forEach((img) => {
+        gsap.set(img, {
+          scale: 1.08,
+          transformOrigin: "center center",
+        });
       });
 
       const tl = gsap.timeline({
         onStart: () => {
-          gsap.set(incomingLayer, { willChange: "clip-path" });
-          gsap.set(incomingImg, { willChange: "transform" });
+          incomingLayers.forEach((layer) => gsap.set(layer, { willChange: "clip-path" }));
+          incomingImgs.forEach((img) => gsap.set(img, { willChange: "transform" }));
         },
         onComplete: () => {
-          gsap.set(incomingLayer, { zIndex: 1, clearProps: "willChange" });
-          gsap.set(incomingImg, { clearProps: "willChange,scale" });
-          gsap.set(outgoingLayer, { visibility: "hidden", zIndex: 0 });
+          incomingLayers.forEach((layer) =>
+            gsap.set(layer, { zIndex: 1, clearProps: "willChange" })
+          );
+          incomingImgs.forEach((img) =>
+            gsap.set(img, { clearProps: "willChange,scale" })
+          );
+          outgoingLayers.forEach((layer) =>
+            gsap.set(layer, { visibility: "hidden", zIndex: 0 })
+          );
           swapTimelineRef.current = null;
         },
       });
 
       // Wipe: 1100ms E2
-      tl.to(
-        incomingLayer,
-        {
-          clipPath: "inset(0 0 0% 0)",
-          duration: 1.1,
-          ease: "E2",
-          overwrite: "auto",
-        },
-        0
-      );
+      incomingLayers.forEach((layer) => {
+        tl.to(
+          layer,
+          {
+            clipPath: "inset(0 0 0% 0)",
+            duration: 1.1,
+            ease: "E2",
+            overwrite: "auto",
+          },
+          0
+        );
+      });
 
       // Inner img: scale 1.08 to 1 over 1600ms E1
-      tl.to(
-        incomingImg,
-        {
-          scale: 1,
-          duration: 1.6,
-          ease: "E1",
-          overwrite: "auto",
-        },
-        0
-      );
+      incomingImgs.forEach((img) => {
+        tl.to(
+          img,
+          {
+            scale: 1,
+            duration: 1.6,
+            ease: "E1",
+            overwrite: "auto",
+          },
+          0
+        );
+      });
 
       swapTimelineRef.current = tl;
 
@@ -2216,50 +2316,62 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
       animateCaption(nextIdx);
 
       // Tab underline
-      updateUnderline(nextIdx);
+      updateBothUnderlines(nextIdx);
 
       // Progress bars
       updateProgressBars(nextIdx, isManual);
     },
-    [isDesktop, slides, animateCaption, updateUnderline, updateProgressBars]
+    [slides, animateCaption, updateBothUnderlines, updateProgressBars]
   );
 
-  // Initial layout & resize measurement (desktop only)
+  // Initial layout & resize measurement
   useIsomorphicLayoutEffect(() => {
-    if (!isDesktop) return;
+    // Initial states: slide 0 visible, others hidden (Desktop & Mobile)
+    const initLayerGroup = (group: (HTMLDivElement | null)[]) => {
+      group.forEach((layer, i) => {
+        if (!layer) return;
+        if (i === 0) {
+          gsap.set(layer, {
+            clipPath: "inset(0 0 0% 0)",
+            zIndex: 1,
+            visibility: "visible",
+          });
+        } else {
+          gsap.set(layer, {
+            clipPath: "inset(0 0 100% 0)",
+            zIndex: 0,
+            visibility: "hidden",
+          });
+        }
+      });
+    };
 
-    // Initial states: slide 0 visible, others hidden
-    layerRefs.current.forEach((layer, i) => {
-      if (!layer) return;
-      if (i === 0) {
-        gsap.set(layer, {
-          clipPath: "inset(0 0 0% 0)",
-          zIndex: 1,
-          visibility: "visible",
-        });
-      } else {
-        gsap.set(layer, {
-          clipPath: "inset(0 0 100% 0)",
-          zIndex: 0,
-          visibility: "hidden",
-        });
-      }
-    });
+    initLayerGroup(desktopLayerRefs.current);
+    initLayerGroup(mobileLayerRefs.current);
 
-    // Set initial underline position and active bar
-    const tabEl = tabRefs.current[0];
-    const underlineEl = underlineRef.current;
-    if (tabEl && underlineEl) {
-      gsap.set(underlineEl, {
-        x: tabEl.offsetLeft,
-        scaleX: tabEl.offsetWidth,
+    // Initial underlines
+    const dTab = desktopTabRefs.current[0];
+    const dUnderline = desktopUnderlineRef.current;
+    if (dTab && dUnderline && dTab.offsetWidth > 0) {
+      gsap.set(dUnderline, {
+        x: dTab.offsetLeft,
+        scaleX: dTab.offsetWidth,
+      });
+    }
+
+    const mTab = mobileTabRefs.current[0];
+    const mUnderline = mobileUnderlineRef.current;
+    if (mTab && mUnderline && mTab.offsetWidth > 0) {
+      gsap.set(mUnderline, {
+        x: mTab.offsetLeft,
+        scaleX: mTab.offsetWidth,
       });
     }
 
     updateProgressBars(0, false);
 
     const onResize = () => {
-      updateUnderline(activeIdxRef.current);
+      updateBothUnderlines(activeIdxRef.current);
     };
 
     window.addEventListener("resize", onResize);
@@ -2270,11 +2382,10 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
     return () => {
       window.removeEventListener("resize", onResize);
     };
-  }, [isDesktop, updateUnderline, updateProgressBars]);
+  }, [updateBothUnderlines, updateProgressBars]);
 
-  // Autoplay loop strictly isolated to desktop
+  // Autoplay loop with pause on hover / touch, disabled on reduced motion
   useEffect(() => {
-    if (!isDesktop) return;
     isPausedRef.current = isPaused;
     if (prefersReducedRef.current) return;
 
@@ -2297,17 +2408,17 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
     }, AUTOPLAY_MS);
 
     return () => clearInterval(interval);
-  }, [isDesktop, isPaused, slides.length, goToSlide]);
+  }, [isPaused, slides.length, goToSlide]);
 
-  // Pointer swipe gestures (threshold 40px, touch-action: pan-y)
-  const onPointerDown = (e: React.PointerEvent) => {
+  // Desktop Pointer gestures (threshold 40px, touch-action: pan-y)
+  const onDesktopPointerDown = (e: React.PointerEvent) => {
     touchStartRef.current = { x: e.clientX, y: e.clientY };
     isDraggingRef.current = true;
     hasHorizontalIntentRef.current = null;
     setIsPaused(true);
   };
 
-  const onPointerMove = (e: React.PointerEvent) => {
+  const onDesktopPointerMove = (e: React.PointerEvent) => {
     if (!isDraggingRef.current || !touchStartRef.current) return;
     const dx = e.clientX - touchStartRef.current.x;
     const dy = e.clientY - touchStartRef.current.y;
@@ -2318,72 +2429,122 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
       }
     }
 
-    if (hasHorizontalIntentRef.current && frameRef.current) {
-      gsap.set(frameRef.current, { x: dx });
+    if (hasHorizontalIntentRef.current && desktopFrameRef.current) {
+      gsap.set(desktopFrameRef.current, { x: dx });
     }
   };
 
-  const onPointerUp = (e: React.PointerEvent) => {
+  const onDesktopPointerUp = (e: React.PointerEvent) => {
     if (!isDraggingRef.current || !touchStartRef.current) return;
     const dx = e.clientX - touchStartRef.current.x;
     isDraggingRef.current = false;
     setIsPaused(false);
 
     if (hasHorizontalIntentRef.current && Math.abs(dx) >= 40) {
-      if (frameRef.current) gsap.set(frameRef.current, { x: 0 });
+      if (desktopFrameRef.current) gsap.set(desktopFrameRef.current, { x: 0 });
       if (dx < 0) {
         goToSlide((activeIdxRef.current + 1) % slides.length, true);
       } else {
         goToSlide((activeIdxRef.current - 1 + slides.length) % slides.length, true);
       }
-    } else if (frameRef.current) {
-      gsap.to(frameRef.current, { x: 0, duration: 0.3, ease: "E1" });
+    } else if (desktopFrameRef.current) {
+      gsap.to(desktopFrameRef.current, { x: 0, duration: 0.3, ease: "E1" });
     }
 
     touchStartRef.current = null;
     hasHorizontalIntentRef.current = null;
   };
 
+  // Mobile Pointer gestures (threshold 40px, touch-action: pan-y)
+  const onMobilePointerDown = (e: React.PointerEvent) => {
+    mobileTouchStartRef.current = { x: e.clientX, y: e.clientY };
+    mobileIsDraggingRef.current = true;
+    mobileHasHorizontalIntentRef.current = null;
+    setIsPaused(true);
+  };
+
+  const onMobilePointerMove = (e: React.PointerEvent) => {
+    if (!mobileIsDraggingRef.current || !mobileTouchStartRef.current) return;
+    const dx = e.clientX - mobileTouchStartRef.current.x;
+    const dy = e.clientY - mobileTouchStartRef.current.y;
+
+    if (mobileHasHorizontalIntentRef.current === null) {
+      if (Math.abs(dx) > 7 || Math.abs(dy) > 7) {
+        mobileHasHorizontalIntentRef.current = Math.abs(dx) >= Math.abs(dy);
+      }
+    }
+
+    if (mobileHasHorizontalIntentRef.current && mobileFrameRef.current) {
+      gsap.set(mobileFrameRef.current, { x: dx });
+    }
+  };
+
+  const onMobilePointerUp = (e: React.PointerEvent) => {
+    if (!mobileIsDraggingRef.current || !mobileTouchStartRef.current) return;
+    const dx = e.clientX - mobileTouchStartRef.current.x;
+    mobileIsDraggingRef.current = false;
+    setIsPaused(false);
+
+    if (mobileHasHorizontalIntentRef.current && Math.abs(dx) >= 40) {
+      if (mobileFrameRef.current) gsap.set(mobileFrameRef.current, { x: 0 });
+      if (dx < 0) {
+        goToSlide((activeIdxRef.current + 1) % slides.length, true);
+      } else {
+        goToSlide((activeIdxRef.current - 1 + slides.length) % slides.length, true);
+      }
+    } else if (mobileFrameRef.current) {
+      gsap.to(mobileFrameRef.current, { x: 0, duration: 0.3, ease: "E1" });
+    }
+
+    mobileTouchStartRef.current = null;
+    mobileHasHorizontalIntentRef.current = null;
+  };
+
   return (
     <article className="w-full bg-white text-[var(--ink)]">
-      {/* 1. Hero Band */}
+      {/* 1. Hero Band (Capitalized Heading) */}
       <HeroBand
         variant="immersive"
         imageSrc="https://res.cloudinary.com/cyfb9slf/image/upload/v1792202373/grain-hero.jpg"
-        imageAlt={data.h1}
-        h1={data.h1}
+        imageAlt={data.h1.toUpperCase()}
+        h1={data.h1.toUpperCase()}
         subtitle={data.quickAnswer}
       />
 
       {/* 2. Content & Slideshow Section */}
       <section className="container py-[var(--sec-y-lg)]">
-        {/* Desktop View: Keep same interactive slideshow (hidden on mobile) */}
+        {/* DESKTOP VIEW (min-width: 1024px) */}
+        {/* Desktop is good. Keep the slideshow.
+            1. Delete the "03 / 03" label and any number.
+            2. Delete the drop shadow on the frame.
+            3. The three outlined buttons below become plain text tabs (same words, title style): a 1px line under the row, and a 2px blue line under the active tab that slides. No boxes.
+            4. The caption (title left, text right) has no box; use TEXT STYLE. */}
         <div
-          className="hidden md:block max-w-[1040px] mx-auto"
+          className="hidden lg:block max-w-[1040px] mx-auto"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          {/* Slideshow Frame (Aspect 1024/687 matches natural photo dimensions; NO drop shadow) */}
+          {/* Slideshow Frame (Aspect 1024/687 matches natural photo dimensions; NO drop shadow, NO numbers) */}
           <div
-            ref={frameRef}
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={onPointerUp}
-            onPointerCancel={onPointerUp}
+            ref={desktopFrameRef}
+            onPointerDown={onDesktopPointerDown}
+            onPointerMove={onDesktopPointerMove}
+            onPointerUp={onDesktopPointerUp}
+            onPointerCancel={onDesktopPointerUp}
             style={{ touchAction: "pan-y" }}
-            className="relative w-full aspect-[1024/687] overflow-hidden bg-slate-950 select-none cursor-grab active:cursor-grabbing"
+            className="relative w-full aspect-[1024/687] overflow-hidden bg-slate-950 select-none cursor-grab active:cursor-grabbing shadow-none"
           >
             {slides.map((s, idx) => (
               <div
                 key={idx}
                 ref={(el) => {
-                  layerRefs.current[idx] = el;
+                  desktopLayerRefs.current[idx] = el;
                 }}
                 className="absolute inset-0 w-full h-full overflow-hidden"
               >
                 <img
                   ref={(el) => {
-                    imgRefs.current[idx] = el;
+                    desktopImgRefs.current[idx] = el;
                   }}
                   src={cl(s.img, 1920)}
                   alt={s.title}
@@ -2399,7 +2560,10 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
             {/* Desktop Top Progress Bars inside frame (clean line, no boxes) */}
             <div className="absolute top-4 inset-x-6 z-20 flex gap-2 pointer-events-none">
               {slides.map((_, idx) => (
-                <div key={idx} className="h-[3px] flex-1 bg-white/30 overflow-hidden rounded-full">
+                <div
+                  key={idx}
+                  className="h-[3px] flex-1 bg-white/30 overflow-hidden rounded-full"
+                >
                   <div
                     ref={(el) => {
                       desktopProgressRefs.current[idx] = el;
@@ -2416,7 +2580,7 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
           <div className="mt-8 grid grid-cols-12 gap-8 text-left items-start">
             <div className="col-span-5">
               <h3
-                ref={captionTitleRef}
+                ref={desktopCaptionTitleRef}
                 className="font-bold uppercase text-[#0A0A0A] text-[20px] lg:text-[22px] leading-[1.25] tracking-[-0.01em]"
               >
                 {slides[0]?.title.toUpperCase()}
@@ -2424,21 +2588,21 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
             </div>
             <div className="col-span-7">
               <p
-                ref={captionTextRef}
-                className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal"
+                ref={desktopCaptionTextRef}
+                className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.7] font-normal"
               >
                 {slides[0]?.text}
               </p>
             </div>
           </div>
 
-          {/* Desktop Plain Text Tabs in one horizontal row: 1px line under row, 2px sliding blue line under active tab. No boxes! */}
-          <div className="mt-8 border-b border-[#E5E5E5] relative flex overflow-x-auto scrollbar-none gap-6">
+          {/* Desktop Plain Text Tabs: 1px line under row, 2px blue line under active tab that slides. No boxes! */}
+          <div className="mt-8 border-b border-[#E5E5E5] relative flex overflow-x-auto scrollbar-none gap-8">
             {slides.map((s, idx) => (
               <button
                 key={idx}
                 ref={(el) => {
-                  tabRefs.current[idx] = el;
+                  desktopTabRefs.current[idx] = el;
                 }}
                 type="button"
                 onClick={() => goToSlide(idx, true)}
@@ -2448,54 +2612,121 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
               </button>
             ))}
 
-            {/* 2px sliding blue underline (width: 1px, scaleX: width, x: offsetLeft) */}
+            {/* 2px sliding blue line under active tab */}
             <div
-              ref={underlineRef}
+              ref={desktopUnderlineRef}
               className="absolute bottom-0 left-0 h-[2px] bg-[var(--blue)] transform-gpu origin-left pointer-events-none"
               style={{ width: "1px" }}
             />
           </div>
         </div>
 
-        {/* Mobile View: Each card for each image, heading in all caps, and subheading */}
-        <div className="md:hidden flex flex-col gap-8 text-left">
-          {slides.map((s, idx) => (
-            <div key={idx} className="border border-[#E5E5E5] bg-white overflow-hidden flex flex-col">
-              {/* Image */}
-              <div className="w-full aspect-[1024/687] overflow-hidden bg-slate-950">
+        {/* MOBILE VIEW (max-width: 1023px) */}
+        {/* Mobile: swipe slideshow.
+            Under the photo: 3 progress bars (4px, 8px gap).
+            Under them the caption of the current slide: its own title and its own text.
+            Delete the button boxes; use the same plain text tabs in one horizontal row. */}
+        <div className="lg:hidden w-full max-w-[640px] mx-auto flex flex-col text-left">
+          {/* Mobile Swipe Slideshow (real shape, pointer events, follows finger x) */}
+          <div
+            ref={mobileFrameRef}
+            onPointerDown={onMobilePointerDown}
+            onPointerMove={onMobilePointerMove}
+            onPointerUp={onMobilePointerUp}
+            onPointerCancel={onMobilePointerUp}
+            style={{ touchAction: "pan-y" }}
+            className="relative w-full aspect-[1024/687] overflow-hidden bg-slate-950 select-none cursor-grab active:cursor-grabbing shadow-none"
+          >
+            {slides.map((s, idx) => (
+              <div
+                key={idx}
+                ref={(el) => {
+                  mobileLayerRefs.current[idx] = el;
+                }}
+                className="absolute inset-0 w-full h-full overflow-hidden"
+              >
                 <img
-                  src={cl(s.img, 1080)}
+                  ref={(el) => {
+                    mobileImgRefs.current[idx] = el;
+                  }}
+                  src={cl(s.img, 1920)}
                   alt={s.title}
                   width={1024}
                   height={687}
                   loading={idx === 0 ? "eager" : "lazy"}
                   decoding="async"
-                  className="w-full h-full object-cover object-center block"
+                  className="w-full h-full object-cover object-center pointer-events-none"
                 />
               </div>
+            ))}
+          </div>
 
-              {/* Content Area */}
-              <div className="p-5 flex flex-col">
-                {/* Heading in all caps */}
-                <h3 className="font-bold text-[#0A0A0A] uppercase text-[17px] leading-[1.3] tracking-[-0.01em] mb-2.5">
-                  {s.title.toUpperCase()}
-                </h3>
-
-                {/* Subheading / Text */}
-                <p className="text-[14px] sm:text-[15px] text-[var(--blue)] leading-[1.65] font-normal">
-                  {s.text}
-                </p>
+          {/* Under the photo: 3 progress bars (4px, 8px gap) */}
+          <div className="mt-4 flex gap-2 w-full">
+            {slides.map((_, idx) => (
+              <div
+                key={idx}
+                className="h-[4px] flex-1 bg-[#E5E5E5] overflow-hidden rounded-full relative"
+              >
+                <div
+                  ref={(el) => {
+                    mobileProgressRefs.current[idx] = el;
+                  }}
+                  className="h-full bg-[var(--blue)] origin-left"
+                  style={{ transform: "scaleX(0)" }}
+                />
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          {/* Under progress bars: caption of the current slide (its own title, its own text) */}
+          <div className="mt-6 flex flex-col gap-2 text-left">
+            <h3
+              ref={mobileCaptionTitleRef}
+              className="font-bold uppercase text-[#0A0A0A] text-[17px] leading-snug tracking-[-0.01em]"
+            >
+              {slides[0]?.title.toUpperCase()}
+            </h3>
+            <p
+              ref={mobileCaptionTextRef}
+              className="text-[15px] text-[var(--blue)] leading-[1.6] font-normal"
+            >
+              {slides[0]?.text}
+            </p>
+          </div>
+
+          {/* Under caption: Plain text tabs in one horizontal row (same words, title style).
+              A 1px line under the row, 2px blue line under active tab that slides. Delete button boxes! */}
+          <div className="mt-6 border-b border-[#E5E5E5] relative flex overflow-x-auto scrollbar-none gap-6 pb-0">
+            {slides.map((s, idx) => (
+              <button
+                key={idx}
+                ref={(el) => {
+                  mobileTabRefs.current[idx] = el;
+                }}
+                type="button"
+                onClick={() => goToSlide(idx, true)}
+                className="pb-2.5 font-bold uppercase text-[15px] sm:text-[17px] text-[#0A0A0A] cursor-pointer whitespace-nowrap bg-transparent border-0 transition-colors focus-visible:outline-none flex-shrink-0"
+              >
+                {s.title.toUpperCase()}
+              </button>
+            ))}
+
+            {/* 2px sliding blue line under active tab */}
+            <div
+              ref={mobileUnderlineRef}
+              className="absolute bottom-0 left-0 h-[2px] bg-[var(--blue)] transform-gpu origin-left pointer-events-none"
+              style={{ width: "1px" }}
+            />
+          </div>
         </div>
       </section>
 
-      {/* 3. FAQ Section: Size according to other pages */}
+      {/* 3. FAQ Section: Accordion recipe & Text Style */}
       {data.faq && data.faq.length > 0 && (
         <section className="container py-[var(--sec-y)]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="font-bold text-[#0A0A0A] uppercase text-[16px] lg:text-[44px] leading-[1.15] tracking-[-0.02em] mb-8 md:mb-10">
+            <h2 className="font-bold text-[#0A0A0A] uppercase text-[16px] lg:text-[44px] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8 md:mb-10">
               FREQUENTLY ASKED QUESTIONS
             </h2>
 
@@ -2553,8 +2784,9 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
         </section>
       )}
 
-      {/* 4. Next Banner */}
+      {/* 4. Next Banner (Capitalized Heading & Title) */}
       <NextBand
+        heading="WAREHOUSES WITH LOADING DOCKS: FAST TRUCK ACCESS AND AUTOMATED LEVELERS."
         image="https://res.cloudinary.com/cyfb9slf/image/upload/v1792202373/grain-next.jpg"
         nextUrl="/steel-warehouses-pakistan/warehouses-with-loading-docks/"
         nextTitle="Warehouses with Loading Docks"
