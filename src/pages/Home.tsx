@@ -19,25 +19,68 @@ import { cl, srcSet } from "../lib/cloudinary.ts";
 const TURNKEY_TEXT =
   "We are a turnkey solution provider offering design, fabrication, and installation for pre-engineered steel buildings, steel structures, and industrial sheds, as well as custom steel fabrication across Pakistan.";
 
+const DESKTOP_VIDEO_MP4 =
+  "https://res.cloudinary.com/cyfb9slf/video/upload/f_mp4,vc_h264,w_1920,q_auto/v1792608975/New_video_edited.mp4";
+const DESKTOP_VIDEO_WEBM =
+  "https://res.cloudinary.com/cyfb9slf/video/upload/f_webm,vc_vp9,w_1920,q_auto/v1792608975/New_video_edited.webm";
 const DESKTOP_VIDEO_ORIGINAL =
-  "https://res.cloudinary.com/cyfb9slf/video/upload/v1791664367/Main-homepage-Video_01.mp4.mov";
-const DESKTOP_VIDEO_HD =
-  "https://res.cloudinary.com/cyfb9slf/video/upload/f_mp4,vc_h264,w_1920,q_85/v1791664367/Main-homepage-Video_01.mp4.mov";
+  "https://res.cloudinary.com/cyfb9slf/video/upload/v1792608975/New_video_edited.mov";
 const DESKTOP_POSTER =
-  "https://res.cloudinary.com/cyfb9slf/video/upload/so_0,f_jpg,q_90,w_1920/v1791664367/Main-homepage-Video_01.mp4.mov";
+  "https://res.cloudinary.com/cyfb9slf/video/upload/so_0,f_jpg,q_90,w_1920/v1792608975/New_video_edited.jpg";
 
+const MOBILE_VIDEO_MP4 =
+  "https://res.cloudinary.com/cyfb9slf/video/upload/f_mp4,vc_h264,w_1080,q_auto/v1791664502/15409488_2160_3840_60fps_1.mp4";
 const MOBILE_VIDEO_ORIGINAL =
   "https://res.cloudinary.com/cyfb9slf/video/upload/v1791664502/15409488_2160_3840_60fps_1.mov";
-const MOBILE_VIDEO_HD =
-  "https://res.cloudinary.com/cyfb9slf/video/upload/f_mp4,vc_h264,w_1080,q_85/v1791664502/15409488_2160_3840_60fps_1.mov";
 const MOBILE_POSTER =
-  "https://res.cloudinary.com/cyfb9slf/video/upload/so_0,f_jpg,q_90,w_1080/v1791664502/15409488_2160_3840_60fps_1.mov";
+  "https://res.cloudinary.com/cyfb9slf/video/upload/so_0,f_jpg,q_90,w_1080/v1791664502/15409488_2160_3840_60fps_1.jpg";
 
 export const Home: React.FC = () => {
   const reducedMotion = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [industryOpen, setIndustryOpen] = useState<number>(0);
+  const [contactData, setContactData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    details: "",
+    company_website: "",
+  });
+  const [contactSubmitting, setContactSubmitting] = useState(false);
+  const [contactSubmitted, setContactSubmitted] = useState(false);
+  const [contactError, setContactError] = useState(false);
+
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (contactData.company_website) return;
+    if (!contactData.name.trim() || !contactData.phone.trim() || !contactData.details.trim()) {
+      return;
+    }
+    setContactSubmitting(true);
+    setContactError(false);
+
+    try {
+      const res = await fetch("/api/quote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: contactData.name,
+          phone: contactData.phone,
+          email: contactData.email || "info@steelmind.pk",
+          city: "General Inquiry",
+          projectType: "General / Turnkey Project",
+          message: contactData.details,
+        }),
+      });
+      if (!res.ok) throw new Error("Submission failed");
+      setContactSubmitted(true);
+    } catch {
+      setContactError(true);
+    } finally {
+      setContactSubmitting(false);
+    }
+  };
 
   const pRef = useRef<HTMLParagraphElement>(null);
 
@@ -152,12 +195,6 @@ export const Home: React.FC = () => {
       url: "/pre-engineered-buildings-pakistan/",
     },
     {
-      title: "Structural Steel Fabrication",
-      desc: "Columns, beams, trusses, platforms, bridges and complete steel frames, fabricated to drawing.",
-      img: A.division.structural,
-      url: "/structural-steel-fabrication-pakistan/",
-    },
-    {
       title: "Industrial Sheds",
       desc: "Steel sheds for production, storage, dairy and livestock use.",
       img: A.division.sheds,
@@ -174,6 +211,12 @@ export const Home: React.FC = () => {
       desc: "Machine frames, tanks, hoppers, gates, stairs and other steel items made to your own drawings.",
       img: A.division.custom,
       url: "/custom-steel-fabrication-pakistan/",
+    },
+    {
+      title: "Structural Steel Fabrication",
+      desc: "Columns, beams, trusses, platforms, bridges and complete steel frames, fabricated to drawing.",
+      img: A.division.structural,
+      url: "/structural-steel-fabrication-pakistan/",
     },
   ];
 
@@ -263,7 +306,7 @@ export const Home: React.FC = () => {
             muted
             loop
             playsInline
-            preload="metadata"
+            preload="auto"
             poster={isMobile ? MOBILE_POSTER : DESKTOP_POSTER}
             onLoadedData={() => setVideoLoaded(true)}
             onPlaying={() => setVideoLoaded(true)}
@@ -279,18 +322,18 @@ export const Home: React.FC = () => {
               videoLoaded ? "opacity-100" : "opacity-95"
             }`}
           >
-            <source
-              src={isMobile ? MOBILE_VIDEO_HD : DESKTOP_VIDEO_HD}
-              type="video/mp4"
-            />
-            <source
-              src={isMobile ? MOBILE_VIDEO_ORIGINAL : DESKTOP_VIDEO_ORIGINAL}
-              type='video/mp4; codecs="hevc, hvc1"'
-            />
-            <source
-              src={isMobile ? MOBILE_VIDEO_ORIGINAL : DESKTOP_VIDEO_ORIGINAL}
-              type="video/quicktime"
-            />
+            {isMobile ? (
+              <>
+                <source src={MOBILE_VIDEO_MP4} type="video/mp4" />
+                <source src={MOBILE_VIDEO_ORIGINAL} type="video/quicktime" />
+              </>
+            ) : (
+              <>
+                <source src={DESKTOP_VIDEO_WEBM} type="video/webm" />
+                <source src={DESKTOP_VIDEO_MP4} type="video/mp4" />
+                <source src={DESKTOP_VIDEO_ORIGINAL} type="video/quicktime" />
+              </>
+            )}
           </video>
 
           {/* Hero Overlay */}
@@ -304,17 +347,12 @@ export const Home: React.FC = () => {
         </div>
 
         {/* Bottom-left stack: Heading, Subheading, and small Buttons directly below subheading */}
-        <div className="absolute inset-0 z-10 w-full max-w-[1340px] mx-auto pointer-events-none">
-          <div
-            style={{
-              position: "absolute",
-              bottom: "calc(28px + env(safe-area-inset-bottom))",
-            }}
-            className="left-[20px] right-[20px] lg:left-[40px] lg:right-[40px] lg:!bottom-[44px] flex flex-col items-start pointer-events-auto"
-          >
+        <div className="absolute inset-0 z-10 pointer-events-none flex flex-col justify-end">
+          <div className="w-full max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-10 pb-[calc(28px+env(safe-area-inset-bottom))] lg:pb-[44px] pointer-events-auto">
+            <div className="flex flex-col items-start">
             {/* Heading */}
             <h1
-              className="text-[15px] sm:text-[18px] lg:text-[30px] font-semibold leading-[1.15] tracking-[-0.01em] text-white whitespace-nowrap max-w-fit"
+              className="text-[15px] sm:text-[18px] lg:text-[30px] font-semibold leading-[1.15] tracking-[-0.01em] text-white whitespace-nowrap max-w-fit uppercase"
               style={{
                 whiteSpace: "nowrap",
                 maxWidth: "fit-content",
@@ -366,6 +404,7 @@ export const Home: React.FC = () => {
             </div>
           </div>
         </div>
+      </div>
 
         {/* Scroll Hint (Bottom Right Line) */}
         <div className="hidden lg:block absolute bottom-8 right-8 z-10">
@@ -423,11 +462,16 @@ export const Home: React.FC = () => {
       <Section
         bg="white"
         title="A Legacy of Leadership"
-        intro="We have completed 30+ projects, worked across 10+ cities and fabricated more than 1,000 tons of steel over 8+ years."
+        intro="We have completed 60+ commercial and industrial projects, worked across 10+ cities and fabricated more than 3,000 tons of steel over 8+ years."
         className="border-b border-[var(--line)]"
       >
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
-          {SITE.stats.map((st) => (
+          {[
+            { value: 60, suffix: "+", label: "projects completed" },
+            { value: 8, suffix: "+", label: "years of experience" },
+            { value: 10, suffix: "+", label: "cities served" },
+            { value: 3000, suffix: "+", label: "tons of steel fabricated", format: true },
+          ].map((st) => (
             <Stat
               key={st.label}
               value={st.value}
@@ -449,14 +493,17 @@ export const Home: React.FC = () => {
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
           <div className="lg:col-span-5 space-y-5" data-reveal-group="">
-            <p className="text-[12px] lg:text-[13px] font-medium leading-[1.65] text-white max-w-[520px]" data-reveal="">
-              Steel Mind Engineers builds turnkey steel structures in Pakistan, from engineering and fabrication to erection.
+            <p className="text-[12px] lg:text-[13px] leading-[1.65] text-white max-w-[520px]" data-reveal="">
+              <strong className="font-bold text-white">Steel Mind Engineers wants to be the steel fabrication and engineering company that Pakistani industry trusts for the long term.</strong>
             </p>
             <p className="text-[12px] lg:text-[13px] leading-[1.65] text-white/85 max-w-[520px]" data-reveal="">
-              Steel Mind Engineers is a steel fabrication and engineering company based in Pakistan. It builds complete steel buildings and structures for manufacturers, dairy and livestock farms, retailers, logistics companies and public-sector clients. In more than eight years, the company has completed over thirty projects in more than ten cities.
+              Our mission is to deliver dependable steel structures that meet each client’s needs, with quality, safety and efficiency in everything we do. We hold ourselves to three core values: quality fabrication, continuous improvement, and safety and reliability.
             </p>
             <p className="text-[12px] lg:text-[13px] leading-[1.65] text-white/85 max-w-[520px]" data-reveal="">
-              The factory in Karol Ghati, Lahore, has cutting machines, welding units and material-handling systems. This allows the team to run several projects at the same time without losing control of quality or schedule. Many clients return for later phases, for example a feed storage building after a dairy shed.
+              What sets us apart is that we plan the work before we do it, and we stay with you after it is done. You get a written schedule before work begins and one project coordinator from contract to handover. Our checks run through the whole project, from material inspection to final alignment, so the result matches the specification and is finished on time.
+            </p>
+            <p className="text-[12px] lg:text-[13px] leading-[1.65] text-white/85 max-w-[520px]" data-reveal="">
+              Because a steel building serves its owner for decades, we treat each project as the start of a relationship and stay available for repairs, additions and extensions long after handover.
             </p>
             <div className="pt-3" data-fade-up="">
               <Button variant="hero-white" href="/about-us/introduction/">
@@ -530,7 +577,7 @@ export const Home: React.FC = () => {
       >
         <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] mb-10 lg:mb-14">
           <h2
-            className="text-[20px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] text-white mb-5"
+            className="text-[20px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] text-white mb-5 uppercase"
             data-split=""
           >
             How We Work
@@ -646,8 +693,8 @@ export const Home: React.FC = () => {
             />
           </div>
           <div className="lg:col-span-7 space-y-4">
-            <h2 className="text-[20px] lg:text-[32px] font-semibold text-white leading-[1.2] tracking-[-0.01em]" data-split="">
-              How the Team Is Organized
+            <h2 className="text-[20px] lg:text-[32px] font-semibold text-white leading-[1.2] tracking-[-0.01em] uppercase" data-split="">
+              Team Steel Mind Engineers
             </h2>
             <p className="text-[12px] lg:text-[13px] text-white/85 leading-[1.65] max-w-[520px]" data-reveal="">
               Four groups share responsibility for each structure. Engineers handle design and detailing. The workshop team handles fabrication and quality checks. Site crews handle erection and safety. Project coordinators handle schedules, material flow and communication with you.
@@ -664,58 +711,58 @@ export const Home: React.FC = () => {
         <div className="divide-y divide-[var(--line)] border-y border-[var(--line)]">
           {industries.map((ind, idx) => {
             const isOpen = industryOpen === idx;
-            const numStr = String(idx + 1).padStart(2, "0");
             return (
-              <div key={ind.name} className="py-3 overflow-hidden transition-all duration-500">
+              <div key={ind.name} className="py-3 overflow-hidden">
                 <button
                   type="button"
                   onClick={() => setIndustryOpen(isOpen ? -1 : idx)}
                   className="w-full py-3 flex items-center justify-between text-left cursor-pointer group"
                 >
-                  <div className="flex items-center space-x-5">
-                    <span className="text-[12px] lg:text-[13px] font-semibold text-[var(--blue)]">
-                      {numStr}
-                    </span>
-                    <span className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors">
-                      {ind.name}
-                    </span>
-                  </div>
-                  <span className="relative w-4 h-4 flex items-center justify-center">
+                  <span className="text-[14px] lg:text-[17px] font-semibold text-[var(--ink)] group-hover:text-[var(--blue)] transition-colors duration-300 uppercase">
+                    {ind.name}
+                  </span>
+                  <span className="relative w-4 h-4 flex items-center justify-center shrink-0 ml-4">
                     <span className="absolute w-4 h-[1.5px] bg-[var(--blue)]" />
                     <span
-                      className={`absolute h-4 w-[1.5px] bg-[var(--blue)] transition-transform duration-300 ${
+                      className={`absolute h-4 w-[1.5px] bg-[var(--blue)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                         isOpen ? "scale-y-0" : "scale-y-100"
                       }`}
                     />
                   </span>
                 </button>
 
-                {isOpen && (
-                  <div className="py-4 space-y-4 animate-[fadeIn_0.5s_ease-out]">
-                    <div className="max-w-[720px] overflow-hidden">
-                      <Img
-                        src={ind.img}
-                        alt={`${ind.name} sector: steel building by Steel Mind Engineers`}
-                        ratio="16/9"
-                      />
-                    </div>
-                    <p className="text-[12px] lg:text-[13px] leading-[1.6] text-[var(--grey)] max-w-[640px]">
-                      {ind.desc}
-                    </p>
-                    <div>
-                      <Link
-                        to={ind.url}
-                        className="text-[10px] uppercase tracking-[0.06em] font-semibold text-[var(--blue)] hover:underline inline-flex items-center"
-                      >
-                        <span>Explore</span>
-                        <svg className="w-4 h-4 ml-1 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                          <polyline points="12 5 19 12 12 19" />
-                        </svg>
-                      </Link>
+                <div
+                  className={`grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                    isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0 pointer-events-none"
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <div className="py-4 space-y-4">
+                      <div className="max-w-[720px] overflow-hidden">
+                        <Img
+                          src={ind.img}
+                          alt={`${ind.name} sector: steel building by Steel Mind Engineers`}
+                          ratio="16/9"
+                        />
+                      </div>
+                      <p className="text-[12px] lg:text-[13px] leading-[1.6] text-[var(--grey)] max-w-[640px]">
+                        {ind.desc}
+                      </p>
+                      <div>
+                        <Link
+                          to={ind.url}
+                          className="text-[10px] uppercase tracking-[0.06em] font-semibold text-[var(--blue)] hover:underline inline-flex items-center"
+                        >
+                          <span>Explore</span>
+                          <svg className="w-4 h-4 ml-1 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                          </svg>
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                )}
+                </div>
               </div>
             );
           })}
@@ -775,7 +822,7 @@ export const Home: React.FC = () => {
         className="py-20 bg-[var(--blue)] text-white"
       >
         <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] flex flex-col items-start space-y-5" data-fade-up="">
-          <h2 className="text-[20px] lg:text-[32px] font-semibold text-white leading-[1.2] tracking-[-0.01em]" data-split="">
+          <h2 className="text-[20px] lg:text-[32px] font-semibold text-white leading-[1.2] tracking-[-0.01em] uppercase" data-split="">
             Company Profile
           </h2>
           <p className="text-[12px] lg:text-[13px] text-white/85 max-w-[520px] leading-[1.65]">
@@ -799,6 +846,203 @@ export const Home: React.FC = () => {
       >
         <Accordion items={pageData.faq} />
       </Section>
+
+      {/* 14. Contact Section (Solid Blue — Directly above Footer) */}
+      <section
+        id="contact"
+        style={{ backgroundColor: "var(--blue)" }}
+        className="relative w-full bg-[var(--blue)] text-white py-10 sm:py-14 lg:py-24 border-t border-white/15"
+      >
+        <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+            {/* Left Column: Heading and Subtext */}
+            <div className="lg:col-span-5 space-y-4 lg:space-y-5 text-left">
+              <h2 className="text-[20px] sm:text-[24px] lg:text-[40px] font-bold text-white leading-[1.18] lg:leading-[1.15] tracking-[-0.01em] uppercase">
+                Ready to Start Your Project?
+              </h2>
+              <p className="text-[12px] sm:text-[13px] lg:text-[14px] leading-[1.6] lg:leading-[1.65] text-white/85 max-w-[480px]">
+                Send your project dimensions, layout requirements, or questions. Our senior engineers review every inquiry and provide clear advice, preliminary feasibility, and turnkey guidance for your steel structure.
+              </p>
+              <div className="pt-1 lg:pt-2 space-y-2 lg:space-y-2.5 text-[11px] sm:text-[12px] text-white/75">
+                <div className="flex items-center gap-2 lg:gap-2.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white/90 shrink-0" />
+                  <span>Written schedule and proposal before fabrication begins</span>
+                </div>
+                <div className="flex items-center gap-2 lg:gap-2.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white/90 shrink-0" />
+                  <span>Direct engineer communication from concept through erection</span>
+                </div>
+                <div className="flex items-center gap-2 lg:gap-2.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white/90 shrink-0" />
+                  <span>Decades of reliable service and after-sale support</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Contact Form */}
+            <div className="lg:col-span-7 w-full">
+              {contactSubmitted ? (
+                <div className="p-6 sm:p-10 lg:p-12 bg-white/10 border border-white/20 text-center flex flex-col items-center space-y-3 sm:space-y-4">
+                  <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-white text-[var(--blue)] flex items-center justify-center font-bold text-lg lg:text-xl shadow-sm">
+                    ✓
+                  </div>
+                  <h3 className="text-[18px] lg:text-[20px] font-bold text-white">Message Received</h3>
+                  <p className="text-[12px] sm:text-[13px] lg:text-[14px] text-white/90 max-w-[420px] leading-[1.6]">
+                    Your message has been received. A senior engineer will review your inquiry and reply promptly.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setContactSubmitted(false);
+                      setContactData({
+                        name: "",
+                        phone: "",
+                        email: "",
+                        details: "",
+                        company_website: "",
+                      });
+                    }}
+                    style={{ backgroundColor: "#FFFFFF", color: "var(--blue)" }}
+                    className="inline-flex items-center justify-center font-semibold text-[9.5px] sm:text-[10px] uppercase tracking-[0.08em] px-4 sm:px-5 py-2 sm:py-2.5 bg-white text-[var(--blue)] hover:bg-white/90 transition-all mt-2 cursor-pointer shadow-sm"
+                  >
+                    <span>Send Another Message</span>
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleContactSubmit} noValidate className="space-y-3 sm:space-y-4 text-left">
+                  {/* Anti-spam honeypot */}
+                  <input
+                    type="text"
+                    name="company_website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={contactData.company_website}
+                    onChange={(e) =>
+                      setContactData({ ...contactData, company_website: e.target.value })
+                    }
+                    className="hidden"
+                    aria-hidden="true"
+                  />
+
+                  {/* Full Name */}
+                  <div>
+                    <label
+                      htmlFor="home-contact-name"
+                      className="block text-[10px] sm:text-[11px] lg:text-[12px] font-semibold text-white uppercase tracking-[0.08em] mb-1 sm:mb-1.5"
+                    >
+                      Full Name
+                    </label>
+                    <input
+                      id="home-contact-name"
+                      type="text"
+                      required
+                      autoComplete="name"
+                      value={contactData.name}
+                      onChange={(e) =>
+                        setContactData({ ...contactData, name: e.target.value })
+                      }
+                      placeholder="e.g. Tariq Mehmood"
+                      className="w-full h-[38px] sm:h-[42px] lg:h-[48px] px-3 sm:px-4 text-[12px] sm:text-[13px] lg:text-[14px] text-[#0A0A0A] bg-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40 rounded-none placeholder:text-gray-400"
+                    />
+                  </div>
+
+                  {/* Two-column row on tablet/desktop for Phone and Email */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    {/* Phone Number */}
+                    <div>
+                      <label
+                        htmlFor="home-contact-phone"
+                        className="block text-[10px] sm:text-[11px] lg:text-[12px] font-semibold text-white uppercase tracking-[0.08em] mb-1 sm:mb-1.5"
+                      >
+                        Phone Number
+                      </label>
+                      <input
+                        id="home-contact-phone"
+                        type="tel"
+                        inputMode="tel"
+                        required
+                        autoComplete="tel"
+                        value={contactData.phone}
+                        onChange={(e) =>
+                          setContactData({ ...contactData, phone: e.target.value })
+                        }
+                        placeholder="e.g. 0300 1234567"
+                        className="w-full h-[38px] sm:h-[42px] lg:h-[48px] px-3 sm:px-4 text-[12px] sm:text-[13px] lg:text-[14px] text-[#0A0A0A] bg-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40 rounded-none placeholder:text-gray-400"
+                      />
+                    </div>
+
+                    {/* Email Address */}
+                    <div>
+                      <label
+                        htmlFor="home-contact-email"
+                        className="block text-[10px] sm:text-[11px] lg:text-[12px] font-semibold text-white uppercase tracking-[0.08em] mb-1 sm:mb-1.5"
+                      >
+                        Email Address
+                      </label>
+                      <input
+                        id="home-contact-email"
+                        type="email"
+                        required
+                        autoComplete="email"
+                        value={contactData.email}
+                        onChange={(e) =>
+                          setContactData({ ...contactData, email: e.target.value })
+                        }
+                        placeholder="e.g. name@company.com"
+                        className="w-full h-[38px] sm:h-[42px] lg:h-[48px] px-3 sm:px-4 text-[12px] sm:text-[13px] lg:text-[14px] text-[#0A0A0A] bg-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40 rounded-none placeholder:text-gray-400"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Project Details */}
+                  <div>
+                    <label
+                      htmlFor="home-contact-details"
+                      className="block text-[10px] sm:text-[11px] lg:text-[12px] font-semibold text-white uppercase tracking-[0.08em] mb-1 sm:mb-1.5"
+                    >
+                      Project Details
+                    </label>
+                    <textarea
+                      id="home-contact-details"
+                      required
+                      rows={3}
+                      value={contactData.details}
+                      onChange={(e) =>
+                        setContactData({ ...contactData, details: e.target.value })
+                      }
+                      placeholder="Please specify estimated dimensions, building purpose, city, and required features..."
+                      className="w-full p-2.5 sm:p-3.5 lg:p-4 text-[12px] sm:text-[13px] lg:text-[14px] text-[#0A0A0A] bg-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/40 rounded-none resize-y placeholder:text-gray-400 min-h-[85px] lg:min-h-[110px]"
+                    />
+                  </div>
+
+                  {/* Submit Button */}
+                  <div className="pt-1 sm:pt-2">
+                    <button
+                      type="submit"
+                      disabled={contactSubmitting}
+                      style={{ backgroundColor: "#FFFFFF", color: "var(--blue)" }}
+                      className="group inline-flex items-center justify-center font-bold text-[10px] sm:text-[10.5px] lg:text-[11px] uppercase tracking-[0.08em] px-5 sm:px-6 lg:px-7 py-2.5 sm:py-3 min-h-[38px] sm:min-h-[42px] lg:min-h-[44px] bg-white text-[var(--blue)] border border-white hover:bg-white/90 active:scale-[0.99] transition-all cursor-pointer shadow-sm disabled:opacity-60"
+                    >
+                      <span className="text-[var(--blue)] font-bold">
+                        {contactSubmitting ? "SENDING..." : "SEND MESSAGE"}
+                      </span>
+                      <span className="ml-1.5 sm:ml-2 inline-block text-[var(--blue)] font-bold transition-transform duration-300 group-hover:translate-x-1">
+                        →
+                      </span>
+                    </button>
+
+                    {contactError && (
+                      <p className="mt-2.5 text-[11px] sm:text-[12px] text-white/95 font-medium">
+                        The message could not send. Please call +92 300 4253966 or reach us on WhatsApp.
+                      </p>
+                    )}
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

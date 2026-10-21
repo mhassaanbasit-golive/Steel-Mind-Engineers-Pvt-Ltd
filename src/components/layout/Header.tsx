@@ -193,11 +193,11 @@ export const Header: React.FC<HeaderProps> = ({ hasDarkHero = true }) => {
           isSolidBlue ? "shadow-[0_4px_20px_rgba(15,23,42,0.15)]" : ""
         }`}
       >
-        <div className="max-w-[1340px] mx-auto h-full px-4 sm:px-6 lg:px-10 flex items-center justify-between">
+        <div className="max-w-[1340px] mx-auto h-full px-4 sm:px-6 lg:px-10 flex items-center justify-between gap-6 lg:gap-12 xl:gap-16">
           {/* Brand Lockup */}
           <TransitionLink
             to="/"
-            className="flex flex-col text-left group select-none cursor-pointer"
+            className="flex flex-col text-left group select-none cursor-pointer shrink-0 mr-4 sm:mr-6 lg:mr-12 xl:mr-16"
             aria-label="Steel Mind Engineers Homepage"
           >
             <span className="font-bold text-[14px] sm:text-[15px] lg:text-[17px] text-white tracking-[-0.01em] leading-tight group-hover:text-white/90 transition-colors">

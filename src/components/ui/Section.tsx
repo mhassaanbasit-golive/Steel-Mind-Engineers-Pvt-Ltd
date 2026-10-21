@@ -36,7 +36,7 @@ export const Section: React.FC<SectionProps> = ({
           <div className="mb-10 lg:mb-14 max-w-[800px]" data-reveal-group="">
             {title && (
               <h2
-                className={`text-[20px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] ${
+                className={`text-[20px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] uppercase ${
                   isBlue ? "text-white" : "text-[var(--ink)]"
                 }`}
                 data-split=""

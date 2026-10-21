@@ -56,7 +56,7 @@ export const QuoteBand: React.FC<QuoteBandProps> = ({
         className="relative z-[3] max-w-[1340px] mx-auto px-[var(--pad-x)] text-center flex flex-col items-center py-2"
       >
         <h2
-          className="text-[20px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] text-white max-w-[800px] mb-3"
+          className="text-[20px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] text-white max-w-[800px] mb-3 uppercase"
           data-split=""
         >
           {title}
@@ -70,7 +70,7 @@ export const QuoteBand: React.FC<QuoteBandProps> = ({
         </p>
 
         <div
-          className="flex flex-row flex-wrap items-center justify-center gap-3 w-full sm:w-auto"
+          className="flex flex-row flex-nowrap items-center justify-center gap-2 sm:gap-3 w-auto max-w-full"
           data-fade-up=""
         >
           {/* Request a Quote: Solid White button with Royal Blue text */}
@@ -81,10 +81,10 @@ export const QuoteBand: React.FC<QuoteBandProps> = ({
               color: "var(--blue)",
               borderColor: "#FFFFFF",
             }}
-            className="group inline-flex items-center justify-center font-semibold text-[10px] uppercase tracking-[0.08em] px-5 py-2.5 min-h-[38px] border border-white bg-white text-[var(--blue)] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.3)] active:translate-y-0 active:scale-[0.98] rounded-none cursor-pointer select-none text-center"
+            className="group inline-flex items-center justify-center font-semibold text-[9px] sm:text-[10px] uppercase tracking-[0.06em] sm:tracking-[0.08em] px-3.5 sm:px-4 h-[30px] sm:h-[34px] border border-white bg-white text-[var(--blue)] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.3)] active:translate-y-0 active:scale-[0.98] rounded-none cursor-pointer select-none text-center whitespace-nowrap shrink-0"
           >
             <span>Request a Quote</span>
-            <span className="ml-1.5 inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1">→</span>
+            <span className="ml-1 inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1">→</span>
           </TransitionLink>
 
           {/* Talk to an Expert: Transparent button with White border and White text */}
@@ -95,10 +95,10 @@ export const QuoteBand: React.FC<QuoteBandProps> = ({
               color: "#FFFFFF",
               borderColor: "#FFFFFF",
             }}
-            className="group inline-flex items-center justify-center font-semibold text-[10px] uppercase tracking-[0.08em] px-5 py-2.5 min-h-[38px] border border-white bg-transparent text-white hover:bg-white hover:text-[var(--blue)] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.2)] active:translate-y-0 active:scale-[0.98] rounded-none cursor-pointer select-none text-center"
+            className="group inline-flex items-center justify-center font-semibold text-[9px] sm:text-[10px] uppercase tracking-[0.06em] sm:tracking-[0.08em] px-3.5 sm:px-4 h-[30px] sm:h-[34px] border border-white bg-transparent text-white hover:bg-white hover:text-[var(--blue)] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,0,0,0.2)] active:translate-y-0 active:scale-[0.98] rounded-none cursor-pointer select-none text-center whitespace-nowrap shrink-0"
           >
             <span>Talk to an Expert</span>
-            <span className="ml-1.5 inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1">→</span>
+            <span className="ml-1 inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1">→</span>
           </a>
         </div>
       </div>

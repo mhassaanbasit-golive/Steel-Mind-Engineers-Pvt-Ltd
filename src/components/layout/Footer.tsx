@@ -120,6 +120,31 @@ export const Footer: React.FC = () => {
                 <LinkedinIcon ref={linkedinRef} size={20} className="text-white" />
               </a>
             </div>
+
+            {/* WhatsApp QR Code */}
+            <div className="pt-3">
+              <div className="inline-flex flex-col items-start gap-1.5">
+                <a
+                  href={SITE.whatsappMessage}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="WhatsApp QR code - Scan to chat"
+                  className="block p-1.5 bg-white shadow-sm hover:opacity-95 transition-opacity"
+                >
+                  <img
+                    src="https://res.cloudinary.com/cyfb9slf/image/upload/v1792203053/QR_Code_Sme.jpg"
+                    alt="WhatsApp QR Code - Steel Mind Engineers"
+                    className="w-[100px] h-[100px] object-contain block"
+                    width={100}
+                    height={100}
+                    loading="lazy"
+                  />
+                </a>
+                <span className="text-[10px] uppercase font-semibold text-white/80 tracking-[0.08em]">
+                  Scan for WhatsApp
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Column 2 — Company */}
@@ -288,7 +313,7 @@ export const Footer: React.FC = () => {
               rel="noopener noreferrer"
               className="hover:text-white hover:underline transition-colors"
             >
-              Demo Made By getGoLive.io
+              Website by GetGolive.io
             </a>
           </div>
         </div>
