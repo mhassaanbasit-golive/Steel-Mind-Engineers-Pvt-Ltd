@@ -11,6 +11,7 @@ import { TwoTone } from "../../page/TwoTone.tsx";
 import { SITE } from "../../../data/site.ts";
 import { gsap, ScrollTrigger } from "../../../lib/gsap.ts";
 import { useMediaQuery } from "../../../hooks/useMediaQuery.ts";
+import { cld } from "../../../lib/cld.ts";
 import {
   Wrench,
   PaintRoller,
@@ -470,8 +471,8 @@ export const DesignLayout: React.FC<{ data: ContentData }> = ({ data }) => {
               >
                 <ChevronLeft size={16} /> PREV
               </button>
-              <div className="text-[12px] font-bold text-[var(--blue)]">
-                {steps[activeStep].num} / 03
+              <div className="text-[12px] font-bold text-[var(--blue)] uppercase tracking-wider">
+                STEP {steps[activeStep].num}
               </div>
               <button
                 type="button"
@@ -1942,110 +1943,707 @@ export const CleaningLayout: React.FC<{ data: ContentData }> = ({ data }) => {
   );
 };
 
-// 9.32 Painting — signature: "Paint-wipe long-form"
+// 9.32 Painting — signature: "Paint-wipe long-form & 6 Two-Column Chapters"
+const PAINTING_IMAGES = {
+  hero: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202584/Painting-hero.jpg",
+  primer: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202581/Painting-1.jpg",
+  intermediate: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202584/Painting-2.jpg",
+  topcoat: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202582/Painting-3.jpg",
+  next: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202588/Painting-next.jpg",
+};
+
+const CHOOSING_ITEMS = [
+  {
+    num: "01",
+    title: "DRY INDOOR BUILDINGS",
+    text: "A primer and a finish coat are usually enough.",
+  },
+  {
+    num: "02",
+    title: "OUTDOOR STRUCTURES",
+    text: "Bridges, gantries and open sheds need a stronger system, because rain and sun reach the steel.",
+  },
+  {
+    num: "03",
+    title: "DAIRY AND POULTRY SHEDS",
+    text: "Moisture and animal waste attack steel. Choose a system built for damp, dirty air.",
+  },
+  {
+    num: "04",
+    title: "GRAIN STORES AND TANKS",
+    text: "Dust, moisture and stored goods call for a coating that suits the contents.",
+  },
+];
+
 export const PaintingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
-  const { sections } = extractSections(data);
-  const chooseSec = sections.find((s) => s.items && s.items.length >= 4) || sections[2];
-  const chooseItems = chooseSec?.items || [
-    { name: "Dry indoor buildings", text: "Standard single or dual-coat alkyd zinc phosphate primer system." },
-    { name: "Outdoor structures", text: "Epoxy zinc-rich primer with high-build polyurethane topcoat UV protection." },
-    { name: "Dairy and poultry sheds", text: "Chemical-resistant epoxy barriers resisting aggressive ammonia emissions." },
-    { name: "Grain stores and tanks", text: "Food-grade non-toxic epoxy coatings approved for grain contact." },
-  ];
+  const rootRef = useRef<HTMLElement>(null);
+  const wipeBoxRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const wipeImgRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const wipeLineRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const chapterLineRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const chapterTextRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const chooseItemLineRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // State
+  const [mobileOpenItem, setMobileOpenItem] = useState<number | null>(null);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+
+  // Debounced ScrollTrigger refresh after images and fonts are loaded
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    const refreshST = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 200);
+    };
+
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(refreshST).catch(() => {});
+    }
+
+    const imgUrls = [
+      PAINTING_IMAGES.primer,
+      PAINTING_IMAGES.intermediate,
+      PAINTING_IMAGES.topcoat,
+    ];
+    imgUrls.forEach((url) => {
+      const im = new Image();
+      im.src = cld(url, 1920);
+      if (im.decode) {
+        im.decode().then(refreshST).catch(() => {});
+      } else {
+        im.onload = refreshST;
+      }
+    });
+
+    window.addEventListener("resize", refreshST);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", refreshST);
+    };
+  }, []);
+
+  // Motion setup with gsap.matchMedia
+  useLayoutEffect(() => {
+    if (!rootRef.current) return;
+
+    const mm = gsap.matchMedia();
+
+    // 1. Reduced motion: immediate final state, no animation
+    mm.add("(prefers-reduced-motion: reduce)", () => {
+      chapterLineRefs.current.forEach((line) => line && gsap.set(line, { scaleX: 1 }));
+      chooseItemLineRefs.current.forEach((line) => line && gsap.set(line, { scaleX: 1 }));
+      chapterTextRefs.current.forEach((tg) => {
+        if (tg) {
+          const ps = tg.querySelectorAll<HTMLElement>(".chapter-p");
+          gsap.set(ps, { opacity: 1, y: 0 });
+        }
+      });
+      wipeBoxRefs.current.forEach((box) => box && gsap.set(box, { clipPath: "none" }));
+      wipeImgRefs.current.forEach((img) => img && gsap.set(img, { scale: 1 }));
+      wipeLineRefs.current.forEach((line) => line && gsap.set(line, { opacity: 0 }));
+    });
+
+    // 2. Desktop animations: (min-width: 1024px)
+    mm.add("(min-width: 1024px)", () => {
+      // a. Chapter lines DRAW (scaleX 0 to 1, transform-origin left, 1000ms E2)
+      chapterLineRefs.current.forEach((line) => {
+        if (!line) return;
+        gsap.set(line, { scaleX: 0, transformOrigin: "left center" });
+        gsap.to(line, {
+          scaleX: 1,
+          duration: 1.0,
+          ease: "E2",
+          scrollTrigger: {
+            trigger: line,
+            start: "top 85%",
+            once: true,
+            invalidateOnRefresh: true,
+          },
+          onStart: () => gsap.set(line, { willChange: "transform" }),
+          onComplete: () => gsap.set(line, { clearProps: "willChange" }),
+        });
+      });
+
+      // b. Chapter text RISE (paragraphs, y 24 to 0, opacity 0 to 1, 900ms E1, stagger 90ms)
+      chapterTextRefs.current.forEach((tg) => {
+        if (!tg) return;
+        const ps = tg.querySelectorAll<HTMLElement>(".chapter-p");
+        if (ps.length === 0) return;
+        gsap.set(ps, { opacity: 0, y: 24 });
+        gsap.to(ps, {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          ease: "E1",
+          stagger: 0.09,
+          scrollTrigger: {
+            trigger: tg,
+            start: "top 85%",
+            once: true,
+            invalidateOnRefresh: true,
+          },
+          onStart: () => gsap.set(ps, { willChange: "transform,opacity" }),
+          onComplete: () => gsap.set(ps, { clearProps: "willChange" }),
+        });
+      });
+
+      // c. Choosing by Use items DRAW
+      chooseItemLineRefs.current.forEach((line) => {
+        if (!line) return;
+        gsap.set(line, { scaleX: 0, transformOrigin: "left center" });
+        gsap.to(line, {
+          scaleX: 1,
+          duration: 1.0,
+          ease: "E2",
+          scrollTrigger: {
+            trigger: line,
+            start: "top 85%",
+            once: true,
+            invalidateOnRefresh: true,
+          },
+          onStart: () => gsap.set(line, { willChange: "transform" }),
+          onComplete: () => gsap.set(line, { clearProps: "willChange" }),
+        });
+      });
+
+      // d. Paint wipes (3 photos)
+      wipeBoxRefs.current.forEach((box, i) => {
+        const img = wipeImgRefs.current[i];
+        const line = wipeLineRefs.current[i];
+        if (!box || !img || !line) return;
+
+        gsap.set(box, { clipPath: "inset(0 0 100% 0)" });
+        gsap.set(img, { scale: 1.06 });
+        gsap.set(line, { y: 0, opacity: 1 });
+
+        const targetY = box.offsetHeight || Math.round(box.offsetWidth * (559 / 1024)) || 350;
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: box,
+            start: "top 85%",
+            once: true,
+            invalidateOnRefresh: true,
+          },
+          onStart: () => {
+            gsap.set([box, img, line], { willChange: "transform,clip-path,opacity" });
+          },
+          onComplete: () => {
+            gsap.set([box, img, line], { clearProps: "willChange" });
+          },
+        });
+
+        tl.to(box, { clipPath: "inset(0 0 0% 0)", duration: 1.4, ease: "E2" }, 0);
+        tl.fromTo(line, { y: 0, opacity: 1 }, { y: targetY, duration: 1.4, ease: "E2" }, 0);
+        tl.to(line, { opacity: 0, duration: 0.3, ease: "power1.out" }, 1.1);
+        tl.fromTo(img, { scale: 1.06 }, { scale: 1, duration: 1.8, ease: "E1" }, 0);
+      });
+    });
+
+    // 3. Mobile animations: (max-width: 1023px)
+    mm.add("(max-width: 1023px)", () => {
+      // a. Chapter lines DRAW
+      chapterLineRefs.current.forEach((line) => {
+        if (!line) return;
+        gsap.set(line, { scaleX: 0, transformOrigin: "left center" });
+        gsap.to(line, {
+          scaleX: 1,
+          duration: 1.0,
+          ease: "E2",
+          scrollTrigger: {
+            trigger: line,
+            start: "top 90%",
+            once: true,
+            invalidateOnRefresh: true,
+          },
+          onStart: () => gsap.set(line, { willChange: "transform" }),
+          onComplete: () => gsap.set(line, { clearProps: "willChange" }),
+        });
+      });
+
+      // b. Chapter text RISE
+      chapterTextRefs.current.forEach((tg) => {
+        if (!tg) return;
+        const ps = tg.querySelectorAll<HTMLElement>(".chapter-p");
+        if (ps.length === 0) return;
+        gsap.set(ps, { opacity: 0, y: 20 });
+        gsap.to(ps, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "E1",
+          stagger: 0.08,
+          scrollTrigger: {
+            trigger: tg,
+            start: "top 90%",
+            once: true,
+            invalidateOnRefresh: true,
+          },
+          onStart: () => gsap.set(ps, { willChange: "transform,opacity" }),
+          onComplete: () => gsap.set(ps, { clearProps: "willChange" }),
+        });
+      });
+
+      // c. Mobile Paint wipes (3 photos)
+      wipeBoxRefs.current.forEach((box, i) => {
+        const img = wipeImgRefs.current[i];
+        const line = wipeLineRefs.current[i];
+        if (!box || !img || !line) return;
+
+        gsap.set(box, { clipPath: "inset(0 0 100% 0)" });
+        gsap.set(img, { scale: 1.06 });
+        gsap.set(line, { y: 0, opacity: 1 });
+
+        const targetY = box.offsetHeight || Math.round(box.offsetWidth * (559 / 1024)) || 220;
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: box,
+            start: "top 90%",
+            once: true,
+            invalidateOnRefresh: true,
+          },
+          onStart: () => {
+            gsap.set([box, img, line], { willChange: "transform,clip-path,opacity" });
+          },
+          onComplete: () => {
+            gsap.set([box, img, line], { clearProps: "willChange" });
+          },
+        });
+
+        tl.to(box, { clipPath: "inset(0 0 0% 0)", duration: 1.4, ease: "E2" }, 0);
+        tl.fromTo(line, { y: 0, opacity: 1 }, { y: targetY, duration: 1.4, ease: "E2" }, 0);
+        tl.to(line, { opacity: 0, duration: 0.3, ease: "power1.out" }, 1.1);
+        tl.fromTo(img, { scale: 1.06 }, { scale: 1, duration: 1.8, ease: "E1" }, 0);
+      });
+    });
+
+    return () => mm.revert();
+  }, []);
 
   return (
-    <article className="w-full bg-white">
+    <article ref={rootRef} className="w-full bg-white text-left pb-0 overflow-x-clip">
+      {/* 1. HERO BAND (strictly capitalized in desktop and mobile view) */}
       <HeroBand
         variant="immersive"
-        imageSrc={IMG.services.painting.hero}
-        imageAlt={data.h1}
-        h1={data.h1}
+        imageSrc={PAINTING_IMAGES.hero}
+        imageAlt={data.h1.toUpperCase()}
+        h1={data.h1.toUpperCase()}
         subtitle={data.quickAnswer}
       />
 
-      <section className="container py-[var(--sec-y-lg)] text-left">
-        {/* Centered Prose Column */}
-        <div className="max-w-[720px] mx-auto space-y-12">
-          {/* Block 1 */}
-          <div className="space-y-4">
-            <h2 className="text-[28px] lg:text-[34px] font-bold text-[var(--ink)]">
-              {sections[0]?.title || "Why the Coating Matters"}
-            </h2>
-            <p className="text-[var(--grey-strong)] leading-[1.75]" style={{ fontSize: "var(--fs-lead)" }}>
-              {sections[0]?.text}
-            </p>
-          </div>
-
-          {/* Block 2 */}
-          <div className="space-y-4">
-            <h2 className="text-[26px] font-bold text-[var(--ink)]">
-              {sections[1]?.title || "What a Coating System Is"}
-            </h2>
-            <p className="text-[var(--grey-strong)] leading-[1.75]" style={{ fontSize: "var(--fs-body)" }}>
-              {sections[1]?.text}
-            </p>
-          </div>
-        </div>
-
-        {/* Wipe Band 1 (p1) */}
-        <div className="my-16 w-full aspect-[21/9] overflow-hidden bg-slate-900 shadow-md">
-          <img src={IMG.services.painting.p1} alt="Primer Coating Application" className="w-full h-full object-cover" />
-        </div>
-
-        {/* Choosing by Use Grid (Breaks out to container) */}
-        <div className="my-16 space-y-8">
-          <h2 className="text-[26px] lg:text-[32px] font-bold text-[var(--ink)]">
-            {chooseSec?.title || "Choosing by Use"}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {chooseItems.map((it, idx) => (
-              <div key={idx} className="border-t border-[var(--rule)] pt-6 space-y-3">
-                <OutlineNum num={idx + 1} />
-                <h3 className="text-[22px] font-bold text-[var(--ink)]">{it.name}</h3>
-                <p className="text-[var(--grey-strong)] leading-[1.65]" style={{ fontSize: "var(--fs-body)" }}>{it.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Wipe Band 2 (p2) */}
-        <div className="my-16 w-full aspect-[21/9] overflow-hidden bg-slate-900 shadow-md">
-          <img src={IMG.services.painting.p2} alt="Intermediate Epoxy Coating" className="w-full h-full object-cover" />
-        </div>
-
-        {/* Remaining Prose */}
-        <div className="max-w-[720px] mx-auto space-y-12">
-          {sections.slice(3, 5).map((sec, idx) => (
-            <div key={idx} className="space-y-4">
-              <h2 className="text-[26px] font-bold text-[var(--ink)]">{sec.title}</h2>
-              <p className="text-[var(--grey-strong)] leading-[1.75]" style={{ fontSize: "var(--fs-body)" }}>{sec.text}</p>
+      {/* CHAPTER 1: WHY THE COATING MATTERS */}
+      <div className="relative w-full">
+        <div className="py-[56px] lg:py-[88px] max-w-[1280px] mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[96px] items-start">
+            <div className="lg:col-span-4 lg:sticky top-[calc(var(--nav-offset)+24px)] self-start">
+              <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
+                WHY THE COATING MATTERS
+              </h2>
             </div>
-          ))}
+            <div
+              ref={(el) => {
+                chapterTextRefs.current[0] = el;
+              }}
+              className="lg:col-span-8 max-w-[640px] text-left"
+            >
+              <p className="chapter-p text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal">
+                Steel rusts when it meets water and air. In Pakistan, heat, rain, humid air and dust all speed up the damage. A good coating is the cheapest protection a steel building can have.
+              </p>
+            </div>
+          </div>
         </div>
+      </div>
 
-        {/* Wipe Band 3 (p3) */}
-        <div className="my-16 w-full aspect-[21/9] overflow-hidden bg-slate-900 shadow-md">
-          <img src={IMG.services.painting.p3} alt="Final Polyurethane Topcoat Finish" className="w-full h-full object-cover" />
+      {/* CHAPTER 2: WHAT A COATING SYSTEM IS + PRIMER PHOTO */}
+      <div className="relative w-full">
+        <div
+          ref={(el) => {
+            chapterLineRefs.current[0] = el;
+          }}
+          className="chapter-line w-full h-[1px] bg-[#E5E5E5]"
+        />
+        <div className="py-[56px] lg:py-[88px] max-w-[1280px] mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[96px] items-start">
+            <div className="lg:col-span-4 lg:sticky top-[calc(var(--nav-offset)+24px)] self-start">
+              <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
+                WHAT A COATING SYSTEM IS
+              </h2>
+            </div>
+            <div
+              ref={(el) => {
+                chapterTextRefs.current[1] = el;
+              }}
+              className="lg:col-span-8 max-w-[640px] text-left"
+            >
+              <p className="chapter-p text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal">
+                A coating system is a set of layers. The primer bonds to the steel and gives the first protection. Intermediate and top coats add thickness, resist weather and give the final color. Steel Mind Engineers selects the number of coats and the paint type from the use of the structure.
+              </p>
+
+              {/* Photo 1: Primer (48px under the text with Paint Wipe) */}
+              <div
+                ref={(el) => {
+                  wipeBoxRefs.current[0] = el;
+                }}
+                className="paint-wipe-box relative w-full overflow-hidden shadow-md mt-12 bg-slate-900"
+                style={{
+                  aspectRatio: "1024 / 559",
+                  clipPath: "inset(0 0 100% 0)",
+                }}
+              >
+                <img
+                  ref={(el) => {
+                    wipeImgRefs.current[0] = el;
+                  }}
+                  src={cld(PAINTING_IMAGES.primer, 1920)}
+                  alt="STEEL RAFTERS WITH A RED-OXIDE PRIMER COAT"
+                  width={1024}
+                  height={559}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover block"
+                  style={{ transform: "scale(1.06)" }}
+                />
+                <div
+                  ref={(el) => {
+                    wipeLineRefs.current[0] = el;
+                  }}
+                  className="paint-wipe-line absolute left-0 right-0 top-0 h-[4px] bg-[var(--blue)] pointer-events-none z-10"
+                />
+              </div>
+            </div>
+          </div>
         </div>
-      </section>
+      </div>
 
-      {/* FAQ */}
+      {/* CHAPTER 3: CHOOSING BY USE */}
+      <div className="relative w-full">
+        <div
+          ref={(el) => {
+            chapterLineRefs.current[1] = el;
+          }}
+          className="chapter-line w-full h-[1px] bg-[#E5E5E5]"
+        />
+        <div className="py-[56px] lg:py-[88px] max-w-[1280px] mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[96px] items-start">
+            <div className="lg:col-span-4 lg:sticky top-[calc(var(--nav-offset)+24px)] self-start">
+              <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
+                CHOOSING BY USE
+              </h2>
+            </div>
+            <div className="lg:col-span-8 max-w-[640px] text-left">
+              {/* Desktop: 2x2 Grid with 1px top line (turns blue on hover), number, title, text */}
+              <div className="hidden lg:grid grid-cols-2 gap-8 lg:gap-12 w-full">
+                {CHOOSING_ITEMS.map((item, i) => (
+                  <div key={item.num} className="group flex flex-col items-start text-left">
+                    {/* 1px top line (turns blue on hover) */}
+                    <div
+                      ref={(el) => {
+                        chooseItemLineRefs.current[i] = el;
+                      }}
+                      className="choose-item-line w-full h-[1px] bg-[#E5E5E5] group-hover:bg-[var(--blue)] transition-colors duration-300 mb-6"
+                    />
+                    {/* Number: solid, bold, var(--blue), placed above its title */}
+                    <span className="block text-[40px] lg:text-[64px] font-extrabold text-[var(--blue)] leading-none select-none mb-3">
+                      {item.num}
+                    </span>
+                    {/* Title: bold, ink colour, uppercase as per critical instruction */}
+                    <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] uppercase mb-3">
+                      {item.title}
+                    </h3>
+                    {/* Text: One-Step blue, regular weight */}
+                    <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal">
+                      {item.text}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Mobile: 4 Accordion rows (number, title, plus icon, text on tap) */}
+              <div className="lg:hidden w-full divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
+                {CHOOSING_ITEMS.map((item, i) => {
+                  const isOpen = mobileOpenItem === i;
+                  const panelId = `paint-choose-panel-${i}`;
+                  const btnId = `paint-choose-btn-${i}`;
+
+                  return (
+                    <div key={item.num} className="w-full overflow-hidden">
+                      <button
+                        id={btnId}
+                        type="button"
+                        aria-expanded={isOpen}
+                        aria-controls={panelId}
+                        onClick={() => setMobileOpenItem((prev) => (prev === i ? null : i))}
+                        className="w-full flex items-center justify-between text-left cursor-pointer min-h-[48px] py-4 focus-visible:outline-none"
+                      >
+                        <div className="flex flex-col pr-4">
+                          {/* Number: solid, bold, var(--blue) */}
+                          <span className="block text-[36px] sm:text-[40px] font-extrabold text-[var(--blue)] leading-none select-none mb-1">
+                            {item.num}
+                          </span>
+                          {/* Title: bold ink uppercase */}
+                          <h3 className="text-[17px] font-bold text-[#0A0A0A] leading-[1.25] uppercase">
+                            {item.title}
+                          </h3>
+                        </div>
+
+                        {/* Plus icon rotating 0 to 45deg over 400ms */}
+                        <span
+                          className="relative flex-shrink-0 flex items-center justify-center w-[24px] h-[24px] transition-transform duration-400 ease-[cubic-bezier(.16,1,.3,1)]"
+                          style={{
+                            transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
+                          }}
+                        >
+                          <span className="absolute bg-[var(--blue)] w-[20px] h-[2px]" />
+                          <span className="absolute bg-[var(--blue)] h-[20px] w-[2px]" />
+                        </span>
+                      </button>
+
+                      {/* ACCORDION panel: grid-template-rows 0fr to 1fr over 600ms E1 */}
+                      <div
+                        id={panelId}
+                        role="region"
+                        aria-labelledby={btnId}
+                        className="transition-[grid-template-rows] duration-600 ease-[cubic-bezier(.16,1,.3,1)]"
+                        style={{
+                          display: "grid",
+                          gridTemplateRows: isOpen ? "1fr" : "0fr",
+                        }}
+                      >
+                        <div className="min-h-0 overflow-hidden">
+                          <p
+                            className="text-[15px] text-[var(--blue)] leading-[1.6] font-normal pb-5 transition-opacity duration-400 ease-out"
+                            style={{
+                              opacity: isOpen ? 1 : 0,
+                              transitionDelay: isOpen ? "150ms" : "0ms",
+                            }}
+                          >
+                            {item.text}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* CHAPTER 4: HOW PAINTING IS DONE + INTERMEDIATE COAT PHOTO */}
+      <div className="relative w-full">
+        <div
+          ref={(el) => {
+            chapterLineRefs.current[2] = el;
+          }}
+          className="chapter-line w-full h-[1px] bg-[#E5E5E5]"
+        />
+        <div className="py-[56px] lg:py-[88px] max-w-[1280px] mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[96px] items-start">
+            <div className="lg:col-span-4 lg:sticky top-[calc(var(--nav-offset)+24px)] self-start">
+              <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
+                HOW PAINTING IS DONE
+              </h2>
+            </div>
+            <div
+              ref={(el) => {
+                chapterTextRefs.current[2] = el;
+              }}
+              className="lg:col-span-8 max-w-[640px] text-left"
+            >
+              <p className="chapter-p text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal">
+                Steel is cleaned first. The primer goes on soon after cleaning. Later coats follow in order, and each coat is left to dry as the paint maker requires. Coating thickness is checked against the specification. Bolted joints are left ready for site touch-up.
+              </p>
+
+              {/* Photo 2: Intermediate Coat (48px under text with Paint Wipe) */}
+              <div
+                ref={(el) => {
+                  wipeBoxRefs.current[1] = el;
+                }}
+                className="paint-wipe-box relative w-full overflow-hidden shadow-md mt-12 bg-slate-900"
+                style={{
+                  aspectRatio: "1024 / 559",
+                  clipPath: "inset(0 0 100% 0)",
+                }}
+              >
+                <img
+                  ref={(el) => {
+                    wipeImgRefs.current[1] = el;
+                  }}
+                  src={cld(PAINTING_IMAGES.intermediate, 1920)}
+                  alt="INTERMEDIATE EPOXY COAT APPLICATION ON STEEL MEMBERS"
+                  width={1024}
+                  height={559}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover block"
+                  style={{ transform: "scale(1.06)" }}
+                />
+                <div
+                  ref={(el) => {
+                    wipeLineRefs.current[1] = el;
+                  }}
+                  className="paint-wipe-line absolute left-0 right-0 top-0 h-[4px] bg-[var(--blue)] pointer-events-none z-10"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* CHAPTER 5: COLORS + TOP COAT PHOTO */}
+      <div className="relative w-full">
+        <div
+          ref={(el) => {
+            chapterLineRefs.current[3] = el;
+          }}
+          className="chapter-line w-full h-[1px] bg-[#E5E5E5]"
+        />
+        <div className="py-[56px] lg:py-[88px] max-w-[1280px] mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[96px] items-start">
+            <div className="lg:col-span-4 lg:sticky top-[calc(var(--nav-offset)+24px)] self-start">
+              <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
+                COLORS
+              </h2>
+            </div>
+            <div
+              ref={(el) => {
+                chapterTextRefs.current[3] = el;
+              }}
+              className="lg:col-span-8 max-w-[640px] text-left"
+            >
+              <p className="chapter-p text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal">
+                Tell the engineer your color choice at the design stage. Sheeting and trims can follow a color scheme that suits your brand.
+              </p>
+
+              {/* Photo 3: Top Coat (48px under text with Paint Wipe) */}
+              <div
+                ref={(el) => {
+                  wipeBoxRefs.current[2] = el;
+                }}
+                className="paint-wipe-box relative w-full overflow-hidden shadow-md mt-12 bg-slate-900"
+                style={{
+                  aspectRatio: "1024 / 559",
+                  clipPath: "inset(0 0 100% 0)",
+                }}
+              >
+                <img
+                  ref={(el) => {
+                    wipeImgRefs.current[2] = el;
+                  }}
+                  src={cld(PAINTING_IMAGES.topcoat, 1920)}
+                  alt="FINAL POLYURETHANE TOP COAT FINISH"
+                  width={1024}
+                  height={559}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover block"
+                  style={{ transform: "scale(1.06)" }}
+                />
+                <div
+                  ref={(el) => {
+                    wipeLineRefs.current[2] = el;
+                  }}
+                  className="paint-wipe-line absolute left-0 right-0 top-0 h-[4px] bg-[var(--blue)] pointer-events-none z-10"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* CHAPTER 6: AFTER ERECTION */}
+      <div className="relative w-full">
+        <div
+          ref={(el) => {
+            chapterLineRefs.current[4] = el;
+          }}
+          className="chapter-line w-full h-[1px] bg-[#E5E5E5]"
+        />
+        <div className="py-[56px] lg:py-[88px] max-w-[1280px] mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[96px] items-start">
+            <div className="lg:col-span-4 lg:sticky top-[calc(var(--nav-offset)+24px)] self-start">
+              <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
+                AFTER ERECTION
+              </h2>
+            </div>
+            <div
+              ref={(el) => {
+                chapterTextRefs.current[4] = el;
+              }}
+              className="lg:col-span-8 max-w-[640px] text-left"
+            >
+              <p className="chapter-p text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal">
+                Parts can be scratched in transport and lifting. Crews touch up damaged areas on site. A building also needs repainting after some years, which Steel Mind Engineers can do. See After Sale Services.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* FREQUENTLY ASKED QUESTIONS */}
       {data.faq && data.faq.length > 0 && (
-        <section className="container py-[var(--sec-y)]">
-          <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="font-bold text-[var(--ink)] mb-8" style={{ fontSize: "var(--fs-h2)" }}>
-              Frequently Asked Questions
+        <section className="w-full bg-white border-t border-[#E5E5E5] py-[72px] lg:py-[120px]">
+          <div className="max-w-[800px] mx-auto px-6 lg:px-8 text-left">
+            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-8 lg:mb-10">
+              FREQUENTLY ASKED QUESTIONS
             </h2>
-            <Accordion items={data.faq} size="large" />
+
+            <div className="divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
+              {data.faq.map((faqItem, idx) => {
+                const isOpen = openFaqIndex === idx;
+                const panelId = `painting-faq-panel-${idx}`;
+                const headerId = `painting-faq-header-${idx}`;
+
+                return (
+                  <div key={idx} className="group overflow-hidden">
+                    <button
+                      id={headerId}
+                      type="button"
+                      aria-expanded={isOpen}
+                      aria-controls={panelId}
+                      onClick={() => setOpenFaqIndex((prev) => (prev === idx ? null : idx))}
+                      className="w-full flex items-center justify-between text-left cursor-pointer transition-colors hover:text-[var(--blue)] focus-visible:outline-none min-h-[48px] py-6 lg:py-8"
+                    >
+                      <span className="font-bold text-[#0A0A0A] uppercase pr-6 leading-[1.3] text-[16px] lg:text-[20px] tracking-[-0.01em] group-hover:text-[var(--blue)] transition-colors">
+                        {faqItem.q.toUpperCase()}
+                      </span>
+
+                      {/* Plus icon rotating 0 to 45deg over 400ms */}
+                      <span
+                        className="relative flex-shrink-0 flex items-center justify-center w-[22px] h-[22px] transition-transform duration-400 ease-[cubic-bezier(.16,1,.3,1)]"
+                        style={{
+                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
+                        }}
+                      >
+                        <span className="absolute bg-[var(--blue)] w-[18px] h-[2px]" />
+                        <span className="absolute bg-[var(--blue)] h-[18px] w-[2px]" />
+                      </span>
+                    </button>
+
+                    {isOpen && (
+                      <div id={panelId} role="region" aria-labelledby={headerId}>
+                        <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal pt-1 pb-6 max-w-[700px]">
+                          {faqItem.a}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
       )}
 
-      {/* Next Banner */}
+      {/* Next Banner: Erection Services */}
       <NextBand
-        image={IMG.services.painting.next}
+        image={PAINTING_IMAGES.next}
         nextUrl="/services/erection/"
-        nextTitle="Erection Services"
+        nextTitle="ERECTION SERVICES"
       />
     </article>
   );
@@ -2065,62 +2663,198 @@ export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
     { name: "Touch-up and handover", text: "Paint coating inspection, field bolt touch-up, and client commissioning sign-off." },
   ];
 
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const prefersReduced =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const [activeSteps, setActiveSteps] = useState<boolean[]>(() =>
+    Array(steps.length).fill(prefersReduced)
+  );
+  const activeStepsRef = useRef<boolean[]>(Array(steps.length).fill(prefersReduced));
+
+  useEffect(() => {
+    if (prefersReduced) {
+      setActiveSteps(Array(steps.length).fill(true));
+      return;
+    }
+
+    let animFrame: number | null = null;
+    let isRunning = false;
+
+    const checkActive = () => {
+      const target = window.innerHeight * 0.5;
+      let changed = false;
+      const current = [...activeStepsRef.current];
+
+      itemRefs.current.forEach((el, idx) => {
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const isAct = rect.top <= target;
+        if (isAct !== current[idx]) {
+          current[idx] = isAct;
+          changed = true;
+        }
+      });
+
+      if (changed) {
+        activeStepsRef.current = current;
+        setActiveSteps(current);
+      }
+      isRunning = false;
+    };
+
+    const onScroll = () => {
+      if (isRunning) return;
+      isRunning = true;
+      animFrame = requestAnimationFrame(checkActive);
+    };
+
+    onScroll();
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (animFrame !== null) cancelAnimationFrame(animFrame);
+    };
+  }, [prefersReduced, steps.length]);
+
   return (
-    <article className="w-full bg-white">
+    <article className="w-full bg-white text-left pb-0 overflow-x-clip">
+      {/* 1. HERO BAND (strictly capitalized in desktop and mobile view) */}
       <HeroBand
         variant="immersive"
         imageSrc={IMG.services.erection.hero}
-        imageAlt={data.h1}
-        h1={data.h1}
+        imageAlt={data.h1.toUpperCase()}
+        h1={data.h1.toUpperCase()}
         subtitle={data.quickAnswer}
       />
 
-      {/* Intro */}
-      <section className="container py-[var(--sec-y-lg)] text-left">
-        <SplitIntro
-          title={sections[0]?.title || "What Erection Includes"}
-          lead={introPs[0]}
-          text={sections[0]?.text || introPs.slice(1)}
-        />
+      {/* 2. INTRO: Two columns on desktop, stacked on mobile */}
+      <section className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px] border-b border-[#E5E5E5]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+          {/* Left Column: Heading UPPERCASE bold ink */}
+          <div className="lg:col-span-5">
+            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
+              WHAT ERECTION INCLUDES
+            </h2>
+          </div>
+
+          {/* Right Column: Text in One-Step blue, regular weight */}
+          <div className="lg:col-span-7 space-y-4">
+            <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal max-w-[620px]">
+              {introPs[0] || "Erection covers lifting the columns and rafters, bolting the frames, fitting purlins, girts and bracing, and then fitting the roof and wall sheets, doors and accessories. For mezzanines and bridges, it also covers deck, stairs and handrails."}
+            </p>
+            {introPs[1] && (
+              <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal max-w-[620px]">
+                {introPs[1]}
+              </p>
+            )}
+          </div>
+        </div>
       </section>
 
-      {/* Crane Hook Rail (Vertical Progress Axis) */}
-      <section className="container pb-[var(--sec-y-lg)] text-left relative">
+      {/* 3. CRANE HOOK RAIL (THE ERECTION STEPS) */}
+      <section className="w-full py-[72px] lg:py-[120px] border-b border-[#E5E5E5]">
+        <div className="max-w-[1280px] mx-auto px-6 lg:px-8 mb-12 lg:mb-16">
+          <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
+            THE ERECTION STEPS
+          </h2>
+        </div>
+
         {/* Desktop Vertical Center Line with alternating steps */}
-        <div className="hidden lg:block relative">
-          <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[2px] bg-[var(--rule)]" />
-          <div className="space-y-16">
+        <div className="hidden lg:block relative max-w-[1280px] mx-auto px-8">
+          {/* 2px vertical center rail line */}
+          <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[2px] bg-[#E5E5E5]" />
+          
+          <div className="space-y-16 lg:space-y-24">
             {steps.map((st, idx) => {
               const isEven = idx % 2 === 1;
+              const isActive = activeSteps[idx] || prefersReduced;
+              const numStr = String(idx + 1).padStart(2, "0");
+
               return (
-                <div key={idx} className="grid grid-cols-12 gap-10 items-center">
-                  <div className={`col-span-5 ${isEven ? "order-1 text-right" : "order-1"}`}>
-                    {!isEven && (
-                      <div className="space-y-3">
-                        <span className="text-[13px] font-mono font-semibold text-[var(--blue)] tracking-wider">
-                          STEP {String(idx + 1).padStart(2, "0")}
+                <div
+                  key={idx}
+                  ref={(el) => {
+                    itemRefs.current[idx] = el;
+                  }}
+                  className="grid grid-cols-12 gap-10 items-center relative"
+                >
+                  {/* Left Column (col-span-5) */}
+                  <div className="col-span-5 order-1">
+                    {!isEven ? (
+                      <div className="flex flex-col items-start text-left">
+                        {/* Number: solid, bold, var(--blue) when active and rgba(30,58,138,.35) when inactive, no stroke, no outline, font-variant-numeric: tabular-nums */}
+                        <span
+                          className="block text-[40px] lg:text-[64px] font-extrabold leading-none select-none mb-3"
+                          style={{
+                            fontVariantNumeric: "tabular-nums",
+                            color: isActive ? "var(--blue)" : "rgba(30, 58, 138, 0.35)",
+                            transition: prefersReduced ? "none" : "color 300ms ease-out",
+                          }}
+                        >
+                          {numStr}
                         </span>
-                        <h3 className="text-[26px] font-[600] tracking-[-0.025em] text-[var(--ink)] leading-[1.1]">
-                          <TwoTone text={st.name} />
+
+                        {/* Title: bold, ink colour, uppercase */}
+                        <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em] uppercase mb-3">
+                          {st.name.toUpperCase()}
                         </h3>
-                        <p className="text-[var(--grey-strong)] leading-[1.7]" style={{ fontSize: "var(--fs-body)" }}>{st.text}</p>
+
+                        {/* Text: One-Step blue, regular weight */}
+                        <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal max-w-[460px]">
+                          {st.text}
+                        </p>
                       </div>
+                    ) : (
+                      <div />
                     )}
                   </div>
-                  <div className="col-span-2 flex justify-center order-2">
-                    <div className="w-4 h-4 rounded-full bg-[var(--blue)] ring-4 ring-white shadow-md" />
+
+                  {/* Center Dot (col-span-2) */}
+                  <div className="col-span-2 flex justify-center order-2 relative z-10">
+                    <div
+                      className="w-[14px] h-[14px] rounded-full ring-4 ring-white shadow-sm transition-colors duration-300"
+                      style={{
+                        backgroundColor: isActive ? "var(--blue)" : "#FFFFFF",
+                        border: `2px solid ${isActive ? "var(--blue)" : "#E5E5E5"}`,
+                      }}
+                    />
                   </div>
-                  <div className={`col-span-5 ${isEven ? "order-3" : "order-3"}`}>
-                    {isEven && (
-                      <div className="space-y-3">
-                        <span className="text-[13px] font-mono font-semibold text-[var(--blue)] tracking-wider">
-                          STEP {String(idx + 1).padStart(2, "0")}
+
+                  {/* Right Column (col-span-5) */}
+                  <div className="col-span-5 order-3">
+                    {isEven ? (
+                      <div className="flex flex-col items-start text-left">
+                        {/* Number: solid, bold, var(--blue) when active and rgba(30,58,138,.35) when inactive */}
+                        <span
+                          className="block text-[40px] lg:text-[64px] font-extrabold leading-none select-none mb-3"
+                          style={{
+                            fontVariantNumeric: "tabular-nums",
+                            color: isActive ? "var(--blue)" : "rgba(30, 58, 138, 0.35)",
+                            transition: prefersReduced ? "none" : "color 300ms ease-out",
+                          }}
+                        >
+                          {numStr}
                         </span>
-                        <h3 className="text-[26px] font-[600] tracking-[-0.025em] text-[var(--ink)] leading-[1.1]">
-                          <TwoTone text={st.name} />
+
+                        {/* Title: bold, ink colour, uppercase */}
+                        <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em] uppercase mb-3">
+                          {st.name.toUpperCase()}
                         </h3>
-                        <p className="text-[var(--grey-strong)] leading-[1.7]" style={{ fontSize: "var(--fs-body)" }}>{st.text}</p>
+
+                        {/* Text: One-Step blue, regular weight */}
+                        <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal max-w-[460px]">
+                          {st.text}
+                        </p>
                       </div>
+                    ) : (
+                      <div />
                     )}
                   </div>
                 </div>
@@ -2130,38 +2864,143 @@ export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         </div>
 
         {/* Mobile Left Rail */}
-        <div className="lg:hidden relative pl-8 border-l-2 border-[var(--blue)] space-y-12">
-          {steps.map((st, idx) => (
-            <div key={idx} className="relative space-y-2">
-              <div className="absolute -left-[41px] top-1 w-4 h-4 rounded-full bg-[var(--blue)] ring-4 ring-white" />
-              <span className="text-[12px] font-mono font-semibold text-[var(--blue)] tracking-wider block">
-                STEP {String(idx + 1).padStart(2, "0")}
-              </span>
-              <h3 className="text-[20px] font-[600] tracking-[-0.025em] text-[var(--ink)] leading-[1.2]">
-                <TwoTone text={st.name} />
-              </h3>
-              <p className="text-[var(--grey-strong)] text-[14px] leading-[1.65]">{st.text}</p>
-            </div>
-          ))}
+        <div className="lg:hidden relative pl-8 border-l-2 border-[var(--blue)] space-y-12 max-w-[1280px] mx-auto px-6 ml-6">
+          {steps.map((st, idx) => {
+            const isActive = activeSteps[idx] || prefersReduced;
+            const numStr = String(idx + 1).padStart(2, "0");
+
+            return (
+              <div
+                key={idx}
+                ref={(el) => {
+                  if (typeof window !== "undefined" && window.innerWidth < 1024) {
+                    itemRefs.current[idx] = el;
+                  }
+                }}
+                className="relative space-y-2 text-left"
+              >
+                {/* Dot on left rail */}
+                <div
+                  className="absolute -left-[41px] top-2 w-[14px] h-[14px] rounded-full ring-4 ring-white shadow-sm transition-colors duration-300"
+                  style={{
+                    backgroundColor: isActive ? "var(--blue)" : "#FFFFFF",
+                    border: `2px solid ${isActive ? "var(--blue)" : "#E5E5E5"}`,
+                  }}
+                />
+
+                {/* Number: solid, bold, var(--blue) when active and rgba(30,58,138,.35) when inactive, placed above title */}
+                <span
+                  className="block text-[40px] font-extrabold leading-none select-none mb-1"
+                  style={{
+                    fontVariantNumeric: "tabular-nums",
+                    color: isActive ? "var(--blue)" : "rgba(30, 58, 138, 0.35)",
+                    transition: prefersReduced ? "none" : "color 300ms ease-out",
+                  }}
+                >
+                  {numStr}
+                </span>
+
+                {/* Title: bold, ink colour, uppercase */}
+                <h3 className="text-[17px] font-bold text-[#0A0A0A] leading-[1.25] uppercase">
+                  {st.name.toUpperCase()}
+                </h3>
+
+                {/* Text: One-Step blue, regular weight */}
+                <p className="text-[15px] text-[var(--blue)] leading-[1.6] font-normal">
+                  {st.text}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* 4. NOTES: Safety on Site & Why Parts Fit (Two columns, 1px top line, uppercase title, One-Step blue text) */}
+      <section className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px] border-b border-[#E5E5E5]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+          {/* Note 1: Safety on Site */}
+          <div className="flex flex-col text-left">
+            <div className="w-full h-[1px] bg-[#E5E5E5] mb-8" />
+            <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] uppercase mb-4">
+              SAFETY ON SITE
+            </h3>
+            <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal">
+              Workers wear certified protective equipment and follow written site rules. Any worker may stop a job that looks unsafe. See the SME Policy.
+            </p>
+          </div>
+
+          {/* Note 2: Why Parts Fit */}
+          <div className="flex flex-col text-left">
+            <div className="w-full h-[1px] bg-[#E5E5E5] mb-8" />
+            <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] uppercase mb-4">
+              WHY PARTS FIT
+            </h3>
+            <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal">
+              Parts are made to the drawing and packed in erection order, so crews do not cut or rework steel on site.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. FREQUENTLY ASKED QUESTIONS */}
       {data.faq && data.faq.length > 0 && (
-        <section className="container py-[var(--sec-y)]">
+        <section className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="font-bold text-[var(--ink)] mb-8" style={{ fontSize: "var(--fs-h2)" }}>
-              Frequently Asked Questions
+            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-8 lg:mb-10">
+              FREQUENTLY ASKED QUESTIONS
             </h2>
-            <Accordion items={data.faq} size="large" />
+
+            <div className="divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
+              {data.faq.map((faqItem, idx) => {
+                const isOpen = openFaqIndex === idx;
+                const panelId = `erection-faq-panel-${idx}`;
+                const headerId = `erection-faq-header-${idx}`;
+
+                return (
+                  <div key={idx} className="group overflow-hidden">
+                    <button
+                      id={headerId}
+                      type="button"
+                      aria-expanded={isOpen}
+                      aria-controls={panelId}
+                      onClick={() => setOpenFaqIndex((prev) => (prev === idx ? null : idx))}
+                      className="w-full flex items-center justify-between text-left cursor-pointer transition-colors hover:text-[var(--blue)] focus-visible:outline-none py-6 lg:py-8"
+                    >
+                      <span className="font-bold text-[#0A0A0A] uppercase pr-6 leading-[1.3] text-[16px] lg:text-[20px] tracking-[-0.01em] group-hover:text-[var(--blue)] transition-colors">
+                        {faqItem.q.toUpperCase()}
+                      </span>
+
+                      {/* Plus icon rotating 0 to 45deg over 400ms */}
+                      <span
+                        className="relative flex-shrink-0 flex items-center justify-center w-[22px] h-[22px] transition-transform duration-400 ease-[cubic-bezier(.16,1,.3,1)]"
+                        style={{
+                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
+                        }}
+                      >
+                        <span className="absolute bg-[var(--blue)] w-[18px] h-[2px]" />
+                        <span className="absolute bg-[var(--blue)] h-[18px] w-[2px]" />
+                      </span>
+                    </button>
+
+                    {isOpen && (
+                      <div id={panelId} role="region" aria-labelledby={headerId}>
+                        <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal pt-1 pb-6 max-w-[700px]">
+                          {faqItem.a}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
       )}
 
-      {/* Next Banner: Blue Classic Banner without image as per prompt */}
+      {/* 6. NEXT BANNER: AFTER SALE SERVICES */}
       <NextBand
         nextUrl="/services/after-sale-services/"
-        nextTitle="After Sale Services"
+        nextTitle="AFTER SALE SERVICES"
       />
     </article>
   );
