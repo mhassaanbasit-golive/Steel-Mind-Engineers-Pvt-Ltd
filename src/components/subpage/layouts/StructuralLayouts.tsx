@@ -1954,9 +1954,6 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
               }}
             />
             <div className="absolute bottom-10 lg:bottom-14 left-6 lg:left-12 max-w-[840px] text-left z-10">
-              <span className="block text-[11px] uppercase tracking-[0.14em] font-semibold text-white/80 mb-2.5">
-                NEXT
-              </span>
               <h2 className="text-[26px] lg:text-[44px] font-bold uppercase text-white tracking-[-0.02em] leading-[1.18] mb-5">
                 CUSTOM-DESIGNED STRUCTURAL STEEL MEZZANINE FLOORS
               </h2>
@@ -1993,9 +1990,6 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
               style={{ backgroundColor: "var(--blue)" }}
               className="w-full text-white px-6 py-8 text-left"
             >
-              <span className="block text-[10px] uppercase tracking-[0.14em] font-semibold text-white/80 mb-2">
-                NEXT
-              </span>
               <h2 className="text-[16px] font-bold uppercase text-white tracking-[-0.02em] leading-tight mb-4">
                 CUSTOM-DESIGNED STRUCTURAL STEEL MEZZANINE FLOORS
               </h2>

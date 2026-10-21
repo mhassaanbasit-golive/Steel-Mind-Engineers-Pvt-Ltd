@@ -21,11 +21,6 @@ export const HubEndBand: React.FC<HubEndBandProps> = ({
       }}
     >
       <div className="max-w-[1340px] mx-auto text-left">
-        {/* Label NEXT */}
-        <div className="text-[10px] uppercase font-semibold text-white/55 tracking-[0.14em] mb-5">
-          NEXT
-        </div>
-
         {/* Heading */}
         <h2 className="next-band-heading text-[24px] lg:text-[40px] font-bold text-white tracking-[-0.02em] leading-[1.15] mb-6 max-w-[900px]">
           {heading}

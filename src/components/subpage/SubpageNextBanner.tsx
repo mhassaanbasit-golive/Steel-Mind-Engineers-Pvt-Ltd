@@ -68,9 +68,6 @@ export const SubpageNextBanner: React.FC<SubpageNextBannerProps> = ({
 
           {/* Desktop Headline & link bottom-left on image */}
           <div className="absolute bottom-10 lg:bottom-14 left-6 lg:left-12 max-w-[840px] text-left z-10">
-            <span className="block text-[11px] uppercase tracking-[0.14em] font-semibold text-white/80 mb-2.5">
-              NEXT
-            </span>
             <h2 className="text-[26px] lg:text-[38px] font-bold text-white tracking-[-0.02em] leading-[1.18] mb-5">
               {heading}
             </h2>
@@ -110,9 +107,6 @@ export const SubpageNextBanner: React.FC<SubpageNextBannerProps> = ({
             style={{ backgroundColor: "var(--blue, #1E3A8A)" }}
             className="w-full bg-[var(--blue)] text-white px-6 py-8 text-left"
           >
-            <span className="block text-[10px] uppercase tracking-[0.14em] font-semibold text-white/80 mb-2">
-              NEXT
-            </span>
             <h2
               className="font-bold text-white tracking-[-0.02em] mb-4"
               style={{
