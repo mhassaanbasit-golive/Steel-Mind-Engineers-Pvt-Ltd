@@ -32,7 +32,8 @@ export const Marquee: React.FC<{ className?: string }> = ({
             src={src}
             alt={`${name} logo`}
             className="max-h-full max-w-full object-contain block filter-none mix-blend-normal"
-            loading="eager"
+            loading="lazy"
+            decoding="async"
           />
         ) : (
           <span className="text-[12px] lg:text-[13px] font-semibold text-[var(--grey)]">
@@ -56,23 +57,14 @@ export const Marquee: React.FC<{ className?: string }> = ({
   return (
     <section
       style={{ backgroundColor: "#FFFFFF" }}
-      className={`py-10 border-y border-[var(--line)] overflow-hidden bg-white ${className}`}
+      className={`py-8 sm:py-10 border-y border-[var(--line)] overflow-hidden bg-white ${className}`}
     >
       <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
         <h2
-          className="text-[20px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] text-[var(--ink)] text-left"
-          style={{
-            fontFamily: "inherit",
-            fontWeight: 600,
-            letterSpacing: "-0.01em",
-            color: "var(--ink)",
-            textTransform: "none",
-            textAlign: "left",
-            margin: "0 0 32px 0",
-            padding: 0,
-          }}
+          className="text-[17px] sm:text-[19px] lg:text-[32px] font-semibold leading-[1.22] tracking-[-0.01em] uppercase text-[var(--ink)] text-left mb-6 sm:mb-8 lg:mb-12"
+          data-split=""
         >
-          Our Clients
+          OUR CLIENTS
         </h2>
       </div>
 

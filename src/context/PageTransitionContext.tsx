@@ -12,17 +12,24 @@ import { ScrollTrigger } from "../lib/gsap.ts";
 
 interface PageTransitionContextType {
   transitionNavigate: (to: string) => void;
+  transitionBack: () => void;
   isTransitioning: boolean;
 }
 
 const PageTransitionContext = createContext<PageTransitionContextType>({
   transitionNavigate: () => {},
+  transitionBack: () => {},
   isTransitioning: false,
 } satisfies PageTransitionContextType);
 
 export const useTransitionNavigate = () => {
   const ctx = useContext(PageTransitionContext);
   return ctx.transitionNavigate;
+};
+
+export const useTransitionBack = () => {
+  const ctx = useContext(PageTransitionContext);
+  return ctx.transitionBack;
 };
 
 export const useIsTransitioning = () => {
@@ -330,9 +337,99 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
     [routerNavigate, startLoadingBar, finishLoadingBar]
   );
 
+  // Transition back function (for Back button on mobile & desktop)
+  const transitionBack = useCallback(() => {
+    if (isTransitioningRef.current) return;
+
+    isTransitioningRef.current = true;
+    setOverlayActive(true);
+    startLoadingBar();
+    stopScroll();
+
+    const overlay = overlayRef.current;
+    const dots = dotsRef.current;
+
+    // 1. Covering: sweep solid blue curtain in
+    if (overlay) {
+      overlay.style.transition = "clip-path 400ms cubic-bezier(0.76, 0, 0.24, 1)";
+      overlay.style.clipPath = "inset(0 0 0 0)";
+    }
+
+    setTimeout(() => {
+      if (dots) {
+        dots.style.transition = "opacity 180ms ease";
+        dots.style.opacity = "1";
+      }
+    }, 200);
+
+    // 2. Perform navigate(-1) once fully covered
+    setTimeout(() => {
+      if (typeof window !== "undefined" && window.history.length > 1) {
+        routerNavigate(-1);
+      } else {
+        routerNavigate("/");
+      }
+
+      // 3. Wait for content readiness on the incoming page
+      Promise.all([
+        waitForFonts(),
+        waitForHeroImage(),
+        new Promise<void>((r) => {
+          requestAnimationFrame(() => requestAnimationFrame(() => r()));
+        }),
+      ]).then(() => {
+        scrollToTop();
+        ScrollTrigger.refresh();
+        finishLoadingBar();
+
+        // 4. Revealing: upward wipe
+        setTimeout(() => {
+          if (dots) {
+            dots.style.transition = "opacity 120ms ease";
+            dots.style.opacity = "0";
+          }
+
+          if (overlay) {
+            overlay.style.transition = "clip-path 500ms cubic-bezier(0.76, 0, 0.24, 1)";
+            overlay.style.clipPath = "inset(0 0 100% 0)";
+          }
+
+          setTimeout(() => {
+            document.dispatchEvent(new Event("page:revealed"));
+            window.dispatchEvent(new Event("page:revealed"));
+          }, 250);
+
+          setTimeout(() => {
+            if (overlay) {
+              overlay.style.transition = "none";
+              overlay.style.clipPath = "inset(100% 0 0 0)";
+            }
+            setOverlayActive(false);
+            isTransitioningRef.current = false;
+            startScroll();
+          }, 500);
+        }, 80);
+      });
+    }, 400);
+
+    // Safety timeout
+    setTimeout(() => {
+      if (isTransitioningRef.current) {
+        finishLoadingBar();
+        if (overlay) {
+          overlay.style.transition = "none";
+          overlay.style.clipPath = "inset(100% 0 0 0)";
+        }
+        setOverlayActive(false);
+        isTransitioningRef.current = false;
+        startScroll();
+      }
+    }, 3500);
+  }, [routerNavigate, startLoadingBar, finishLoadingBar]);
+
   return (
     <PageTransitionContext.Provider
-      value={{ transitionNavigate, isTransitioning: overlayActive }}
+      value={{ transitionNavigate, transitionBack, isTransitioning: overlayActive }}
     >
       {/* Sleek Top Loading Bar (Linear / YouTube style) */}
       <div

@@ -47,8 +47,14 @@ export const Article: React.FC<ArticleProps> = ({ data }) => {
 
   return (
     <div className="w-full bg-white">
-      {/* Reading Progress Bar fixed at bottom of header */}
-      <div className="fixed top-[var(--header-h)] inset-x-0 h-[2.5px] bg-[var(--line)]/40 z-[110] pointer-events-none">
+      {/* Reading Progress Bar: attaches seamlessly to the top of the viewport when header moves out of view */}
+      <div
+        style={{
+          top: "var(--nav-offset, 0px)",
+          transition: "top 300ms cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
+        className="fixed inset-x-0 h-[2.5px] bg-[var(--line)]/40 z-[110] pointer-events-none will-change-[top]"
+      >
         <div
           className="h-full origin-left transition-transform duration-75 bg-[var(--blue)]"
           style={{

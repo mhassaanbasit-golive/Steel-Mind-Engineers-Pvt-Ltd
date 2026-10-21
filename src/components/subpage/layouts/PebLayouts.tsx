@@ -73,19 +73,18 @@ export const EngineeringLayout: React.FC<{ data: ContentData }> = ({ data }) => 
         subtitle={data.quickAnswer}
       />
 
-      {/* 2. Intro Section: WHAT THE ENGINEERING DEPARTMENT DOES */}
-      <section className="container py-[var(--sec-y-lg)] text-left max-w-[1340px] mx-auto">
-        <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] uppercase mb-4">
-          WHAT THE ENGINEERING DEPARTMENT DOES
-        </h2>
-        <div className="w-full h-[1px] bg-[#E5E5E5] my-6" />
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-12">
-            <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[880px]">
+      {/* 2. Intro Section: WHAT THE ENGINEERING DEPARTMENT DOES (matching One-Step Solution structural alignment) */}
+      <section className="w-full bg-white py-[60px] lg:py-[100px] px-6 lg:px-8 border-b border-[#E5E5E5]">
+        <div className="max-w-[1340px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start text-left">
+          <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] uppercase">
+            WHAT THE ENGINEERING DEPARTMENT DOES
+          </h2>
+          <div className="max-w-[560px]">
+            <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
               {sections[0]?.text || introPs[0]}
             </p>
             {introPs.slice(1).length > 0 && (
-              <p className="mt-4 text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[880px]">
+              <p className="mt-4 text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
                 {introPs.slice(1).join(" ")}
               </p>
             )}
@@ -93,13 +92,13 @@ export const EngineeringLayout: React.FC<{ data: ContentData }> = ({ data }) => 
         </div>
       </section>
 
-      {/* 3. Steps Rail: THE DESIGN PROCESS (2px blue vertical line, 10px dot, solid bold var(--blue) number above title) */}
-      <section className="container pb-[var(--sec-y-lg)] text-left max-w-[1340px] mx-auto">
-        <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] uppercase mb-12">
-          THE DESIGN PROCESS
-        </h2>
+      {/* 3. Steps Rail: THE DESIGN PROCESS (matching One-Step Solution vertical rail padding & max-w 760px) */}
+      <section className="w-full bg-white py-[72px] lg:py-[120px] px-6 lg:px-8">
+        <div className="max-w-[760px] mx-auto text-left">
+          <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] uppercase mb-12">
+            THE DESIGN PROCESS
+          </h2>
 
-        <div className="max-w-[760px] mx-auto">
           <ol className="list-none m-0 p-0 relative">
             {steps.map((step, idx) => {
               const stepNumber = String(idx + 1).padStart(2, "0");
@@ -156,69 +155,74 @@ export const EngineeringLayout: React.FC<{ data: ContentData }> = ({ data }) => 
         </div>
       </section>
 
-      {/* 4. Wide View Photo: Clean framing, no grey border */}
-      <section className="container pb-[var(--sec-y-lg)] max-w-[1340px] mx-auto">
-        <div className="w-full relative overflow-hidden bg-slate-900 shadow-sm" style={{ aspectRatio: "16 / 9" }}>
-          <img
-            src="https://res.cloudinary.com/cyfb9slf/image/upload/v1792007695/peb-engineering-wide.jpg"
-            alt="PEB Engineering Wide View"
-            className="w-full h-full object-cover block"
-            loading="lazy"
-          />
+      {/* 4. Wide View Photo: Clean framing, no grey border (matching One-Step layout) */}
+      <section className="w-full bg-white px-6 lg:px-8 pb-[72px] lg:pb-[120px]">
+        <div className="max-w-[1340px] mx-auto">
+          <div className="w-full relative overflow-hidden bg-slate-900 shadow-sm" style={{ aspectRatio: "16 / 9" }}>
+            <img
+              src="https://res.cloudinary.com/cyfb9slf/image/upload/v1792007695/peb-engineering-wide.jpg"
+              alt="PEB Engineering Wide View"
+              className="w-full h-full object-cover block"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         </div>
       </section>
 
       {/* 5. 3 Blocks: High-end interactive cards with hover transition & crisp typography */}
       {ledgerBlocks.length > 0 && (
-        <section className="container pb-[var(--sec-y-lg)] text-left max-w-[1340px] mx-auto">
-          <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-4">
-            DELIVERABLES AND VALUE
-          </h2>
-          <div className="w-full h-[1px] bg-[#E5E5E5] mb-8 lg:mb-12" />
+        <section className="w-full bg-white px-6 lg:px-8 pb-[72px] lg:pb-[120px] text-left">
+          <div className="max-w-[1340px] mx-auto">
+            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-4">
+              DELIVERABLES AND VALUE
+            </h2>
+            <div className="w-full h-[1px] bg-[#E5E5E5] mb-8 lg:mb-12" />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {ledgerBlocks.map((blk, idx) => {
-              const blockNum = String(idx + 1).padStart(2, "0");
-              return (
-                <div
-                  key={idx}
-                  className="relative bg-white border border-[#E5E5E5] p-6 lg:p-8 flex flex-col justify-between group transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] hover:-translate-y-2 hover:shadow-[0_16px_36px_rgba(30,58,138,0.08)] hover:border-[var(--blue)] overflow-hidden"
-                >
-                  {/* 3px top blue accent line that expands smoothly from left to right on hover */}
-                  <div className="absolute top-0 left-0 right-0 h-[3px] bg-[var(--blue)] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] origin-left" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+              {ledgerBlocks.map((blk, idx) => {
+                const blockNum = String(idx + 1).padStart(2, "0");
+                return (
+                  <div
+                    key={idx}
+                    className="relative bg-white border border-[#E5E5E5] p-6 lg:p-8 flex flex-col justify-between group transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] hover:-translate-y-2 hover:shadow-[0_16px_36px_rgba(30,58,138,0.08)] hover:border-[var(--blue)] overflow-hidden"
+                  >
+                    {/* 3px top blue accent line that expands smoothly from left to right on hover */}
+                    <div className="absolute top-0 left-0 right-0 h-[3px] bg-[var(--blue)] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] origin-left" />
 
-                  <div>
-                    {/* Number: solid, bold, var(--blue), placed above its title, like One-Step */}
-                    <div className="text-[40px] lg:text-[48px] font-[800] text-[var(--blue)] leading-none select-none mb-3">
-                      {blockNum}
+                    <div>
+                      {/* Number: solid, bold, var(--blue), placed above its title, like One-Step */}
+                      <div className="text-[40px] lg:text-[48px] font-[800] text-[var(--blue)] leading-none select-none mb-3">
+                        {blockNum}
+                      </div>
+
+                      {/* Title: bold, ink colour, sentence case, One-Step desktop 20px */}
+                      <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mb-3 group-hover:text-[var(--blue)] transition-colors duration-300">
+                        {blk.title}
+                      </h3>
+
+                      {/* Text: the blue of One-Step body text, regular weight */}
+                      <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
+                        {blk.text}
+                      </p>
                     </div>
 
-                    {/* Title: bold, ink colour, sentence case, One-Step desktop 20px */}
-                    <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mb-3 group-hover:text-[var(--blue)] transition-colors duration-300">
-                      {blk.title}
-                    </h3>
-
-                    {/* Text: the blue of One-Step body text, regular weight */}
-                    <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
-                      {blk.text}
-                    </p>
+                    {/* Interactive card footer accent */}
+                    <div className="mt-6 pt-4 border-t border-[#E5E5E5] group-hover:border-[var(--blue)]/30 flex items-center justify-between text-[13px] font-semibold text-[var(--blue)] transition-colors">
+                      <span>Engineering Specification</span>
+                      <span className="transform group-hover:translate-x-1.5 transition-transform duration-300 inline-block" aria-hidden="true">&rarr;</span>
+                    </div>
                   </div>
-
-                  {/* Interactive card footer accent */}
-                  <div className="mt-6 pt-4 border-t border-[#E5E5E5] group-hover:border-[var(--blue)]/30 flex items-center justify-between text-[13px] font-semibold text-[var(--blue)] transition-colors">
-                    <span>Engineering Specification</span>
-                    <span className="transform group-hover:translate-x-1.5 transition-transform duration-300 inline-block" aria-hidden="true">&rarr;</span>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </section>
       )}
 
       {/* 6. Frequently Asked Questions: One-Step style, ZERO grey text */}
       {data.faq && data.faq.length > 0 && (
-        <section className="container py-[var(--sec-y-lg)] border-t border-[#E5E5E5] text-left max-w-[1340px] mx-auto">
+        <section className="w-full bg-white py-[60px] lg:py-[100px] px-6 lg:px-8 border-t border-[#E5E5E5] text-left">
           <div className="max-w-[800px] mx-auto">
             <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
@@ -1627,7 +1631,7 @@ export const MezzanineLayout: React.FC<{ data: ContentData }> = ({ data }) => {
               trigger: nextCard,
               start: "top bottom",
               end: () => `top ${stickyTopPx}px`,
-              scrub: 1.4,
+              scrub: 0.5,
               invalidateOnRefresh: true,
             },
           });

@@ -489,10 +489,15 @@ export const Home: React.FC = () => {
       {/* 4. About Steel Mind Engineers (Royal Blue — alternating with White) */}
       <Section
         bg="blue"
-        title="About Steel Mind Engineers"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
           <div className="lg:col-span-5 space-y-5" data-reveal-group="">
+            <h2
+              className="text-[17px] sm:text-[19px] lg:text-[32px] font-semibold leading-[1.22] tracking-[-0.01em] uppercase text-white mb-4 sm:mb-5"
+              data-split=""
+            >
+              About Steel Mind Engineers
+            </h2>
             <p className="text-[12px] lg:text-[13px] leading-[1.65] text-white max-w-[520px]" data-reveal="">
               <strong className="font-bold text-white">Steel Mind Engineers wants to be the steel fabrication and engineering company that Pakistani industry trusts for the long term.</strong>
             </p>
@@ -573,11 +578,11 @@ export const Home: React.FC = () => {
         style={{
           backgroundColor: "var(--blue)",
         }}
-        className="py-[var(--section-y)] bg-[var(--blue)] text-white"
+        className="py-8 sm:py-10 lg:py-[var(--section-y)] bg-[var(--blue)] text-white"
       >
-        <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] mb-10 lg:mb-14">
+        <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] mb-6 sm:mb-8 lg:mb-14">
           <h2
-            className="text-[20px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] text-white mb-5 uppercase"
+            className="text-[17px] sm:text-[19px] lg:text-[32px] font-semibold leading-[1.22] tracking-[-0.01em] text-white mb-3 sm:mb-4 lg:mb-5 uppercase"
             data-split=""
           >
             How We Work
@@ -689,11 +694,13 @@ export const Home: React.FC = () => {
             <img
               src={A.team}
               alt="Steel Mind Engineers fabrication team in front of the factory building in Lahore."
+              loading="lazy"
+              decoding="async"
               className="w-full h-auto object-contain block"
             />
           </div>
           <div className="lg:col-span-7 space-y-4">
-            <h2 className="text-[20px] lg:text-[32px] font-semibold text-white leading-[1.2] tracking-[-0.01em] uppercase" data-split="">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-semibold text-white leading-[1.22] tracking-[-0.01em] uppercase" data-split="">
               Team Steel Mind Engineers
             </h2>
             <p className="text-[12px] lg:text-[13px] text-white/85 leading-[1.65] max-w-[520px]" data-reveal="">
@@ -819,10 +826,10 @@ export const Home: React.FC = () => {
         style={{
           backgroundColor: "var(--blue)",
         }}
-        className="py-20 bg-[var(--blue)] text-white"
+        className="py-10 sm:py-14 lg:py-20 bg-[var(--blue)] text-white"
       >
-        <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] flex flex-col items-start space-y-5" data-fade-up="">
-          <h2 className="text-[20px] lg:text-[32px] font-semibold text-white leading-[1.2] tracking-[-0.01em] uppercase" data-split="">
+        <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] flex flex-col items-start space-y-4 sm:space-y-5" data-fade-up="">
+          <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-semibold text-white leading-[1.22] tracking-[-0.01em] uppercase" data-split="">
             Company Profile
           </h2>
           <p className="text-[12px] lg:text-[13px] text-white/85 max-w-[520px] leading-[1.65]">
@@ -851,13 +858,13 @@ export const Home: React.FC = () => {
       <section
         id="contact"
         style={{ backgroundColor: "var(--blue)" }}
-        className="relative w-full bg-[var(--blue)] text-white py-10 sm:py-14 lg:py-24 border-t border-white/15"
+        className="relative w-full bg-[var(--blue)] text-white py-8 sm:py-12 lg:py-24 border-t border-white/15"
       >
         <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
             {/* Left Column: Heading and Subtext */}
             <div className="lg:col-span-5 space-y-4 lg:space-y-5 text-left">
-              <h2 className="text-[20px] sm:text-[24px] lg:text-[40px] font-bold text-white leading-[1.18] lg:leading-[1.15] tracking-[-0.01em] uppercase">
+              <h2 className="text-[17px] sm:text-[22px] lg:text-[36px] font-bold text-white leading-[1.2] lg:leading-[1.15] tracking-[-0.01em] uppercase">
                 Ready to Start Your Project?
               </h2>
               <p className="text-[12px] sm:text-[13px] lg:text-[14px] leading-[1.6] lg:leading-[1.65] text-white/85 max-w-[480px]">

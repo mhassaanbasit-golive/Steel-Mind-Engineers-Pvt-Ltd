@@ -50,7 +50,7 @@ export const StackCards: React.FC<StackCardsProps> = ({
           trigger: nextCard,
           start: "top 85%",
           end: `top ${nextStickyTop}px`,
-          scrub: 1.4,
+          scrub: 0.5,
           onUpdate: (self) => {
             const p = self.progress;
             const scale = 1 - 0.05 * p; // scale down to 0.95

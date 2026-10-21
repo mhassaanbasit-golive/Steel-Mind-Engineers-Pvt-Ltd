@@ -29,14 +29,14 @@ export const Section: React.FC<SectionProps> = ({
       style={{
         backgroundColor: isBlue ? "var(--blue)" : "#FFFFFF",
       }}
-      className={`py-[var(--section-y)] relative w-full ${bgClass} ${className}`}
+      className={`py-8 sm:py-10 lg:py-[var(--section-y)] relative w-full ${bgClass} ${className}`}
     >
       <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
         {(title || intro) && (
-          <div className="mb-10 lg:mb-14 max-w-[800px]" data-reveal-group="">
+          <div className="mb-6 sm:mb-8 lg:mb-14 max-w-[800px]" data-reveal-group="">
             {title && (
               <h2
-                className={`text-[20px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.01em] uppercase ${
+                className={`text-[17px] sm:text-[19px] lg:text-[32px] font-semibold leading-[1.22] tracking-[-0.01em] uppercase ${
                   isBlue ? "text-white" : "text-[var(--ink)]"
                 }`}
                 data-split=""

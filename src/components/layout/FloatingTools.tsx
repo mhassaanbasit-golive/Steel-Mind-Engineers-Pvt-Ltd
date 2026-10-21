@@ -18,11 +18,14 @@ import {
   MessageSquareMoreIconHandle,
 } from "../icons/message-square-more.tsx";
 import { LinkedinIcon, LinkedinIconHandle } from "../icons/linkedin.tsx";
+import { playPop } from "../../lib/sound.ts";
 
 export const FloatingTools: React.FC = () => {
   const [dialOpen, setDialOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const [copiedLabel, setCopiedLabel] = useState<string | null>(null);
+  const [bubbleRendered, setBubbleRendered] = useState(false);
+  const [bubbleVisible, setBubbleVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const botMessageRef = useRef<BotMessageSquareHandle>(null);
@@ -35,6 +38,15 @@ export const FloatingTools: React.FC = () => {
   // Make floating tools visible after loader completes or fallback and trigger entrance animation
   useEffect(() => {
     let triggered = false;
+    let hideTimer: NodeJS.Timeout;
+    let showTimer: NodeJS.Timeout;
+    let playedSound = false;
+
+    const playBubbleSound = () => {
+      if (playedSound) return;
+      playedSound = true;
+      playPop();
+    };
 
     const triggerEntrance = () => {
       if (triggered) return;
@@ -44,6 +56,32 @@ export const FloatingTools: React.FC = () => {
         botMessageRef.current?.startAnimation();
         layoutGridRef.current?.startAnimation();
       }, 350);
+
+      // Chatbot notification bubble on page load: white bg, blue text, pop sound, disappears after 4 seconds
+      showTimer = setTimeout(() => {
+        setBubbleRendered(true);
+        setBubbleVisible(true);
+        playBubbleSound();
+
+        // Browser autoplay fallback: if browser suspended audio, play on first interaction while bubble is up
+        const onFirstInteract = () => {
+          playBubbleSound();
+          window.removeEventListener("pointerdown", onFirstInteract);
+          window.removeEventListener("touchstart", onFirstInteract);
+          window.removeEventListener("scroll", onFirstInteract);
+        };
+        window.addEventListener("pointerdown", onFirstInteract, { once: true, passive: true });
+        window.addEventListener("touchstart", onFirstInteract, { once: true, passive: true });
+        window.addEventListener("scroll", onFirstInteract, { once: true, passive: true });
+
+        hideTimer = setTimeout(() => {
+          setBubbleVisible(false);
+          window.removeEventListener("pointerdown", onFirstInteract);
+          window.removeEventListener("touchstart", onFirstInteract);
+          window.removeEventListener("scroll", onFirstInteract);
+          setTimeout(() => setBubbleRendered(false), 450);
+        }, 4000);
+      }, 650);
     };
 
     const handleLoaderDone = () => {
@@ -62,6 +100,8 @@ export const FloatingTools: React.FC = () => {
       window.removeEventListener("site:ready", handleSiteReady);
       window.removeEventListener("loader:done", handleLoaderDone);
       clearTimeout(fallbackTimer);
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
     };
   }, []);
 
@@ -213,6 +253,35 @@ export const FloatingTools: React.FC = () => {
           style={{ color: "#FFFFFF" }}
         />
       </button>
+
+      {/* Chat Notification Bubble: White background, Royal blue text (var(--blue)), soft rounded corners, no emojis. Automatically fades out after exactly 4s */}
+      {bubbleRendered && (
+        <div
+          role="status"
+          aria-live="polite"
+          onClick={() => {
+            botMessageRef.current?.startAnimation();
+            handleOpenChat();
+          }}
+          style={{
+            backgroundColor: "#FFFFFF",
+            color: "var(--blue, #1E3A8A)",
+            transition: "opacity 400ms cubic-bezier(0.16, 1, 0.3, 1), transform 400ms cubic-bezier(0.16, 1, 0.3, 1)",
+          }}
+          className={`absolute right-[64px] bottom-1 px-3.5 py-2 rounded-xl bg-white text-[var(--blue)] border border-[var(--blue)]/20 text-[12px] sm:text-[13px] font-semibold leading-snug whitespace-nowrap shadow-[0_6px_24px_rgba(30,58,138,0.18),0_2px_8px_rgba(0,0,0,0.06)] cursor-pointer select-none flex items-center z-[260] ${
+            bubbleVisible
+              ? "opacity-100 translate-x-0 pointer-events-auto"
+              : "opacity-0 translate-x-2 pointer-events-none"
+          }`}
+        >
+          <span>Hi! Do you need any help?</span>
+          {/* Soft arrow tip pointing to the chat button */}
+          <span
+            className="absolute -right-1.5 top-1/2 -translate-y-1/2 w-0 h-0 border-y-[5px] border-y-transparent border-l-[6px] border-l-white drop-shadow-[2px_0_1px_rgba(30,58,138,0.15)]"
+            aria-hidden="true"
+          />
+        </div>
+      )}
 
       {/* AI Chat Launcher */}
       <button

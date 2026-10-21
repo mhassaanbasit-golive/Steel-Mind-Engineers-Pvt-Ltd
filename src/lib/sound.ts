@@ -16,28 +16,43 @@ function getAudioContext(): AudioContext | null {
 
 export function playPop(muted = false): void {
   if (muted || typeof window === "undefined") return;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   try {
     const ctx = getAudioContext();
     if (!ctx) return;
 
+    if (ctx.state === "suspended") {
+      ctx.resume().then(() => {
+        playPopTone(ctx);
+      }).catch(() => {});
+      return;
+    }
+
+    playPopTone(ctx);
+  } catch {}
+}
+
+function playPopTone(ctx: AudioContext): void {
+  try {
+    const now = ctx.currentTime;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
 
     osc.type = "sine";
-    const now = ctx.currentTime;
-    osc.frequency.setValueAtTime(520, now);
-    osc.frequency.exponentialRampToValueAtTime(320, now + 0.09);
+    // Cheerful, friendly bubble pop: sweeps from 480Hz up to 1100Hz and drops softly
+    osc.frequency.setValueAtTime(480, now);
+    osc.frequency.exponentialRampToValueAtTime(1120, now + 0.04);
+    osc.frequency.exponentialRampToValueAtTime(420, now + 0.11);
 
-    gain.gain.setValueAtTime(0.3, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.linearRampToValueAtTime(0.4, now + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
 
     osc.connect(gain);
     gain.connect(ctx.destination);
 
     osc.start(now);
-    osc.stop(now + 0.09);
+    osc.stop(now + 0.12);
   } catch {}
 }
 

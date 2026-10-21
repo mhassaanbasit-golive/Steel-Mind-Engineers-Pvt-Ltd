@@ -56,6 +56,8 @@ export const Footer: React.FC = () => {
               <img
                 src={A.logoTransparent}
                 alt="Steel Mind Engineers"
+                loading="lazy"
+                decoding="async"
                 className="w-[110px] h-auto object-contain brightness-0 invert"
               />
             </Link>

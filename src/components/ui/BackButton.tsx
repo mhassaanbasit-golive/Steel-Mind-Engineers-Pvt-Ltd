@@ -2,23 +2,18 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeftIcon, ArrowLeftIconHandle } from "../icons/arrow-left.tsx";
 import { lenis } from "../../lib/lenis.ts";
-import { useTransitionNavigate } from "../../context/PageTransitionContext.tsx";
+import { useTransitionBack } from "../../context/PageTransitionContext.tsx";
 
 export const BackButton: React.FC = () => {
-  const navigate = useNavigate();
-  const transitionNavigate = useTransitionNavigate();
+  const transitionBack = useTransitionBack();
   const location = useLocation();
   const iconRef = useRef<ArrowLeftIconHandle>(null);
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollYRef = useRef(0);
 
   const handleBack = useCallback(() => {
-    if (window.history.length > 1) {
-      navigate(-1);
-    } else {
-      transitionNavigate("/");
-    }
-  }, [navigate, transitionNavigate]);
+    transitionBack();
+  }, [transitionBack]);
 
   useEffect(() => {
     // Reset to visible on route change if at upper section
