@@ -1,7 +1,7 @@
 {
-  "trailingSlash": true,
+  "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/((?!assets/|images/|fonts/|favicon|robots.txt|sitemap.xml|manifest).*)", "destination": "/index.html" }
+    { "source": "/((?!api/|assets/|images/|fonts/|favicon|robots.txt|sitemap.xml|manifest).*)", "destination": "/index.html" }
   ],
   "headers": [
     {
