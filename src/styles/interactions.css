@@ -281,3 +281,46 @@ html:not(.is-touch) .card-hover:hover .pic img {
   transform: scale(1.1);
   transition: transform 300ms var(--ease);
 }
+
+/* HOVER-ROW: content translateX 0 to 24px, 600ms E1; arrow button fill from blue 0 to 100% by clip-path circle, 400ms; arrow travels 8px up-right and back */
+.hover-row {
+  background: transparent !important;
+}
+
+.hover-row-content {
+  transition: transform 600ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.hover-row-btn-fill {
+  clip-path: circle(0% at center);
+  transition: clip-path 400ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.hover-row-arrow {
+  transition: color 400ms cubic-bezier(.16, 1, .3, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hover-row:hover .hover-row-content {
+    transform: translateX(24px);
+  }
+  .hover-row:hover .hover-row-btn-fill {
+    clip-path: circle(100% at center);
+  }
+  .hover-row:hover .hover-row-arrow {
+    color: #ffffff !important;
+    animation: hoverRowArrowAnim 600ms cubic-bezier(.16, 1, .3, 1);
+  }
+}
+
+@keyframes hoverRowArrowAnim {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(8px, -8px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
