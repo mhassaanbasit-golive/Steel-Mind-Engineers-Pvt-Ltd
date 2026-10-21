@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect, useCallback, useMemo } from "react";
 import { ContentData, ContentBlock } from "../../../content/types.ts";
 import { IMG } from "../../../data/subpageImages.ts";
 import { PhotoBox } from "../../page/PhotoBox.tsx";
@@ -11,6 +11,7 @@ import { TwoTone } from "../../page/TwoTone.tsx";
 import { SITE } from "../../../data/site.ts";
 import { gsap, ScrollTrigger } from "../../../lib/gsap.ts";
 import { useMediaQuery } from "../../../hooks/useMediaQuery.ts";
+import { FitOneLine } from "../../ui/FitOneLine.tsx";
 import { cld } from "../../../lib/cld.ts";
 import {
   Wrench,
@@ -1126,6 +1127,11 @@ export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
 
 // 9.30 Fabrication — signature: "7 Sequential Process Cards"
 export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => {
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const prefersReduced =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   const rootRef = useRef<HTMLElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const photoBoxRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -1139,6 +1145,55 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
 
   // State
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+
+  // 1. INTRO ANIMATION SETUP (identical to One-Step)
+  const introRef = useRef<HTMLElement>(null);
+  const [introTriggered, setIntroTriggered] = useState(prefersReduced);
+
+  const introTitle = "WHAT FABRICATION COVERS";
+  const introText =
+    "Fabrication turns steel plates and sections into columns, rafters, beams, trusses and custom items. At Steel Mind Engineers, this work happens in one factory, under cover. Engineers send approved drawings to the workshop, and the workshop makes each part exactly as drawn.";
+
+  const titleWords = useMemo(
+    () => introTitle.trim().split(/\s+/),
+    [introTitle]
+  );
+  const totalTitleChars = useMemo(
+    () => titleWords.reduce((acc, w) => acc + w.length, 0),
+    [titleWords]
+  );
+  const charStagger = useMemo(() => {
+    if (totalTitleChars <= 1) return 0;
+    return Math.min(35, 1400 / (totalTitleChars - 1));
+  }, [totalTitleChars]);
+
+  const textWords = useMemo(() => introText.trim().split(/\s+/), [introText]);
+  const wordStagger = useMemo(() => {
+    if (textWords.length <= 1) return 0;
+    return Math.min(45, 1400 / (textWords.length - 1));
+  }, [textWords]);
+
+  useEffect(() => {
+    if (prefersReduced) {
+      setIntroTriggered(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !introTriggered) {
+            setIntroTriggered(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    if (introRef.current) observer.observe(introRef.current);
+    return () => observer.disconnect();
+  }, [introTriggered, prefersReduced]);
 
   const steps = [
     {
@@ -1205,7 +1260,7 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
     };
   }, []);
 
-  // Motion setup: CURTAIN, RISE, WELDING LOOP (No Stacking)
+  // Motion setup: ON SCROLL ONLY for both desktop and mobile
   useLayoutEffect(() => {
     if (!rootRef.current) return;
 
@@ -1220,7 +1275,7 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
       weldDotRefs.current.forEach((dot) => dot && gsap.set(dot, { scale: 1, opacity: 1 }));
     });
 
-    // 2. Desktop animations: (min-width: 1024px)
+    // 2. Desktop animations on scroll only: (min-width: 1024px)
     mm.add("(min-width: 1024px)", () => {
       steps.forEach((_, idx) => {
         const card = cardRefs.current[idx];
@@ -1246,22 +1301,22 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                 gsap.to(photoBox, {
                   clipPath: "inset(0 0 0 0%)",
                   duration: 0.9,
-                  ease: "E2",
+                  ease: "cubic-bezier(0.22, 1, 0.36, 1)",
                 });
               }
               if (img) {
                 gsap.to(img, {
                   scale: 1,
-                  duration: 1.17,
-                  ease: "E1",
+                  duration: 1.1,
+                  ease: "cubic-bezier(0.22, 1, 0.36, 1)",
                 });
               }
               if (textGroup) {
                 gsap.to(textGroup, {
                   opacity: 1,
                   y: 0,
-                  duration: 0.9,
-                  ease: "E1",
+                  duration: 0.8,
+                  ease: "cubic-bezier(0.22, 1, 0.36, 1)",
                   delay: 0.1,
                 });
               }
@@ -1270,7 +1325,7 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
         }
       });
 
-      // Welding loop
+      // Welding on scroll into view only
       const weldPath = weldPathRef.current;
       const weldDots = weldDotRefs.current.filter(Boolean) as SVGCircleElement[];
       const weldingCard = weldingCardRef.current;
@@ -1279,29 +1334,23 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
         gsap.set(weldPath, { strokeDasharray: 704, strokeDashoffset: 704, opacity: 1 });
         gsap.set(weldDots, { scale: 0, transformOrigin: "center center", opacity: 1 });
 
-        const weldTl = gsap.timeline({
-          repeat: -1,
-          scrollTrigger: {
-            trigger: weldingCard,
-            start: "top bottom",
-            end: "bottom top",
-            toggleActions: "play pause resume pause",
+        ScrollTrigger.create({
+          trigger: weldingCard,
+          start: "top 80%",
+          once: true,
+          onEnter: () => {
+            const weldTl = gsap.timeline();
+            weldTl.to(weldPath, { strokeDashoffset: 0, duration: 2.2, ease: "power2.out" }, 0);
+            weldDots.forEach((dot, dotIdx) => {
+              const atTime = (2.2 * (dotIdx + 1)) / 7;
+              weldTl.to(dot, { scale: 1, duration: 0.25, ease: "back.out(1.5)" }, atTime - 0.05);
+            });
           },
         });
-
-        weldTl.to(weldPath, { strokeDashoffset: 0, duration: 3.0, ease: "none" }, 0);
-        weldDots.forEach((dot, dotIdx) => {
-          const atTime = (3.0 * (dotIdx + 1)) / 7;
-          weldTl.to(dot, { scale: 1, duration: 0.22, ease: "E1" }, atTime - 0.08);
-        });
-        weldTl.to({}, { duration: 0.6 });
-        weldTl.to([weldPath, ...weldDots], { opacity: 0, duration: 0.3, ease: "power1.out" });
-        weldTl.set(weldPath, { strokeDashoffset: 704, opacity: 1 });
-        weldTl.set(weldDots, { scale: 0, opacity: 1 });
       }
     });
 
-    // 3. Mobile animations: (max-width: 1023px)
+    // 3. Mobile animations on scroll only: (max-width: 1023px)
     mm.add("(max-width: 1023px)", () => {
       steps.forEach((_, idx) => {
         const card = cardRefs.current[idx];
@@ -1316,21 +1365,21 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
         if (card) {
           ScrollTrigger.create({
             trigger: card,
-            start: "top 90%",
+            start: "top 88%",
             once: true,
             onEnter: () => {
               if (photoBox) {
                 gsap.to(photoBox, {
                   clipPath: "inset(0 0 0 0%)",
                   duration: 0.9,
-                  ease: "E2",
+                  ease: "cubic-bezier(0.22, 1, 0.36, 1)",
                 });
               }
               if (img) {
                 gsap.to(img, {
                   scale: 1,
-                  duration: 1.17,
-                  ease: "E1",
+                  duration: 1.1,
+                  ease: "cubic-bezier(0.22, 1, 0.36, 1)",
                 });
               }
               if (textGroup) {
@@ -1338,7 +1387,7 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                   opacity: 1,
                   y: 0,
                   duration: 0.8,
-                  ease: "E1",
+                  ease: "cubic-bezier(0.22, 1, 0.36, 1)",
                   delay: 0.1,
                 });
               }
@@ -1347,7 +1396,7 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
         }
       });
 
-      // Mobile welding loop
+      // Mobile welding on scroll into view only
       const weldPath = weldPathRef.current;
       const weldDots = weldDotRefs.current.filter(Boolean) as SVGCircleElement[];
       const weldingCard = weldingCardRef.current;
@@ -1356,25 +1405,19 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
         gsap.set(weldPath, { strokeDasharray: 704, strokeDashoffset: 704, opacity: 1 });
         gsap.set(weldDots, { scale: 0, transformOrigin: "center center", opacity: 1 });
 
-        const weldTl = gsap.timeline({
-          repeat: -1,
-          scrollTrigger: {
-            trigger: weldingCard,
-            start: "top bottom",
-            end: "bottom top",
-            toggleActions: "play pause resume pause",
+        ScrollTrigger.create({
+          trigger: weldingCard,
+          start: "top 85%",
+          once: true,
+          onEnter: () => {
+            const weldTl = gsap.timeline();
+            weldTl.to(weldPath, { strokeDashoffset: 0, duration: 2.2, ease: "power2.out" }, 0);
+            weldDots.forEach((dot, dotIdx) => {
+              const atTime = (2.2 * (dotIdx + 1)) / 7;
+              weldTl.to(dot, { scale: 1, duration: 0.25, ease: "back.out(1.5)" }, atTime - 0.05);
+            });
           },
         });
-
-        weldTl.to(weldPath, { strokeDashoffset: 0, duration: 3.0, ease: "none" }, 0);
-        weldDots.forEach((dot, dotIdx) => {
-          const atTime = (3.0 * (dotIdx + 1)) / 7;
-          weldTl.to(dot, { scale: 1, duration: 0.22, ease: "E1" }, atTime - 0.08);
-        });
-        weldTl.to({}, { duration: 0.6 });
-        weldTl.to([weldPath, ...weldDots], { opacity: 0, duration: 0.3, ease: "power1.out" });
-        weldTl.set(weldPath, { strokeDashoffset: 704, opacity: 1 });
-        weldTl.set(weldDots, { scale: 0, opacity: 1 });
       }
     });
 
@@ -1392,20 +1435,146 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
         subtitle={data.quickAnswer}
       />
 
-      {/* 2. INTRO: "WHAT FABRICATION COVERS" (heading left, text right) */}
-      <section className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px] border-b border-[#E5E5E5]">
+      {/* 2. INTRO: "WHAT FABRICATION COVERS" with One-Step lookalike scroll stagger */}
+      <section
+        ref={introRef}
+        className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px] border-b border-[#E5E5E5]"
+      >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
-          {/* Left Column (5fr): Heading UPPERCASE bold ink */}
+          {/* Left Column (5fr): Heading UPPERCASE bold ink with One-Step character animation */}
           <div className="lg:col-span-5">
-            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
-              WHAT FABRICATION COVERS
-            </h2>
+            {isDesktop ? (
+              <h2
+                aria-label={introTitle}
+                className="text-[28px] lg:text-[46px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase"
+              >
+                {titleWords.map((word, wordIdx) => {
+                  let prevChars = 0;
+                  for (let i = 0; i < wordIdx; i++) {
+                    prevChars += titleWords[i].length;
+                  }
+
+                  return (
+                    <span
+                      key={wordIdx}
+                      className="inline-block whitespace-nowrap"
+                      aria-hidden="true"
+                    >
+                      {word.split("").map((char, charIdx) => {
+                        const delay = prefersReduced
+                          ? 0
+                          : (prevChars + charIdx) * charStagger;
+
+                        return (
+                          <span
+                            key={charIdx}
+                            className="inline-block"
+                            style={{
+                              opacity: introTriggered ? 1 : 0,
+                              transform: introTriggered
+                                ? "translateY(0)"
+                                : "translateY(40%)",
+                              filter: introTriggered ? "blur(0px)" : "blur(4px)",
+                              transition: prefersReduced
+                                ? "none"
+                                : `opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms, transform 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms, filter 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms`,
+                            }}
+                          >
+                            {char}
+                          </span>
+                        );
+                      })}
+                      {wordIdx < titleWords.length - 1 ? "\u00A0" : ""}
+                    </span>
+                  );
+                })}
+              </h2>
+            ) : (
+              <div className="w-full overflow-hidden">
+                <FitOneLine
+                  as="h2"
+                  ariaLabel={introTitle}
+                  initialClamp="clamp(18px, 6vw, 30px)"
+                  minFontSize={16}
+                  className="font-bold text-[#0A0A0A] tracking-[-0.02em] uppercase leading-tight"
+                >
+                  {titleWords.map((word, wordIdx) => {
+                    let prevChars = 0;
+                    for (let i = 0; i < wordIdx; i++) {
+                      prevChars += titleWords[i].length;
+                    }
+
+                    return (
+                      <span
+                        key={wordIdx}
+                        className="inline-block whitespace-nowrap"
+                        aria-hidden="true"
+                      >
+                        {word.split("").map((char, charIdx) => {
+                          const delay = prefersReduced
+                            ? 0
+                            : (prevChars + charIdx) * charStagger;
+
+                          return (
+                            <span
+                              key={charIdx}
+                              className="inline-block"
+                              style={{
+                                opacity: introTriggered ? 1 : 0,
+                                transform: introTriggered
+                                  ? "translateY(0)"
+                                  : "translateY(40%)",
+                                filter: introTriggered
+                                  ? "blur(0px)"
+                                  : "blur(4px)",
+                                transition: prefersReduced
+                                  ? "none"
+                                  : `opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms, transform 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms, filter 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms`,
+                              }}
+                            >
+                              {char}
+                            </span>
+                          );
+                        })}
+                        {wordIdx < titleWords.length - 1 ? "\u00A0" : ""}
+                      </span>
+                    );
+                  })}
+                </FitOneLine>
+              </div>
+            )}
           </div>
 
-          {/* Right Column (7fr): Text in One-Step blue, regular weight */}
+          {/* Right Column (7fr): Text in One-Step blue, regular weight with word stagger */}
           <div className="lg:col-span-7">
-            <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal max-w-[620px]">
-              Fabrication turns steel plates and sections into columns, rafters, beams, trusses and custom items. At Steel Mind Engineers, this work happens in one factory, under cover. Engineers send approved drawings to the workshop, and the workshop makes each part exactly as drawn.
+            <p
+              aria-label={introText}
+              className="text-[15px] lg:text-[17px] text-[var(--blue)] leading-[1.7] max-w-[620px]"
+            >
+              {textWords.map((word, wordIdx) => {
+                const delay = prefersReduced ? 0 : wordIdx * wordStagger;
+
+                return (
+                  <span
+                    key={wordIdx}
+                    className="inline-block whitespace-nowrap"
+                    aria-hidden="true"
+                    style={{
+                      opacity: introTriggered ? 1 : 0,
+                      transform: introTriggered
+                        ? "translateY(0)"
+                        : "translateY(40%)",
+                      filter: introTriggered ? "blur(0px)" : "blur(4px)",
+                      transition: prefersReduced
+                        ? "none"
+                        : `opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms, transform 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms, filter 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms`,
+                    }}
+                  >
+                    {word}
+                    {wordIdx < textWords.length - 1 ? "\u00A0" : ""}
+                  </span>
+                );
+              })}
             </p>
           </div>
         </div>
@@ -1414,10 +1583,23 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
       {/* 3. 7 PROCESS CARDS (Sequential flow, no stacking) */}
       <section className="relative w-full py-[72px] lg:py-[120px]">
         <div className="max-w-[1280px] mx-auto px-6 lg:px-8">
-          {/* Section Heading: strictly capitalized */}
-          <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-12 lg:mb-16">
-            THE FABRICATION STEPS
-          </h2>
+          {/* Section Heading: strictly capitalized with One-Step sizing */}
+          {isDesktop ? (
+            <h2 className="text-[28px] lg:text-[46px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-12 lg:mb-16">
+              THE FABRICATION STEPS
+            </h2>
+          ) : (
+            <div className="w-full mb-10 overflow-hidden">
+              <FitOneLine
+                as="h2"
+                initialClamp="clamp(20px, 6.5vw, 32px)"
+                minFontSize={18}
+                className="font-bold text-[#0A0A0A] tracking-[-0.02em] uppercase leading-tight"
+              >
+                THE FABRICATION STEPS
+              </FitOneLine>
+            </div>
+          )}
 
           <div className="w-full space-y-12 lg:space-y-20">
             {steps.map((step, idx) => {
@@ -2649,79 +2831,471 @@ export const PaintingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
   );
 };
 
+const ERECTION_STEP_PHOTOS = [
+  {
+    step: 1,
+    title: "Site check",
+    url: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202535/Erection-1.jpg",
+    width: 1024,
+    height: 687,
+  },
+  {
+    step: 2,
+    title: "Lifting plan",
+    url: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202536/erection-2.jpg",
+    width: 1024,
+    height: 687,
+  },
+  {
+    step: 3,
+    title: "Frames",
+    url: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202536/Erection-3.jpg",
+    width: 1024,
+    height: 687,
+  },
+  {
+    step: 4,
+    title: "Bracing and secondary members",
+    url: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202537/Erection-4.jpg",
+    width: 1024,
+    height: 687,
+  },
+  {
+    step: 5,
+    title: "Alignment",
+    url: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202538/Erection-5.jpg",
+    width: 1024,
+    height: 687,
+  },
+  {
+    step: 6,
+    title: "Sheeting and accessories",
+    url: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202541/Erection-6.jpg",
+    width: 1024,
+    height: 687,
+  },
+  {
+    step: 7,
+    title: "Touch-up and handover",
+    url: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202542/Erection-7.jpg",
+    width: 1024,
+    height: 687,
+  },
+];
+
 // 9.33 Erection — signature: "Crane-hook rail"
 export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
-  const { introPs, sections } = extractSections(data);
-  const stepsSec = sections.find((s) => s.items && s.items.length >= 6) || sections[0];
-  const steps = stepsSec?.items || [
-    { name: "Site check", text: "Verifying foundation survey coordinates, anchor bolt elevations and crane access paths." },
-    { name: "Lifting plan", text: "Rigging calculations determining crane capacity, radius, and tandem lift safety." },
-    { name: "Frames", text: "Standing primary portal frame columns and assembling rafters into rigid bents." },
-    { name: "Bracing and secondary members", text: "Installing cable bracing, fly braces, purlins and girts to lock structural geometry." },
-    { name: "Alignment", text: "Plumb line laser alignment and torquing high-strength connection bolts." },
-    { name: "Sheeting and accessories", text: "Fastening insulated roof and wall sandwich panels, ridge monitors, and skylights." },
-    { name: "Touch-up and handover", text: "Paint coating inspection, field bolt touch-up, and client commissioning sign-off." },
-  ];
-
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
-  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
   const prefersReduced =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const [activeSteps, setActiveSteps] = useState<boolean[]>(() =>
-    Array(steps.length).fill(prefersReduced)
+  const { introPs } = extractSections(data);
+
+  // 1. INTRO ANIMATION SETUP (identical to One-Step)
+  const introRef = useRef<HTMLElement>(null);
+  const [introTriggered, setIntroTriggered] = useState(prefersReduced);
+
+  const introTitle = "WHAT ERECTION INCLUDES";
+  const introText =
+    introPs[0] ||
+    "Erection covers lifting the columns and rafters, bolting the frames, fitting purlins, girts and bracing, and then fitting the roof and wall sheets, doors and accessories. For mezzanines and bridges, it also covers deck, stairs and handrails.";
+
+  const titleWords = useMemo(
+    () => introTitle.trim().split(/\s+/),
+    [introTitle]
   );
-  const activeStepsRef = useRef<boolean[]>(Array(steps.length).fill(prefersReduced));
+  const totalTitleChars = useMemo(
+    () => titleWords.reduce((acc, w) => acc + w.length, 0),
+    [titleWords]
+  );
+  const charStagger = useMemo(() => {
+    if (totalTitleChars <= 1) return 0;
+    return Math.min(35, 1400 / (totalTitleChars - 1));
+  }, [totalTitleChars]);
+
+  const textWords = useMemo(() => introText.trim().split(/\s+/), [introText]);
+  const wordStagger = useMemo(() => {
+    if (textWords.length <= 1) return 0;
+    return Math.min(45, 1400 / (textWords.length - 1));
+  }, [textWords]);
 
   useEffect(() => {
     if (prefersReduced) {
-      setActiveSteps(Array(steps.length).fill(true));
+      setIntroTriggered(true);
       return;
     }
 
-    let animFrame: number | null = null;
-    let isRunning = false;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !introTriggered) {
+            setIntroTriggered(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
 
-    const checkActive = () => {
-      const target = window.innerHeight * 0.5;
-      let changed = false;
-      const current = [...activeStepsRef.current];
+    if (introRef.current) observer.observe(introRef.current);
+    return () => observer.disconnect();
+  }, [introTriggered, prefersReduced]);
 
-      itemRefs.current.forEach((el, idx) => {
-        if (!el) return;
-        const rect = el.getBoundingClientRect();
-        const isAct = rect.top <= target;
-        if (isAct !== current[idx]) {
-          current[idx] = isAct;
-          changed = true;
+  // 2. THE 7 ERECTION STEPS
+  const steps = [
+    {
+      num: "01",
+      title: "Site check",
+      text: "Foundation levels and anchor bolts are checked against the plan.",
+    },
+    {
+      num: "02",
+      title: "Lifting plan",
+      text: "The lift plan is written and explained to the crew before work starts.",
+    },
+    {
+      num: "03",
+      title: "Frames",
+      text: "Columns and rafters are lifted and bolted in order.",
+    },
+    {
+      num: "04",
+      title: "Bracing and secondary members",
+      text: "Bracing, purlins and girts make the structure stable.",
+    },
+    {
+      num: "05",
+      title: "Alignment",
+      text: "Frames are checked for plumb and level, and bolts are tightened to the specified torque.",
+    },
+    {
+      num: "06",
+      title: "Sheeting and accessories",
+      text: "Roof and wall sheets, trims, doors, skylights and vents are fitted.",
+    },
+    {
+      num: "07",
+      title: "Touch-up and handover",
+      text: "Damaged paint is repaired and the building is checked with you.",
+    },
+  ];
+
+  const N = steps.length;
+
+  // Refs for Desktop
+  const desktopRowRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const desktopNumRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const desktopBoxRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const desktopImgRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const desktopWrapRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const desktopTextRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Refs for Mobile
+  const mobileRowRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const mobileNumRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const mobileBoxRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const mobileImgRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const mobileTextRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const rootTimelineRef = useRef<HTMLElement>(null);
+
+  // Active steps state & hook rail animation
+  const [activeSteps, setActiveSteps] = useState<boolean[]>(() =>
+    Array(N).fill(prefersReduced)
+  );
+  const activeStepsRef = useRef<boolean[]>(Array(N).fill(prefersReduced));
+  const segValsRef = useRef<number[]>(Array(N).fill(prefersReduced ? 1 : 0));
+  const animFrameRef = useRef<number | null>(null);
+  const isRunningRef = useRef(false);
+
+  // Measured dot positions relative to row top
+  const [dotTopsDesktop, setDotTopsDesktop] = useState<number[]>(() => Array(N).fill(84));
+  const [dotTopsMobile, setDotTopsMobile] = useState<number[]>(() => Array(N).fill(28));
+
+  const updateDotPositions = useCallback(() => {
+    const dLis = desktopRowRefs.current;
+    const dNums = desktopNumRefs.current;
+    if (dLis.length > 0 && dLis[0] && dNums[0]) {
+      const nextTops = dLis.map((li, i) => {
+        const num = dNums[i];
+        if (!li || !num) return 84;
+        const liRect = li.getBoundingClientRect();
+        const numRect = num.getBoundingClientRect();
+        return Math.round(numRect.top - liRect.top + numRect.height / 2);
+      });
+      setDotTopsDesktop(nextTops);
+    }
+
+    const mLis = mobileRowRefs.current;
+    const mNums = mobileNumRefs.current;
+    if (mLis.length > 0 && mLis[0] && mNums[0]) {
+      const nextTops = mLis.map((li, i) => {
+        const num = mNums[i];
+        if (!li || !num) return 28;
+        const liRect = li.getBoundingClientRect();
+        const numRect = num.getBoundingClientRect();
+        return Math.round(numRect.top - liRect.top + numRect.height / 2);
+      });
+      setDotTopsMobile(nextTops);
+    }
+  }, [N]);
+
+  // Hook rail motion loop (identical to One-Step)
+  useEffect(() => {
+    updateDotPositions();
+
+    const checkAndAnimate = () => {
+      const markY = window.innerHeight * 0.65;
+      let needsMoreFrames = false;
+      let activeChanged = false;
+      const currentActive = [...activeStepsRef.current];
+
+      const isDesktopScreen = window.innerWidth >= 1024;
+      const lis = isDesktopScreen ? desktopRowRefs.current : mobileRowRefs.current;
+      const nums = isDesktopScreen ? desktopNumRefs.current : mobileNumRefs.current;
+
+      lis.forEach((li, i) => {
+        if (!li) return;
+        const rect = li.getBoundingClientRect();
+        const numEl = nums[i];
+        const numRect = numEl ? numEl.getBoundingClientRect() : null;
+        const targetTop = numRect ? (numRect.top + numRect.height / 2) : (rect.top + 28);
+
+        const isAct = prefersReduced || markY >= targetTop;
+        if (isAct !== currentActive[i]) {
+          currentActive[i] = isAct;
+          activeChanged = true;
+        }
+
+        if (prefersReduced) {
+          desktopRowRefs.current[i]?.style.setProperty("--seg", "1");
+          mobileRowRefs.current[i]?.style.setProperty("--seg", "1");
+          return;
+        }
+
+        const t = Math.max(0, Math.min(1, (markY - targetTop) / rect.height));
+        const currentS = segValsRef.current[i] || 0;
+        const diff = t - currentS;
+
+        if (Math.abs(diff) > 0.001) {
+          needsMoreFrames = true;
+          const nextS = currentS + diff * 0.15;
+          segValsRef.current[i] = nextS;
+          desktopRowRefs.current[i]?.style.setProperty("--seg", String(nextS));
+          mobileRowRefs.current[i]?.style.setProperty("--seg", String(nextS));
+        } else if (currentS !== t) {
+          segValsRef.current[i] = t;
+          desktopRowRefs.current[i]?.style.setProperty("--seg", String(t));
+          mobileRowRefs.current[i]?.style.setProperty("--seg", String(t));
         }
       });
 
-      if (changed) {
-        activeStepsRef.current = current;
-        setActiveSteps(current);
+      if (activeChanged) {
+        activeStepsRef.current = currentActive;
+        setActiveSteps(currentActive);
       }
-      isRunning = false;
+
+      return needsMoreFrames;
     };
 
-    const onScroll = () => {
-      if (isRunning) return;
-      isRunning = true;
-      animFrame = requestAnimationFrame(checkActive);
+    const loop = () => {
+      const needsMore = checkAndAnimate();
+      if (needsMore) {
+        animFrameRef.current = requestAnimationFrame(loop);
+      } else {
+        isRunningRef.current = false;
+        animFrameRef.current = null;
+      }
     };
 
-    onScroll();
+    const triggerLoop = () => {
+      if (isRunningRef.current) return;
+      isRunningRef.current = true;
+      animFrameRef.current = requestAnimationFrame(loop);
+    };
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
+    triggerLoop();
+
+    const handleResize = () => {
+      updateDotPositions();
+      triggerLoop();
+    };
+
+    window.addEventListener("scroll", triggerLoop, { passive: true });
+    window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (animFrame !== null) cancelAnimationFrame(animFrame);
+      window.removeEventListener("scroll", triggerLoop);
+      window.removeEventListener("resize", handleResize);
+      if (animFrameRef.current !== null) {
+        cancelAnimationFrame(animFrameRef.current);
+      }
     };
-  }, [prefersReduced, steps.length]);
+  }, [prefersReduced, updateDotPositions]);
+
+  // GSAP CURTAIN & RISE MOTION (Recipes matching Motion Kit)
+  useEffect(() => {
+    if (!rootTimelineRef.current) return;
+
+    const mm = gsap.matchMedia();
+
+    // 1. DESKTOP (1024px and up):
+    // Photos: CURTAIN 1200ms from outer edge (right for odd, left for even).
+    // Photo wrapper drifts y 0 to -20px (scrub 1.4). Inner img scale 1.06 to 1 over 1560ms E1.
+    // Text: number, title, text RISE (stagger 90ms) 200ms after photo starts.
+    mm.add("(min-width: 1024px)", () => {
+      desktopRowRefs.current.forEach((row, i) => {
+        if (!row) return;
+        const box = desktopBoxRefs.current[i];
+        const img = desktopImgRefs.current[i];
+        const wrap = desktopWrapRefs.current[i];
+        const textContainer = desktopTextRefs.current[i];
+        if (!box || !img || !textContainer) return;
+
+        const isOdd = i % 2 === 0; // step 1, 3, 5, 7: odd index 0, 2, 4, 6 (photo right)
+        // Photos on right come from right (inset(0 0 0 100%)), photos on left from left (inset(0 100% 0 0))
+        const initialClip = isOdd ? "inset(0 0 0 100%)" : "inset(0 100% 0 0)";
+
+        gsap.set(box, { clipPath: initialClip });
+        gsap.set(img, { scale: 1.06 });
+
+        const numSpan = textContainer.querySelector("span");
+        const h3 = textContainer.querySelector("h3");
+        const p = textContainer.querySelector("p");
+        const textEls = [numSpan, h3, p].filter(Boolean) as HTMLElement[];
+        gsap.set(textEls, { y: 24, opacity: 0 });
+
+        // Wrapper drift y 0 to -20px (scrub 1.4)
+        if (wrap) {
+          gsap.fromTo(
+            wrap,
+            { y: 0 },
+            {
+              y: -20,
+              ease: "none",
+              scrollTrigger: {
+                trigger: row,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1.4,
+                invalidateOnRefresh: true,
+              },
+            }
+          );
+        }
+
+        // Reveal timeline at top 85%
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: row,
+            start: "top 85%",
+            once: true,
+            invalidateOnRefresh: true,
+          },
+          onStart: () => {
+            box.style.willChange = "clip-path";
+            img.style.willChange = "transform";
+            textEls.forEach((el) => {
+              (el as HTMLElement).style.willChange = "transform, opacity";
+            });
+          },
+          onComplete: () => {
+            gsap.set(box, { clearProps: "willChange" });
+            gsap.set(img, { clearProps: "willChange" });
+            textEls.forEach((el) => {
+              gsap.set(el, { clearProps: "willChange" });
+            });
+          },
+        });
+
+        // 1. Photo: CURTAIN 1200ms from outer edge (E2) + inner img scale 1.06 to 1 over 1560ms (E1)
+        tl.to(box, { clipPath: "inset(0 0 0 0%)", duration: 1.2, ease: "E2" }, 0);
+        tl.to(img, { scale: 1, duration: 1.56, ease: "E1" }, 0);
+
+        // 2. Text: number, title and text RISE (stagger 90ms) 200ms after photo starts
+        tl.to(textEls, { y: 0, opacity: 1, duration: 0.9, stagger: 0.09, ease: "E1" }, 0.2);
+      });
+    });
+
+    // 2. MOBILE (below 1024px):
+    // Photo: CURTAIN 900ms from bottom, once.
+    // Text: RISE (stagger 90ms) as step enters (top 90%). No parallax.
+    mm.add("(max-width: 1023px)", () => {
+      mobileRowRefs.current.forEach((row, i) => {
+        if (!row) return;
+        const box = mobileBoxRefs.current[i];
+        const img = mobileImgRefs.current[i];
+        const textContainer = mobileTextRefs.current[i];
+        if (!box || !img || !textContainer) return;
+
+        gsap.set(box, { clipPath: "inset(0 0 100% 0)" });
+        gsap.set(img, { scale: 1.06 });
+
+        const numSpan = textContainer.querySelector("span");
+        const h3 = textContainer.querySelector("h3");
+        const p = textContainer.querySelector("p");
+        const textEls = [numSpan, h3, p].filter(Boolean) as HTMLElement[];
+        gsap.set(textEls, { y: 24, opacity: 0 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: row,
+            start: "top 90%",
+            once: true,
+            invalidateOnRefresh: true,
+          },
+          onStart: () => {
+            box.style.willChange = "clip-path";
+            img.style.willChange = "transform";
+            textEls.forEach((el) => {
+              (el as HTMLElement).style.willChange = "transform, opacity";
+            });
+          },
+          onComplete: () => {
+            gsap.set(box, { clearProps: "willChange" });
+            gsap.set(img, { clearProps: "willChange" });
+            textEls.forEach((el) => {
+              gsap.set(el, { clearProps: "willChange" });
+            });
+          },
+        });
+
+        // Photo CURTAIN 900ms from bottom
+        tl.to(box, { clipPath: "inset(0 0 0% 0)", duration: 0.9, ease: "E2" }, 0);
+        tl.to(img, { scale: 1, duration: 1.17, ease: "E1" }, 0);
+
+        // Text RISE
+        tl.to(textEls, { y: 0, opacity: 1, duration: 0.9, stagger: 0.09, ease: "E1" }, 0);
+      });
+    });
+
+    // 3. PREFERS-REDUCED-MOTION
+    mm.add("(prefers-reduced-motion: reduce)", () => {
+      [...desktopBoxRefs.current, ...mobileBoxRefs.current].forEach((b) => {
+        if (b) gsap.set(b, { clipPath: "inset(0 0 0 0)" });
+      });
+      [...desktopImgRefs.current, ...mobileImgRefs.current].forEach((img) => {
+        if (img) gsap.set(img, { scale: 1 });
+      });
+      [...desktopTextRefs.current, ...mobileTextRefs.current].forEach((c) => {
+        if (c) gsap.set(c.children, { y: 0, opacity: 1 });
+      });
+    });
+
+    // Refresh triggers after lazy decode and fonts
+    const refreshTimer = setTimeout(() => {
+      updateDotPositions();
+      ScrollTrigger.refresh();
+    }, 200);
+
+    return () => {
+      clearTimeout(refreshTimer);
+      mm.revert();
+    };
+  }, [updateDotPositions]);
+
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
   return (
     <article className="w-full bg-white text-left pb-0 overflow-x-clip">
@@ -2734,23 +3308,149 @@ export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         subtitle={data.quickAnswer}
       />
 
-      {/* 2. INTRO: Two columns on desktop, stacked on mobile */}
-      <section className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px] border-b border-[#E5E5E5]">
+      {/* 2. INTRO: "WHAT ERECTION INCLUDES" with One-Step lookalike scroll stagger */}
+      <section
+        ref={introRef}
+        className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px] border-b border-[#E5E5E5]"
+      >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
-          {/* Left Column: Heading UPPERCASE bold ink */}
+          {/* Left Column (5fr): Heading UPPERCASE bold ink with One-Step character animation */}
           <div className="lg:col-span-5">
-            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
-              WHAT ERECTION INCLUDES
-            </h2>
+            {isDesktop ? (
+              <h2
+                aria-label={introTitle}
+                className="text-[28px] lg:text-[46px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase"
+              >
+                {titleWords.map((word, wordIdx) => {
+                  let prevChars = 0;
+                  for (let i = 0; i < wordIdx; i++) {
+                    prevChars += titleWords[i].length;
+                  }
+
+                  return (
+                    <span
+                      key={wordIdx}
+                      className="inline-block whitespace-nowrap"
+                      aria-hidden="true"
+                    >
+                      {word.split("").map((char, charIdx) => {
+                        const delay = prefersReduced
+                          ? 0
+                          : (prevChars + charIdx) * charStagger;
+
+                        return (
+                          <span
+                            key={charIdx}
+                            className="inline-block"
+                            style={{
+                              opacity: introTriggered ? 1 : 0,
+                              transform: introTriggered
+                                ? "translateY(0)"
+                                : "translateY(40%)",
+                              filter: introTriggered ? "blur(0px)" : "blur(4px)",
+                              transition: prefersReduced
+                                ? "none"
+                                : `opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms, transform 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms, filter 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms`,
+                            }}
+                          >
+                            {char}
+                          </span>
+                        );
+                      })}
+                      {wordIdx < titleWords.length - 1 ? "\u00A0" : ""}
+                    </span>
+                  );
+                })}
+              </h2>
+            ) : (
+              <div className="w-full overflow-hidden">
+                <FitOneLine
+                  as="h2"
+                  ariaLabel={introTitle}
+                  initialClamp="clamp(18px, 6vw, 30px)"
+                  minFontSize={16}
+                  className="font-bold text-[#0A0A0A] tracking-[-0.02em] uppercase leading-tight"
+                >
+                  {titleWords.map((word, wordIdx) => {
+                    let prevChars = 0;
+                    for (let i = 0; i < wordIdx; i++) {
+                      prevChars += titleWords[i].length;
+                    }
+
+                    return (
+                      <span
+                        key={wordIdx}
+                        className="inline-block whitespace-nowrap"
+                        aria-hidden="true"
+                      >
+                        {word.split("").map((char, charIdx) => {
+                          const delay = prefersReduced
+                            ? 0
+                            : (prevChars + charIdx) * charStagger;
+
+                          return (
+                            <span
+                              key={charIdx}
+                              className="inline-block"
+                              style={{
+                                opacity: introTriggered ? 1 : 0,
+                                transform: introTriggered
+                                  ? "translateY(0)"
+                                  : "translateY(40%)",
+                                filter: introTriggered
+                                  ? "blur(0px)"
+                                  : "blur(4px)",
+                                transition: prefersReduced
+                                  ? "none"
+                                  : `opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms, transform 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms, filter 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms`,
+                              }}
+                            >
+                              {char}
+                            </span>
+                          );
+                        })}
+                        {wordIdx < titleWords.length - 1 ? "\u00A0" : ""}
+                      </span>
+                    );
+                  })}
+                </FitOneLine>
+              </div>
+            )}
           </div>
 
-          {/* Right Column: Text in One-Step blue, regular weight */}
+          {/* Right Column (7fr): Text in One-Step blue, regular weight with word stagger */}
           <div className="lg:col-span-7 space-y-4">
-            <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal max-w-[620px]">
-              {introPs[0] || "Erection covers lifting the columns and rafters, bolting the frames, fitting purlins, girts and bracing, and then fitting the roof and wall sheets, doors and accessories. For mezzanines and bridges, it also covers deck, stairs and handrails."}
+            <p
+              aria-label={introText}
+              className="text-[15px] lg:text-[17px] text-[var(--blue)] leading-[1.7] max-w-[620px]"
+            >
+              {textWords.map((word, wordIdx) => {
+                const delay = prefersReduced ? 0 : wordIdx * wordStagger;
+
+                return (
+                  <span
+                    key={wordIdx}
+                    className="inline-block whitespace-nowrap"
+                    aria-hidden="true"
+                    style={{
+                      opacity: introTriggered ? 1 : 0,
+                      transform: introTriggered
+                        ? "translateY(0)"
+                        : "translateY(40%)",
+                      filter: introTriggered ? "blur(0px)" : "blur(4px)",
+                      transition: prefersReduced
+                        ? "none"
+                        : `opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms, transform 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms, filter 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms`,
+                    }}
+                  >
+                    {word}
+                    {wordIdx < textWords.length - 1 ? "\u00A0" : ""}
+                  </span>
+                );
+              })}
             </p>
             {introPs[1] && (
-              <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal max-w-[620px]">
+              <p className="text-[15px] lg:text-[17px] text-[var(--blue)] leading-[1.7] max-w-[620px]">
                 {introPs[1]}
               </p>
             )}
@@ -2758,160 +3458,361 @@ export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         </div>
       </section>
 
-      {/* 3. CRANE HOOK RAIL (THE ERECTION STEPS) */}
-      <section className="w-full py-[72px] lg:py-[120px] border-b border-[#E5E5E5]">
-        <div className="max-w-[1280px] mx-auto px-6 lg:px-8 mb-12 lg:mb-16">
-          <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
-            THE ERECTION STEPS
-          </h2>
-        </div>
+      {/* 3. THE ERECTION STEPS */}
+      <section
+        ref={rootTimelineRef}
+        className="w-full bg-white py-[72px] lg:py-[120px] px-6 lg:px-8 border-b border-[#E5E5E5] erection-timeline-section"
+      >
+        <div className="max-w-[1280px] mx-auto text-left">
+          {/* DESKTOP (1024px and up): A zigzag timeline around a centered rail */}
+          <div className="hidden lg:block w-full">
+            <h2 className="text-[28px] lg:text-[46px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-[72px]">
+              THE ERECTION STEPS
+            </h2>
 
-        {/* Desktop Vertical Center Line with alternating steps */}
-        <div className="hidden lg:block relative max-w-[1280px] mx-auto px-8">
-          {/* 2px vertical center rail line */}
-          <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[2px] bg-[#E5E5E5]" />
-          
-          <div className="space-y-16 lg:space-y-24">
-            {steps.map((st, idx) => {
-              const isEven = idx % 2 === 1;
-              const isActive = activeSteps[idx] || prefersReduced;
-              const numStr = String(idx + 1).padStart(2, "0");
+            <ol className="list-none m-0 p-0 relative w-full">
+              {steps.map((step, idx) => {
+                const photo = ERECTION_STEP_PHOTOS[idx];
+                const isOdd = idx % 2 === 0; // Steps 1, 3, 5, 7: text on left, photo on right
+                const isActive = activeSteps[idx] || prefersReduced;
+                const dotTop = dotTopsDesktop[idx] ?? 84;
+                const nextDotTop = dotTopsDesktop[idx + 1] ?? 84;
 
-              return (
-                <div
-                  key={idx}
-                  ref={(el) => {
-                    itemRefs.current[idx] = el;
-                  }}
-                  className="grid grid-cols-12 gap-10 items-center relative"
-                >
-                  {/* Left Column (col-span-5) */}
-                  <div className="col-span-5 order-1">
-                    {!isEven ? (
-                      <div className="flex flex-col items-start text-left">
-                        {/* Number: solid, bold, var(--blue) when active and rgba(30,58,138,.35) when inactive, no stroke, no outline, font-variant-numeric: tabular-nums */}
-                        <span
-                          className="block text-[40px] lg:text-[64px] font-extrabold leading-none select-none mb-3"
-                          style={{
-                            fontVariantNumeric: "tabular-nums",
-                            color: isActive ? "var(--blue)" : "rgba(30, 58, 138, 0.35)",
-                            transition: prefersReduced ? "none" : "color 300ms ease-out",
+                return (
+                  <li
+                    key={step.num}
+                    ref={(el) => {
+                      desktopRowRefs.current[idx] = el;
+                    }}
+                    className="relative w-full py-[56px]"
+                  >
+                    <div className="grid grid-cols-[1fr_96px_1fr] items-center w-full">
+                      {/* Column 1 */}
+                      {isOdd ? (
+                        // Odd step: text on the left, right-aligned to the rail, text left-aligned
+                        <div className="flex justify-end w-full">
+                          <div
+                            ref={(el) => {
+                              desktopTextRefs.current[idx] = el;
+                            }}
+                            className="w-full max-w-[420px] ml-auto text-left"
+                          >
+                            <span
+                              ref={(el) => {
+                                desktopNumRefs.current[idx] = el;
+                              }}
+                              className="block font-bold leading-none select-none"
+                              style={{
+                                fontSize: "var(--num)",
+                                color: isActive ? "#1E3A8A" : "rgba(30, 58, 138, 0.45)",
+                                transition: prefersReduced
+                                  ? "none"
+                                  : "color 800ms cubic-bezier(0.22, 1, 0.36, 1)",
+                              }}
+                            >
+                              {step.num}
+                            </span>
+                            <div className="mt-3">
+                              <h3 className="font-bold text-[#0A0A0A] text-[18px] lg:text-[22px] leading-[1.25] tracking-[-0.01em] mb-2">
+                                {step.title}
+                              </h3>
+                              <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] max-w-[540px]">
+                                {step.text}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        // Even step: photo on the left
+                        <div
+                          ref={(el) => {
+                            desktopWrapRefs.current[idx] = el;
                           }}
+                          className="w-full flex justify-end"
                         >
-                          {numStr}
-                        </span>
+                          <div
+                            ref={(el) => {
+                              desktopBoxRefs.current[idx] = el;
+                            }}
+                            className="relative w-full overflow-hidden"
+                            style={{
+                              aspectRatio: "1024 / 687",
+                              maxHeight: "68svh",
+                              maxWidth: "calc(68svh * (1024 / 687))",
+                            }}
+                          >
+                            <img
+                              ref={(el) => {
+                                desktopImgRefs.current[idx] = el;
+                              }}
+                              src={cld(photo.url, 1920)}
+                              width={1024}
+                              height={687}
+                              alt={step.title}
+                              loading="lazy"
+                              decoding="async"
+                              className="w-full h-full object-cover block"
+                            />
+                          </div>
+                        </div>
+                      )}
 
-                        {/* Title: bold, ink colour, uppercase */}
-                        <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em] uppercase mb-3">
-                          {st.name.toUpperCase()}
-                        </h3>
+                      {/* Column 2: Centered Rail */}
+                      <div className="relative w-[96px] h-full flex justify-center self-stretch">
+                        {/* Grey background line to next step */}
+                        {idx < N - 1 && (
+                          <div
+                            className="absolute w-[2px] bg-[#E5E5E5] z-[1]"
+                            style={{
+                              left: "50%",
+                              top: `${dotTop}px`,
+                              bottom: `-${nextDotTop}px`,
+                              transform: "translateX(-50%)",
+                            }}
+                          />
+                        )}
 
-                        {/* Text: One-Step blue, regular weight */}
-                        <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal max-w-[460px]">
-                          {st.text}
-                        </p>
+                        {/* Blue active fill line to next step */}
+                        {idx < N - 1 && (
+                          <div
+                            className="absolute w-[2px] bg-[#1E3A8A] z-[1]"
+                            style={{
+                              left: "50%",
+                              top: `${dotTop}px`,
+                              bottom: `-${nextDotTop}px`,
+                              transform: "translateX(-50%) scaleY(var(--seg, 0))",
+                              transformOrigin: "50% 0",
+                            }}
+                          />
+                        )}
+
+                        {/* Dot (14px circle centered at x = 50%, y = dotTop) */}
+                        <div
+                          className="absolute rounded-full box-border z-[2]"
+                          style={{
+                            left: "50%",
+                            top: `${dotTop}px`,
+                            width: "14px",
+                            height: "14px",
+                            transform: "translate(-50%, -50%)",
+                            backgroundColor: isActive ? "#1E3A8A" : "#FFFFFF",
+                            border: `2px solid ${isActive ? "#1E3A8A" : "#E5E5E5"}`,
+                            transition: prefersReduced
+                              ? "none"
+                              : "background-color 700ms cubic-bezier(0.22, 1, 0.36, 1), border-color 700ms cubic-bezier(0.22, 1, 0.36, 1)",
+                          }}
+                        />
                       </div>
-                    ) : (
-                      <div />
-                    )}
-                  </div>
 
-                  {/* Center Dot (col-span-2) */}
-                  <div className="col-span-2 flex justify-center order-2 relative z-10">
+                      {/* Column 3 */}
+                      {isOdd ? (
+                        // Odd step: photo on the right
+                        <div
+                          ref={(el) => {
+                            desktopWrapRefs.current[idx] = el;
+                          }}
+                          className="w-full flex justify-start"
+                        >
+                          <div
+                            ref={(el) => {
+                              desktopBoxRefs.current[idx] = el;
+                            }}
+                            className="relative w-full overflow-hidden"
+                            style={{
+                              aspectRatio: "1024 / 687",
+                              maxHeight: "68svh",
+                              maxWidth: "calc(68svh * (1024 / 687))",
+                            }}
+                          >
+                            <img
+                              ref={(el) => {
+                                desktopImgRefs.current[idx] = el;
+                              }}
+                              src={cld(photo.url, 1920)}
+                              width={1024}
+                              height={687}
+                              alt={step.title}
+                              loading={idx === 0 ? "eager" : "lazy"}
+                              decoding="async"
+                              className="w-full h-full object-cover block"
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        // Even step: text on the right
+                        <div className="flex justify-start w-full">
+                          <div
+                            ref={(el) => {
+                              desktopTextRefs.current[idx] = el;
+                            }}
+                            className="w-full max-w-[420px] mr-auto text-left"
+                          >
+                            <span
+                              ref={(el) => {
+                                desktopNumRefs.current[idx] = el;
+                              }}
+                              className="block font-bold leading-none select-none"
+                              style={{
+                                fontSize: "var(--num)",
+                                color: isActive ? "#1E3A8A" : "rgba(30, 58, 138, 0.45)",
+                                transition: prefersReduced
+                                  ? "none"
+                                  : "color 800ms cubic-bezier(0.22, 1, 0.36, 1)",
+                              }}
+                            >
+                              {step.num}
+                            </span>
+                            <div className="mt-3">
+                              <h3 className="font-bold text-[#0A0A0A] text-[18px] lg:text-[22px] leading-[1.25] tracking-[-0.01em] mb-2">
+                                {step.title}
+                              </h3>
+                              <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] max-w-[540px]">
+                                {step.text}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+
+          {/* MOBILE (below 1024px): Left Rail, 36px content indent, photo 24px below text, 56px between steps */}
+          <div className="lg:hidden w-full max-w-[760px] mx-auto">
+            <div className="w-full mb-10 overflow-hidden">
+              <FitOneLine
+                as="h2"
+                initialClamp="clamp(20px, 6.5vw, 32px)"
+                minFontSize={18}
+                className="font-bold text-[#0A0A0A] tracking-[-0.02em] uppercase leading-tight"
+              >
+                THE ERECTION STEPS
+              </FitOneLine>
+            </div>
+
+            <ol className="list-none m-0 p-0 relative w-full">
+              {steps.map((step, idx) => {
+                const photo = ERECTION_STEP_PHOTOS[idx];
+                const isActive = activeSteps[idx] || prefersReduced;
+                const dotTop = dotTopsMobile[idx] ?? 28;
+                const nextDotTop = dotTopsMobile[idx + 1] ?? 28;
+
+                return (
+                  <li
+                    key={step.num}
+                    ref={(el) => {
+                      mobileRowRefs.current[idx] = el;
+                    }}
+                    className="relative mb-[56px] last:mb-0 last:pb-[96px]"
+                  >
+                    {/* Left Rail: 12px from left edge */}
+                    {idx < N - 1 && (
+                      <div
+                        className="absolute w-[2px] bg-[#E5E5E5] z-[1]"
+                        style={{
+                          left: "12px",
+                          top: `${dotTop}px`,
+                          bottom: `-${56 + nextDotTop}px`,
+                          transform: "translateX(-50%)",
+                        }}
+                      />
+                    )}
+
+                    {idx < N - 1 && (
+                      <div
+                        className="absolute w-[2px] bg-[#1E3A8A] z-[1]"
+                        style={{
+                          left: "12px",
+                          top: `${dotTop}px`,
+                          bottom: `-${56 + nextDotTop}px`,
+                          transform: "translateX(-50%) scaleY(var(--seg, 0))",
+                          transformOrigin: "50% 0",
+                        }}
+                      />
+                    )}
+
+                    {/* Dot on left rail */}
                     <div
-                      className="w-[14px] h-[14px] rounded-full ring-4 ring-white shadow-sm transition-colors duration-300"
+                      className="absolute rounded-full box-border z-[2]"
                       style={{
-                        backgroundColor: isActive ? "var(--blue)" : "#FFFFFF",
-                        border: `2px solid ${isActive ? "var(--blue)" : "#E5E5E5"}`,
+                        left: "12px",
+                        top: `${dotTop}px`,
+                        width: "14px",
+                        height: "14px",
+                        transform: "translate(-50%, -50%)",
+                        backgroundColor: isActive ? "#1E3A8A" : "#FFFFFF",
+                        border: `2px solid ${isActive ? "#1E3A8A" : "#E5E5E5"}`,
+                        transition: prefersReduced
+                          ? "none"
+                          : "background-color 700ms cubic-bezier(0.22, 1, 0.36, 1), border-color 700ms cubic-bezier(0.22, 1, 0.36, 1)",
                       }}
                     />
-                  </div>
 
-                  {/* Right Column (col-span-5) */}
-                  <div className="col-span-5 order-3">
-                    {isEven ? (
-                      <div className="flex flex-col items-start text-left">
-                        {/* Number: solid, bold, var(--blue) when active and rgba(30,58,138,.35) when inactive */}
+                    {/* Content Block (padding-left: 36px) */}
+                    <div className="pl-[36px] text-left">
+                      <div
+                        ref={(el) => {
+                          mobileTextRefs.current[idx] = el;
+                        }}
+                      >
                         <span
-                          className="block text-[40px] lg:text-[64px] font-extrabold leading-none select-none mb-3"
+                          ref={(el) => {
+                            mobileNumRefs.current[idx] = el;
+                          }}
+                          className="block font-bold leading-none select-none"
                           style={{
-                            fontVariantNumeric: "tabular-nums",
-                            color: isActive ? "var(--blue)" : "rgba(30, 58, 138, 0.35)",
-                            transition: prefersReduced ? "none" : "color 300ms ease-out",
+                            fontSize: "var(--num)",
+                            color: isActive ? "#1E3A8A" : "rgba(30, 58, 138, 0.45)",
+                            transition: prefersReduced
+                              ? "none"
+                              : "color 800ms cubic-bezier(0.22, 1, 0.36, 1)",
                           }}
                         >
-                          {numStr}
+                          {step.num}
                         </span>
 
-                        {/* Title: bold, ink colour, uppercase */}
-                        <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em] uppercase mb-3">
-                          {st.name.toUpperCase()}
-                        </h3>
-
-                        {/* Text: One-Step blue, regular weight */}
-                        <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal max-w-[460px]">
-                          {st.text}
-                        </p>
+                        <div className="mt-3">
+                          <h3 className="font-bold text-[#0A0A0A] text-[18px] leading-[1.25] tracking-[-0.01em] mb-2">
+                            {step.title}
+                          </h3>
+                          <p className="text-[15px] text-[var(--blue)] leading-[1.65]">
+                            {step.text}
+                          </p>
+                        </div>
                       </div>
-                    ) : (
-                      <div />
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+
+                      {/* Photo: 24px below text at full content width and real shape */}
+                      <div
+                        ref={(el) => {
+                          mobileBoxRefs.current[idx] = el;
+                        }}
+                        className="relative w-full overflow-hidden mt-6 bg-slate-100"
+                        style={{
+                          aspectRatio: "1024 / 687",
+                        }}
+                      >
+                        <img
+                          ref={(el) => {
+                            mobileImgRefs.current[idx] = el;
+                          }}
+                          src={cld(photo.url, 1200)}
+                          width={1024}
+                          height={687}
+                          alt={step.title}
+                          loading={idx === 0 ? "eager" : "lazy"}
+                          decoding="async"
+                          className="w-full h-full object-cover block"
+                        />
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
           </div>
-        </div>
-
-        {/* Mobile Left Rail */}
-        <div className="lg:hidden relative pl-8 border-l-2 border-[var(--blue)] space-y-12 max-w-[1280px] mx-auto px-6 ml-6">
-          {steps.map((st, idx) => {
-            const isActive = activeSteps[idx] || prefersReduced;
-            const numStr = String(idx + 1).padStart(2, "0");
-
-            return (
-              <div
-                key={idx}
-                ref={(el) => {
-                  if (typeof window !== "undefined" && window.innerWidth < 1024) {
-                    itemRefs.current[idx] = el;
-                  }
-                }}
-                className="relative space-y-2 text-left"
-              >
-                {/* Dot on left rail */}
-                <div
-                  className="absolute -left-[41px] top-2 w-[14px] h-[14px] rounded-full ring-4 ring-white shadow-sm transition-colors duration-300"
-                  style={{
-                    backgroundColor: isActive ? "var(--blue)" : "#FFFFFF",
-                    border: `2px solid ${isActive ? "var(--blue)" : "#E5E5E5"}`,
-                  }}
-                />
-
-                {/* Number: solid, bold, var(--blue) when active and rgba(30,58,138,.35) when inactive, placed above title */}
-                <span
-                  className="block text-[40px] font-extrabold leading-none select-none mb-1"
-                  style={{
-                    fontVariantNumeric: "tabular-nums",
-                    color: isActive ? "var(--blue)" : "rgba(30, 58, 138, 0.35)",
-                    transition: prefersReduced ? "none" : "color 300ms ease-out",
-                  }}
-                >
-                  {numStr}
-                </span>
-
-                {/* Title: bold, ink colour, uppercase */}
-                <h3 className="text-[17px] font-bold text-[#0A0A0A] leading-[1.25] uppercase">
-                  {st.name.toUpperCase()}
-                </h3>
-
-                {/* Text: One-Step blue, regular weight */}
-                <p className="text-[15px] text-[var(--blue)] leading-[1.6] font-normal">
-                  {st.text}
-                </p>
-              </div>
-            );
-          })}
         </div>
       </section>
 
@@ -2941,6 +3842,18 @@ export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
           </div>
         </div>
       </section>
+
+      {/* CSS Rules for timeline variables */}
+      <style>{`
+        .erection-timeline-section {
+          --num: clamp(44px, 12vw, 56px);
+        }
+        @media (min-width: 1024px) {
+          .erection-timeline-section {
+            --num: clamp(56px, 5vw, 72px);
+          }
+        }
+      `}</style>
 
       {/* 5. FREQUENTLY ASKED QUESTIONS */}
       {data.faq && data.faq.length > 0 && (
@@ -2999,6 +3912,7 @@ export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
 
       {/* 6. NEXT BANNER: AFTER SALE SERVICES */}
       <NextBand
+        image="https://res.cloudinary.com/cyfb9slf/image/upload/v1792202544/Erection-next.jpg"
         nextUrl="/services/after-sale-services/"
         nextTitle="AFTER SALE SERVICES"
       />
@@ -3010,72 +3924,162 @@ export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
 export const AfterSaleLayout: React.FC<{ data: ContentData }> = ({ data }) => {
   const { introPs, sections } = extractSections(data);
   const cardsSec = sections[1];
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+
+  const toggleFaq = (idx: number) => {
+    setOpenFaqIndex((prev) => (prev === idx ? null : idx));
+  };
+
   const serviceCards = [
-    { icon: Wrench, name: "Repairs", text: "Immediate structural repairs for accidental crane or forklift impact damage." },
-    { icon: PaintRoller, name: "Repainting", text: "Periodic recoating and touch-up maintaining anti-corrosion barrier integrity." },
-    { icon: MoveHorizontal, name: "Extensions", text: "Adding building length bays or connecting lean-tos using original anchor points." },
-    { icon: SquarePlus, name: "Additions", text: "Retrofitting mezzanines, crane brackets, roof monitors, and partition walls." },
-    { icon: ClipboardCheck, name: "Checks", text: "Annual structural inspections verifying bolt torques and foundation alignment." },
+    {
+      icon: Wrench,
+      name: "Repairs",
+      text: cardsSec?.items?.find((i) => i.name === "Repairs")?.text || "Damaged sheets, trims, doors and connections.",
+    },
+    {
+      icon: PaintRoller,
+      name: "Repainting",
+      text: cardsSec?.items?.find((i) => i.name === "Repainting")?.text || "Cleaning and recoating of steel that has aged in the weather.",
+    },
+    {
+      icon: MoveHorizontal,
+      name: "Extensions",
+      text: cardsSec?.items?.find((i) => i.name === "Extensions")?.text || "Extra bays at the end of a PEB, or a new shed beside the first one.",
+    },
+    {
+      icon: SquarePlus,
+      name: "Additions",
+      text: cardsSec?.items?.find((i) => i.name === "Additions")?.text || "Canopies, mezzanine floors, skylights, ventilators, doors and stairs.",
+    },
+    {
+      icon: ClipboardCheck,
+      name: "Checks",
+      text: cardsSec?.items?.find((i) => i.name === "Checks")?.text || "A visit to look at the structure and advise on needed work.",
+    },
   ];
 
   const whyEasySec = sections[2];
   const supportSec = sections[3];
 
   return (
-    <article className="w-full bg-white">
+    <article className="w-full bg-white text-left">
       <HeroBand
         variant="immersive"
-        imageSrc={IMG.services.afterSale.hero}
+        imageSrc="https://res.cloudinary.com/cyfb9slf/image/upload/v1792202522/After-sale-services-hero.jpg"
         imageAlt={data.h1}
-        h1={data.h1}
+        h1={data.h1.toUpperCase()}
         subtitle={data.quickAnswer}
       />
 
       {/* Intro */}
       <section className="container py-[var(--sec-y-lg)] text-left">
-        <SplitIntro
-          title={sections[0]?.title || "Why After Sale Support Matters"}
-          lead={introPs[0]}
-          text={sections[0]?.text || introPs.slice(1)}
-        />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[96px] items-start">
+          <div className="lg:col-span-5">
+            <h2 className="text-[16px] lg:text-[44px] font-bold text-[var(--ink)] uppercase leading-[1.15] tracking-[-0.02em]">
+              {(sections[0]?.title || "Why After Sale Support Matters").toUpperCase()}
+            </h2>
+          </div>
+          <div className="lg:col-span-7 space-y-4 max-w-[640px]">
+            {introPs[0] && (
+              <p className="text-[15px] lg:text-[16px] font-normal text-[var(--blue)] leading-[1.6] lg:leading-[1.7]">
+                {introPs[0]}
+              </p>
+            )}
+            {(sections[0]?.text || introPs.slice(1).join(" ")) && (
+              <p className="text-[15px] lg:text-[16px] font-normal text-[var(--blue)] leading-[1.6] lg:leading-[1.7]">
+                {sections[0]?.text || introPs.slice(1).join(" ")}
+              </p>
+            )}
+          </div>
+        </div>
       </section>
 
       {/* 5 Service Icon Cards */}
       <section className="container pb-[var(--sec-y-lg)] text-left">
-        <h2 className="font-bold text-[var(--ink)] mb-10" style={{ fontSize: "var(--fs-h2)" }}>
-          {cardsSec?.title || "What Steel Mind Engineers Provides"}
+        <h2 className="text-[16px] lg:text-[44px] font-bold text-[var(--ink)] uppercase leading-[1.15] tracking-[-0.02em] mb-8 lg:mb-10">
+          {(cardsSec?.title || "What Steel Mind Engineers Provides").toUpperCase()}
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+        {/* Desktop: 5-column grid */}
+        <div className="hidden lg:grid lg:grid-cols-5 gap-6">
           {serviceCards.map((sc, idx) => {
             const Icon = sc.icon;
             return (
               <div
                 key={idx}
-                className="group border border-[var(--rule)] bg-white p-8 space-y-4 transition-all duration-300 hover:bg-[var(--blue)] hover:text-white"
+                className="group border border-[var(--rule)] bg-white p-8 space-y-4 transition-all duration-300 hover:bg-[var(--blue)] text-left cursor-default"
               >
-                <div className="w-12 h-12 rounded-lg bg-[rgba(30,58,138,0.08)] text-[var(--blue)] flex items-center justify-center group-hover:bg-white group-hover:text-[var(--blue)] transition-colors">
-                  <Icon size={24} />
+                <div className="w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-[14px] bg-[var(--blue)] text-white flex items-center justify-center transition-colors duration-300 group-hover:bg-white group-hover:text-[var(--blue)]">
+                  <Icon size={26} strokeWidth={2} />
                 </div>
-                <h3 className="text-[20px] font-bold text-[var(--ink)] group-hover:text-white transition-colors">
+                <h3 className="text-[20px] font-bold text-[var(--ink)] group-hover:text-white transition-colors duration-300">
                   {sc.name}
                 </h3>
-                <p className="text-[var(--grey-strong)] group-hover:text-white/90 text-[14px] leading-[1.6] transition-colors">
+                <p className="text-[16px] leading-[1.7] font-normal text-[var(--blue)] group-hover:text-white transition-colors duration-300">
                   {sc.text}
                 </p>
               </div>
             );
           })}
         </div>
+
+        {/* Mobile: one column, gap 12px. Rows alternate blue and white: card 1 blue, 2 white, 3 blue, 4 white, 5 blue */}
+        <div className="flex flex-col gap-[12px] lg:hidden">
+          {serviceCards.map((sc, idx) => {
+            const Icon = sc.icon;
+            const isBlue = idx % 2 === 0;
+
+            return (
+              <div
+                key={idx}
+                className={`p-[18px] border transition-colors ${
+                  isBlue
+                    ? "bg-[var(--blue)] border-[var(--blue)] text-white"
+                    : "bg-white border-[var(--rule)] text-[var(--blue)]"
+                }`}
+              >
+                <div className="flex flex-row items-start gap-4 text-left">
+                  {/* Left: icon box (56px, radius 14px) */}
+                  <div
+                    className={`w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-[14px] flex items-center justify-center shrink-0 ${
+                      isBlue ? "bg-white text-[var(--blue)]" : "bg-[var(--blue)] text-white"
+                    }`}
+                  >
+                    <Icon size={26} strokeWidth={2} />
+                  </div>
+
+                  {/* Right: title and text */}
+                  <div className="flex-1 min-w-0">
+                    <h3
+                      className={`text-[17px] font-bold leading-tight ${
+                        isBlue ? "text-white" : "text-[var(--ink)]"
+                      }`}
+                    >
+                      {sc.name}
+                    </h3>
+                    <p
+                      className={`text-[15px] leading-[1.6] font-normal mt-1 line-clamp-3 ${
+                        isBlue ? "text-white" : "text-[var(--blue)]"
+                      }`}
+                    >
+                      {sc.text}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </section>
 
-      {/* Wide Image */}
+      {/* Wide Image (64:27 shape) */}
       <section className="container pb-[var(--sec-y-lg)]">
         <div className="w-full aspect-[64/27] overflow-hidden bg-slate-900 shadow-md">
           <img
-            src={IMG.services.afterSale.wide}
+            src="https://res.cloudinary.com/cyfb9slf/image/upload/v1792202525/after-sale-wide.jpg"
             alt="Ongoing Support and Factory Maintenance"
             className="w-full h-full object-cover"
+            loading="lazy"
           />
         </div>
       </section>
@@ -3083,14 +4087,14 @@ export const AfterSaleLayout: React.FC<{ data: ContentData }> = ({ data }) => {
       {/* Why Add Easily (2 Columns) */}
       {whyEasySec && (
         <section className="container pb-[var(--sec-y-lg)] text-left border-t border-[var(--rule)] pt-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
             <div className="lg:col-span-5">
-              <h2 className="text-[26px] lg:text-[34px] font-bold text-[var(--ink)]">
-                {whyEasySec.title}
+              <h2 className="text-[16px] lg:text-[44px] font-bold text-[var(--ink)] uppercase leading-[1.15] tracking-[-0.02em]">
+                {whyEasySec.title.toUpperCase()}
               </h2>
             </div>
             <div className="lg:col-span-7">
-              <p className="text-[var(--grey-strong)] leading-[1.75]" style={{ fontSize: "var(--fs-body)" }}>
+              <p className="text-[15px] lg:text-[16px] font-normal text-[var(--blue)] leading-[1.6] lg:leading-[1.7]">
                 {whyEasySec.text}
               </p>
             </div>
@@ -3100,28 +4104,28 @@ export const AfterSaleLayout: React.FC<{ data: ContentData }> = ({ data }) => {
 
       {/* Support Band (Full Width Nav Blue with direct phone buttons) */}
       <section className="w-full bg-[var(--blue)] text-white py-[var(--sec-y-lg)]">
-        <div className="container text-left space-y-8">
-          <h2 className="text-[28px] lg:text-[38px] font-bold text-white">
-            {supportSec?.title || "How to Ask for Support"}
+        <div className="container text-left space-y-6 lg:space-y-8">
+          <h2 className="text-[16px] lg:text-[44px] font-bold text-white uppercase leading-[1.15] tracking-[-0.02em]">
+            {(supportSec?.title || "How to Ask for Support").toUpperCase()}
           </h2>
-          <p className="text-white/90 text-[16px] lg:text-[18px] leading-[1.7] max-w-[800px]">
+          <p className="text-[15px] lg:text-[16px] font-normal text-white leading-[1.6] lg:leading-[1.7] max-w-[800px]">
             {supportSec?.text || "Call our service engineers directly with your project location and building details."}
           </p>
 
-          <div className="flex flex-wrap gap-4 pt-4">
+          <div className="flex flex-wrap gap-4 pt-2 lg:pt-4">
             <a
               href={`tel:${SITE.tel[0]}`}
               className="btn btn-light btn-sm"
             >
               <span>Call Engineer: {SITE.phones[0]}</span>
-              <span className="btn-arrow">→</span>
+              <span className="btn-arrow" aria-hidden="true">&rarr;</span>
             </a>
             <a
               href={`tel:${SITE.tel[1]}`}
               className="btn btn-light btn-sm"
             >
               <span>Call Office: {SITE.phones[1]}</span>
-              <span className="btn-arrow">→</span>
+              <span className="btn-arrow" aria-hidden="true">&rarr;</span>
             </a>
             <a
               href={`mailto:${SITE.email}`}
@@ -3137,10 +4141,48 @@ export const AfterSaleLayout: React.FC<{ data: ContentData }> = ({ data }) => {
       {data.faq && data.faq.length > 0 && (
         <section className="container py-[var(--sec-y)]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="font-bold text-[var(--ink)] mb-8" style={{ fontSize: "var(--fs-h2)" }}>
-              Frequently Asked Questions
+            <h2 className="text-[16px] lg:text-[44px] font-bold text-[var(--ink)] uppercase leading-[1.15] tracking-[-0.02em] mb-8">
+              FREQUENTLY ASKED QUESTIONS
             </h2>
-            <Accordion items={data.faq} size="large" />
+            <div className="w-full divide-y divide-[var(--rule)] border-y border-[var(--rule)]">
+              {data.faq.map((item, idx) => {
+                const isOpen = openFaqIndex === idx;
+                return (
+                  <div key={idx} className="w-full py-5">
+                    <button
+                      type="button"
+                      aria-expanded={isOpen}
+                      onClick={() => toggleFaq(idx)}
+                      className="w-full flex items-center justify-between text-left cursor-pointer group focus-visible:outline-none"
+                    >
+                      <span className="font-bold text-[17px] lg:text-[20px] text-[var(--ink)] pr-6 leading-snug">
+                        {item.q}
+                      </span>
+                      <span
+                        className="relative flex-shrink-0 flex items-center justify-center transition-transform duration-300 ease-out w-[22px] h-[22px]"
+                        style={{
+                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
+                        }}
+                      >
+                        <span
+                          className="absolute bg-[var(--blue)]"
+                          style={{ width: "18px", height: "2px" }}
+                        />
+                        <span
+                          className="absolute bg-[var(--blue)]"
+                          style={{ height: "18px", width: "2px" }}
+                        />
+                      </span>
+                    </button>
+                    {isOpen && (
+                      <div className="pt-3 pb-2 text-[15px] lg:text-[16px] font-normal text-[var(--blue)] leading-[1.6] lg:leading-[1.7] max-w-[800px]">
+                        {item.a}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
       )}
@@ -3149,7 +4191,7 @@ export const AfterSaleLayout: React.FC<{ data: ContentData }> = ({ data }) => {
       <NextBand
         image={IMG.services.afterSale.next}
         nextUrl="/projects/"
-        nextTitle="Our Projects"
+        nextTitle="OUR PROJECTS"
       />
     </article>
   );

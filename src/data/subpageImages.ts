@@ -231,7 +231,7 @@ export const IMG = {
     },
     erection: {
       hero: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202543/Erection-hero.jpg",
-      // There is no next image. Keep the existing blue next band.
+      next: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202544/Erection-next.jpg",
     },
     afterSale: {
       hero: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792202522/After-sale-services-hero.jpg",
