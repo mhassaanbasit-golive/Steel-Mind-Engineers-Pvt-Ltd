@@ -10,116 +10,98 @@ export interface HubFaqProps {
   items: HubFaqItem[];
 }
 
+function toSentenceCase(text: string): string {
+  if (!text) return "";
+  const trimmed = text.trim();
+  const lower = trimmed.toLowerCase();
+  let result = lower.charAt(0).toUpperCase() + lower.slice(1);
+  result = result
+    .replace(/\bpeb\b/gi, "PEB")
+    .replace(/\bsme\b/gi, "SME")
+    .replace(/\bpakistan\b/gi, "Pakistan")
+    .replace(/\blahore\b/gi, "Lahore");
+  return result;
+}
+
 export const HubFaq: React.FC<HubFaqProps> = ({ items }) => {
   // On page load: all rows closed. Nothing pre-opened.
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const innerTextRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const handleToggle = (idx: number) => {
     const prevIndex = openIndex;
 
     if (prevIndex === idx) {
-      // Close the currently opened row
       const currEl = contentRefs.current[idx];
       if (currEl) {
-        gsap.to(currEl, { height: 0, duration: 0.5, ease: "expo.out" });
+        gsap.to(currEl, { height: 0, duration: 0.35, ease: "power3.inOut" });
       }
       setOpenIndex(null);
       return;
     }
 
-    // Both closing and opening must run in the same animation window. Do not queue them.
     if (prevIndex !== null) {
       const prevEl = contentRefs.current[prevIndex];
       if (prevEl) {
-        gsap.to(prevEl, { height: 0, duration: 0.5, ease: "expo.out" });
+        gsap.to(prevEl, { height: 0, duration: 0.35, ease: "power3.inOut" });
       }
     }
 
     const nextEl = contentRefs.current[idx];
     if (nextEl) {
-      gsap.to(nextEl, { height: "auto", duration: 0.4, ease: "expo.out" });
+      gsap.to(nextEl, { height: "auto", duration: 0.45, ease: "power3.out" });
     }
 
     setOpenIndex(idx);
   };
 
   return (
-    <section className="w-full bg-[#FFFFFF] py-[80px] lg:py-[112px] px-[20px] lg:px-[40px] border-b border-[#E5E5E5]">
-      <div className="max-w-[1340px] mx-auto">
+    <section className="w-full bg-[#FFFFFF] py-[64px] lg:py-[88px] px-[20px] lg:px-[40px] border-b border-[#E5E5E5]">
+      <div className="max-w-[1340px] mx-auto text-left">
         {/* H2 Heading */}
-        <h2 className="text-[22px] lg:text-[48px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] mb-10">
+        <h2 className="text-[20px] lg:text-[32px] font-bold text-[#0A0A0A] leading-[1.2] tracking-[-0.01em] mb-8">
           Frequently Asked Questions
         </h2>
 
-        {/* Accordion list: 1px var(--line) divider between rows, background #FFFFFF */}
-        <div className="w-full divide-y divide-[var(--line)] border-y border-[var(--line)] bg-[#FFFFFF]">
+        {/* Standardized Accordion list */}
+        <div className="w-full divide-y divide-[#E5E5E5] border-y border-[#E5E5E5] bg-[#FFFFFF]">
           {items.map((item, idx) => {
             const isOpen = openIndex === idx;
+            const sentenceQuestion = toSentenceCase(item.q);
 
             return (
-              <div
-                key={idx}
-                className="w-full bg-[#FFFFFF] transition-all"
-                style={{
-                  padding: "20px 0",
-                  borderLeft: isOpen ? "1px solid var(--blue)" : "none",
-                  paddingLeft: isOpen ? "16px" : "0px",
-                }}
-              >
+              <div key={idx} className="group overflow-hidden">
                 <button
                   type="button"
                   aria-expanded={isOpen}
                   onClick={() => handleToggle(idx)}
-                  className="w-full flex items-center justify-between text-left cursor-pointer transition-colors focus-visible:outline-none"
+                  className="w-full min-h-[48px] py-5 lg:py-6 flex items-center justify-between text-left cursor-pointer transition-colors group focus-visible:outline-none"
                 >
-                  {/* Question: 15px (mobile), 17px (desktop), weight 600, color var(--ink) */}
-                  <span
-                    className="font-semibold pr-6 text-[15px] lg:text-[17px]"
-                    style={{
-                      color: "var(--ink)",
-                    }}
-                  >
-                    {item.q}
+                  <span className="text-[14px] lg:text-[16px] font-semibold text-[var(--ink)] leading-snug pr-4 group-hover:text-[var(--blue)] transition-colors normal-case">
+                    {sentenceQuestion}
                   </span>
 
-                  {/* Plus icon: 20px, stroke 1.5px, color var(--ink). Rotates 45 deg to become X on open over 0.35s, ease cubic-bezier(0.23, 1, 0.32, 1) */}
-                  <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center relative">
-                    <svg
-                      className="w-5 h-5 stroke-[var(--ink)] transition-transform duration-[350ms] ease-[cubic-bezier(0.23,1,0.32,1)]"
-                      style={{
-                        transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                      }}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      strokeWidth="1.5"
-                    >
-                      <line x1="12" y1="5" x2="12" y2="19" />
-                      <line x1="5" y1="12" x2="19" y2="12" />
-                    </svg>
+                  {/* Exact Steel Warehouses circular badge icon: + rotates 45° to × with solid blue fill */}
+                  <span
+                    className={`flex-shrink-0 w-8 h-8 rounded-full border border-[var(--blue)] flex items-center justify-center font-bold text-[18px] transition-all duration-300 leading-none select-none ${
+                      isOpen
+                        ? "rotate-45 bg-[var(--blue)] text-white"
+                        : "bg-white text-[var(--blue)]"
+                    }`}
+                    aria-hidden="true"
+                  >
+                    +
                   </span>
                 </button>
 
-                {/* Answer: 14px (mobile), 15px (desktop), color var(--grey), line-height 1.7, padding-bottom 24px */}
                 <div
                   ref={(el) => {
                     contentRefs.current[idx] = el;
                   }}
                   className="h-0 overflow-hidden"
                 >
-                  <div
-                    ref={(el) => {
-                      innerTextRefs.current[idx] = el;
-                    }}
-                    className="pt-4 pb-6"
-                    style={{
-                      paddingBottom: "24px",
-                    }}
-                  >
-                    <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]">
-                      {item.a}
-                    </p>
+                  <div className="pt-1 pb-6 text-[13px] lg:text-[15px] leading-[1.65] text-[var(--grey)] max-w-[680px]">
+                    {item.a}
                   </div>
                 </div>
               </div>

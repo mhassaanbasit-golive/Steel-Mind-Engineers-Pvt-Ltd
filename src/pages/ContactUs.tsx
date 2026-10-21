@@ -232,9 +232,10 @@ export const ContactUs: React.FC = () => {
                   aria-label="Facebook"
                   onMouseEnter={() => fbRef.current?.startAnimation()}
                   onMouseLeave={() => fbRef.current?.stopAnimation()}
-                  className="w-11 h-11 rounded-full border border-[var(--rule)] flex items-center justify-center text-[var(--ink)] hover:bg-[var(--blue)] hover:text-white hover:border-[var(--blue)] transition-all duration-350 cursor-pointer"
+                  style={{ backgroundColor: "var(--blue)" }}
+                  className="w-10 h-10 lg:w-11 lg:h-11 rounded-full flex items-center justify-center text-white hover:bg-[var(--blue-dark)] transition-all duration-300 cursor-pointer shadow-sm"
                 >
-                  <FacebookIcon ref={fbRef} size={18} />
+                  <FacebookIcon ref={fbRef} size={18} className="text-white" />
                 </a>
 
                 <a
@@ -244,9 +245,10 @@ export const ContactUs: React.FC = () => {
                   aria-label="Instagram"
                   onMouseEnter={() => igRef.current?.startAnimation()}
                   onMouseLeave={() => igRef.current?.stopAnimation()}
-                  className="w-11 h-11 rounded-full border border-[var(--rule)] flex items-center justify-center text-[var(--ink)] hover:bg-[var(--blue)] hover:text-white hover:border-[var(--blue)] transition-all duration-350 cursor-pointer"
+                  style={{ backgroundColor: "var(--blue)" }}
+                  className="w-10 h-10 lg:w-11 lg:h-11 rounded-full flex items-center justify-center text-white hover:bg-[var(--blue-dark)] transition-all duration-300 cursor-pointer shadow-sm"
                 >
-                  <InstagramIcon ref={igRef} size={18} />
+                  <InstagramIcon ref={igRef} size={18} className="text-white" />
                 </a>
 
                 <a
@@ -256,9 +258,10 @@ export const ContactUs: React.FC = () => {
                   aria-label="TikTok"
                   onMouseEnter={() => ttRef.current?.startAnimation()}
                   onMouseLeave={() => ttRef.current?.stopAnimation()}
-                  className="w-11 h-11 rounded-full border border-[var(--rule)] flex items-center justify-center text-[var(--ink)] hover:bg-[var(--blue)] hover:text-white hover:border-[var(--blue)] transition-all duration-350 cursor-pointer"
+                  style={{ backgroundColor: "var(--blue)" }}
+                  className="w-10 h-10 lg:w-11 lg:h-11 rounded-full flex items-center justify-center text-white hover:bg-[var(--blue-dark)] transition-all duration-300 cursor-pointer shadow-sm"
                 >
-                  <TiktokIcon ref={ttRef} size={18} />
+                  <TiktokIcon ref={ttRef} size={18} className="text-white" />
                 </a>
 
                 <a
@@ -268,9 +271,10 @@ export const ContactUs: React.FC = () => {
                   aria-label="LinkedIn"
                   onMouseEnter={() => liRef.current?.startAnimation()}
                   onMouseLeave={() => liRef.current?.stopAnimation()}
-                  className="w-11 h-11 rounded-full border border-[var(--rule)] flex items-center justify-center text-[var(--ink)] hover:bg-[var(--blue)] hover:text-white hover:border-[var(--blue)] transition-all duration-350 cursor-pointer"
+                  style={{ backgroundColor: "var(--blue)" }}
+                  className="w-10 h-10 lg:w-11 lg:h-11 rounded-full flex items-center justify-center text-white hover:bg-[var(--blue-dark)] transition-all duration-300 cursor-pointer shadow-sm"
                 >
-                  <LinkedinIcon ref={liRef} size={18} />
+                  <LinkedinIcon ref={liRef} size={18} className="text-white" />
                 </a>
               </div>
             </div>
@@ -345,7 +349,7 @@ export const ContactUs: React.FC = () => {
                   <div>
                     <label
                       htmlFor="field-name"
-                      className="block text-[13px] font-semibold text-white uppercase tracking-[0.06em] mb-2"
+                      className="block text-[11px] sm:text-[12px] md:text-[13px] font-semibold text-white uppercase tracking-[0.06em] mb-1 sm:mb-2"
                     >
                       Full Name
                     </label>
@@ -358,11 +362,11 @@ export const ContactUs: React.FC = () => {
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="e.g. Tariq Mehmood"
-                      className="w-full h-[52px] px-4 text-[16px] text-[#0A0A0A] bg-white border border-[#D1D5DB] focus:border-white focus:outline-none focus:ring-2 focus:ring-white/40 transition-all placeholder:text-gray-400"
+                      className="w-full h-[40px] sm:h-[44px] md:h-[48px] lg:h-[52px] px-3 sm:px-4 text-[13px] sm:text-[14px] md:text-[16px] text-[#0A0A0A] bg-white border border-[#D1D5DB] focus:border-white focus:outline-none focus:ring-2 focus:ring-white/40 transition-all placeholder:text-gray-400"
                       aria-invalid={!!errors.name}
                     />
                     {errors.name && (
-                      <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-white font-medium">
+                      <p className="mt-1 flex items-center gap-1.5 text-[12px] sm:text-[13px] text-white font-medium">
                         <AlertCircle size={14} className="text-white" />
                         {errors.name}
                       </p>
@@ -373,7 +377,7 @@ export const ContactUs: React.FC = () => {
                   <div>
                     <label
                       htmlFor="field-phone"
-                      className="block text-[13px] font-semibold text-white uppercase tracking-[0.06em] mb-2"
+                      className="block text-[11px] sm:text-[12px] md:text-[13px] font-semibold text-white uppercase tracking-[0.06em] mb-1 sm:mb-2"
                     >
                       Phone or WhatsApp
                     </label>
@@ -387,11 +391,11 @@ export const ContactUs: React.FC = () => {
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="e.g. 0300 1234567"
-                      className="w-full h-[52px] px-4 text-[16px] text-[#0A0A0A] bg-white border border-[#D1D5DB] focus:border-white focus:outline-none focus:ring-2 focus:ring-white/40 transition-all placeholder:text-gray-400"
+                      className="w-full h-[40px] sm:h-[44px] md:h-[48px] lg:h-[52px] px-3 sm:px-4 text-[13px] sm:text-[14px] md:text-[16px] text-[#0A0A0A] bg-white border border-[#D1D5DB] focus:border-white focus:outline-none focus:ring-2 focus:ring-white/40 transition-all placeholder:text-gray-400"
                       aria-invalid={!!errors.phone}
                     />
                     {errors.phone && (
-                      <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-white font-medium">
+                      <p className="mt-1 flex items-center gap-1.5 text-[12px] sm:text-[13px] text-white font-medium">
                         <AlertCircle size={14} className="text-white" />
                         {errors.phone}
                       </p>
@@ -402,7 +406,7 @@ export const ContactUs: React.FC = () => {
                   <div>
                     <label
                       htmlFor="field-email"
-                      className="block text-[13px] font-semibold text-white uppercase tracking-[0.06em] mb-2"
+                      className="block text-[11px] sm:text-[12px] md:text-[13px] font-semibold text-white uppercase tracking-[0.06em] mb-1 sm:mb-2"
                     >
                       Email Address
                     </label>
@@ -415,11 +419,11 @@ export const ContactUs: React.FC = () => {
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="e.g. engineer@company.com"
-                      className="w-full h-[52px] px-4 text-[16px] text-[#0A0A0A] bg-white border border-[#D1D5DB] focus:border-white focus:outline-none focus:ring-2 focus:ring-white/40 transition-all placeholder:text-gray-400"
+                      className="w-full h-[40px] sm:h-[44px] md:h-[48px] lg:h-[52px] px-3 sm:px-4 text-[13px] sm:text-[14px] md:text-[16px] text-[#0A0A0A] bg-white border border-[#D1D5DB] focus:border-white focus:outline-none focus:ring-2 focus:ring-white/40 transition-all placeholder:text-gray-400"
                       aria-invalid={!!errors.email}
                     />
                     {errors.email && (
-                      <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-white font-medium">
+                      <p className="mt-1 flex items-center gap-1.5 text-[12px] sm:text-[13px] text-white font-medium">
                         <AlertCircle size={14} className="text-white" />
                         {errors.email}
                       </p>
@@ -430,7 +434,7 @@ export const ContactUs: React.FC = () => {
                   <div>
                     <label
                       htmlFor="field-projectType"
-                      className="block text-[13px] font-semibold text-white uppercase tracking-[0.06em] mb-2"
+                      className="block text-[11px] sm:text-[12px] md:text-[13px] font-semibold text-white uppercase tracking-[0.06em] mb-1 sm:mb-2"
                     >
                       Project Type
                     </label>
@@ -438,7 +442,7 @@ export const ContactUs: React.FC = () => {
                       id="field-projectType"
                       value={formData.projectType}
                       onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
-                      className="w-full h-[52px] px-4 text-[16px] text-[#0A0A0A] bg-white border border-[#D1D5DB] focus:border-white focus:outline-none focus:ring-2 focus:ring-white/40 transition-all cursor-pointer"
+                      className="w-full h-[40px] sm:h-[44px] md:h-[48px] lg:h-[52px] px-3 sm:px-4 text-[13px] sm:text-[14px] md:text-[16px] text-[#0A0A0A] bg-white border border-[#D1D5DB] focus:border-white focus:outline-none focus:ring-2 focus:ring-white/40 transition-all cursor-pointer"
                     >
                       {PROJECT_TYPES.map((pt) => (
                         <option key={pt} value={pt} className="text-[#0A0A0A] bg-white">
@@ -452,23 +456,23 @@ export const ContactUs: React.FC = () => {
                   <div>
                     <label
                       htmlFor="field-message"
-                      className="block text-[13px] font-semibold text-white uppercase tracking-[0.06em] mb-2"
+                      className="block text-[11px] sm:text-[12px] md:text-[13px] font-semibold text-white uppercase tracking-[0.06em] mb-1 sm:mb-2"
                     >
                       Message / Project Details
                     </label>
                     <textarea
                       id="field-message"
                       required
-                      rows={5}
+                      rows={4}
                       enterKeyHint="send"
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="Please specify estimated dimensions, building purpose, city, and required features (crane, mezzanine, etc.)."
-                      className="w-full p-4 text-[16px] text-[#0A0A0A] bg-white border border-[#D1D5DB] focus:border-white focus:outline-none focus:ring-2 focus:ring-white/40 transition-all resize-y placeholder:text-gray-400"
+                      className="w-full p-3 sm:p-4 text-[13px] sm:text-[14px] md:text-[16px] text-[#0A0A0A] bg-white border border-[#D1D5DB] focus:border-white focus:outline-none focus:ring-2 focus:ring-white/40 transition-all resize-y placeholder:text-gray-400"
                       aria-invalid={!!errors.message}
                     />
                     {errors.message && (
-                      <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-white font-medium">
+                      <p className="mt-1 flex items-center gap-1.5 text-[12px] sm:text-[13px] text-white font-medium">
                         <AlertCircle size={14} className="text-white" />
                         {errors.message}
                       </p>
@@ -480,10 +484,11 @@ export const ContactUs: React.FC = () => {
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="btn bg-white text-[var(--blue)] hover:bg-white/90 border-transparent font-bold w-full sm:w-auto min-w-[200px] shadow-sm transition-all"
+                      style={{ backgroundColor: "#FFFFFF", color: "var(--blue)" }}
+                      className="btn !bg-white !text-[var(--blue)] hover:!bg-white/90 border-transparent font-bold w-full sm:w-auto min-w-[200px] shadow-sm transition-all"
                     >
-                      <span>{submitting ? "Sending..." : "Send Message"}</span>
-                      <span className="btn-arrow text-[var(--blue)]">→</span>
+                      <span className="!text-[var(--blue)] font-bold">{submitting ? "SENDING..." : "SEND MESSAGE"}</span>
+                      <span className="btn-arrow !text-[var(--blue)] font-bold">→</span>
                     </button>
 
                     {submitError && (

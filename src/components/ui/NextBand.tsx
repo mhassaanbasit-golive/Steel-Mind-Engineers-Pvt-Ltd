@@ -53,6 +53,15 @@ const DESCRIPTIVE_HEADINGS: Record<string, string> = {
   "After Sale Services": "Long-term structural maintenance, expansions, repairs, and after-sale support.",
 };
 
+function toTitleCase(str: string): string {
+  if (!str) return "";
+  return str
+    .toLowerCase()
+    .split(" ")
+    .map((word) => (word ? word.charAt(0).toUpperCase() + word.slice(1) : ""))
+    .join(" ");
+}
+
 export const NextBand: React.FC<NextBandProps> = ({
   heading,
   nextUrl,
@@ -66,6 +75,8 @@ export const NextBand: React.FC<NextBandProps> = ({
       : DESCRIPTIVE_HEADINGS[nextTitle] || `Explore our engineering solutions for ${nextTitle}.`;
 
   const bannerImg = image || "https://res.cloudinary.com/cyfb9slf/image/upload/v1791406999/peb-card-image.jpg";
+  const titleCasedHeading = toTitleCase(descriptiveHeading);
+  const titleCasedNextTitle = toTitleCase(nextTitle);
 
   return (
     <section className={`w-full bg-[#0A0A0A] border-t border-[#E5E5E5]/20 overflow-hidden ${className}`.trim()}>
@@ -77,7 +88,7 @@ export const NextBand: React.FC<NextBandProps> = ({
         <div className="hidden md:block relative w-full h-[380px] lg:h-[440px] overflow-hidden bg-[#0A0A0A]">
           <img
             src={cld(bannerImg, 2560)}
-            alt={nextTitle}
+            alt={titleCasedNextTitle}
             loading="lazy"
             className="absolute inset-0 w-full h-full object-cover object-center block transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.05]"
           />
@@ -106,13 +117,13 @@ export const NextBand: React.FC<NextBandProps> = ({
             }}
           />
 
-          {/* Desktop Headline & link bottom-left on image */}
+          {/* Desktop Headline & link bottom-left on image: Title Case on desktop >= 1024px */}
           <div className="absolute bottom-10 lg:bottom-14 left-6 lg:left-12 max-w-[840px] text-left z-10">
-            <h2 className="text-[26px] lg:text-[38px] font-bold uppercase text-white tracking-[-0.02em] leading-[1.18] mb-5">
-              {descriptiveHeading}
+            <h2 className="text-[26px] lg:text-[38px] font-bold text-white tracking-[-0.02em] leading-[1.18] mb-5 normal-case lg:normal-case">
+              {titleCasedHeading}
             </h2>
             <div className="inline-flex items-center gap-2.5 text-[15px] lg:text-[17px] font-semibold text-white">
-              <span>{nextTitle}</span>
+              <span>{titleCasedNextTitle}</span>
               <span className="inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-2 text-[20px]">
                 &rarr;
               </span>
@@ -120,7 +131,7 @@ export const NextBand: React.FC<NextBandProps> = ({
           </div>
         </div>
 
-        {/* Mobile (below 768px): Photo on top 16/9, solid nav-blue panel underneath */}
+        {/* Mobile (below 768px): Photo on top 16/9, solid nav-blue panel underneath, ALL CAPS on mobile */}
         <div className="md:hidden w-full flex flex-col">
           <div
             className="relative w-full overflow-hidden bg-[#0A0A0A]"
@@ -128,7 +139,7 @@ export const NextBand: React.FC<NextBandProps> = ({
           >
             <img
               src={cld(bannerImg, 1080)}
-              alt={nextTitle}
+              alt={titleCasedNextTitle}
               loading="lazy"
               className="w-full h-full object-cover object-center block"
             />
@@ -147,12 +158,13 @@ export const NextBand: React.FC<NextBandProps> = ({
               style={{
                 fontSize: "clamp(17px, 4.8vw, 22px)",
                 lineHeight: 1.25,
+                textTransform: "uppercase",
               }}
             >
               {descriptiveHeading}
             </h2>
             <div className="inline-flex items-center gap-2 text-[14px] font-semibold text-white">
-              <span>{nextTitle}</span>
+              <span>{titleCasedNextTitle}</span>
               <span className="inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5 text-[17px]">
                 &rarr;
               </span>
