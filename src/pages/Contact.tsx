@@ -133,16 +133,16 @@ export const Contact: React.FC = () => {
                 onMouseLeave={() => phone1Ref.current?.stopAnimation()}
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-[rgba(30,58,138,0.06)] text-[var(--blue)] flex items-center justify-center">
-                    <PhoneIcon ref={phone1Ref} size={20} />
+                  <div className="w-10 h-10 rounded-full bg-[var(--blue)] text-white flex items-center justify-center flex-shrink-0">
+                    <PhoneIcon ref={phone1Ref} size={20} className="text-white" />
                   </div>
                   <div>
-                    <div className="text-[12px] uppercase font-semibold text-[var(--grey)] tracking-[0.08em]">
+                    <div className="text-[12px] uppercase font-semibold text-[#0A0A0A] tracking-[0.08em]">
                       Direct Engineer Line
                     </div>
                     <a
                       href={`tel:${SITE.tel[0]}`}
-                      className="text-[16px] lg:text-[17px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors"
+                      className="text-[16px] lg:text-[17px] font-semibold text-[#0A0A0A] hover:text-[var(--blue)] transition-colors"
                     >
                       {SITE.phones[0]}
                     </a>
@@ -157,16 +157,16 @@ export const Contact: React.FC = () => {
                 onMouseLeave={() => phone2Ref.current?.stopAnimation()}
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-[rgba(30,58,138,0.06)] text-[var(--blue)] flex items-center justify-center">
-                    <PhoneIcon ref={phone2Ref} size={20} />
+                  <div className="w-10 h-10 rounded-full bg-[var(--blue)] text-white flex items-center justify-center flex-shrink-0">
+                    <PhoneIcon ref={phone2Ref} size={20} className="text-white" />
                   </div>
                   <div>
-                    <div className="text-[12px] uppercase font-semibold text-[var(--grey)] tracking-[0.08em]">
+                    <div className="text-[12px] uppercase font-semibold text-[#0A0A0A] tracking-[0.08em]">
                       Lahore Office Line
                     </div>
                     <a
                       href={`tel:${SITE.tel[1]}`}
-                      className="text-[16px] lg:text-[17px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors"
+                      className="text-[16px] lg:text-[17px] font-semibold text-[#0A0A0A] hover:text-[var(--blue)] transition-colors"
                     >
                       {SITE.phones[1]}
                     </a>
@@ -181,16 +181,16 @@ export const Contact: React.FC = () => {
                 onMouseLeave={() => emailRef.current?.stopAnimation()}
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-[rgba(30,58,138,0.06)] text-[var(--blue)] flex items-center justify-center">
-                    <MessageSquareMoreIcon ref={emailRef} size={20} />
+                  <div className="w-10 h-10 rounded-full bg-[var(--blue)] text-white flex items-center justify-center flex-shrink-0">
+                    <MessageSquareMoreIcon ref={emailRef} size={20} className="text-white" />
                   </div>
                   <div>
-                    <div className="text-[12px] uppercase font-semibold text-[var(--grey)] tracking-[0.08em]">
+                    <div className="text-[12px] uppercase font-semibold text-[#0A0A0A] tracking-[0.08em]">
                       Project Inquiries & Drawings
                     </div>
                     <a
                       href={`mailto:${SITE.email}`}
-                      className="text-[16px] lg:text-[17px] font-semibold text-[var(--ink)] hover:text-[var(--blue)] transition-colors"
+                      className="text-[16px] lg:text-[17px] font-semibold text-[#0A0A0A] hover:text-[var(--blue)] transition-colors"
                     >
                       {SITE.email}
                     </a>
@@ -200,18 +200,18 @@ export const Contact: React.FC = () => {
 
               {/* Address */}
               <div className="py-5 flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-[rgba(30,58,138,0.06)] text-[var(--blue)] flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <MapPin size={20} />
+                <div className="w-10 h-10 rounded-full bg-[var(--blue)] text-white flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <MapPin size={20} className="text-white" />
                 </div>
                 <div>
-                  <div className="text-[12px] uppercase font-semibold text-[var(--grey)] tracking-[0.08em]">
+                  <div className="text-[12px] uppercase font-semibold text-[#0A0A0A] tracking-[0.08em]">
                     Factory & Head Office
                   </div>
                   <a
                     href="https://maps.google.com/?q=827+Karol+Village+Rd+Lahore+Pakistan"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[15px] lg:text-[16px] font-medium text-[var(--ink)] hover:text-[var(--blue)] transition-colors block mt-0.5 leading-[1.5]"
+                    className="text-[15px] lg:text-[16px] font-medium text-[#0A0A0A] hover:text-[var(--blue)] transition-colors block mt-0.5 leading-[1.5]"
                   >
                     827 Karol Village Rd, Lahore, Pakistan
                   </a>
@@ -221,7 +221,7 @@ export const Contact: React.FC = () => {
 
             {/* Social Icons (44px round buttons) */}
             <div className="pt-2">
-              <div className="text-[12px] uppercase font-semibold text-[var(--grey)] tracking-[0.08em] mb-4">
+              <div className="text-[12px] uppercase font-semibold text-[#0A0A0A] tracking-[0.08em] mb-4">
                 Connect on Social Channels
               </div>
               <div className="flex items-center gap-3">
@@ -289,7 +289,7 @@ export const Contact: React.FC = () => {
                 />
               </div>
               <div className="space-y-1">
-                <span className="text-[12px] uppercase font-semibold text-[var(--blue)] tracking-[0.08em] block">
+                <span className="text-[12px] uppercase font-semibold text-[#0A0A0A] tracking-[0.08em] block">
                   Scan to connect
                 </span>
                 <p className="text-[13px] text-[var(--grey)] leading-[1.5] max-w-[220px]">
@@ -301,12 +301,12 @@ export const Contact: React.FC = () => {
 
           {/* Form Section (Desktop right 7fr, Mobile first) */}
           <div className="order-1 lg:order-2 lg:col-span-7 w-full">
-            <div className="bg-white border border-[var(--rule)] p-6 sm:p-10 shadow-sm text-left">
+            <div style={{ backgroundColor: "var(--blue)" }} className="bg-[var(--blue)] border border-[var(--blue)] p-6 sm:p-10 shadow-sm text-left text-white">
               {submitted ? (
-                <div className="py-12 flex flex-col items-center text-center space-y-4">
-                  <CheckCircle2 size={48} className="text-[var(--blue)] animate-bounce" />
-                  <h3 className="text-[22px] font-bold text-[var(--ink)]">Thank You</h3>
-                  <p className="text-[15px] text-[var(--grey-strong)] max-w-[420px] leading-[1.6]">
+                <div className="py-12 flex flex-col items-center text-center space-y-4 text-white">
+                  <CheckCircle2 size={48} className="text-white animate-bounce" />
+                  <h3 className="text-[22px] font-bold text-white">Thank You</h3>
+                  <p className="text-[15px] text-white/90 max-w-[420px] leading-[1.6]">
                     Your message has been received. A senior engineer will review your inquiry and reply promptly.
                   </p>
                   <button
@@ -322,7 +322,7 @@ export const Contact: React.FC = () => {
                         company_website: "",
                       });
                     }}
-                    className="btn btn-outline btn-sm mt-4"
+                    className="btn bg-white text-[var(--blue)] border-white hover:bg-white/90 btn-sm mt-4 font-semibold"
                   >
                     <span>Send Another Message</span>
                   </button>
@@ -345,9 +345,9 @@ export const Contact: React.FC = () => {
                   <div>
                     <label
                       htmlFor="field-name"
-                      className="block text-[13px] font-semibold text-[var(--ink)] uppercase tracking-[0.06em] mb-2"
+                      className="block text-[13px] font-semibold text-white uppercase tracking-[0.06em] mb-2"
                     >
-                      Full Name <span className="text-[var(--blue)]">*</span>
+                      Full Name
                     </label>
                     <input
                       id="field-name"
@@ -358,12 +358,12 @@ export const Contact: React.FC = () => {
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="e.g. Tariq Mehmood"
-                      className="w-full h-[52px] px-4 text-[16px] text-[var(--ink)] bg-white border border-[var(--rule)] focus:border-[var(--blue)] focus:outline-none focus:ring-3 focus:ring-[rgba(30,58,138,0.15)] transition-all"
+                      className="w-full h-[52px] px-4 text-[16px] text-[#0A0A0A] bg-white border border-[#D1D5DB] focus:border-white focus:outline-none focus:ring-2 focus:ring-white/40 transition-all placeholder:text-gray-400"
                       aria-invalid={!!errors.name}
                     />
                     {errors.name && (
-                      <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-[var(--ink)] font-medium">
-                        <AlertCircle size={14} />
+                      <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-white font-medium">
+                        <AlertCircle size={14} className="text-white" />
                         {errors.name}
                       </p>
                     )}
@@ -373,9 +373,9 @@ export const Contact: React.FC = () => {
                   <div>
                     <label
                       htmlFor="field-phone"
-                      className="block text-[13px] font-semibold text-[var(--ink)] uppercase tracking-[0.06em] mb-2"
+                      className="block text-[13px] font-semibold text-white uppercase tracking-[0.06em] mb-2"
                     >
-                      Phone or WhatsApp <span className="text-[var(--blue)]">*</span>
+                      Phone or WhatsApp
                     </label>
                     <input
                       id="field-phone"
@@ -387,12 +387,12 @@ export const Contact: React.FC = () => {
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="e.g. 0300 1234567"
-                      className="w-full h-[52px] px-4 text-[16px] text-[var(--ink)] bg-white border border-[var(--rule)] focus:border-[var(--blue)] focus:outline-none focus:ring-3 focus:ring-[rgba(30,58,138,0.15)] transition-all"
+                      className="w-full h-[52px] px-4 text-[16px] text-[#0A0A0A] bg-white border border-[#D1D5DB] focus:border-white focus:outline-none focus:ring-2 focus:ring-white/40 transition-all placeholder:text-gray-400"
                       aria-invalid={!!errors.phone}
                     />
                     {errors.phone && (
-                      <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-[var(--ink)] font-medium">
-                        <AlertCircle size={14} />
+                      <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-white font-medium">
+                        <AlertCircle size={14} className="text-white" />
                         {errors.phone}
                       </p>
                     )}
@@ -402,9 +402,9 @@ export const Contact: React.FC = () => {
                   <div>
                     <label
                       htmlFor="field-email"
-                      className="block text-[13px] font-semibold text-[var(--ink)] uppercase tracking-[0.06em] mb-2"
+                      className="block text-[13px] font-semibold text-white uppercase tracking-[0.06em] mb-2"
                     >
-                      Email Address <span className="text-[var(--blue)]">*</span>
+                      Email Address
                     </label>
                     <input
                       id="field-email"
@@ -415,12 +415,12 @@ export const Contact: React.FC = () => {
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="e.g. engineer@company.com"
-                      className="w-full h-[52px] px-4 text-[16px] text-[var(--ink)] bg-white border border-[var(--rule)] focus:border-[var(--blue)] focus:outline-none focus:ring-3 focus:ring-[rgba(30,58,138,0.15)] transition-all"
+                      className="w-full h-[52px] px-4 text-[16px] text-[#0A0A0A] bg-white border border-[#D1D5DB] focus:border-white focus:outline-none focus:ring-2 focus:ring-white/40 transition-all placeholder:text-gray-400"
                       aria-invalid={!!errors.email}
                     />
                     {errors.email && (
-                      <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-[var(--ink)] font-medium">
-                        <AlertCircle size={14} />
+                      <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-white font-medium">
+                        <AlertCircle size={14} className="text-white" />
                         {errors.email}
                       </p>
                     )}
@@ -430,7 +430,7 @@ export const Contact: React.FC = () => {
                   <div>
                     <label
                       htmlFor="field-projectType"
-                      className="block text-[13px] font-semibold text-[var(--ink)] uppercase tracking-[0.06em] mb-2"
+                      className="block text-[13px] font-semibold text-white uppercase tracking-[0.06em] mb-2"
                     >
                       Project Type
                     </label>
@@ -438,10 +438,10 @@ export const Contact: React.FC = () => {
                       id="field-projectType"
                       value={formData.projectType}
                       onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
-                      className="w-full h-[52px] px-4 text-[16px] text-[var(--ink)] bg-white border border-[var(--rule)] focus:border-[var(--blue)] focus:outline-none focus:ring-3 focus:ring-[rgba(30,58,138,0.15)] transition-all"
+                      className="w-full h-[52px] px-4 text-[16px] text-[#0A0A0A] bg-white border border-[#D1D5DB] focus:border-white focus:outline-none focus:ring-2 focus:ring-white/40 transition-all cursor-pointer"
                     >
                       {PROJECT_TYPES.map((pt) => (
-                        <option key={pt} value={pt}>
+                        <option key={pt} value={pt} className="text-[#0A0A0A] bg-white">
                           {pt}
                         </option>
                       ))}
@@ -452,9 +452,9 @@ export const Contact: React.FC = () => {
                   <div>
                     <label
                       htmlFor="field-message"
-                      className="block text-[13px] font-semibold text-[var(--ink)] uppercase tracking-[0.06em] mb-2"
+                      className="block text-[13px] font-semibold text-white uppercase tracking-[0.06em] mb-2"
                     >
-                      Message / Project Details <span className="text-[var(--blue)]">*</span>
+                      Message / Project Details
                     </label>
                     <textarea
                       id="field-message"
@@ -464,12 +464,12 @@ export const Contact: React.FC = () => {
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="Please specify estimated dimensions, building purpose, city, and required features (crane, mezzanine, etc.)."
-                      className="w-full p-4 text-[16px] text-[var(--ink)] bg-white border border-[var(--rule)] focus:border-[var(--blue)] focus:outline-none focus:ring-3 focus:ring-[rgba(30,58,138,0.15)] transition-all resize-y"
+                      className="w-full p-4 text-[16px] text-[#0A0A0A] bg-white border border-[#D1D5DB] focus:border-white focus:outline-none focus:ring-2 focus:ring-white/40 transition-all resize-y placeholder:text-gray-400"
                       aria-invalid={!!errors.message}
                     />
                     {errors.message && (
-                      <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-[var(--ink)] font-medium">
-                        <AlertCircle size={14} />
+                      <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-white font-medium">
+                        <AlertCircle size={14} className="text-white" />
                         {errors.message}
                       </p>
                     )}
@@ -480,14 +480,14 @@ export const Contact: React.FC = () => {
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="btn btn-primary w-full sm:w-auto min-w-[200px]"
+                      className="btn bg-white text-[var(--blue)] hover:bg-white/90 border-transparent font-bold w-full sm:w-auto min-w-[200px] shadow-sm transition-all"
                     >
                       <span>{submitting ? "Sending..." : "Send Message"}</span>
-                      <span className="btn-arrow">→</span>
+                      <span className="btn-arrow text-[var(--blue)]">→</span>
                     </button>
 
                     {submitError && (
-                      <p className="mt-3 text-[13px] text-[var(--ink)] font-medium">
+                      <p className="mt-3 text-[13px] text-white font-medium">
                         The message could not send. Please call +92 300 4253966 or reach us on WhatsApp.
                       </p>
                     )}
@@ -523,7 +523,7 @@ export const Contact: React.FC = () => {
               onClick={() => setMapActive(true)}
               className="md:hidden absolute inset-0 z-10 bg-black/10 flex items-center justify-center cursor-pointer"
             >
-              <span className="bg-white text-[var(--ink)] px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.08em] shadow-md">
+              <span className="bg-white text-[#0A0A0A] px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.08em] shadow-md">
                 Tap to use the map
               </span>
             </div>

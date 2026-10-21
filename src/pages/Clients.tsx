@@ -524,11 +524,8 @@ export const Clients: React.FC = () => {
             <div
               ref={repeatClientsRef}
               style={{ backgroundColor: "var(--blue)" }}
-              className="p-8 lg:p-10 space-y-4 text-white shadow-md transition-all duration-300"
+              className="p-8 lg:p-10 space-y-4 text-white shadow-md transition-all duration-300 flex flex-col justify-start"
             >
-              <span className="inline-block text-[10px] font-semibold uppercase tracking-[0.12em] text-white bg-white/20 px-2.5 py-1">
-                Customer Trust
-              </span>
               <h3 className="text-[20px] lg:text-[26px] font-bold text-white tracking-tight">
                 Repeat Clients
               </h3>
@@ -541,11 +538,8 @@ export const Clients: React.FC = () => {
             <div
               ref={whatClientsReceiveRef}
               style={{ backgroundColor: "var(--blue)" }}
-              className="p-8 lg:p-10 space-y-4 text-white shadow-md transition-all duration-300"
+              className="p-8 lg:p-10 space-y-4 text-white shadow-md transition-all duration-300 flex flex-col justify-start"
             >
-              <span className="inline-block text-[10px] font-semibold uppercase tracking-[0.12em] text-white bg-white/20 px-2.5 py-1">
-                Turnkey Commitment
-              </span>
               <h3 className="text-[20px] lg:text-[26px] font-bold text-white tracking-tight">
                 What Clients Receive
               </h3>
