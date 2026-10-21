@@ -279,7 +279,7 @@ export const DesignLayout: React.FC<{ data: ContentData }> = ({ data }) => {
   }, []);
 
   return (
-    <article ref={rootRef} className="w-full bg-white text-left pb-[96px] overflow-x-clip">
+    <article ref={rootRef} className="w-full bg-white text-left pb-0 overflow-x-clip">
       {/* 1. HERO BAND (strictly capitalized in desktop and mobile view) */}
       <HeroBand
         variant="immersive"
@@ -583,7 +583,6 @@ export const DesignLayout: React.FC<{ data: ContentData }> = ({ data }) => {
 export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
   const rootRef = useRef<HTMLElement>(null);
   const registerRef = useRef<HTMLDivElement>(null);
-  const drawingRef = useRef<SVGSVGElement>(null);
   const notesRef = useRef<HTMLElement>(null);
   // Mobile Accordion state
   const [mobileOpenRow, setMobileOpenRow] = useState<number | null>(null);
@@ -654,14 +653,6 @@ export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
       gsap.set(".register-desktop-row", { opacity: 1, y: 0 });
       gsap.set(".register-mobile-line", { scaleX: 1 });
       gsap.set(".register-mobile-row", { opacity: 1, y: 0 });
-      gsap.set(
-        ".drawing-plate, .drawing-bolt, .drawing-dim, .drawing-dim-tick, .drawing-dim-proj, .drawing-center",
-        {
-          strokeDashoffset: 0,
-          opacity: 1,
-          scale: 1,
-        }
-      );
       gsap.set(".notes-top-line", { scaleX: 1 });
       gsap.set(".notes-content-box", { opacity: 1, y: 0 });
     });
@@ -719,54 +710,7 @@ export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         0.2
       );
 
-      // 2. Drawing: SVG line drawing on scroll
-      if (drawingRef.current) {
-        const drawTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: drawingRef.current,
-            start: "top 85%",
-            once: true,
-            invalidateOnRefresh: true,
-          },
-        });
-
-        drawTl.fromTo(
-          ".drawing-plate",
-          { strokeDasharray: 1520, strokeDashoffset: 1520 },
-          { strokeDashoffset: 0, duration: 1.2, ease: "E2" },
-          0
-        );
-
-        drawTl.fromTo(
-          ".drawing-bolt",
-          { strokeDasharray: 88, strokeDashoffset: 88 },
-          { strokeDashoffset: 0, duration: 0.6, ease: "E1", stagger: 0.08 },
-          0.3
-        );
-
-        drawTl.fromTo(
-          ".drawing-dim",
-          { strokeDasharray: 600, strokeDashoffset: 600 },
-          { strokeDashoffset: 0, duration: 0.8, ease: "E1" },
-          0.5
-        );
-
-        drawTl.fromTo(
-          ".drawing-dim-tick, .drawing-dim-proj",
-          { opacity: 0, scale: 0.8 },
-          { opacity: 1, scale: 1, duration: 0.4, stagger: 0.04, ease: "E1" },
-          0.7
-        );
-
-        drawTl.fromTo(
-          ".drawing-center",
-          { opacity: 0 },
-          { opacity: 1, duration: 0.8, ease: "E1" },
-          0.4
-        );
-      }
-
-      // 3. Notes: DRAW the top lines, then RISE title and text
+      // 2. Notes: DRAW the top lines, then RISE title and text
       const nLines = gsap.utils.toArray<HTMLElement>(".notes-top-line");
       const nBoxes = gsap.utils.toArray<HTMLElement>(".notes-content-box");
 
@@ -871,54 +815,7 @@ export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         0.2
       );
 
-      // 2. Mobile Drawing SVG
-      if (drawingRef.current) {
-        const mDrawTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: drawingRef.current,
-            start: "top 90%",
-            once: true,
-            invalidateOnRefresh: true,
-          },
-        });
-
-        mDrawTl.fromTo(
-          ".drawing-plate",
-          { strokeDasharray: 1520, strokeDashoffset: 1520 },
-          { strokeDashoffset: 0, duration: 1.0, ease: "E2" },
-          0
-        );
-
-        mDrawTl.fromTo(
-          ".drawing-bolt",
-          { strokeDasharray: 88, strokeDashoffset: 88 },
-          { strokeDashoffset: 0, duration: 0.5, ease: "E1", stagger: 0.06 },
-          0.2
-        );
-
-        mDrawTl.fromTo(
-          ".drawing-dim",
-          { strokeDasharray: 600, strokeDashoffset: 600 },
-          { strokeDashoffset: 0, duration: 0.7, ease: "E1" },
-          0.4
-        );
-
-        mDrawTl.fromTo(
-          ".drawing-dim-tick, .drawing-dim-proj",
-          { opacity: 0 },
-          { opacity: 1, duration: 0.4, stagger: 0.04, ease: "E1" },
-          0.6
-        );
-
-        mDrawTl.fromTo(
-          ".drawing-center",
-          { opacity: 0 },
-          { opacity: 1, duration: 0.6, ease: "E1" },
-          0.3
-        );
-      }
-
-      // 3. Mobile Notes: DRAW lines, RISE title & text
+      // 2. Mobile Notes: DRAW lines, RISE title & text
       const mnLines = gsap.utils.toArray<HTMLElement>(".notes-top-line");
       const mnBoxes = gsap.utils.toArray<HTMLElement>(".notes-content-box");
 
@@ -974,7 +871,7 @@ export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
   }, []);
 
   return (
-    <article ref={rootRef} className="w-full bg-white text-left pb-[96px] overflow-x-clip">
+    <article ref={rootRef} className="w-full bg-white text-left pb-0 overflow-x-clip">
       {/* 1. HERO BAND (strictly capitalized in desktop and mobile view) */}
       <HeroBand
         variant="immersive"
@@ -1004,7 +901,7 @@ export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
       </section>
 
       {/* 3. REGISTER: "DRAWINGS PRODUCED" */}
-      <section ref={registerRef} className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px]">
+      <section ref={registerRef} className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px] border-b border-[#E5E5E5]">
         {/* Section Heading: strictly capitalized in desktop and mobile view */}
         <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-10 lg:mb-14">
           DRAWINGS PRODUCED
@@ -1026,9 +923,9 @@ export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                     {row.num}
                   </span>
 
-                  {/* Title: bold, ink colour, sentence case */}
-                  <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em] w-[260px] shrink-0 pr-6">
-                    {row.name}
+                  {/* Title: bold, ink colour, uppercase */}
+                  <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em] w-[260px] shrink-0 pr-6 uppercase">
+                    {row.name.toUpperCase()}
                   </h3>
 
                   {/* Text: One-Step blue, regular weight, 15px / 16px, line-height 1.65 */}
@@ -1082,9 +979,9 @@ export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                     <span className="block text-[40px] font-extrabold text-[var(--blue)] leading-none select-none mb-1">
                       {row.num}
                     </span>
-                    {/* Title: bold ink sentence case */}
-                    <h3 className="text-[17px] font-bold text-[#0A0A0A] leading-[1.25]">
-                      {row.name}
+                    {/* Title: bold ink uppercase */}
+                    <h3 className="text-[17px] font-bold text-[#0A0A0A] leading-[1.25] uppercase">
+                      {row.name.toUpperCase()}
                     </h3>
                   </div>
 
@@ -1129,196 +1026,15 @@ export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         </div>
       </section>
 
-      {/* 4. DRAWING (decor, aria-hidden, no text): full-width SVG, viewBox 0 0 1200 280, strokes 1.25px in var(--blue) */}
-      <section className="w-full max-w-[1280px] mx-auto px-6 lg:px-8 my-10 lg:my-[96px]">
-        <svg
-          ref={drawingRef}
-          viewBox="0 0 1200 280"
-          className="w-full h-[160px] lg:h-[280px] block"
-          preserveAspectRatio="xMidYMid meet"
-          aria-hidden="true"
-        >
-          {/* Base plate rectangle (300,60 to 900,220) */}
-          <rect
-            className="drawing-plate"
-            x="300"
-            y="60"
-            width="600"
-            height="160"
-            fill="none"
-            stroke="var(--blue)"
-            strokeWidth="1.25"
-          />
-
-          {/* 4 bolt circles r=14 at (360,100), (840,100), (360,180), (840,180) */}
-          <circle
-            className="drawing-bolt"
-            cx="360"
-            cy="100"
-            r="14"
-            fill="none"
-            stroke="var(--blue)"
-            strokeWidth="1.25"
-          />
-          <circle
-            className="drawing-bolt"
-            cx="840"
-            cy="100"
-            r="14"
-            fill="none"
-            stroke="var(--blue)"
-            strokeWidth="1.25"
-          />
-          <circle
-            className="drawing-bolt"
-            cx="360"
-            cy="180"
-            r="14"
-            fill="none"
-            stroke="var(--blue)"
-            strokeWidth="1.25"
-          />
-          <circle
-            className="drawing-bolt"
-            cx="840"
-            cy="180"
-            r="14"
-            fill="none"
-            stroke="var(--blue)"
-            strokeWidth="1.25"
-          />
-
-          {/* Top dimension line at y=30 from x=300 to x=900 with end ticks */}
-          <line
-            className="drawing-dim"
-            x1="300"
-            y1="30"
-            x2="900"
-            y2="30"
-            stroke="var(--blue)"
-            strokeWidth="1.25"
-          />
-          <line
-            className="drawing-dim-tick"
-            x1="300"
-            y1="22"
-            x2="300"
-            y2="38"
-            stroke="var(--blue)"
-            strokeWidth="1.25"
-          />
-          <line
-            className="drawing-dim-proj"
-            x1="300"
-            y1="22"
-            x2="300"
-            y2="60"
-            stroke="var(--blue)"
-            strokeWidth="1.25"
-            strokeOpacity="0.4"
-          />
-          <line
-            className="drawing-dim-tick"
-            x1="900"
-            y1="22"
-            x2="900"
-            y2="38"
-            stroke="var(--blue)"
-            strokeWidth="1.25"
-          />
-          <line
-            className="drawing-dim-proj"
-            x1="900"
-            y1="22"
-            x2="900"
-            y2="60"
-            stroke="var(--blue)"
-            strokeWidth="1.25"
-            strokeOpacity="0.4"
-          />
-
-          {/* Left dimension line at x=250 from y=60 to y=220 with end ticks */}
-          <line
-            className="drawing-dim"
-            x1="250"
-            y1="60"
-            x2="250"
-            y2="220"
-            stroke="var(--blue)"
-            strokeWidth="1.25"
-          />
-          <line
-            className="drawing-dim-tick"
-            x1="242"
-            y1="60"
-            x2="258"
-            y2="60"
-            stroke="var(--blue)"
-            strokeWidth="1.25"
-          />
-          <line
-            className="drawing-dim-proj"
-            x1="242"
-            y1="60"
-            x2="300"
-            y2="60"
-            stroke="var(--blue)"
-            strokeWidth="1.25"
-            strokeOpacity="0.4"
-          />
-          <line
-            className="drawing-dim-tick"
-            x1="242"
-            y1="220"
-            x2="258"
-            y2="220"
-            stroke="var(--blue)"
-            strokeWidth="1.25"
-          />
-          <line
-            className="drawing-dim-proj"
-            x1="242"
-            y1="220"
-            x2="300"
-            y2="220"
-            stroke="var(--blue)"
-            strokeWidth="1.25"
-            strokeOpacity="0.4"
-          />
-
-          {/* Two dashed centre lines */}
-          <line
-            className="drawing-center"
-            x1="260"
-            y1="140"
-            x2="940"
-            y2="140"
-            stroke="var(--blue)"
-            strokeWidth="1.25"
-            strokeDasharray="8 6"
-          />
-          <line
-            className="drawing-center"
-            x1="600"
-            y1="20"
-            x2="600"
-            y2="260"
-            stroke="var(--blue)"
-            strokeWidth="1.25"
-            strokeDasharray="8 6"
-          />
-        </svg>
-      </section>
-
-      {/* 5. NOTES: Two columns (gap 64px), 1px line on top, title, text. Stacked on mobile */}
+      {/* 4. NOTES: Two columns (gap 64px), 1px line on top, title, text. Stacked on mobile */}
       <section ref={notesRef} className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px] border-b border-[#E5E5E5]">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Column 1: Why Detailing Prevents Delays */}
           <div className="flex flex-col">
             <div className="notes-top-line w-full h-[1px] bg-[#E5E5E5] mb-8" />
             <div className="notes-content-box space-y-4">
-              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25]">
-                {note1.title}
+              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] uppercase">
+                {note1.title.toUpperCase()}
               </h3>
               <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal">
                 {note1.text}
@@ -1330,8 +1046,8 @@ export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
           <div className="flex flex-col">
             <div className="notes-top-line w-full h-[1px] bg-[#E5E5E5] mb-8" />
             <div className="notes-content-box space-y-4">
-              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25]">
-                {note2.title}
+              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] uppercase">
+                {note2.title.toUpperCase()}
               </h3>
               <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal">
                 {note2.text}
@@ -1665,7 +1381,7 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
   }, []);
 
   return (
-    <article ref={rootRef} className="w-full bg-white text-left pb-[96px] overflow-x-clip">
+    <article ref={rootRef} className="w-full bg-white text-left pb-0 overflow-x-clip">
       {/* 1. HERO BAND (strictly capitalized in desktop and mobile view) */}
       <HeroBand
         variant="immersive"
@@ -1790,9 +1506,9 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                         {step.num}
                       </span>
 
-                      {/* Title: bold, ink colour, sentence case */}
-                      <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] mb-4">
-                        {step.title}
+                      {/* Title: bold, ink colour, uppercase */}
+                      <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] mb-4 uppercase">
+                        {step.title.toUpperCase()}
                       </h3>
 
                       {/* Text: One-Step blue, regular weight, 15px/16px, line-height 1.65 */}
@@ -1860,8 +1576,8 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                       <span className="block text-[32px] sm:text-[40px] font-extrabold text-[var(--blue)] leading-none select-none mb-2">
                         {step.num}
                       </span>
-                      <h3 className="text-[17px] font-bold text-[#0A0A0A] leading-[1.25] mb-2">
-                        {step.title}
+                      <h3 className="text-[17px] font-bold text-[#0A0A0A] leading-[1.25] mb-2 uppercase">
+                        {step.title.toUpperCase()}
                       </h3>
                       <p className="text-[15px] text-[var(--blue)] leading-[1.65] font-normal">
                         {step.text}
@@ -2064,7 +1780,7 @@ export const CleaningLayout: React.FC<{ data: ContentData }> = ({ data }) => {
   }, []);
 
   return (
-    <article ref={rootRef} className="w-full bg-white text-left pb-[96px] overflow-x-clip">
+    <article ref={rootRef} className="w-full bg-white text-left pb-0 overflow-x-clip">
       {/* 1. HERO BAND (strictly capitalized in desktop and mobile view) */}
       <HeroBand
         variant="immersive"
@@ -2128,9 +1844,9 @@ export const CleaningLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                 {item.num}
               </span>
 
-              {/* Title: bold, ink colour, sentence case */}
-              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] mb-3">
-                {item.title}
+              {/* Title: bold, ink colour, uppercase */}
+              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] mb-3 uppercase">
+                {item.title.toUpperCase()}
               </h3>
 
               {/* Text: One-Step blue, regular weight, 15px/16px */}
@@ -2147,9 +1863,9 @@ export const CleaningLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
           {notes.map((note, idx) => (
             <div key={idx} className="flex flex-col border-t border-[#E5E5E5] pt-6 lg:pt-8 text-left">
-              {/* Title: bold, ink colour, sentence case */}
-              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] mb-4">
-                {note.title}
+              {/* Title: bold, ink colour, uppercase */}
+              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] mb-4 uppercase">
+                {note.title.toUpperCase()}
               </h3>
 
               {/* Text: One-Step blue, regular weight */}
