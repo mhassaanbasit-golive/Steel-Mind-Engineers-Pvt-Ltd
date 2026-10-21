@@ -76,15 +76,15 @@ export const EngineeringLayout: React.FC<{ data: ContentData }> = ({ data }) => 
       {/* 2. Intro Section: WHAT THE ENGINEERING DEPARTMENT DOES (matching One-Step Solution structural alignment) */}
       <section className="w-full bg-white py-[60px] lg:py-[100px] px-6 lg:px-8 border-b border-[#E5E5E5]">
         <div className="max-w-[1340px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start text-left">
-          <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] uppercase">
+          <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] uppercase">
             WHAT THE ENGINEERING DEPARTMENT DOES
           </h2>
           <div className="max-w-[560px]">
-            <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
+            <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal">
               {sections[0]?.text || introPs[0]}
             </p>
             {introPs.slice(1).length > 0 && (
-              <p className="mt-4 text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
+              <p className="mt-4 text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal">
                 {introPs.slice(1).join(" ")}
               </p>
             )}
@@ -95,7 +95,7 @@ export const EngineeringLayout: React.FC<{ data: ContentData }> = ({ data }) => 
       {/* 3. Steps Rail: THE DESIGN PROCESS (matching One-Step Solution vertical rail padding & max-w 760px) */}
       <section className="w-full bg-white py-[72px] lg:py-[120px] px-6 lg:px-8">
         <div className="max-w-[760px] mx-auto text-left">
-          <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] uppercase mb-12">
+          <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] uppercase mb-12">
             THE DESIGN PROCESS
           </h2>
 
@@ -140,12 +140,12 @@ export const EngineeringLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                   </div>
 
                   {/* Title: bold, ink colour, sentence case */}
-                  <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mb-2">
+                  <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug mb-2">
                     {step.name}
                   </h3>
 
                   {/* Text: the blue of One-Step body text (var(--blue)), regular weight */}
-                  <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[580px]">
+                  <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal max-w-[580px]">
                     {step.text}
                   </p>
                 </li>
@@ -174,7 +174,7 @@ export const EngineeringLayout: React.FC<{ data: ContentData }> = ({ data }) => 
       {ledgerBlocks.length > 0 && (
         <section className="w-full bg-white px-6 lg:px-8 pb-[72px] lg:pb-[120px] text-left">
           <div className="max-w-[1340px] mx-auto">
-            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-4">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-4">
               DELIVERABLES AND VALUE
             </h2>
             <div className="w-full h-[1px] bg-[#E5E5E5] mb-8 lg:mb-12" />
@@ -197,12 +197,12 @@ export const EngineeringLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                       </div>
 
                       {/* Title: bold, ink colour, sentence case, One-Step desktop 20px */}
-                      <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mb-3 group-hover:text-[var(--blue)] transition-colors duration-300">
+                      <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug mb-3 group-hover:text-[var(--blue)] transition-colors duration-300">
                         {blk.title}
                       </h3>
 
                       {/* Text: the blue of One-Step body text, regular weight */}
-                      <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
+                      <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal">
                         {blk.text}
                       </p>
                     </div>
@@ -220,61 +220,14 @@ export const EngineeringLayout: React.FC<{ data: ContentData }> = ({ data }) => 
         </section>
       )}
 
-      {/* 6. Frequently Asked Questions: One-Step style, ZERO grey text */}
+      {/* 6. Frequently Asked Questions */}
       {data.faq && data.faq.length > 0 && (
         <section className="w-full bg-white py-[60px] lg:py-[100px] px-6 lg:px-8 border-t border-[#E5E5E5] text-left">
           <div className="max-w-[800px] mx-auto">
-            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
-
-            <div className="w-full divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
-              {data.faq.map((item, idx) => {
-                const isOpen = openFaqIdx === idx;
-                const panelId = `eng-faq-panel-${idx}`;
-                const headerId = `eng-faq-header-${idx}`;
-
-                return (
-                  <div key={idx} className="group overflow-hidden">
-                    <button
-                      id={headerId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      onClick={() => setOpenFaqIdx(isOpen ? null : idx)}
-                      className="w-full py-5 lg:py-6 flex items-center justify-between text-left cursor-pointer transition-colors"
-                    >
-                      <span className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug pr-4">
-                        {item.q}
-                      </span>
-                      <span
-                        className={`flex-shrink-0 w-8 h-8 rounded-full border border-[var(--blue)] flex items-center justify-center text-[var(--blue)] font-bold text-[18px] transition-transform duration-300 ${
-                          isOpen ? "rotate-45 bg-[var(--blue)] text-white" : "bg-white"
-                        }`}
-                        aria-hidden="true"
-                      >
-                        +
-                      </span>
-                    </button>
-
-                    <div
-                      id={panelId}
-                      role="region"
-                      aria-labelledby={headerId}
-                      className="overflow-hidden transition-all duration-300 ease-out"
-                      style={{
-                        maxHeight: isOpen ? "400px" : "0px",
-                        opacity: isOpen ? 1 : 0,
-                      }}
-                    >
-                      <p className="pb-6 text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[680px]">
-                        {item.a}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}
@@ -313,10 +266,10 @@ export const PrimaryFramingLayout: React.FC<{ data: ContentData }> = ({ data }) 
       />
 
       <section className="container py-[var(--sec-y-lg)] text-left max-w-[1340px] mx-auto">
-        <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] uppercase mb-4">
+        <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] uppercase mb-4">
           WHAT THE PRIMARY FRAME IS
         </h2>
-        <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[880px]">
+        <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal max-w-[880px]">
           {sections[0]?.text || introPs[0]}
         </p>
       </section>
@@ -382,10 +335,10 @@ export const PrimaryFramingLayout: React.FC<{ data: ContentData }> = ({ data }) 
 
             <div className="mt-8 pt-6 border-t border-[rgba(15,23,42,0.12)] flex flex-col justify-between">
               <div>
-                <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mb-3">
+                <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug mb-3">
                   {activeType.name}
                 </h3>
-                <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
+                <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal">
                   {activeType.desc}
                 </p>
               </div>
@@ -418,7 +371,7 @@ export const PrimaryFramingLayout: React.FC<{ data: ContentData }> = ({ data }) 
             className="bg-white p-8 max-w-[800px] w-full rounded shadow-2xl relative text-left"
           >
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug">{activeType.name}</h3>
+              <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug">{activeType.name}</h3>
               <button
                 type="button"
                 onClick={() => setModalOpen(false)}
@@ -430,7 +383,7 @@ export const PrimaryFramingLayout: React.FC<{ data: ContentData }> = ({ data }) 
             <div className="w-full py-8 flex items-center justify-center bg-slate-50">
               <FrameDiagram type={activeType.name} className="max-w-[640px] w-full" />
             </div>
-            <p className="mt-6 text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">{activeType.desc}</p>
+            <p className="mt-6 text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal">{activeType.desc}</p>
           </div>
         </div>
       )}
@@ -438,7 +391,7 @@ export const PrimaryFramingLayout: React.FC<{ data: ContentData }> = ({ data }) 
       {data.faq && data.faq.length > 0 && (
         <section className="container py-[var(--sec-y)]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
             <Accordion items={data.faq} size="large" />
@@ -811,11 +764,11 @@ export const BasicParametersLayout: React.FC<{ data: ContentData }> = ({ data })
       {/* 2. INTRO: "WHY THESE PARAMETERS MATTER" using exact TEXT STYLE */}
       <section className="w-full bg-white py-12 lg:py-20 border-b border-[#E5E5E5]">
         <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] text-left">
-          <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em]">
+          <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em]">
             WHY THESE PARAMETERS MATTER
           </h2>
           <div className="w-full h-[1px] bg-[#E5E5E5] my-6" />
-          <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[880px]">
+          <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal max-w-[880px]">
             {sections[0]?.text ||
               introPs[0] ||
               "Every design starts with a few numbers. If they are correct, the quote is accurate and the design is fast. If they are wrong, the structure may be too weak or too costly. Collect the items below before you request a quote."}
@@ -900,12 +853,12 @@ export const BasicParametersLayout: React.FC<{ data: ContentData }> = ({ data })
                       </div>
 
                       {/* Title: bold, ink colour, sentence case */}
-                      <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mt-3 mb-2">
+                      <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug mt-3 mb-2">
                         {item.title}
                       </h3>
 
                       {/* Text: the blue of the One-Step body text (var(--blue)), regular weight, full colour */}
-                      <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[540px]">
+                      <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal max-w-[540px]">
                         {item.text}
                       </p>
                     </div>
@@ -924,10 +877,10 @@ export const BasicParametersLayout: React.FC<{ data: ContentData }> = ({ data })
             {note1 && (
               <div className="relative pt-6">
                 <div className="w-full h-[1px] bg-[#E5E5E5] absolute top-0 left-0" />
-                <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mb-3 uppercase">
+                <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug mb-3 uppercase">
                   {note1.title}
                 </h3>
-                <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
+                <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal">
                   {note1.text}
                 </p>
               </div>
@@ -936,10 +889,10 @@ export const BasicParametersLayout: React.FC<{ data: ContentData }> = ({ data })
             {note2 && (
               <div className="relative pt-6">
                 <div className="w-full h-[1px] bg-[#E5E5E5] absolute top-0 left-0" />
-                <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mb-3 uppercase">
+                <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug mb-3 uppercase">
                   {note2.title}
                 </h3>
-                <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
+                <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal">
                   {note2.text}
                 </p>
               </div>
@@ -952,7 +905,7 @@ export const BasicParametersLayout: React.FC<{ data: ContentData }> = ({ data })
       {data.faq && data.faq.length > 0 && (
         <section className="w-full bg-white py-12 lg:py-20 border-b border-[#E5E5E5]">
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] text-left">
-            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
             <div className="max-w-[860px]">
@@ -1163,16 +1116,16 @@ export const SubStructuresLayout: React.FC<{ data: ContentData }> = ({ data }) =
       <section className="container py-[var(--sec-y-lg)] text-left">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-16 items-start">
           <div className="lg:col-span-5">
-            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] uppercase">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] uppercase">
               {sections[0]?.title?.toUpperCase() || "WHAT THE SUB STRUCTURE IS"}
             </h2>
           </div>
           <div className="lg:col-span-7">
-            <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[640px]">
+            <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal max-w-[640px]">
               {introPs[0] || sections[0]?.text}
             </p>
             {introPs.slice(1).length > 0 && (
-              <p className="mt-4 text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[640px]">
+              <p className="mt-4 text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal max-w-[640px]">
                 {introPs.slice(1).join(" ")}
               </p>
             )}
@@ -1199,7 +1152,7 @@ export const SubStructuresLayout: React.FC<{ data: ContentData }> = ({ data }) =
               {/* Title: bold, ink colour, sentence case with 2px blue line on hover */}
               <div className="transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:translate-x-5 min-w-0">
                 <div className="relative inline-block max-w-full">
-                  <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug">
+                  <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug">
                     {item.name}
                   </h3>
                   <div className="h-[2px] w-full bg-[var(--blue)] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] origin-left" />
@@ -1208,7 +1161,7 @@ export const SubStructuresLayout: React.FC<{ data: ContentData }> = ({ data }) =
 
               {/* Text: the blue of One-Step, regular weight */}
               <div className="min-w-0">
-                <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[560px]">
+                <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal max-w-[560px]">
                   {item.text}
                 </p>
               </div>
@@ -1226,7 +1179,7 @@ export const SubStructuresLayout: React.FC<{ data: ContentData }> = ({ data }) =
       {/* 4. Add-on Carousel without borders or fill, scroll snap mandatory, 2px progress line */}
       <section className="container pb-[var(--sec-y-lg)] text-left">
         <div className="flex justify-between items-baseline mb-8">
-          <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em]">
+          <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em]">
             ADD-ON STRUCTURES
           </h2>
           <div className="hidden lg:flex items-center gap-3">
@@ -1272,12 +1225,12 @@ export const SubStructuresLayout: React.FC<{ data: ContentData }> = ({ data }) =
               </div>
 
               {/* Title: bold, ink colour, sentence case */}
-              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug">
+              <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug">
                 {ao.name}
               </h3>
 
               {/* Text: the blue of One-Step */}
-              <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
+              <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal">
                 {ao.desc}
               </p>
             </div>
@@ -1298,12 +1251,12 @@ export const SubStructuresLayout: React.FC<{ data: ContentData }> = ({ data }) =
         <section className="container pb-[var(--sec-y-lg)] text-left border-t border-[#E5E5E5] pt-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-16 items-start">
             <div className="lg:col-span-5">
-              <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em]">
+              <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em]">
                 {fastenersSec.title?.toUpperCase() || "FASTENERS AND SEALING"}
               </h2>
             </div>
             <div className="lg:col-span-7">
-              <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[640px]">
+              <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal max-w-[640px]">
                 {fastenersSec.text}
               </p>
             </div>
@@ -1314,7 +1267,7 @@ export const SubStructuresLayout: React.FC<{ data: ContentData }> = ({ data }) =
       {data.faq && data.faq.length > 0 && (
         <section className="container py-[var(--sec-y)]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
             <Accordion items={data.faq} size="large" />
@@ -1382,10 +1335,10 @@ export const CraneSystemLayout: React.FC<{ data: ContentData }> = ({ data }) => 
             className="lg:col-span-4 lg:sticky"
             style={{ top: "calc(var(--nav-offset, 80px) + 24px)" }}
           >
-            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] uppercase mb-4">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] uppercase mb-4">
               WHY CRANE BUILDINGS NEED SPECIAL DESIGN
             </h2>
-            <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[440px]">
+            <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal max-w-[440px]">
               {introSec?.text}
             </p>
           </div>
@@ -1407,10 +1360,10 @@ export const CraneSystemLayout: React.FC<{ data: ContentData }> = ({ data }) => 
 
                 {/* Exactly 20px gap on mobile, 32px on desktop between diagram and title */}
                 <div className="mt-5 lg:mt-8">
-                  <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mb-2">
+                  <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug mb-2">
                     {sh.title}
                   </h3>
-                  <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
+                  <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal">
                     {sh.desc}
                   </p>
                 </div>
@@ -1444,7 +1397,7 @@ export const CraneSystemLayout: React.FC<{ data: ContentData }> = ({ data }) => 
             className="bg-white p-8 max-w-[800px] w-full rounded shadow-2xl relative text-left"
           >
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug">{modalDiagram}</h3>
+              <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug">{modalDiagram}</h3>
               <button
                 type="button"
                 onClick={() => setModalDiagram(null)}
@@ -1463,7 +1416,7 @@ export const CraneSystemLayout: React.FC<{ data: ContentData }> = ({ data }) => 
       {data.faq && data.faq.length > 0 && (
         <section className="container py-[var(--sec-y)]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
             <Accordion items={data.faq} size="large" />
@@ -1949,7 +1902,7 @@ export const MezzanineLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                   >
                     <div className="min-h-0 overflow-hidden px-5">
                       <p
-                        className="text-[15px] leading-[1.6] text-[var(--blue)] font-normal pb-6"
+                        className="text-[15px] leading-[1.6] text-[#0A0A0A] font-normal pb-6"
                         style={{
                           opacity: isOpen ? 1 : 0,
                           transition: isOpen
@@ -1987,7 +1940,7 @@ export const MezzanineLayout: React.FC<{ data: ContentData }> = ({ data }) => {
             <div className="lg:col-span-5">
               <h2
                 ref={experienceTitleRef}
-                className="text-[16px] lg:text-[44px] font-bold text-white uppercase leading-tight lg:leading-[1.15] tracking-[-0.02em]"
+                className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-white uppercase leading-tight lg:leading-[1.15] tracking-[-0.02em]"
               >
                 {experienceSec.title?.toUpperCase() || "EXPERIENCE"}
               </h2>
@@ -2004,88 +1957,17 @@ export const MezzanineLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         </section>
       )}
 
-      {/* Frequently Asked Questions (One-Step style, ZERO grey text) */}
+      {/* Frequently Asked Questions */}
       {data.faq && data.faq.length > 0 && (
         <section ref={faqSecRef} className="container py-[var(--sec-y-lg)]">
           <div className="max-w-[800px] mx-auto text-left">
             <h2
               ref={faqTitleRef}
-              className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8"
+              className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8"
             >
               FREQUENTLY ASKED QUESTIONS
             </h2>
-
-            <div className="w-full divide-y divide-[rgba(15,23,42,0.12)] border-y border-[rgba(15,23,42,0.12)]">
-              {data.faq.map((item, idx) => {
-                const isOpen = openFaqIdx === idx;
-                const panelId = `faq-panel-${idx}`;
-                const headerId = `faq-header-${idx}`;
-
-                return (
-                  <div key={idx} className="group overflow-hidden">
-                    <button
-                      id={headerId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      onClick={() => {
-                        setOpenFaqIdx((prev) => (prev === idx ? null : idx));
-                        debouncedRefresh();
-                      }}
-                      className="w-full min-h-[52px] py-5 flex items-center justify-between text-left cursor-pointer focus-visible:outline-none"
-                    >
-                      <span className="font-bold text-[17px] lg:text-[20px] text-[#0A0A0A] pr-6 leading-snug">
-                        {item.q}
-                      </span>
-
-                      <span className="w-6 h-6 flex items-center justify-center flex-shrink-0 text-[#0A0A0A]">
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          style={{
-                            transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                            transition: "transform 400ms cubic-bezier(0.16, 1, 0.3, 1)",
-                          }}
-                        >
-                          <line x1="12" y1="5" x2="12" y2="19" />
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
-                      </span>
-                    </button>
-
-                    <div
-                      id={panelId}
-                      role="region"
-                      aria-labelledby={headerId}
-                      className="grid"
-                      style={{
-                        gridTemplateRows: isOpen ? "1fr" : "0fr",
-                        transition: "grid-template-rows 600ms cubic-bezier(0.16, 1, 0.3, 1)",
-                      }}
-                    >
-                      <div className="min-h-0 overflow-hidden">
-                        <p
-                          className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal pb-6 max-w-[680px]"
-                          style={{
-                            opacity: isOpen ? 1 : 0,
-                            transition: isOpen
-                              ? "opacity 400ms cubic-bezier(0.16, 1, 0.3, 1) 150ms"
-                              : "opacity 200ms ease 0ms",
-                          }}
-                        >
-                          {item.a}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}
@@ -2408,16 +2290,16 @@ export const AccessoriesLayout: React.FC<{ data: ContentData }> = ({ data }) => 
 
       {/* Intro: "WHY ACCESSORIES MATTER" (TEXT STYLE uppercase bold ink) */}
       <section className="container py-[var(--sec-y-lg)] text-left">
-        <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] uppercase mb-4">
+        <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] uppercase mb-4">
           WHY ACCESSORIES MATTER
         </h2>
         <div className="w-full h-[1px] bg-[#E5E5E5] my-6" />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
-          <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
+          <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal">
             {introPs[0] || sections[0]?.text || "The frame and the sheets make a building. The accessories make it comfortable, safe and usable. Steel Mind Engineers supplies and fits them with the building, so each item is ordered at the right stage and carries the same finish as the rest of the structure."}
           </p>
           {introPs[1] && (
-            <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
+            <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal">
               {introPs[1]}
             </p>
           )}
@@ -2549,7 +2431,7 @@ export const AccessoriesLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                 />
 
                 {/* Category Heading (TEXT STYLE uppercase bold ink) */}
-                <h3 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] uppercase leading-tight lg:leading-[1.15] tracking-[-0.02em] mt-8 mb-6">
+                <h3 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] uppercase leading-tight lg:leading-[1.15] tracking-[-0.02em] mt-8 mb-6">
                   {cat.title}
                 </h3>
 
@@ -2560,7 +2442,7 @@ export const AccessoriesLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                       <h4 className="text-[20px] font-bold text-[#0A0A0A] leading-snug">
                         {it.name}
                       </h4>
-                      <p className="text-[16px] leading-[1.7] text-[var(--blue)] font-normal">
+                      <p className="text-[16px] leading-[1.7] text-[#0A0A0A] font-normal">
                         {it.text}
                       </p>
                     </div>
@@ -2612,7 +2494,7 @@ export const AccessoriesLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                         >
                           <div className="overflow-hidden min-h-0">
                             <p
-                              className="text-[15px] leading-[1.6] text-[var(--blue)] font-normal pb-5 transition-opacity duration-400 delay-150"
+                              className="text-[15px] leading-[1.6] text-[#0A0A0A] font-normal pb-5 transition-opacity duration-400 delay-150"
                               style={{ opacity: isOpen ? 1 : 0 }}
                             >
                               {it.text}
@@ -2633,10 +2515,10 @@ export const AccessoriesLayout: React.FC<{ data: ContentData }> = ({ data }) => 
       {howToChoose && (
         <section className="container pb-[var(--sec-y-lg)] text-left">
           <div className="pt-8 border-t border-[#E5E5E5] max-w-[880px] space-y-4">
-            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em]">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em]">
               {howToChoose.title?.toUpperCase() || "HOW TO CHOOSE"}
             </h2>
-            <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
+            <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal">
               Pick accessories by use. A{" "}
               <Link
                 to="/agricultural-sheds-pakistan/poultry-sheds/"
@@ -2661,7 +2543,7 @@ export const AccessoriesLayout: React.FC<{ data: ContentData }> = ({ data }) => 
       {data.faq && data.faq.length > 0 && (
         <section className="container py-[var(--sec-y)]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
             <Accordion items={data.faq} size="large" />

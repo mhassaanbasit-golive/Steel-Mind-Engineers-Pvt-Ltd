@@ -296,10 +296,10 @@ export const DesignLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
           {/* Left Column: Heading & Text */}
           <div ref={coverTextRef} className="lg:col-span-5 space-y-6">
-            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
               WHAT DESIGN COVERS
             </h2>
-            <p className="text-[15px] lg:text-[17px] text-[var(--blue)] leading-[1.7] font-normal">
+            <p className="text-[15px] lg:text-[17px] text-[#0A0A0A] leading-[1.7] font-normal">
               {coverText}
             </p>
           </div>
@@ -333,7 +333,7 @@ export const DesignLayout: React.FC<{ data: ContentData }> = ({ data }) => {
       {/* 3. PROCESS INFOGRAPHIC WITH RAIL (ALL SCREEN SIZES) */}
       <section className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px] border-b border-[#E5E5E5]">
         {/* Section Heading: strictly capitalized in desktop and mobile view */}
-        <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-8 lg:mb-16">
+        <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-8 lg:mb-16">
           THE DESIGN PROCESS & DELIVERABLES
         </h2>
 
@@ -371,7 +371,7 @@ export const DesignLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                   </h3>
 
                   {/* Step Text: One-Step body blue, regular weight, same size & line-height */}
-                  <p className="text-[15px] lg:text-[17px] text-[var(--blue)] leading-[1.7] font-normal">
+                  <p className="text-[15px] lg:text-[17px] text-[#0A0A0A] leading-[1.7] font-normal">
                     {st.text}
                   </p>
                 </div>
@@ -454,7 +454,7 @@ export const DesignLayout: React.FC<{ data: ContentData }> = ({ data }) => {
             </h3>
 
             {/* Step Text: One-Step blue */}
-            <p className="text-[15px] sm:text-[16px] text-[var(--blue)] leading-[1.7] font-normal">
+            <p className="text-[15px] sm:text-[16px] text-[#0A0A0A] leading-[1.7] font-normal">
               {steps[activeStep].text}
             </p>
 
@@ -472,7 +472,7 @@ export const DesignLayout: React.FC<{ data: ContentData }> = ({ data }) => {
               >
                 <ChevronLeft size={16} /> PREV
               </button>
-              <div className="text-[12px] font-bold text-[var(--blue)] uppercase tracking-wider">
+              <div className="text-[12px] font-bold text-[#0A0A0A] uppercase tracking-wider">
                 STEP {steps[activeStep].num}
               </div>
               <button
@@ -516,57 +516,14 @@ export const DesignLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         </div>
       </section>
 
-      {/* 4. FREQUENTLY ASKED QUESTIONS (One-Step Style, No Grey Text, Uppercase Headings) */}
+      {/* FREQUENTLY ASKED QUESTIONS */}
       {data.faq && data.faq.length > 0 && (
-        <section className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px]">
-          <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-8 lg:mb-10">
+        <section className="w-full bg-white py-[60px] lg:py-[100px] px-6 lg:px-8 border-t border-[#E5E5E5] text-left">
+          <div className="max-w-[800px] mx-auto">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold text-[#0A0A0A] uppercase leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
-
-            <div className="divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
-              {data.faq.map((faqItem, idx) => {
-                const isOpen = openFaqIndex === idx;
-                const panelId = `design-faq-panel-${idx}`;
-                const headerId = `design-faq-header-${idx}`;
-
-                return (
-                  <div key={idx} className="group overflow-hidden">
-                    <button
-                      id={headerId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      onClick={() => setOpenFaqIndex((prev) => (prev === idx ? null : idx))}
-                      className="w-full flex items-center justify-between text-left cursor-pointer transition-colors hover:text-[var(--blue)] focus-visible:outline-none py-6 lg:py-8"
-                    >
-                      <span className="font-bold text-[#0A0A0A] uppercase pr-6 leading-[1.3] text-[16px] md:text-[20px] tracking-[-0.01em] group-hover:text-[var(--blue)] transition-colors">
-                        {faqItem.q.toUpperCase()}
-                      </span>
-
-                      {/* Plus icon rotating 45° to become × */}
-                      <span
-                        className="relative flex-shrink-0 flex items-center justify-center w-[22px] h-[22px] transition-transform duration-300 ease-out"
-                        style={{
-                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                        }}
-                      >
-                        <span className="absolute bg-[var(--blue)] w-[18px] h-[2px]" />
-                        <span className="absolute bg-[var(--blue)] h-[18px] w-[2px]" />
-                      </span>
-                    </button>
-
-                    {isOpen && (
-                      <div id={panelId} role="region" aria-labelledby={headerId}>
-                        <p className="text-[15px] lg:text-[17px] text-[var(--blue)] leading-[1.7] font-normal pt-1 pb-6 max-w-[700px]">
-                          {faqItem.a}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}
@@ -888,14 +845,14 @@ export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
           {/* Left Column (5fr): Heading UPPERCASE bold ink */}
           <div className="lg:col-span-5">
-            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
               WHAT DETAILING IS
             </h2>
           </div>
 
           {/* Right Column (7fr): Text in One-Step blue, regular weight */}
           <div className="lg:col-span-7">
-            <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal max-w-[620px]">
+            <p className="text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.65] font-normal max-w-[620px]">
               Design decides what the building is. Detailing decides how every part is made. Each column, rafter, plate and bolt hole is drawn with exact size and position.
             </p>
           </div>
@@ -905,7 +862,7 @@ export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
       {/* 3. REGISTER: "DRAWINGS PRODUCED" */}
       <section ref={registerRef} className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px] border-b border-[#E5E5E5]">
         {/* Section Heading: strictly capitalized in desktop and mobile view */}
-        <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-10 lg:mb-14">
+        <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-10 lg:mb-14">
           DRAWINGS PRODUCED
         </h2>
 
@@ -926,12 +883,12 @@ export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                   </span>
 
                   {/* Title: bold, ink colour, uppercase */}
-                  <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em] w-[260px] shrink-0 pr-6 uppercase">
+                  <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-[1.25] tracking-[-0.01em] w-[260px] shrink-0 pr-6 uppercase">
                     {row.name.toUpperCase()}
                   </h3>
 
                   {/* Text: One-Step blue, regular weight, 15px / 16px, line-height 1.65 */}
-                  <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal flex-1 max-w-[560px] pr-8">
+                  <p className="text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.65] font-normal flex-1 max-w-[560px] pr-8">
                     {row.text}
                   </p>
 
@@ -941,7 +898,7 @@ export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                     <div className="hover-row-btn-fill absolute inset-0 bg-[var(--blue)] rounded-full" />
                     {/* Arrow travels 8px up-right and back once */}
                     <ArrowUpRight
-                      className="hover-row-arrow relative z-10 text-[var(--blue)]"
+                      className="hover-row-arrow relative z-10 text-[#0A0A0A]"
                       size={24}
                     />
                   </div>
@@ -1012,7 +969,7 @@ export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                 >
                   <div className="min-h-0 overflow-hidden">
                     <p
-                      className="text-[15px] text-[var(--blue)] leading-[1.65] font-normal pb-5 transition-opacity duration-400 ease-out"
+                      className="text-[15px] text-[#0A0A0A] leading-[1.65] font-normal pb-5 transition-opacity duration-400 ease-out"
                       style={{
                         opacity: isOpen ? 1 : 0,
                         transitionDelay: isOpen ? "150ms" : "0ms",
@@ -1035,10 +992,10 @@ export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
           <div className="flex flex-col">
             <div className="notes-top-line w-full h-[1px] bg-[#E5E5E5] mb-8" />
             <div className="notes-content-box space-y-4">
-              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] uppercase">
+              <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-[1.25] uppercase">
                 {note1.title.toUpperCase()}
               </h3>
-              <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal">
+              <p className="text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.65] font-normal">
                 {note1.text}
               </p>
             </div>
@@ -1048,10 +1005,10 @@ export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
           <div className="flex flex-col">
             <div className="notes-top-line w-full h-[1px] bg-[#E5E5E5] mb-8" />
             <div className="notes-content-box space-y-4">
-              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] uppercase">
+              <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-[1.25] uppercase">
                 {note2.title.toUpperCase()}
               </h3>
-              <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal">
+              <p className="text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.65] font-normal">
                 {note2.text}
               </p>
             </div>
@@ -1059,57 +1016,14 @@ export const DetailingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         </div>
       </section>
 
-      {/* 6. FAQ (One-Step Style, No Grey Text, Uppercase Heading) */}
+      {/* FREQUENTLY ASKED QUESTIONS */}
       {data.faq && data.faq.length > 0 && (
-        <section className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px]">
-          <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-8 lg:mb-10">
+        <section className="w-full bg-white py-[60px] lg:py-[100px] px-6 lg:px-8 border-t border-[#E5E5E5] text-left">
+          <div className="max-w-[800px] mx-auto">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold text-[#0A0A0A] uppercase leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
-
-            <div className="divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
-              {data.faq.map((faqItem, idx) => {
-                const isOpen = openFaqIndex === idx;
-                const panelId = `detailing-faq-panel-${idx}`;
-                const headerId = `detailing-faq-header-${idx}`;
-
-                return (
-                  <div key={idx} className="group overflow-hidden">
-                    <button
-                      id={headerId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      onClick={() => setOpenFaqIndex((prev) => (prev === idx ? null : idx))}
-                      className="w-full flex items-center justify-between text-left cursor-pointer transition-colors hover:text-[var(--blue)] focus-visible:outline-none py-6 lg:py-8"
-                    >
-                      <span className="font-bold text-[#0A0A0A] uppercase pr-6 leading-[1.3] text-[16px] lg:text-[20px] tracking-[-0.01em] group-hover:text-[var(--blue)] transition-colors">
-                        {faqItem.q.toUpperCase()}
-                      </span>
-
-                      {/* Plus icon rotating 0 to 45deg over 400ms */}
-                      <span
-                        className="relative flex-shrink-0 flex items-center justify-center w-[22px] h-[22px] transition-transform duration-400 ease-[cubic-bezier(.16,1,.3,1)]"
-                        style={{
-                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                        }}
-                      >
-                        <span className="absolute bg-[var(--blue)] w-[18px] h-[2px]" />
-                        <span className="absolute bg-[var(--blue)] h-[18px] w-[2px]" />
-                      </span>
-                    </button>
-
-                    {isOpen && (
-                      <div id={panelId} role="region" aria-labelledby={headerId}>
-                        <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal pt-1 pb-6 max-w-[700px]">
-                          {faqItem.a}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}
@@ -1549,7 +1463,7 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
           <div className="lg:col-span-7">
             <p
               aria-label={introText}
-              className="text-[15px] lg:text-[17px] text-[var(--blue)] leading-[1.7] max-w-[620px]"
+              className="text-[15px] lg:text-[17px] text-[#0A0A0A] leading-[1.7] max-w-[620px]"
             >
               {textWords.map((word, wordIdx) => {
                 const delay = prefersReduced ? 0 : wordIdx * wordStagger;
@@ -1690,12 +1604,12 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                       </span>
 
                       {/* Title: bold, ink colour, uppercase */}
-                      <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] mb-4 uppercase">
+                      <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-[1.25] mb-4 uppercase">
                         {step.title.toUpperCase()}
                       </h3>
 
                       {/* Text: One-Step blue, regular weight, 15px/16px, line-height 1.65 */}
-                      <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal max-w-[480px]">
+                      <p className="text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.65] font-normal max-w-[480px]">
                         {step.text}
                       </p>
                     </div>
@@ -1762,7 +1676,7 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                       <h3 className="text-[17px] font-bold text-[#0A0A0A] leading-[1.25] mb-2 uppercase">
                         {step.title.toUpperCase()}
                       </h3>
-                      <p className="text-[15px] text-[var(--blue)] leading-[1.65] font-normal">
+                      <p className="text-[15px] text-[#0A0A0A] leading-[1.65] font-normal">
                         {step.text}
                       </p>
                     </div>
@@ -1774,57 +1688,14 @@ export const FabricationLayout: React.FC<{ data: ContentData }> = ({ data }) => 
         </div>
       </section>
 
-      {/* 4. FREQUENTLY ASKED QUESTIONS (One-Step Style, No Grey Text, Uppercase Heading) */}
+      {/* FREQUENTLY ASKED QUESTIONS */}
       {data.faq && data.faq.length > 0 && (
-        <section className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px]">
-          <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-8 lg:mb-10">
+        <section className="w-full bg-white py-[60px] lg:py-[100px] px-6 lg:px-8 border-t border-[#E5E5E5] text-left">
+          <div className="max-w-[800px] mx-auto">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold text-[#0A0A0A] uppercase leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
-
-            <div className="divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
-              {data.faq.map((faqItem, idx) => {
-                const isOpen = openFaqIndex === idx;
-                const panelId = `fab-faq-panel-${idx}`;
-                const headerId = `fab-faq-header-${idx}`;
-
-                return (
-                  <div key={idx} className="group overflow-hidden">
-                    <button
-                      id={headerId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      onClick={() => setOpenFaqIndex((prev) => (prev === idx ? null : idx))}
-                      className="w-full flex items-center justify-between text-left cursor-pointer transition-colors hover:text-[var(--blue)] focus-visible:outline-none py-6 lg:py-8"
-                    >
-                      <span className="font-bold text-[#0A0A0A] uppercase pr-6 leading-[1.3] text-[16px] lg:text-[20px] tracking-[-0.01em] group-hover:text-[var(--blue)] transition-colors">
-                        {faqItem.q.toUpperCase()}
-                      </span>
-
-                      {/* Plus icon rotating 0 to 45deg over 400ms */}
-                      <span
-                        className="relative flex-shrink-0 flex items-center justify-center w-[22px] h-[22px] transition-transform duration-400 ease-[cubic-bezier(.16,1,.3,1)]"
-                        style={{
-                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                        }}
-                      >
-                        <span className="absolute bg-[var(--blue)] w-[18px] h-[2px]" />
-                        <span className="absolute bg-[var(--blue)] h-[18px] w-[2px]" />
-                      </span>
-                    </button>
-
-                    {isOpen && (
-                      <div id={panelId} role="region" aria-labelledby={headerId}>
-                        <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal pt-1 pb-6 max-w-[700px]">
-                          {faqItem.a}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}
@@ -1978,14 +1849,14 @@ export const CleaningLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
           {/* Left Column (5fr): Heading UPPERCASE bold ink */}
           <div className="lg:col-span-5">
-            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
               WHY CLEANING COMES FIRST
             </h2>
           </div>
 
           {/* Right Column (7fr): Text in One-Step blue, regular weight */}
           <div className="lg:col-span-7">
-            <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal max-w-[620px]">
+            <p className="text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.65] font-normal max-w-[620px]">
               Paint does not hold well on dirty steel. Mill scale, rust, oil and dust form a weak layer between the steel and the coating. The paint then lifts, blisters or peels. Good cleaning costs little compared with repainting a building.
             </p>
           </div>
@@ -2014,7 +1885,7 @@ export const CleaningLayout: React.FC<{ data: ContentData }> = ({ data }) => {
       {/* 4. WHAT IS REMOVED (5 Surface Contaminants Register) */}
       <section className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px] border-b border-[#E5E5E5]">
         {/* Section Heading: strictly capitalized */}
-        <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-12 lg:mb-16">
+        <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-12 lg:mb-16">
           WHAT IS REMOVED
         </h2>
 
@@ -2028,12 +1899,12 @@ export const CleaningLayout: React.FC<{ data: ContentData }> = ({ data }) => {
               </span>
 
               {/* Title: bold, ink colour, uppercase */}
-              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] mb-3 uppercase">
+              <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-[1.25] mb-3 uppercase">
                 {item.title.toUpperCase()}
               </h3>
 
               {/* Text: One-Step blue, regular weight, 15px/16px */}
-              <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal">
+              <p className="text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.65] font-normal">
                 {item.text}
               </p>
             </div>
@@ -2047,12 +1918,12 @@ export const CleaningLayout: React.FC<{ data: ContentData }> = ({ data }) => {
           {notes.map((note, idx) => (
             <div key={idx} className="flex flex-col border-t border-[#E5E5E5] pt-6 lg:pt-8 text-left">
               {/* Title: bold, ink colour, uppercase */}
-              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] mb-4 uppercase">
+              <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-[1.25] mb-4 uppercase">
                 {note.title.toUpperCase()}
               </h3>
 
               {/* Text: One-Step blue, regular weight */}
-              <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal">
+              <p className="text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.65] font-normal">
                 {note.text}
               </p>
             </div>
@@ -2060,57 +1931,14 @@ export const CleaningLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         </div>
       </section>
 
-      {/* 6. FREQUENTLY ASKED QUESTIONS (One-Step Style, No Grey Text, Uppercase Heading) */}
+      {/* FREQUENTLY ASKED QUESTIONS */}
       {data.faq && data.faq.length > 0 && (
-        <section className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px]">
-          <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-8 lg:mb-10">
+        <section className="w-full bg-white py-[60px] lg:py-[100px] px-6 lg:px-8 border-t border-[#E5E5E5] text-left">
+          <div className="max-w-[800px] mx-auto">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold text-[#0A0A0A] uppercase leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
-
-            <div className="divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
-              {data.faq.map((faqItem, idx) => {
-                const isOpen = openFaqIndex === idx;
-                const panelId = `cleaning-faq-panel-${idx}`;
-                const headerId = `cleaning-faq-header-${idx}`;
-
-                return (
-                  <div key={idx} className="group overflow-hidden">
-                    <button
-                      id={headerId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      onClick={() => setOpenFaqIndex((prev) => (prev === idx ? null : idx))}
-                      className="w-full flex items-center justify-between text-left cursor-pointer transition-colors hover:text-[var(--blue)] focus-visible:outline-none py-6 lg:py-8"
-                    >
-                      <span className="font-bold text-[#0A0A0A] uppercase pr-6 leading-[1.3] text-[16px] lg:text-[20px] tracking-[-0.01em] group-hover:text-[var(--blue)] transition-colors">
-                        {faqItem.q.toUpperCase()}
-                      </span>
-
-                      {/* Plus icon rotating 0 to 45deg over 400ms */}
-                      <span
-                        className="relative flex-shrink-0 flex items-center justify-center w-[22px] h-[22px] transition-transform duration-400 ease-[cubic-bezier(.16,1,.3,1)]"
-                        style={{
-                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                        }}
-                      >
-                        <span className="absolute bg-[var(--blue)] w-[18px] h-[2px]" />
-                        <span className="absolute bg-[var(--blue)] h-[18px] w-[2px]" />
-                      </span>
-                    </button>
-
-                    {isOpen && (
-                      <div id={panelId} role="region" aria-labelledby={headerId}>
-                        <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal pt-1 pb-6 max-w-[700px]">
-                          {faqItem.a}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}
@@ -2421,7 +2249,7 @@ export const PaintingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         <div className="py-[56px] lg:py-[88px] max-w-[1280px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[96px] items-start">
             <div className="lg:col-span-4 lg:sticky top-[calc(var(--nav-offset)+24px)] self-start">
-              <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
+              <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
                 WHY THE COATING MATTERS
               </h2>
             </div>
@@ -2431,7 +2259,7 @@ export const PaintingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
               }}
               className="lg:col-span-8 max-w-[640px] text-left"
             >
-              <p className="chapter-p text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal">
+              <p className="chapter-p text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.6] lg:leading-[1.7] font-normal">
                 Steel rusts when it meets water and air. In Pakistan, heat, rain, humid air and dust all speed up the damage. A good coating is the cheapest protection a steel building can have.
               </p>
             </div>
@@ -2450,7 +2278,7 @@ export const PaintingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         <div className="py-[56px] lg:py-[88px] max-w-[1280px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[96px] items-start">
             <div className="lg:col-span-4 lg:sticky top-[calc(var(--nav-offset)+24px)] self-start">
-              <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
+              <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
                 WHAT A COATING SYSTEM IS
               </h2>
             </div>
@@ -2460,7 +2288,7 @@ export const PaintingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
               }}
               className="lg:col-span-8 max-w-[640px] text-left"
             >
-              <p className="chapter-p text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal">
+              <p className="chapter-p text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.6] lg:leading-[1.7] font-normal">
                 A coating system is a set of layers. The primer bonds to the steel and gives the first protection. Intermediate and top coats add thickness, resist weather and give the final color. Steel Mind Engineers selects the number of coats and the paint type from the use of the structure.
               </p>
 
@@ -2511,7 +2339,7 @@ export const PaintingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         <div className="py-[56px] lg:py-[88px] max-w-[1280px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[96px] items-start">
             <div className="lg:col-span-4 lg:sticky top-[calc(var(--nav-offset)+24px)] self-start">
-              <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
+              <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
                 CHOOSING BY USE
               </h2>
             </div>
@@ -2532,11 +2360,11 @@ export const PaintingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                       {item.num}
                     </span>
                     {/* Title: bold, ink colour, uppercase as per critical instruction */}
-                    <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] uppercase mb-3">
+                    <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-[1.25] uppercase mb-3">
                       {item.title}
                     </h3>
                     {/* Text: One-Step blue, regular weight */}
-                    <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal">
+                    <p className="text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.6] lg:leading-[1.7] font-normal">
                       {item.text}
                     </p>
                   </div>
@@ -2596,7 +2424,7 @@ export const PaintingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                       >
                         <div className="min-h-0 overflow-hidden">
                           <p
-                            className="text-[15px] text-[var(--blue)] leading-[1.6] font-normal pb-5 transition-opacity duration-400 ease-out"
+                            className="text-[15px] text-[#0A0A0A] leading-[1.6] font-normal pb-5 transition-opacity duration-400 ease-out"
                             style={{
                               opacity: isOpen ? 1 : 0,
                               transitionDelay: isOpen ? "150ms" : "0ms",
@@ -2626,7 +2454,7 @@ export const PaintingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         <div className="py-[56px] lg:py-[88px] max-w-[1280px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[96px] items-start">
             <div className="lg:col-span-4 lg:sticky top-[calc(var(--nav-offset)+24px)] self-start">
-              <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
+              <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
                 HOW PAINTING IS DONE
               </h2>
             </div>
@@ -2636,7 +2464,7 @@ export const PaintingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
               }}
               className="lg:col-span-8 max-w-[640px] text-left"
             >
-              <p className="chapter-p text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal">
+              <p className="chapter-p text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.6] lg:leading-[1.7] font-normal">
                 Steel is cleaned first. The primer goes on soon after cleaning. Later coats follow in order, and each coat is left to dry as the paint maker requires. Coating thickness is checked against the specification. Bolted joints are left ready for site touch-up.
               </p>
 
@@ -2687,7 +2515,7 @@ export const PaintingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         <div className="py-[56px] lg:py-[88px] max-w-[1280px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[96px] items-start">
             <div className="lg:col-span-4 lg:sticky top-[calc(var(--nav-offset)+24px)] self-start">
-              <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
+              <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
                 COLORS
               </h2>
             </div>
@@ -2697,7 +2525,7 @@ export const PaintingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
               }}
               className="lg:col-span-8 max-w-[640px] text-left"
             >
-              <p className="chapter-p text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal">
+              <p className="chapter-p text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.6] lg:leading-[1.7] font-normal">
                 Tell the engineer your color choice at the design stage. Sheeting and trims can follow a color scheme that suits your brand.
               </p>
 
@@ -2748,7 +2576,7 @@ export const PaintingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         <div className="py-[56px] lg:py-[88px] max-w-[1280px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[96px] items-start">
             <div className="lg:col-span-4 lg:sticky top-[calc(var(--nav-offset)+24px)] self-start">
-              <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
+              <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase">
                 AFTER ERECTION
               </h2>
             </div>
@@ -2758,7 +2586,7 @@ export const PaintingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
               }}
               className="lg:col-span-8 max-w-[640px] text-left"
             >
-              <p className="chapter-p text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal">
+              <p className="chapter-p text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.6] lg:leading-[1.7] font-normal">
                 Parts can be scratched in transport and lifting. Crews touch up damaged areas on site. A building also needs repainting after some years, which Steel Mind Engineers can do. See After Sale Services.
               </p>
             </div>
@@ -2768,55 +2596,12 @@ export const PaintingLayout: React.FC<{ data: ContentData }> = ({ data }) => {
 
       {/* FREQUENTLY ASKED QUESTIONS */}
       {data.faq && data.faq.length > 0 && (
-        <section className="w-full bg-white border-t border-[#E5E5E5] py-[72px] lg:py-[120px]">
-          <div className="max-w-[800px] mx-auto px-6 lg:px-8 text-left">
-            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-8 lg:mb-10">
+        <section className="w-full bg-white py-[60px] lg:py-[100px] px-6 lg:px-8 border-t border-[#E5E5E5] text-left">
+          <div className="max-w-[800px] mx-auto">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold text-[#0A0A0A] uppercase leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
-
-            <div className="divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
-              {data.faq.map((faqItem, idx) => {
-                const isOpen = openFaqIndex === idx;
-                const panelId = `painting-faq-panel-${idx}`;
-                const headerId = `painting-faq-header-${idx}`;
-
-                return (
-                  <div key={idx} className="group overflow-hidden">
-                    <button
-                      id={headerId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      onClick={() => setOpenFaqIndex((prev) => (prev === idx ? null : idx))}
-                      className="w-full flex items-center justify-between text-left cursor-pointer transition-colors hover:text-[var(--blue)] focus-visible:outline-none min-h-[48px] py-6 lg:py-8"
-                    >
-                      <span className="font-bold text-[#0A0A0A] uppercase pr-6 leading-[1.3] text-[16px] lg:text-[20px] tracking-[-0.01em] group-hover:text-[var(--blue)] transition-colors">
-                        {faqItem.q.toUpperCase()}
-                      </span>
-
-                      {/* Plus icon rotating 0 to 45deg over 400ms */}
-                      <span
-                        className="relative flex-shrink-0 flex items-center justify-center w-[22px] h-[22px] transition-transform duration-400 ease-[cubic-bezier(.16,1,.3,1)]"
-                        style={{
-                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                        }}
-                      >
-                        <span className="absolute bg-[var(--blue)] w-[18px] h-[2px]" />
-                        <span className="absolute bg-[var(--blue)] h-[18px] w-[2px]" />
-                      </span>
-                    </button>
-
-                    {isOpen && (
-                      <div id={panelId} role="region" aria-labelledby={headerId}>
-                        <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal pt-1 pb-6 max-w-[700px]">
-                          {faqItem.a}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}
@@ -3422,7 +3207,7 @@ export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
           <div className="lg:col-span-7 space-y-4">
             <p
               aria-label={introText}
-              className="text-[15px] lg:text-[17px] text-[var(--blue)] leading-[1.7] max-w-[620px]"
+              className="text-[15px] lg:text-[17px] text-[#0A0A0A] leading-[1.7] max-w-[620px]"
             >
               {textWords.map((word, wordIdx) => {
                 const delay = prefersReduced ? 0 : wordIdx * wordStagger;
@@ -3450,7 +3235,7 @@ export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
               })}
             </p>
             {introPs[1] && (
-              <p className="text-[15px] lg:text-[17px] text-[var(--blue)] leading-[1.7] max-w-[620px]">
+              <p className="text-[15px] lg:text-[17px] text-[#0A0A0A] leading-[1.7] max-w-[620px]">
                 {introPs[1]}
               </p>
             )}
@@ -3513,10 +3298,10 @@ export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                               {step.num}
                             </span>
                             <div className="mt-3">
-                              <h3 className="font-bold text-[#0A0A0A] text-[18px] lg:text-[22px] leading-[1.25] tracking-[-0.01em] mb-2">
+                              <h3 className="font-bold text-[#0A0A0A] text-[14px] sm:text-[16px] lg:text-[22px] uppercase leading-[1.25] tracking-[-0.01em] mb-2">
                                 {step.title}
                               </h3>
-                              <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] max-w-[540px]">
+                              <p className="text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.65] max-w-[540px]">
                                 {step.text}
                               </p>
                             </div>
@@ -3663,10 +3448,10 @@ export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                               {step.num}
                             </span>
                             <div className="mt-3">
-                              <h3 className="font-bold text-[#0A0A0A] text-[18px] lg:text-[22px] leading-[1.25] tracking-[-0.01em] mb-2">
+                              <h3 className="font-bold text-[#0A0A0A] text-[14px] sm:text-[16px] lg:text-[22px] uppercase leading-[1.25] tracking-[-0.01em] mb-2">
                                 {step.title}
                               </h3>
-                              <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] max-w-[540px]">
+                              <p className="text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.65] max-w-[540px]">
                                 {step.text}
                               </p>
                             </div>
@@ -3775,10 +3560,10 @@ export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                         </span>
 
                         <div className="mt-3">
-                          <h3 className="font-bold text-[#0A0A0A] text-[18px] leading-[1.25] tracking-[-0.01em] mb-2">
+                          <h3 className="font-bold text-[#0A0A0A] text-[14px] sm:text-[16px] uppercase leading-[1.25] tracking-[-0.01em] mb-2">
                             {step.title}
                           </h3>
-                          <p className="text-[15px] text-[var(--blue)] leading-[1.65]">
+                          <p className="text-[15px] text-[#0A0A0A] leading-[1.65]">
                             {step.text}
                           </p>
                         </div>
@@ -3822,10 +3607,10 @@ export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
           {/* Note 1: Safety on Site */}
           <div className="flex flex-col text-left">
             <div className="w-full h-[1px] bg-[#E5E5E5] mb-8" />
-            <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] uppercase mb-4">
+            <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-[1.25] uppercase mb-4">
               SAFETY ON SITE
             </h3>
-            <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal">
+            <p className="text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.6] lg:leading-[1.7] font-normal">
               Workers wear certified protective equipment and follow written site rules. Any worker may stop a job that looks unsafe. See the SME Policy.
             </p>
           </div>
@@ -3833,10 +3618,10 @@ export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
           {/* Note 2: Why Parts Fit */}
           <div className="flex flex-col text-left">
             <div className="w-full h-[1px] bg-[#E5E5E5] mb-8" />
-            <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] uppercase mb-4">
+            <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-[1.25] uppercase mb-4">
               WHY PARTS FIT
             </h3>
-            <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.6] lg:leading-[1.7] font-normal">
+            <p className="text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.6] lg:leading-[1.7] font-normal">
               Parts are made to the drawing and packed in erection order, so crews do not cut or rework steel on site.
             </p>
           </div>
@@ -3855,57 +3640,14 @@ export const ErectionLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         }
       `}</style>
 
-      {/* 5. FREQUENTLY ASKED QUESTIONS */}
+      {/* FREQUENTLY ASKED QUESTIONS */}
       {data.faq && data.faq.length > 0 && (
-        <section className="max-w-[1280px] mx-auto px-6 lg:px-8 py-[72px] lg:py-[120px]">
-          <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] uppercase mb-8 lg:mb-10">
+        <section className="w-full bg-white py-[60px] lg:py-[100px] px-6 lg:px-8 border-t border-[#E5E5E5] text-left">
+          <div className="max-w-[800px] mx-auto">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold text-[#0A0A0A] uppercase leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
-
-            <div className="divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
-              {data.faq.map((faqItem, idx) => {
-                const isOpen = openFaqIndex === idx;
-                const panelId = `erection-faq-panel-${idx}`;
-                const headerId = `erection-faq-header-${idx}`;
-
-                return (
-                  <div key={idx} className="group overflow-hidden">
-                    <button
-                      id={headerId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      onClick={() => setOpenFaqIndex((prev) => (prev === idx ? null : idx))}
-                      className="w-full flex items-center justify-between text-left cursor-pointer transition-colors hover:text-[var(--blue)] focus-visible:outline-none py-6 lg:py-8"
-                    >
-                      <span className="font-bold text-[#0A0A0A] uppercase pr-6 leading-[1.3] text-[16px] lg:text-[20px] tracking-[-0.01em] group-hover:text-[var(--blue)] transition-colors">
-                        {faqItem.q.toUpperCase()}
-                      </span>
-
-                      {/* Plus icon rotating 0 to 45deg over 400ms */}
-                      <span
-                        className="relative flex-shrink-0 flex items-center justify-center w-[22px] h-[22px] transition-transform duration-400 ease-[cubic-bezier(.16,1,.3,1)]"
-                        style={{
-                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                        }}
-                      >
-                        <span className="absolute bg-[var(--blue)] w-[18px] h-[2px]" />
-                        <span className="absolute bg-[var(--blue)] h-[18px] w-[2px]" />
-                      </span>
-                    </button>
-
-                    {isOpen && (
-                      <div id={panelId} role="region" aria-labelledby={headerId}>
-                        <p className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal pt-1 pb-6 max-w-[700px]">
-                          {faqItem.a}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}
@@ -3975,18 +3717,18 @@ export const AfterSaleLayout: React.FC<{ data: ContentData }> = ({ data }) => {
       <section className="container py-[var(--sec-y-lg)] text-left">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[96px] items-start">
           <div className="lg:col-span-5">
-            <h2 className="text-[16px] lg:text-[44px] font-bold text-[var(--ink)] uppercase leading-[1.15] tracking-[-0.02em]">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[var(--ink)] uppercase leading-[1.15] tracking-[-0.02em]">
               {(sections[0]?.title || "Why After Sale Support Matters").toUpperCase()}
             </h2>
           </div>
           <div className="lg:col-span-7 space-y-4 max-w-[640px]">
             {introPs[0] && (
-              <p className="text-[15px] lg:text-[16px] font-normal text-[var(--blue)] leading-[1.6] lg:leading-[1.7]">
+              <p className="text-[15px] lg:text-[16px] font-normal text-[#0A0A0A] leading-[1.6] lg:leading-[1.7]">
                 {introPs[0]}
               </p>
             )}
             {(sections[0]?.text || introPs.slice(1).join(" ")) && (
-              <p className="text-[15px] lg:text-[16px] font-normal text-[var(--blue)] leading-[1.6] lg:leading-[1.7]">
+              <p className="text-[15px] lg:text-[16px] font-normal text-[#0A0A0A] leading-[1.6] lg:leading-[1.7]">
                 {sections[0]?.text || introPs.slice(1).join(" ")}
               </p>
             )}
@@ -3996,7 +3738,7 @@ export const AfterSaleLayout: React.FC<{ data: ContentData }> = ({ data }) => {
 
       {/* 5 Service Icon Cards */}
       <section className="container pb-[var(--sec-y-lg)] text-left">
-        <h2 className="text-[16px] lg:text-[44px] font-bold text-[var(--ink)] uppercase leading-[1.15] tracking-[-0.02em] mb-8 lg:mb-10">
+        <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[var(--ink)] uppercase leading-[1.15] tracking-[-0.02em] mb-8 lg:mb-10">
           {(cardsSec?.title || "What Steel Mind Engineers Provides").toUpperCase()}
         </h2>
 
@@ -4009,13 +3751,13 @@ export const AfterSaleLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                 key={idx}
                 className="group border border-[var(--rule)] bg-white p-8 space-y-4 transition-all duration-300 hover:bg-[var(--blue)] text-left cursor-default"
               >
-                <div className="w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-[14px] bg-[var(--blue)] text-white flex items-center justify-center transition-colors duration-300 group-hover:bg-white group-hover:text-[var(--blue)]">
+                <div className="w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-[14px] bg-[var(--blue)] text-white flex items-center justify-center transition-colors duration-300 group-hover:bg-white group-hover:text-[#0A0A0A]">
                   <Icon size={26} strokeWidth={2} />
                 </div>
-                <h3 className="text-[20px] font-bold text-[var(--ink)] group-hover:text-white transition-colors duration-300">
+                <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase group-hover:text-white transition-colors duration-300">
                   {sc.name}
                 </h3>
-                <p className="text-[16px] leading-[1.7] font-normal text-[var(--blue)] group-hover:text-white transition-colors duration-300">
+                <p className="text-[16px] leading-[1.7] font-normal text-[#0A0A0A] group-hover:text-white transition-colors duration-300">
                   {sc.text}
                 </p>
               </div>
@@ -4059,7 +3801,7 @@ export const AfterSaleLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                     </h3>
                     <p
                       className={`text-[15px] leading-[1.6] font-normal mt-1 line-clamp-3 ${
-                        isBlue ? "text-white" : "text-[var(--blue)]"
+                        isBlue ? "text-white" : "text-[#0A0A0A]"
                       }`}
                     >
                       {sc.text}
@@ -4089,12 +3831,12 @@ export const AfterSaleLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         <section className="container pb-[var(--sec-y-lg)] text-left border-t border-[var(--rule)] pt-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
             <div className="lg:col-span-5">
-              <h2 className="text-[16px] lg:text-[44px] font-bold text-[var(--ink)] uppercase leading-[1.15] tracking-[-0.02em]">
+              <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[var(--ink)] uppercase leading-[1.15] tracking-[-0.02em]">
                 {whyEasySec.title.toUpperCase()}
               </h2>
             </div>
             <div className="lg:col-span-7">
-              <p className="text-[15px] lg:text-[16px] font-normal text-[var(--blue)] leading-[1.6] lg:leading-[1.7]">
+              <p className="text-[15px] lg:text-[16px] font-normal text-[#0A0A0A] leading-[1.6] lg:leading-[1.7]">
                 {whyEasySec.text}
               </p>
             </div>
@@ -4105,7 +3847,7 @@ export const AfterSaleLayout: React.FC<{ data: ContentData }> = ({ data }) => {
       {/* Support Band (Full Width Nav Blue with direct phone buttons) */}
       <section className="w-full bg-[var(--blue)] text-white py-[var(--sec-y-lg)]">
         <div className="container text-left space-y-6 lg:space-y-8">
-          <h2 className="text-[16px] lg:text-[44px] font-bold text-white uppercase leading-[1.15] tracking-[-0.02em]">
+          <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-white uppercase leading-[1.15] tracking-[-0.02em]">
             {(supportSec?.title || "How to Ask for Support").toUpperCase()}
           </h2>
           <p className="text-[15px] lg:text-[16px] font-normal text-white leading-[1.6] lg:leading-[1.7] max-w-[800px]">
@@ -4129,7 +3871,7 @@ export const AfterSaleLayout: React.FC<{ data: ContentData }> = ({ data }) => {
             </a>
             <a
               href={`mailto:${SITE.email}`}
-              className="btn btn-outline border-white text-white hover:bg-white hover:text-[var(--blue)] btn-sm"
+              className="btn btn-outline border-white text-white hover:bg-white hover:text-[#0A0A0A] btn-sm"
             >
               <span>Email: {SITE.email}</span>
             </a>
@@ -4137,52 +3879,14 @@ export const AfterSaleLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* FREQUENTLY ASKED QUESTIONS */}
       {data.faq && data.faq.length > 0 && (
-        <section className="container py-[var(--sec-y)]">
-          <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="text-[16px] lg:text-[44px] font-bold text-[var(--ink)] uppercase leading-[1.15] tracking-[-0.02em] mb-8">
+        <section className="w-full bg-white py-[60px] lg:py-[100px] px-6 lg:px-8 border-t border-[#E5E5E5] text-left">
+          <div className="max-w-[800px] mx-auto">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold text-[#0A0A0A] uppercase leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
-            <div className="w-full divide-y divide-[var(--rule)] border-y border-[var(--rule)]">
-              {data.faq.map((item, idx) => {
-                const isOpen = openFaqIndex === idx;
-                return (
-                  <div key={idx} className="w-full py-5">
-                    <button
-                      type="button"
-                      aria-expanded={isOpen}
-                      onClick={() => toggleFaq(idx)}
-                      className="w-full flex items-center justify-between text-left cursor-pointer group focus-visible:outline-none"
-                    >
-                      <span className="font-bold text-[17px] lg:text-[20px] text-[var(--ink)] pr-6 leading-snug">
-                        {item.q}
-                      </span>
-                      <span
-                        className="relative flex-shrink-0 flex items-center justify-center transition-transform duration-300 ease-out w-[22px] h-[22px]"
-                        style={{
-                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                        }}
-                      >
-                        <span
-                          className="absolute bg-[var(--blue)]"
-                          style={{ width: "18px", height: "2px" }}
-                        />
-                        <span
-                          className="absolute bg-[var(--blue)]"
-                          style={{ height: "18px", width: "2px" }}
-                        />
-                      </span>
-                    </button>
-                    {isOpen && (
-                      <div className="pt-3 pb-2 text-[15px] lg:text-[16px] font-normal text-[var(--blue)] leading-[1.6] lg:leading-[1.7] max-w-[800px]">
-                        {item.a}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}

@@ -107,15 +107,13 @@ export const ChapterSplit: React.FC<ChapterSplitProps> = ({
                     {ch.num}
                   </div>
 
-                  {/* Chapter name (H3): 17px mobile / 19px desktop, weight 600, var(--blue). Letter-spacing -0.01em. Margin-bottom 8px. 
-                      Row name slides 4px right over 0.4s ease cubic-bezier(0.23, 1, 0.32, 1) when active.
-                  */}
+                  {/* Chapter name (H3): uppercase, black #0A0A0A */}
                   <h3
-                    className="text-[17px] lg:text-[19px] font-semibold text-[var(--blue)] mb-2"
+                    className="text-[14px] sm:text-[16px] lg:text-[19px] font-semibold text-[#0A0A0A] uppercase mb-2"
                     style={{
                       fontFamily: "Inter, sans-serif",
                       fontWeight: 600,
-                      color: "var(--blue)",
+                      color: "#0A0A0A",
                       letterSpacing: "-0.01em",
                       marginBottom: "8px",
                       transform: isActive ? "translateX(4px)" : "translateX(0px)",
@@ -125,13 +123,13 @@ export const ChapterSplit: React.FC<ChapterSplitProps> = ({
                     {ch.label}
                   </h3>
 
-                  {/* Description: 13px, var(--grey), line-height 1.6, max-width 480px. Margin-bottom 16px. */}
+                  {/* Description: 13px, #0A0A0A, line-height 1.6, max-width 480px. Margin-bottom 16px. */}
                   <p
-                    className="text-[13px] text-[var(--grey)] leading-[1.6] max-w-[480px] mb-4"
+                    className="text-[13px] text-[#0A0A0A] leading-[1.6] max-w-[480px] mb-4"
                     style={{
                       fontFamily: "Inter, sans-serif",
                       fontSize: "13px",
-                      color: "var(--grey)",
+                      color: "#0A0A0A",
                       lineHeight: 1.6,
                       maxWidth: "480px",
                       marginBottom: "16px",

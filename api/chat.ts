@@ -69,7 +69,7 @@ export default async function handler(req: any, res: any) {
     } else {
       // Default to Gemini API
       const geminiKey = process.env.GEMINI_API_KEY;
-      const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+      const model = process.env.GEMINI_MODEL || "gemini-3.8-flash";
 
       if (!geminiKey) {
         clearTimeout(timeout);
@@ -80,7 +80,14 @@ export default async function handler(req: any, res: any) {
       }
 
       try {
-        const ai = new GoogleGenAI({ apiKey: geminiKey });
+        const ai = new GoogleGenAI({
+          apiKey: geminiKey,
+          httpOptions: {
+            headers: {
+              "User-Agent": "aistudio-build",
+            },
+          },
+        });
         const contents = [
           ...validHistory.map((h) => ({
             role: h.role === "bot" ? ("model" as const) : ("user" as const),

@@ -59,7 +59,7 @@ export const HubFaq: React.FC<HubFaqProps> = ({ items }) => {
     <section className="w-full bg-[#FFFFFF] py-[64px] lg:py-[88px] px-[20px] lg:px-[40px] border-b border-[#E5E5E5]">
       <div className="max-w-[1340px] mx-auto text-left">
         {/* H2 Heading */}
-        <h2 className="text-[20px] lg:text-[32px] font-bold text-[#0A0A0A] leading-[1.2] tracking-[-0.01em] mb-8">
+        <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-semibold text-[#0A0A0A] uppercase leading-[1.2] tracking-[-0.01em] mb-8">
           Frequently Asked Questions
         </h2>
 
@@ -100,7 +100,7 @@ export const HubFaq: React.FC<HubFaqProps> = ({ items }) => {
                   }}
                   className="h-0 overflow-hidden"
                 >
-                  <div className="pt-1 pb-6 text-[13px] lg:text-[15px] leading-[1.65] text-[var(--grey)] max-w-[680px]">
+                  <div className="pt-1 pb-6 text-[13px] lg:text-[15px] leading-[1.65] text-[#0A0A0A] max-w-[680px]">
                     {item.a}
                   </div>
                 </div>

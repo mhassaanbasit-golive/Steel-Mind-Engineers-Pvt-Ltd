@@ -104,7 +104,7 @@ export const Accordion: React.FC<AccordionProps> = ({
               }}
               className="h-0 overflow-hidden"
             >
-              <div className="pt-1 pb-6 text-[13px] lg:text-[15px] leading-[1.65] text-[var(--grey)] max-w-[680px]">
+              <div className="pt-1 pb-6 text-[13px] lg:text-[15px] leading-[1.65] text-[#0A0A0A] max-w-[680px]">
                 {item.a}
               </div>
             </div>

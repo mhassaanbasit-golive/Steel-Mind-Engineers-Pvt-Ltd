@@ -279,26 +279,6 @@ html.lenis, html.lenis body {
   letter-spacing: 0.06em;
 }
 
-/* Other than homepage: change grey text to blue (especially main divisions sub sections) and faded numbers to blue */
-main:not([data-home="true"]) {
-  --grey: #1E3A8A;
-  --grey-strong: #1E3A8A;
-}
-
-main:not([data-home="true"]) .text-\[\#6B7280\],
-main:not([data-home="true"]) .text-\[\#4B5563\],
-main:not([data-home="true"]) .text-gray-500,
-main:not([data-home="true"]) .text-gray-600 {
-  color: #1E3A8A !important;
-}
-
-main:not([data-home="true"]) p.text-\[\#6B7280\],
-main:not([data-home="true"]) p.text-\[\#4B5563\],
-main:not([data-home="true"]) span.text-\[\#6B7280\],
-main:not([data-home="true"]) span.text-\[\#4B5563\] {
-  color: #1E3A8A !important;
-}
-
 .link-accent {
   color: #1E3A8A;
   font-weight: 600;

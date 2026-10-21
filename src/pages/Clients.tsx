@@ -373,13 +373,13 @@ export const Clients: React.FC = () => {
           <div className="text-center mb-12">
             <h2
               ref={headingRef}
-              className="text-[20px] lg:text-[28px] font-bold text-[var(--ink)] tracking-tight"
+              className="text-[17px] sm:text-[19px] lg:text-[28px] font-semibold text-[#0A0A0A] uppercase tracking-tight"
             >
               Companies That Have Built With Us
             </h2>
             <p
               ref={sublineRef}
-              className="text-[13px] lg:text-[14px] text-[var(--grey)] mt-1.5"
+              className="text-[13px] lg:text-[14px] text-[#0A0A0A] mt-1.5"
             >
               Click any client to see their completed projects and facilities
             </p>
@@ -430,7 +430,7 @@ export const Clients: React.FC = () => {
                       </span>
                     )}
                     {client.projectNote && (
-                      <span className="mt-3 text-center text-[11px] sm:text-[12px] uppercase tracking-wider text-[var(--grey)] group-hover:text-[var(--blue)] font-medium line-clamp-1 transition-colors">
+                      <span className="mt-3 text-center text-[11px] sm:text-[12px] uppercase tracking-wider text-[#0A0A0A] font-medium line-clamp-1 transition-colors">
                         {client.projectNote}
                       </span>
                     )}
@@ -526,7 +526,7 @@ export const Clients: React.FC = () => {
               style={{ backgroundColor: "var(--blue)" }}
               className="p-8 lg:p-10 space-y-4 text-white shadow-md transition-all duration-300 flex flex-col justify-start"
             >
-              <h3 className="text-[20px] lg:text-[26px] font-bold text-white tracking-tight">
+              <h3 className="text-[17px] sm:text-[20px] lg:text-[26px] font-bold text-white uppercase tracking-tight">
                 Repeat Clients
               </h3>
               <p className="text-[14px] lg:text-[15px] text-white leading-[1.7]">
@@ -540,7 +540,7 @@ export const Clients: React.FC = () => {
               style={{ backgroundColor: "var(--blue)" }}
               className="p-8 lg:p-10 space-y-4 text-white shadow-md transition-all duration-300 flex flex-col justify-start"
             >
-              <h3 className="text-[20px] lg:text-[26px] font-bold text-white tracking-tight">
+              <h3 className="text-[17px] sm:text-[20px] lg:text-[26px] font-bold text-white uppercase tracking-tight">
                 What Clients Receive
               </h3>
               <p className="text-[14px] lg:text-[15px] text-white leading-[1.7]">
@@ -556,7 +556,7 @@ export const Clients: React.FC = () => {
             className="mt-10 p-8 lg:p-10 text-white flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-md transition-all duration-300"
           >
             <div>
-              <h3 className="text-[20px] lg:text-[24px] font-bold text-white tracking-tight">
+              <h3 className="text-[17px] sm:text-[20px] lg:text-[24px] font-bold text-white uppercase tracking-tight">
                 Become a Client
               </h3>
               <p className="text-[13px] lg:text-[14px] text-white mt-1 max-w-[620px]">
@@ -578,11 +578,11 @@ export const Clients: React.FC = () => {
       {/* 4. FAQ Section */}
       {pageData.faq && pageData.faq.length > 0 && (
         <section className="py-12 lg:py-16 bg-white border-b border-[var(--line)]">
-          <div className="max-w-[800px] mx-auto px-[var(--pad-x)] text-left">
-            <h2 className="text-[22px] lg:text-[40px] font-bold leading-[1.15] tracking-[-0.02em] text-[var(--ink)] mb-6">
+          <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] text-left">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-semibold uppercase text-[#0A0A0A] mb-8">
               Frequently Asked Questions
             </h2>
-            <Accordion items={pageData.faq} size="large" />
+            <Accordion items={pageData.faq} />
           </div>
         </section>
       )}

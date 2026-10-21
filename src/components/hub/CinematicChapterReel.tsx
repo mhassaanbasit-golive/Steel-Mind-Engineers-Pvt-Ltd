@@ -201,24 +201,24 @@ export const CinematicChapterReel: React.FC<CinematicChapterReelProps> = ({
                       {ch.num}
                     </div>
 
-                    {/* Chapter name (H3): font-size 20px, weight 600, color var(--ink), margin-bottom 10px */}
+                    {/* Chapter name (H3): uppercase, color #0A0A0A */}
                     <h3
-                      className="font-semibold leading-tight"
+                      className="font-semibold leading-tight uppercase"
                       style={{
-                        fontSize: "20px",
-                        color: "var(--ink)",
+                        fontSize: "clamp(15px, 2vw, 20px)",
+                        color: "#0A0A0A",
                         marginBottom: "10px",
                       }}
                     >
                       {ch.label}
                     </h3>
 
-                    {/* Description: font-size 13px, color var(--grey), line-height 1.6, max-width 360px, clamp to 2 lines */}
+                    {/* Description: font-size 13px, color #0A0A0A, line-height 1.6, max-width 360px, clamp to 2 lines */}
                     <p
                       className="line-clamp-2"
                       style={{
                         fontSize: "13px",
-                        color: "var(--grey)",
+                        color: "#0A0A0A",
                         lineHeight: "1.6",
                         maxWidth: "360px",
                       }}

@@ -6,6 +6,7 @@ import { divisionImages, cl } from "../data/images.ts";
 import { TransitionLink } from "../components/ui/TransitionLink.tsx";
 import { useMediaQuery } from "../hooks/useMediaQuery.ts";
 import { DotRail } from "../components/page/DotRail.tsx";
+import { Accordion } from "../components/ui/Accordion.tsx";
 
 export interface HubProps {
   data: ContentData;
@@ -490,7 +491,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
           {/* Animated H2 Title */}
           <h2
             aria-label={introTitle}
-            className="text-[22px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] text-center uppercase"
+            className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] text-center uppercase"
           >
             {titleWords.map((word, wordIdx) => {
               let prevCharsCount = 0;
@@ -542,7 +543,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
           {introParagraph && (
             <p
               aria-label={introParagraph}
-              className="mt-6 max-w-[640px] text-[14px] lg:text-[15px] font-normal text-[var(--blue)] leading-[1.7] text-center mx-auto"
+              className="mt-6 max-w-[640px] text-[14px] lg:text-[15px] font-normal text-[#0A0A0A] leading-[1.7] text-center mx-auto"
             >
               {paraWords.map((word, wordIdx) => {
                 const delay = prefersReduced
@@ -741,9 +742,9 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
                     >
                       {/* Title */}
                       <h3
-                        className="font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.01em] mb-4"
+                        className="font-bold text-[#0A0A0A] uppercase leading-[1.15] tracking-[-0.01em] mb-4"
                         style={{
-                          fontSize: "clamp(28px, 2.6vw, 40px)",
+                          fontSize: "clamp(24px, 2.4vw, 36px)",
                           opacity: isActive ? 1 : 0,
                           transform: prefersReduced
                             ? "none"
@@ -766,7 +767,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
                       {/* Description */}
                       {item.desc && (
                         <p
-                          className="text-[14px] lg:text-[15px] text-[var(--blue)] leading-[1.7] max-w-[440px] mb-6"
+                          className="text-[14px] lg:text-[15px] text-[#0A0A0A] leading-[1.7] max-w-[440px] mb-6"
                           style={{
                             opacity: isActive ? 1 : 0,
                             transform: prefersReduced
@@ -858,7 +859,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
 
                   {/* Row with title and arrow (no number) */}
                   <div className="flex items-center justify-between gap-3 mt-4">
-                    <h3 className="text-[18px] font-bold text-[#0A0A0A] leading-[1.2] truncate">
+                    <h3 className="text-[14px] sm:text-[16px] lg:text-[18px] font-bold text-[#0A0A0A] uppercase leading-[1.2] truncate">
                       {item.title}
                     </h3>
                     <span className="text-[#1E3A8A] text-[18px] flex-shrink-0 transition-transform duration-300 group-hover:translate-x-1">
@@ -868,7 +869,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
 
                   {/* ONE line of description with ellipsis */}
                   {item.desc && (
-                    <p className="mt-2 text-[13px] text-[var(--blue)] leading-[1.5] whitespace-nowrap overflow-hidden text-ellipsis block max-w-full">
+                    <p className="mt-2 text-[13px] text-[#0A0A0A] leading-[1.5] whitespace-nowrap overflow-hidden text-ellipsis block max-w-full">
                       {item.desc}
                     </p>
                   )}
@@ -880,81 +881,17 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
       )}
 
       {/* ========================================================
-          4. FAQ (KEPT AS-IS)
+          4. FAQ (Standardized to match Homepage FAQ)
           - Spacing: bottom padding 96px desktop, 64px mobile.
           - Followed by next banner directly.
       ======================================================== */}
       {data.faq && data.faq.length > 0 && (
         <section className="w-full bg-white pt-16 lg:pt-24 pb-[64px] lg:pb-[96px] px-5 lg:px-8 border-t border-[#E5E5E5]">
           <div className="max-w-[1280px] mx-auto text-left">
-            <h2 className="text-[22px] lg:text-[40px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] mb-10">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-semibold text-[#0A0A0A] uppercase leading-[1.15] tracking-[-0.01em] mb-8">
               Frequently Asked Questions
             </h2>
-
-            <div className="w-full divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
-              {data.faq.map((item, idx) => {
-                const isOpen = openFaqIndex === idx;
-
-                return (
-                  <div key={idx} className="w-full py-5">
-                    <button
-                      type="button"
-                      aria-expanded={isOpen}
-                      onClick={() => toggleFaq(idx)}
-                      className="w-full flex items-center justify-between text-left cursor-pointer group focus-visible:outline-none"
-                    >
-                      <span className="font-semibold text-[15px] lg:text-[17px] text-[#0A0A0A] pr-6">
-                        {item.q}
-                      </span>
-
-                      {/* Plus icon rotates to minus over 700ms */}
-                      <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center">
-                        <svg
-                          className="w-5 h-5 stroke-[#0A0A0A]"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          strokeWidth="1.5"
-                        >
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                          <line
-                            x1="12"
-                            y1="5"
-                            x2="12"
-                            y2="19"
-                            style={{
-                              transformOrigin: "center",
-                              transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
-                              opacity: isOpen ? 0 : 1,
-                              transition: prefersReduced
-                                ? "none"
-                                : "transform 700ms cubic-bezier(0.22, 1, 0.36, 1), opacity 700ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                        </svg>
-                      </span>
-                    </button>
-
-                    {/* Accordion panel using grid-template-rows 0fr to 1fr plus opacity */}
-                    <div
-                      className="grid"
-                      style={{
-                        gridTemplateRows: isOpen ? "1fr" : "0fr",
-                        opacity: isOpen ? 1 : 0,
-                        transition: prefersReduced
-                          ? "none"
-                          : "grid-template-rows 700ms cubic-bezier(0.22, 1, 0.36, 1), opacity 700ms cubic-bezier(0.22, 1, 0.36, 1)",
-                      }}
-                    >
-                      <div className="overflow-hidden">
-                        <p className="pt-3 pb-2 text-[14px] lg:text-[15px] text-[var(--blue)] leading-[1.7] max-w-[800px]">
-                          {item.a}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} />
           </div>
         </section>
       )}

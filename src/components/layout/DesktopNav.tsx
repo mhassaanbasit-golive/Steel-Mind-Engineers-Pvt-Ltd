@@ -177,8 +177,8 @@ export const DesktopNav: React.FC = () => {
                                 onClick={() => setActiveDropdown(null)}
                                 className={`text-[12px] lg:text-[13px] py-1 transition-colors leading-tight ${
                                   isChildActive
-                                    ? "text-[var(--blue)] font-semibold"
-                                    : "text-[var(--blue)]/80 hover:text-[var(--blue)] font-medium"
+                                    ? "text-[var(--ink,#0A0A0A)] font-semibold"
+                                    : "text-[var(--ink,#0A0A0A)] hover:text-[var(--blue)] font-normal"
                                 }`}
                               >
                                 {child.label}

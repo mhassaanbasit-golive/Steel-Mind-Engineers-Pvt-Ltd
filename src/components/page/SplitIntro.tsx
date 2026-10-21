@@ -34,8 +34,7 @@ export const SplitIntro: React.FC<SplitIntroProps> = ({
     >
       <div className="lg:col-span-5">
         <h2
-          className="font-bold text-[var(--ink)] leading-[1.15] tracking-[-0.02em]"
-          style={{ fontSize: "var(--fs-h2)" }}
+          className="font-bold text-[#0A0A0A] uppercase leading-[1.15] tracking-[-0.02em] text-[17px] sm:text-[19px] lg:text-[40px]"
         >
           {title}
         </h2>

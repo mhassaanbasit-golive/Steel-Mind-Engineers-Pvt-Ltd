@@ -157,10 +157,10 @@ export const ProjectsIndex: React.FC = () => {
       <section className="py-12 lg:py-20 bg-white border-b border-[#E5E5E5]">
         <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
           <div className="mb-8 lg:mb-12">
-            <h2 className="text-[22px] lg:text-[36px] font-bold text-[#0A0A0A] tracking-tight">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-semibold text-[#0A0A0A] uppercase tracking-tight">
               Our Latest Projects
             </h2>
-            <p className="text-[13px] lg:text-[15px] text-[#4B5563] mt-1.5">
+            <p className="text-[13px] lg:text-[15px] text-[#0A0A0A] mt-1.5">
               Verified steel fabrication, crane shed, and industrial facility projects completed across Pakistan.
             </p>
           </div>
@@ -226,11 +226,11 @@ export const ProjectsIndex: React.FC = () => {
 
                     {/* Minimalist White Section Below Image: ONLY Industry Icon, Industry Category, and Project Title */}
                     <div className="p-6 flex-1 flex flex-col justify-center">
-                      <div className="flex items-center gap-2 text-[#4B5563] text-[11px] font-semibold uppercase tracking-[0.08em] mb-2.5">
+                      <div className="flex items-center gap-2 text-[#0A0A0A] text-[11px] font-semibold uppercase tracking-[0.08em] mb-2.5">
                         {getIndustryIcon(proj)}
                         <span>{getProjectIndustry(proj)}</span>
                       </div>
-                      <h3 className="text-[17px] lg:text-[19px] font-bold text-[#0A0A0A] leading-[1.3]">
+                      <h3 className="text-[14px] sm:text-[16px] lg:text-[18px] font-bold text-[#0A0A0A] uppercase leading-[1.3]">
                         {proj.title}
                       </h3>
                     </div>
@@ -246,7 +246,7 @@ export const ProjectsIndex: React.FC = () => {
       {pageData.faq && pageData.faq.length > 0 && (
         <section className="py-12 lg:py-20 bg-white">
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-            <h2 className="text-[22px] lg:text-[36px] font-bold leading-[1.15] tracking-[-0.02em] text-[#0A0A0A] mb-8">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-semibold leading-[1.15] tracking-[-0.01em] uppercase text-[#0A0A0A] mb-8">
               Frequently Asked Questions
             </h2>
             <Accordion items={pageData.faq} />

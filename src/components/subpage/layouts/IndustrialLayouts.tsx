@@ -469,7 +469,7 @@ export const FactoryShedsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
                         ref={(el) => {
                           textRefs.current[idx] = el;
                         }}
-                        className="text-[16px] leading-[1.7] text-[var(--blue)] font-normal max-w-[480px]"
+                        className="text-[16px] leading-[1.7] text-[#0A0A0A] font-normal max-w-[480px]"
                       >
                         {c.text}
                       </p>
@@ -575,7 +575,7 @@ export const FactoryShedsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
                   >
                     <div className="min-h-0 overflow-hidden px-5">
                       <p
-                        className="text-[15px] leading-[1.6] text-[var(--blue)] font-normal pb-6"
+                        className="text-[15px] leading-[1.6] text-[#0A0A0A] font-normal pb-6"
                         style={{
                           opacity: isOpen ? 1 : 0,
                           transition: isOpen
@@ -603,88 +603,16 @@ export const FactoryShedsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
         </div>
       </section>
 
-      {/* Frequently Asked Questions (One-Step style, ZERO grey text) */}
+      {/* FAQ */}
       {data.faq && data.faq.length > 0 && (
         <section ref={faqSecRef} className="container py-[var(--sec-y-lg)]">
           <div className="max-w-[800px] mx-auto text-left">
             <h2
-              ref={faqTitleRef}
-              className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8"
+              ref={faqTitleRef} className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8"
             >
               FREQUENTLY ASKED QUESTIONS
             </h2>
-
-            <div className="w-full divide-y divide-[rgba(15,23,42,0.12)] border-y border-[rgba(15,23,42,0.12)]">
-              {data.faq.map((item, idx) => {
-                const isOpen = openFaqIdx === idx;
-                const panelId = `faq-factory-panel-${idx}`;
-                const headerId = `faq-factory-header-${idx}`;
-
-                return (
-                  <div key={idx} className="group overflow-hidden">
-                    <button
-                      id={headerId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      onClick={() => {
-                        setOpenFaqIdx((prev) => (prev === idx ? null : idx));
-                        debouncedRefresh();
-                      }}
-                      className="w-full min-h-[52px] py-5 flex items-center justify-between text-left cursor-pointer focus-visible:outline-none"
-                    >
-                      <span className="font-bold text-[17px] lg:text-[20px] text-[#0A0A0A] pr-6 leading-snug">
-                        {item.q}
-                      </span>
-
-                      <span className="w-6 h-6 flex items-center justify-center flex-shrink-0 text-[#0A0A0A]">
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          style={{
-                            transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                            transition: "transform 400ms cubic-bezier(0.16, 1, 0.3, 1)",
-                          }}
-                        >
-                          <line x1="12" y1="5" x2="12" y2="19" />
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
-                      </span>
-                    </button>
-
-                    <div
-                      id={panelId}
-                      role="region"
-                      aria-labelledby={headerId}
-                      className="grid"
-                      style={{
-                        gridTemplateRows: isOpen ? "1fr" : "0fr",
-                        transition: "grid-template-rows 600ms cubic-bezier(0.16, 1, 0.3, 1)",
-                      }}
-                    >
-                      <div className="min-h-0 overflow-hidden">
-                        <p
-                          className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal pb-6 max-w-[680px]"
-                          style={{
-                            opacity: isOpen ? 1 : 0,
-                            transition: isOpen
-                              ? "opacity 400ms cubic-bezier(0.16, 1, 0.3, 1) 150ms"
-                              : "opacity 200ms ease 0ms",
-                          }}
-                        >
-                          {item.a}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}
@@ -976,7 +904,7 @@ export const DairyShedsLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                     ref={(el) => {
                       desktopTextRefs.current[idx] = el;
                     }}
-                    className="text-[16px] leading-[1.7] text-[var(--blue)] font-normal"
+                    className="text-[16px] leading-[1.7] text-[#0A0A0A] font-normal"
                   >
                     {b.text}
                   </p>
@@ -1023,7 +951,7 @@ export const DairyShedsLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                   </h3>
 
                   {/* Text: One-Step blue (var(--blue)), regular weight, mobile 15px / 1.6 */}
-                  <p className="text-[15px] leading-[1.6] text-[var(--blue)] font-normal">
+                  <p className="text-[15px] leading-[1.6] text-[#0A0A0A] font-normal">
                     {b.text}
                   </p>
                 </div>
@@ -1033,88 +961,16 @@ export const DairyShedsLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         </div>
       </section>
 
-      {/* Frequently Asked Questions (One-Step style, ZERO grey text) */}
+      {/* FAQ */}
       {data.faq && data.faq.length > 0 && (
         <section ref={faqSecRef} className="container py-[var(--sec-y-lg)]">
           <div className="max-w-[800px] mx-auto text-left">
             <h2
-              ref={faqTitleRef}
-              className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8"
+              ref={faqTitleRef} className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8"
             >
               FREQUENTLY ASKED QUESTIONS
             </h2>
-
-            <div className="w-full divide-y divide-[rgba(15,23,42,0.12)] border-y border-[rgba(15,23,42,0.12)]">
-              {data.faq.map((item, idx) => {
-                const isOpen = openFaqIdx === idx;
-                const panelId = `dairy-faq-panel-${idx}`;
-                const headerId = `dairy-faq-header-${idx}`;
-
-                return (
-                  <div key={idx} className="group overflow-hidden">
-                    <button
-                      id={headerId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      onClick={() => {
-                        setOpenFaqIdx((prev) => (prev === idx ? null : idx));
-                        debouncedRefresh();
-                      }}
-                      className="w-full min-h-[52px] py-5 flex items-center justify-between text-left cursor-pointer focus-visible:outline-none"
-                    >
-                      <span className="font-bold text-[17px] lg:text-[20px] text-[#0A0A0A] pr-6 leading-snug">
-                        {item.q}
-                      </span>
-
-                      <span className="w-6 h-6 flex items-center justify-center flex-shrink-0 text-[#0A0A0A]">
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          style={{
-                            transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                            transition: "transform 400ms cubic-bezier(0.16, 1, 0.3, 1)",
-                          }}
-                        >
-                          <line x1="12" y1="5" x2="12" y2="19" />
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
-                      </span>
-                    </button>
-
-                    <div
-                      id={panelId}
-                      role="region"
-                      aria-labelledby={headerId}
-                      className="grid"
-                      style={{
-                        gridTemplateRows: isOpen ? "1fr" : "0fr",
-                        transition: "grid-template-rows 600ms cubic-bezier(0.16, 1, 0.3, 1)",
-                      }}
-                    >
-                      <div className="min-h-0 overflow-hidden">
-                        <p
-                          className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal pb-6 max-w-[680px]"
-                          style={{
-                            opacity: isOpen ? 1 : 0,
-                            transition: isOpen
-                              ? "opacity 400ms cubic-bezier(0.16, 1, 0.3, 1) 150ms"
-                              : "opacity 200ms ease 0ms",
-                          }}
-                        >
-                          {item.a}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}
@@ -1518,7 +1374,7 @@ export const PoultryShedsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
                 </h3>
 
                 {/* Text: One-Step blue, regular weight, 16px / 1.7 */}
-                <p className="text-[16px] leading-[1.7] text-[var(--blue)] font-normal">
+                <p className="text-[16px] leading-[1.7] text-[#0A0A0A] font-normal">
                   {item.text}
                 </p>
               </div>
@@ -1597,7 +1453,7 @@ export const PoultryShedsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
                   </h3>
 
                   {/* Text: One-Step blue, regular weight, 15px / 1.6 */}
-                  <p className="text-[15px] leading-[1.6] text-[var(--blue)] font-normal">
+                  <p className="text-[15px] leading-[1.6] text-[#0A0A0A] font-normal">
                     {item.text}
                   </p>
                 </div>
@@ -1607,88 +1463,16 @@ export const PoultryShedsLayout: React.FC<{ data: ContentData }> = ({ data }) =>
         </div>
       </section>
 
-      {/* Frequently Asked Questions (One-Step style, ZERO grey text) */}
+      {/* FAQ */}
       {data.faq && data.faq.length > 0 && (
         <section ref={faqSecRef} className="container py-[var(--sec-y-lg)]">
           <div className="max-w-[800px] mx-auto text-left">
             <h2
-              ref={faqTitleRef}
-              className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8"
+              ref={faqTitleRef} className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8"
             >
               FREQUENTLY ASKED QUESTIONS
             </h2>
-
-            <div className="w-full divide-y divide-[rgba(15,23,42,0.12)] border-y border-[rgba(15,23,42,0.12)]">
-              {data.faq.map((item, idx) => {
-                const isOpen = openFaqIdx === idx;
-                const panelId = `poultry-faq-panel-${idx}`;
-                const headerId = `poultry-faq-header-${idx}`;
-
-                return (
-                  <div key={idx} className="group overflow-hidden">
-                    <button
-                      id={headerId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      onClick={() => {
-                        setOpenFaqIdx((prev) => (prev === idx ? null : idx));
-                        debouncedRefresh();
-                      }}
-                      className="w-full min-h-[52px] py-5 flex items-center justify-between text-left cursor-pointer focus-visible:outline-none"
-                    >
-                      <span className="font-bold text-[17px] lg:text-[20px] text-[#0A0A0A] pr-6 leading-snug">
-                        {item.q}
-                      </span>
-
-                      <span className="w-6 h-6 flex items-center justify-center flex-shrink-0 text-[#0A0A0A]">
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          style={{
-                            transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                            transition: "transform 400ms cubic-bezier(0.16, 1, 0.3, 1)",
-                          }}
-                        >
-                          <line x1="12" y1="5" x2="12" y2="19" />
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
-                      </span>
-                    </button>
-
-                    <div
-                      id={panelId}
-                      role="region"
-                      aria-labelledby={headerId}
-                      className="grid"
-                      style={{
-                        gridTemplateRows: isOpen ? "1fr" : "0fr",
-                        transition: "grid-template-rows 600ms cubic-bezier(0.16, 1, 0.3, 1)",
-                      }}
-                    >
-                      <div className="min-h-0 overflow-hidden">
-                        <p
-                          className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal pb-6 max-w-[680px]"
-                          style={{
-                            opacity: isOpen ? 1 : 0,
-                            transition: isOpen
-                              ? "opacity 400ms cubic-bezier(0.16, 1, 0.3, 1) 150ms"
-                              : "opacity 200ms ease 0ms",
-                          }}
-                        >
-                          {item.a}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}
@@ -2085,7 +1869,7 @@ export const WorkshopShedsLayout: React.FC<{ data: ContentData }> = ({ data }) =
 
                 {/* Right: Text in One-Step body style (16px / 1.7, var(--blue), regular weight, zero grey text) */}
                 <div className="col-span-6 flex flex-col justify-center pt-2">
-                  <p className="text-[16px] leading-[1.7] text-[var(--blue)] font-normal max-w-[560px]">
+                  <p className="text-[16px] leading-[1.7] text-[#0A0A0A] font-normal max-w-[560px]">
                     {r.text}
                   </p>
                 </div>
@@ -2184,7 +1968,7 @@ export const WorkshopShedsLayout: React.FC<{ data: ContentData }> = ({ data }) =
                       ref={(el) => {
                         mobileTextRefs.current[idx] = el;
                       }}
-                      className="text-[15px] leading-[1.6] text-[var(--blue)] font-normal pt-4"
+                      className="text-[15px] leading-[1.6] text-[#0A0A0A] font-normal pt-4"
                       style={{
                         opacity: idx === 0 ? 1 : 0,
                       }}
@@ -2199,88 +1983,16 @@ export const WorkshopShedsLayout: React.FC<{ data: ContentData }> = ({ data }) =
         </div>
       </section>
 
-      {/* Frequently Asked Questions (One-Step style, ZERO grey text) */}
+      {/* FAQ */}
       {data.faq && data.faq.length > 0 && (
         <section ref={faqSecRef} className="container py-[var(--sec-y-lg)]">
           <div className="max-w-[800px] mx-auto text-left">
             <h2
-              ref={faqTitleRef}
-              className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8"
+              ref={faqTitleRef} className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8"
             >
               FREQUENTLY ASKED QUESTIONS
             </h2>
-
-            <div className="w-full divide-y divide-[rgba(15,23,42,0.12)] border-y border-[rgba(15,23,42,0.12)]">
-              {data.faq.map((item, idx) => {
-                const isOpen = openFaqIdx === idx;
-                const panelId = `workshop-faq-panel-${idx}`;
-                const headerId = `workshop-faq-header-${idx}`;
-
-                return (
-                  <div key={idx} className="group overflow-hidden">
-                    <button
-                      id={headerId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      onClick={() => {
-                        setOpenFaqIdx((prev) => (prev === idx ? null : idx));
-                        debouncedRefresh();
-                      }}
-                      className="w-full min-h-[52px] py-5 flex items-center justify-between text-left cursor-pointer focus-visible:outline-none"
-                    >
-                      <span className="font-bold text-[17px] lg:text-[20px] text-[#0A0A0A] pr-6 leading-snug">
-                        {item.q}
-                      </span>
-
-                      <span className="w-6 h-6 flex items-center justify-center flex-shrink-0 text-[#0A0A0A]">
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          style={{
-                            transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                            transition: "transform 400ms cubic-bezier(0.16, 1, 0.3, 1)",
-                          }}
-                        >
-                          <line x1="12" y1="5" x2="12" y2="19" />
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
-                      </span>
-                    </button>
-
-                    <div
-                      id={panelId}
-                      role="region"
-                      aria-labelledby={headerId}
-                      className="grid"
-                      style={{
-                        gridTemplateRows: isOpen ? "1fr" : "0fr",
-                        transition: "grid-template-rows 600ms cubic-bezier(0.16, 1, 0.3, 1)",
-                      }}
-                    >
-                      <div className="min-h-0 overflow-hidden">
-                        <p
-                          className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal pb-6 max-w-[680px]"
-                          style={{
-                            opacity: isOpen ? 1 : 0,
-                            transition: isOpen
-                              ? "opacity 400ms cubic-bezier(0.16, 1, 0.3, 1) 150ms"
-                              : "opacity 200ms ease 0ms",
-                          }}
-                        >
-                          {item.a}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}
@@ -2324,12 +2036,12 @@ export const CraneShedsLayout: React.FC<{ data: ContentData }> = ({ data }) => {
       <section className="container py-[var(--sec-y-lg)] text-left">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[96px] items-start">
           <div className="lg:col-span-5">
-            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em]">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em]">
               {(sections[0]?.title || "What a Crane Shed Is").toUpperCase()}
             </h2>
           </div>
           <div className="lg:col-span-7 space-y-4 max-w-[640px]">
-            <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal">
+            <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal">
               {sections[0]?.text || introPs[0] || ""}
             </p>
           </div>
@@ -2362,7 +2074,7 @@ export const CraneShedsLayout: React.FC<{ data: ContentData }> = ({ data }) => {
       <section className="w-full bg-[var(--blue)] text-white py-[var(--sec-y-lg)]">
         <div className="container grid grid-cols-1 lg:grid-cols-12 gap-10 items-center text-left">
           <div className="lg:col-span-5">
-            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase tracking-[-0.02em] text-white leading-tight lg:leading-[1.15]">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold uppercase tracking-[-0.02em] text-white leading-tight lg:leading-[1.15]">
               {(sections[1]?.title || "The Raiwind Crane Sheds").toUpperCase()}
             </h2>
           </div>
@@ -2378,12 +2090,12 @@ export const CraneShedsLayout: React.FC<{ data: ContentData }> = ({ data }) => {
       <section className="container py-[var(--sec-y-lg)] text-left">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-[96px] items-start">
           <div className="lg:col-span-5">
-            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em]">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em]">
               {(sections[2]?.title || "Design Points for Crane Sheds").toUpperCase()}
             </h2>
           </div>
           <div className="lg:col-span-7">
-            <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[640px]">
+            <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal max-w-[640px]">
               {sections[2]?.text}
             </p>
           </div>
@@ -2392,11 +2104,11 @@ export const CraneShedsLayout: React.FC<{ data: ContentData }> = ({ data }) => {
 
       {/* 5. Learn More: 2 Link Cards */}
       <section className="container pb-[var(--sec-y-lg)] text-left">
-        <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-4">
+        <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-4">
           {(sections[3]?.title || "Learn More").toUpperCase()}
         </h2>
         {sections[3]?.text && (
-          <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal mb-8 max-w-[640px]">
+          <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal mb-8 max-w-[640px]">
             {sections[3]?.text}
           </p>
         )}
@@ -2430,85 +2142,14 @@ export const CraneShedsLayout: React.FC<{ data: ContentData }> = ({ data }) => {
         </div>
       </section>
 
-      {/* FAQ (One-Step style, ZERO grey text) */}
+      {/* FAQ */}
       {data.faq && data.faq.length > 0 && (
         <section className="container py-[var(--sec-y-lg)]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
-
-            <div className="w-full divide-y divide-[rgba(15,23,42,0.12)] border-y border-[rgba(15,23,42,0.12)]">
-              {data.faq.map((item, idx) => {
-                const isOpen = openFaqIdx === idx;
-                const panelId = `crane-faq-panel-${idx}`;
-                const headerId = `crane-faq-header-${idx}`;
-
-                return (
-                  <div key={idx} className="group overflow-hidden">
-                    <button
-                      id={headerId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      onClick={() => {
-                        setOpenFaqIdx((prev) => (prev === idx ? null : idx));
-                        debouncedRefresh();
-                      }}
-                      className="w-full min-h-[52px] py-5 flex items-center justify-between text-left cursor-pointer focus-visible:outline-none"
-                    >
-                      <span className="font-bold text-[17px] lg:text-[20px] text-[#0A0A0A] pr-6 leading-snug">
-                        {item.q}
-                      </span>
-
-                      <span className="w-6 h-6 flex items-center justify-center flex-shrink-0 text-[#0A0A0A]">
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          style={{
-                            transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                            transition: "transform 400ms cubic-bezier(0.16, 1, 0.3, 1)",
-                          }}
-                        >
-                          <line x1="12" y1="5" x2="12" y2="19" />
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
-                      </span>
-                    </button>
-
-                    <div
-                      id={panelId}
-                      role="region"
-                      aria-labelledby={headerId}
-                      className="grid"
-                      style={{
-                        gridTemplateRows: isOpen ? "1fr" : "0fr",
-                        transition: "grid-template-rows 600ms cubic-bezier(0.16, 1, 0.3, 1)",
-                      }}
-                    >
-                      <div className="min-h-0 overflow-hidden">
-                        <p
-                          className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal pb-6 max-w-[680px]"
-                          style={{
-                            opacity: isOpen ? 1 : 0,
-                            transition: isOpen
-                              ? "opacity 400ms cubic-bezier(0.16, 1, 0.3, 1) 150ms"
-                              : "opacity 200ms ease 0ms",
-                          }}
-                        >
-                          {item.a}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}

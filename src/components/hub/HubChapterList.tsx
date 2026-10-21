@@ -33,16 +33,16 @@ export const HubChapterList: React.FC<HubChapterListProps> = ({ chapters }) => {
               {chapter.num}
             </div>
 
-            {/* Chapter name (H3): 17px mobile / 22px desktop, weight 600, #0A0A0A. Margin-bottom 10px. Hover: shifts 4px to the right over 0.3s ease. */}
-            <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em] mb-[10px] transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-1">
+            {/* Chapter name (H3): 14px mobile / 22px desktop, weight 600, #0A0A0A, uppercase. Margin-bottom 10px. Hover: shifts 4px to the right over 0.3s ease. */}
+            <h3 className="text-[14px] sm:text-[16px] lg:text-[22px] font-semibold text-[#0A0A0A] uppercase leading-[1.25] tracking-[-0.01em] mb-[10px] transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-1">
               <Link to={chapter.url} className="text-[#0A0A0A] hover:text-[#0A0A0A] block">
                 {chapter.label}
               </Link>
             </h3>
 
-            {/* Description: 14px, #6B7280, line-height 1.7, max-width 480px. Margin-bottom 16px. */}
+            {/* Description: 14px, #0A0A0A, line-height 1.7, max-width 480px. Margin-bottom 16px. */}
             {chapter.desc && (
-              <p className="text-[14px] text-[var(--blue)] leading-[1.7] max-w-[480px] mb-[16px]">
+              <p className="text-[14px] text-[#0A0A0A] leading-[1.7] max-w-[480px] mb-[16px]">
                 {chapter.desc}
               </p>
             )}

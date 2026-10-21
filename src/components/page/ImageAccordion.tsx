@@ -42,7 +42,7 @@ export const ImageAccordionCard: React.FC<{
         className="w-full h-[64px] min-h-[64px] px-5 sm:px-6 flex items-center justify-between text-left cursor-pointer border-0 bg-white rounded-none select-none transition-colors"
         aria-expanded={isOpen}
       >
-        <h3 className="text-[17px] font-bold text-[#0A0A0A] leading-snug pr-3">
+        <h3 className="text-[17px] font-bold text-[#0A0A0A] uppercase leading-snug pr-3">
           {item.title}
         </h3>
 
@@ -75,7 +75,7 @@ export const ImageAccordionCard: React.FC<{
         }}
       >
         <div className="overflow-hidden px-5 sm:px-6">
-          <p className="text-[15px] leading-[1.6] text-[var(--blue)] font-normal pb-6">
+          <p className="text-[15px] leading-[1.6] text-[#0A0A0A] font-normal pb-6">
             {item.text}
           </p>
         </div>

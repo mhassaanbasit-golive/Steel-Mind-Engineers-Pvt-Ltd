@@ -337,10 +337,10 @@ export const StorageWarehousesLayout: React.FC<{ data: ContentData }> = ({ data 
             {blocks.map((b, idx) => (
               <div key={idx} className="sw-block space-y-3">
                 <div className="w-full h-[1px] bg-[#E5E5E5] mb-5 sw-line" />
-                <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug sw-text-item">
+                <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug sw-text-item">
                   {b.title}
                 </h3>
-                <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal sw-text-item">
+                <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal sw-text-item">
                   {b.text}
                 </p>
               </div>
@@ -407,7 +407,7 @@ export const StorageWarehousesLayout: React.FC<{ data: ContentData }> = ({ data 
             <h3 className="text-[17px] font-bold text-[#0A0A0A] leading-snug sw-text-item">
               {blocks[0]?.title}
             </h3>
-            <p className="text-[15px] leading-[1.6] text-[var(--blue)] font-normal sw-text-item">
+            <p className="text-[15px] leading-[1.6] text-[#0A0A0A] font-normal sw-text-item">
               {blocks[0]?.text}
             </p>
           </div>
@@ -442,7 +442,7 @@ export const StorageWarehousesLayout: React.FC<{ data: ContentData }> = ({ data 
             <h3 className="text-[17px] font-bold text-[#0A0A0A] leading-snug sw-text-item">
               {blocks[1]?.title}
             </h3>
-            <p className="text-[15px] leading-[1.6] text-[var(--blue)] font-normal sw-text-item">
+            <p className="text-[15px] leading-[1.6] text-[#0A0A0A] font-normal sw-text-item">
               {blocks[1]?.text}
             </p>
           </div>
@@ -477,73 +477,21 @@ export const StorageWarehousesLayout: React.FC<{ data: ContentData }> = ({ data 
             <h3 className="text-[17px] font-bold text-[#0A0A0A] leading-snug sw-text-item">
               {blocks[2]?.title}
             </h3>
-            <p className="text-[15px] leading-[1.6] text-[var(--blue)] font-normal sw-text-item">
+            <p className="text-[15px] leading-[1.6] text-[#0A0A0A] font-normal sw-text-item">
               {blocks[2]?.text}
             </p>
           </div>
         </div>
       </section>
 
-      {/* 3. Frequently Asked Questions: TEXT STYLE & ACCORDION recipe */}
+      {/* 3. Frequently Asked Questions */}
       {data.faq && data.faq.length > 0 && (
         <section className="container py-[var(--sec-y-lg)] border-t border-[#E5E5E5] text-left max-w-[1340px] mx-auto">
           <div className="max-w-[800px] mx-auto">
-            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
-
-            <div className="w-full divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
-              {data.faq.map((item, idx) => {
-                const isOpen = openFaqIdx === idx;
-                const panelId = `storage-faq-panel-${idx}`;
-                const headerId = `storage-faq-header-${idx}`;
-
-                return (
-                  <div key={idx} className="group overflow-hidden">
-                    <button
-                      id={headerId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      onClick={() => setOpenFaqIdx(isOpen ? null : idx)}
-                      className="w-full min-h-[48px] py-5 lg:py-6 flex items-center justify-between text-left cursor-pointer transition-colors"
-                    >
-                      <span className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug pr-4">
-                        {item.q}
-                      </span>
-                      <span
-                        className={`flex-shrink-0 w-8 h-8 rounded-full border border-[var(--blue)] flex items-center justify-center text-[var(--blue)] font-bold text-[18px] transition-transform duration-300 ${
-                          isOpen ? "rotate-45 bg-[var(--blue)] text-white" : "bg-white"
-                        }`}
-                        aria-hidden="true"
-                      >
-                        +
-                      </span>
-                    </button>
-
-                    <div
-                      id={panelId}
-                      role="region"
-                      aria-labelledby={headerId}
-                      className="overflow-hidden"
-                      style={{
-                        display: "grid",
-                        gridTemplateRows: isOpen ? "1fr" : "0fr",
-                        opacity: isOpen ? 1 : 0,
-                        transition:
-                          "grid-template-rows 600ms cubic-bezier(.16, 1, .3, 1), opacity 400ms cubic-bezier(.16, 1, .3, 1) 150ms",
-                      }}
-                    >
-                      <div className="min-h-0 overflow-hidden">
-                        <p className="pb-6 text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[680px]">
-                          {item.a}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}
@@ -907,12 +855,12 @@ export const LogisticsWarehousesLayout: React.FC<{ data: ContentData }> = ({ dat
                 </div>
 
                 {/* Title: bold, ink colour, sentence case */}
-                <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mb-3 lw-text-item">
+                <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug mb-3 lw-text-item">
                   {c.title}
                 </h3>
 
                 {/* Text: the blue of the One-Step body text (var(--blue)), regular weight */}
-                <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal lw-text-item">
+                <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal lw-text-item">
                   {c.text}
                 </p>
               </div>
@@ -987,7 +935,7 @@ export const LogisticsWarehousesLayout: React.FC<{ data: ContentData }> = ({ dat
                 </h3>
 
                 {/* Text: the blue of the One-Step body text (var(--blue)), regular weight */}
-                <p className="text-[15px] leading-[1.6] text-[var(--blue)] font-normal lw-text-item">
+                <p className="text-[15px] leading-[1.6] text-[#0A0A0A] font-normal lw-text-item">
                   {c.text}
                 </p>
               </div>
@@ -996,66 +944,14 @@ export const LogisticsWarehousesLayout: React.FC<{ data: ContentData }> = ({ dat
         </div>
       </section>
 
-      {/* 3. Frequently Asked Questions: TEXT STYLE & ACCORDION recipe */}
+      {/* 3. Frequently Asked Questions */}
       {data.faq && data.faq.length > 0 && (
         <section className="container py-[var(--sec-y-lg)] border-t border-[#E5E5E5] text-left max-w-[1340px] mx-auto">
           <div className="max-w-[800px] mx-auto">
-            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
-
-            <div className="w-full divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
-              {data.faq.map((item, idx) => {
-                const isOpen = openFaqIdx === idx;
-                const panelId = `logistics-faq-panel-${idx}`;
-                const headerId = `logistics-faq-header-${idx}`;
-
-                return (
-                  <div key={idx} className="group overflow-hidden">
-                    <button
-                      id={headerId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      onClick={() => setOpenFaqIdx(isOpen ? null : idx)}
-                      className="w-full min-h-[48px] py-5 lg:py-6 flex items-center justify-between text-left cursor-pointer transition-colors"
-                    >
-                      <span className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug pr-4">
-                        {item.q}
-                      </span>
-                      <span
-                        className={`flex-shrink-0 w-8 h-8 rounded-full border border-[var(--blue)] flex items-center justify-center text-[var(--blue)] font-bold text-[18px] transition-transform duration-300 ${
-                          isOpen ? "rotate-45 bg-[var(--blue)] text-white" : "bg-white"
-                        }`}
-                        aria-hidden="true"
-                      >
-                        +
-                      </span>
-                    </button>
-
-                    <div
-                      id={panelId}
-                      role="region"
-                      aria-labelledby={headerId}
-                      className="overflow-hidden"
-                      style={{
-                        display: "grid",
-                        gridTemplateRows: isOpen ? "1fr" : "0fr",
-                        opacity: isOpen ? 1 : 0,
-                        transition:
-                          "grid-template-rows 600ms cubic-bezier(.16, 1, .3, 1), opacity 400ms cubic-bezier(.16, 1, .3, 1) 150ms",
-                      }}
-                    >
-                      <div className="min-h-0 overflow-hidden">
-                        <p className="pb-6 text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[680px]">
-                          {item.a}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}
@@ -1600,10 +1496,10 @@ export const ColdStorageLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                   className="w-full h-full object-cover block cs-photo-img"
                 />
               </div>
-              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mt-6 mb-3 cs-text-item">
+              <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug mt-6 mb-3 cs-text-item">
                 {cards[0].title}
               </h3>
-              <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal cs-text-item">
+              <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal cs-text-item">
                 {cards[0].text}
               </p>
             </div>
@@ -1657,10 +1553,10 @@ export const ColdStorageLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                   className="w-full h-full object-cover block cs-photo-img"
                 />
               </div>
-              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mt-6 mb-3 cs-text-item">
+              <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug mt-6 mb-3 cs-text-item">
                 {cards[1].title}
               </h3>
-              <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal cs-text-item">
+              <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal cs-text-item">
                 {cards[1].text}
               </p>
             </div>
@@ -1717,10 +1613,10 @@ export const ColdStorageLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                   className="w-full h-full object-cover block cs-photo-img"
                 />
               </div>
-              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mt-6 mb-3 cs-text-item">
+              <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug mt-6 mb-3 cs-text-item">
                 {cards[2].title}
               </h3>
-              <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal cs-text-item">
+              <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal cs-text-item">
                 {cards[2].text}
               </p>
             </div>
@@ -1774,10 +1670,10 @@ export const ColdStorageLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                   className="w-full h-full object-cover block cs-photo-img"
                 />
               </div>
-              <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug mt-6 mb-3 cs-text-item">
+              <h3 className="text-[14px] sm:text-[16px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug mt-6 mb-3 cs-text-item">
                 {cards[3].title}
               </h3>
-              <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal cs-text-item">
+              <p className="text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[#0A0A0A] font-normal cs-text-item">
                 {cards[3].text}
               </p>
             </div>
@@ -1818,7 +1714,7 @@ export const ColdStorageLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                 </h3>
 
                 {/* Text: the blue of the One-Step body text (var(--blue)), regular weight */}
-                <p className="text-[15px] leading-[1.6] text-[var(--blue)] font-normal cs-text-item">
+                <p className="text-[15px] leading-[1.6] text-[#0A0A0A] font-normal cs-text-item">
                   {c.text}
                 </p>
               </div>
@@ -1849,66 +1745,14 @@ export const ColdStorageLayout: React.FC<{ data: ContentData }> = ({ data }) => 
         </div>
       </section>
 
-      {/* 3. Frequently Asked Questions: TEXT STYLE & ACCORDION recipe */}
+      {/* 3. Frequently Asked Questions */}
       {data.faq && data.faq.length > 0 && (
         <section className="container py-[var(--sec-y-lg)] border-t border-[#E5E5E5] text-left max-w-[1340px] mx-auto">
           <div className="max-w-[800px] mx-auto">
-            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
-
-            <div className="w-full divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
-              {data.faq.map((item, idx) => {
-                const isOpen = openFaqIdx === idx;
-                const panelId = `cold-storage-faq-panel-${idx}`;
-                const headerId = `cold-storage-faq-header-${idx}`;
-
-                return (
-                  <div key={idx} className="group overflow-hidden">
-                    <button
-                      id={headerId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      onClick={() => setOpenFaqIdx(isOpen ? null : idx)}
-                      className="w-full min-h-[48px] py-5 lg:py-6 flex items-center justify-between text-left cursor-pointer transition-colors"
-                    >
-                      <span className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug pr-4">
-                        {item.q}
-                      </span>
-                      <span
-                        className={`flex-shrink-0 w-8 h-8 rounded-full border border-[var(--blue)] flex items-center justify-center text-[var(--blue)] font-bold text-[18px] transition-transform duration-300 ${
-                          isOpen ? "rotate-45 bg-[var(--blue)] text-white" : "bg-white"
-                        }`}
-                        aria-hidden="true"
-                      >
-                        +
-                      </span>
-                    </button>
-
-                    <div
-                      id={panelId}
-                      role="region"
-                      aria-labelledby={headerId}
-                      className="overflow-hidden"
-                      style={{
-                        display: "grid",
-                        gridTemplateRows: isOpen ? "1fr" : "0fr",
-                        opacity: isOpen ? 1 : 0,
-                        transition:
-                          "grid-template-rows 600ms cubic-bezier(.16, 1, .3, 1), opacity 400ms cubic-bezier(.16, 1, .3, 1) 150ms",
-                      }}
-                    >
-                      <div className="min-h-0 overflow-hidden">
-                        <p className="pb-6 text-[15px] lg:text-[16px] leading-[1.6] lg:leading-[1.7] text-[var(--blue)] font-normal max-w-[680px]">
-                          {item.a}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}
@@ -2589,7 +2433,7 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
             <div className="col-span-7">
               <p
                 ref={desktopCaptionTextRef}
-                className="text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.7] font-normal"
+                className="text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.7] font-normal"
               >
                 {slides[0]?.text}
               </p>
@@ -2689,7 +2533,7 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
             </h3>
             <p
               ref={mobileCaptionTextRef}
-              className="text-[15px] text-[var(--blue)] leading-[1.6] font-normal"
+              className="text-[15px] text-[#0A0A0A] leading-[1.6] font-normal"
             >
               {slides[0]?.text}
             </p>
@@ -2722,64 +2566,14 @@ export const GrainWarehousesLayout: React.FC<{ data: ContentData }> = ({ data })
         </div>
       </section>
 
-      {/* 3. FAQ Section: Accordion recipe & Text Style */}
+      {/* 3. Frequently Asked Questions */}
       {data.faq && data.faq.length > 0 && (
-        <section className="container py-[var(--sec-y)]">
-          <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="font-bold text-[#0A0A0A] uppercase text-[16px] lg:text-[44px] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8 md:mb-10">
+        <section className="container py-[var(--sec-y-lg)] border-t border-[#E5E5E5] text-left max-w-[1340px] mx-auto">
+          <div className="max-w-[800px] mx-auto">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
-
-            <div className="w-full divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
-              {data.faq.map((item, idx) => {
-                const isOpen = openFaqIndex === idx;
-
-                return (
-                  <div key={idx} className="w-full">
-                    <button
-                      type="button"
-                      aria-expanded={isOpen}
-                      onClick={() =>
-                        setOpenFaqIndex((prev) => (prev === idx ? null : idx))
-                      }
-                      className="w-full min-h-[48px] py-4 lg:py-5 flex items-center justify-between text-left cursor-pointer group focus-visible:outline-none"
-                    >
-                      <span className="font-bold text-[#0A0A0A] text-[15px] lg:text-[18px] pr-6 leading-snug">
-                        {item.q}
-                      </span>
-
-                      {/* Rotating Plus Icon (0 to 45deg over 400ms E1) */}
-                      <span
-                        className="relative flex-shrink-0 w-6 h-6 flex items-center justify-center transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]"
-                        style={{
-                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                        }}
-                      >
-                        <span className="absolute w-[16px] h-[2px] bg-[var(--blue)]" />
-                        <span className="absolute h-[16px] w-[2px] bg-[var(--blue)]" />
-                      </span>
-                    </button>
-
-                    {/* Accordion panel: grid-template-rows 0fr to 1fr over 600ms E1 */}
-                    <div
-                      className="grid transition-[grid-template-rows] duration-600 ease-[cubic-bezier(0.16,1,0.3,1)]"
-                      style={{
-                        gridTemplateRows: isOpen ? "1fr" : "0fr",
-                      }}
-                    >
-                      <div className="overflow-hidden">
-                        <p
-                          className="pt-2 pb-5 text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal max-w-[800px] transition-opacity duration-400 delay-150"
-                          style={{ opacity: isOpen ? 1 : 0 }}
-                        >
-                          {item.a}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}
@@ -3242,7 +3036,7 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
                     }}
                   >
                     <div className="overflow-hidden">
-                      <p className="pt-3 text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal">
+                      <p className="pt-3 text-[15px] lg:text-[16px] text-[#0A0A0A] leading-[1.65] font-normal">
                         {item.text}
                       </p>
 
@@ -3368,7 +3162,7 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
                   >
                     <div className="overflow-hidden">
                       <p
-                        className="pt-1 pb-3 text-[15px] text-[var(--blue)] leading-[1.6] font-normal transition-opacity duration-400 delay-150"
+                        className="pt-1 pb-3 text-[15px] text-[#0A0A0A] leading-[1.6] font-normal transition-opacity duration-400 delay-150"
                         style={{ opacity: isActive ? 1 : 0 }}
                       >
                         {item.text}
@@ -3393,64 +3187,14 @@ export const LoadingDocksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
         </div>
       </section>
 
-      {/* 3. FAQ Section: size according to other pages */}
+      {/* 3. Frequently Asked Questions */}
       {data.faq && data.faq.length > 0 && (
         <section className="container py-[var(--sec-y-lg)] border-t border-[#E5E5E5] text-left max-w-[1340px] mx-auto">
           <div className="max-w-[800px] mx-auto">
-            <h2 className="text-[16px] lg:text-[44px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold uppercase text-[#0A0A0A] leading-tight lg:leading-[1.15] tracking-[-0.02em] mb-8">
               FREQUENTLY ASKED QUESTIONS
             </h2>
-
-            <div className="w-full divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
-              {data.faq.map((item, idx) => {
-                const isOpen = openFaqIndex === idx;
-
-                return (
-                  <div key={idx} className="group overflow-hidden">
-                    <button
-                      type="button"
-                      aria-expanded={isOpen}
-                      onClick={() =>
-                        setOpenFaqIndex((prev) => (prev === idx ? null : idx))
-                      }
-                      className="w-full min-h-[48px] py-5 lg:py-6 flex items-center justify-between text-left cursor-pointer transition-colors focus-visible:outline-none"
-                    >
-                      <span className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-snug pr-4">
-                        {item.q}
-                      </span>
-
-                      {/* Rotating Plus Icon (0 to 45deg over 400ms E1) */}
-                      <span
-                        className="relative flex-shrink-0 w-6 h-6 flex items-center justify-center transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]"
-                        style={{
-                          transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                        }}
-                      >
-                        <span className="absolute w-[16px] h-[2px] bg-[var(--blue)]" />
-                        <span className="absolute h-[16px] w-[2px] bg-[var(--blue)]" />
-                      </span>
-                    </button>
-
-                    {/* Accordion panel: grid-template-rows 0fr to 1fr over 600ms E1 */}
-                    <div
-                      className="grid transition-[grid-template-rows] duration-600 ease-[cubic-bezier(0.16,1,0.3,1)]"
-                      style={{
-                        gridTemplateRows: isOpen ? "1fr" : "0fr",
-                      }}
-                    >
-                      <div className="overflow-hidden">
-                        <p
-                          className="pt-1.5 pb-5 text-[15px] lg:text-[16px] text-[var(--blue)] leading-[1.65] font-normal max-w-[800px] transition-opacity duration-400 delay-150"
-                          style={{ opacity: isOpen ? 1 : 0 }}
-                        >
-                          {item.a}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}

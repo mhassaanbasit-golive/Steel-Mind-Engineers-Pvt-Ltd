@@ -245,13 +245,13 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
               {/* Left Column: First H2 and first two paragraphs */}
               <div className="lg:col-span-6 space-y-4">
-                <h2 className="text-[22px] lg:text-[48px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em]">
+                <h2 className="text-[17px] sm:text-[19px] lg:text-[48px] font-bold text-[#0A0A0A] uppercase leading-[1.15] tracking-[-0.02em]">
                   {blockBSection.h2Title}
                 </h2>
                 {blockBSection.paragraphs.slice(0, 2).map((p, idx) => (
                   <p
                     key={idx}
-                    className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]"
+                    className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#0A0A0A] max-w-[600px]"
                   >
                     {p}
                   </p>
@@ -268,7 +268,7 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
             {blockBSection.paragraphs.length > 2 && (
               <div className="mt-8 space-y-4 max-w-[600px]">
                 {blockBSection.paragraphs.slice(2).map((p, idx) => (
-                  <p key={idx} className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]">
+                  <p key={idx} className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#0A0A0A] max-w-[600px]">
                     {p}
                   </p>
                 ))}
@@ -286,10 +286,10 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
                         <div className="text-[16px] font-bold text-[#1E3A8A] tabular-nums tracking-[0.06em] mb-3">
                           {numStr}
                         </div>
-                        <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em] mb-2">
+                        <h3 className="text-[14px] sm:text-[16px] lg:text-[22px] font-semibold text-[#0A0A0A] uppercase leading-[1.25] tracking-[-0.01em] mb-2">
                           {item.term}
                         </h3>
-                        <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]">
+                        <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#0A0A0A] max-w-[600px]">
                           {item.desc}
                         </p>
                       </div>
@@ -324,10 +324,10 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
                     </div>
 
                     <div className="space-y-3">
-                      <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
+                      <h3 className="text-[14px] sm:text-[16px] lg:text-[22px] font-semibold text-[#0A0A0A] uppercase leading-[1.25] tracking-[-0.01em]">
                         {st.name}
                       </h3>
-                      <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]">
+                      <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#0A0A0A] max-w-[600px]">
                         {st.desc}
                       </p>
 
@@ -383,13 +383,13 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
                           : "lg:col-span-6 lg:order-1"
                       }`}
                     >
-                      <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
+                      <h3 className="text-[14px] sm:text-[16px] lg:text-[22px] font-semibold text-[#0A0A0A] uppercase leading-[1.25] tracking-[-0.01em]">
                         {sec.h2Title}
                       </h3>
                       {sec.paragraphs.map((p, pIdx) => (
                         <p
                           key={pIdx}
-                          className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]"
+                          className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#0A0A0A] max-w-[600px]"
                         >
                           {p}
                         </p>
@@ -408,10 +408,10 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
                               <div className="text-[16px] font-bold text-[#1E3A8A] tabular-nums tracking-[0.06em] mb-3">
                                 {numStr}
                               </div>
-                              <h3 className="text-[17px] lg:text-[22px] font-semibold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em] mb-2">
+                              <h3 className="text-[14px] sm:text-[16px] lg:text-[22px] font-semibold text-[#0A0A0A] uppercase leading-[1.25] tracking-[-0.01em] mb-2">
                                 {item.term}
                               </h3>
-                              <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[var(--blue)] max-w-[600px]">
+                              <p className="text-[14px] lg:text-[15px] font-normal leading-[1.7] text-[#0A0A0A] max-w-[600px]">
                                 {item.desc}
                               </p>
                             </div>
@@ -430,7 +430,7 @@ export const Info: React.FC<InfoProps> = ({ data, isStepsPage = false }) => {
       {data.faq && data.faq.length > 0 && (
         <section className="py-12 lg:py-16 bg-white border-b border-[#E5E5E5]">
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)] max-w-[800px]">
-            <h2 className="text-[22px] lg:text-[48px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] mb-6">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold text-[#0A0A0A] uppercase leading-[1.15] tracking-[-0.02em] mb-6">
               Frequently Asked Questions
             </h2>
             <Accordion items={data.faq} />

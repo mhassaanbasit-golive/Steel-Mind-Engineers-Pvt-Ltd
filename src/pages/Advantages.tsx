@@ -4,6 +4,7 @@ import { subpageImages } from "../data/subpageImages.ts";
 import { PhotoBox } from "../components/ui/PhotoBox.tsx";
 import { SubpageHero } from "../components/subpage/SubpageHero.tsx";
 import { SubpageNextBanner } from "../components/subpage/SubpageNextBanner.tsx";
+import { Accordion } from "../components/ui/Accordion.tsx";
 import { FitOneLine } from "../components/ui/FitOneLine.tsx";
 import { useMediaQuery } from "../hooks/useMediaQuery.ts";
 
@@ -182,8 +183,7 @@ export const Advantages: React.FC<AdvantagesProps> = ({ data }) => {
                 style={{ top: "calc(var(--nav-h, 88px) + 48px)" }}
               >
                 <h2
-                  className="font-bold text-[#0A0A0A] leading-[1.12] tracking-[-0.02em] max-w-[420px] text-left uppercase"
-                  style={{ fontSize: "clamp(36px, 3.4vw, 56px)" }}
+                  className="font-bold text-[#0A0A0A] leading-[1.12] tracking-[-0.02em] max-w-[420px] text-left uppercase text-[17px] sm:text-[19px] lg:text-[44px]"
                 >
                   Why Owners Choose PEB
                 </h2>
@@ -315,7 +315,7 @@ export const Advantages: React.FC<AdvantagesProps> = ({ data }) => {
                         >
                           <div className="overflow-hidden min-h-0">
                             <p
-                              className="pl-16 pb-8 text-[15px] text-[var(--blue)] leading-[1.7] max-w-[520px]"
+                              className="pl-16 pb-8 text-[15px] text-[#0A0A0A] leading-[1.7] max-w-[520px]"
                               style={{
                                 transform:
                                   isOpen || prefersReduced
@@ -357,9 +357,9 @@ export const Advantages: React.FC<AdvantagesProps> = ({ data }) => {
                 <FitOneLine
                   as="h2"
                   ariaLabel={introTitle}
-                  initialClamp="clamp(18px, 6vw, 30px)"
+                  initialClamp="clamp(17px, 5vw, 20px)"
                   minFontSize={16}
-                  className="font-bold text-[#0A0A0A] tracking-[-0.02em] uppercase leading-tight"
+                  className="font-bold text-[#0A0A0A] tracking-[-0.02em] uppercase leading-tight text-[17px] sm:text-[19px]"
                 >
                   {titleWords.map((word, wordIdx) => {
                     let prevChars = 0;
@@ -499,7 +499,7 @@ export const Advantages: React.FC<AdvantagesProps> = ({ data }) => {
                       >
                         <div className="overflow-hidden min-h-0">
                           <p
-                            className="pl-12 pb-6 text-[15px] text-[var(--blue)] leading-[1.6]"
+                            className="pl-12 pb-6 text-[15px] text-[#0A0A0A] leading-[1.6]"
                             style={{
                               transform:
                                 isOpen || prefersReduced
@@ -582,13 +582,7 @@ export const Advantages: React.FC<AdvantagesProps> = ({ data }) => {
           >
             {/* Title Left */}
             <h3
-              className="font-bold text-[#0A0A0A] leading-[1.2] tracking-[-0.01em]"
-              style={{
-                fontSize: isDesktop
-                  ? "clamp(28px, 2.8vw, 44px)"
-                  : "clamp(18px, 5vw, 24px)",
-                textWrap: !isDesktop ? ("balance" as any) : undefined,
-              }}
+              className="font-bold text-[#0A0A0A] leading-[1.2] tracking-[-0.01em] uppercase text-[17px] sm:text-[19px] lg:text-[32px]"
             >
               PEB Compared With Concrete Construction
             </h3>
@@ -598,7 +592,7 @@ export const Advantages: React.FC<AdvantagesProps> = ({ data }) => {
               {/* Column A: text up to end of sentence about concrete. 1px light grey top line */}
               <div className="relative pt-6">
                 <div className="absolute top-0 inset-x-0 h-[1px] bg-[#E5E5E5]" />
-                <p className="text-[15px] text-[var(--blue)] leading-[1.7]">
+                <p className="text-[15px] text-[#0A0A0A] leading-[1.7]">
                   Concrete buildings are cast on site. They depend on curing
                   time and weather, and changes are slow.
                 </p>
@@ -619,7 +613,7 @@ export const Advantages: React.FC<AdvantagesProps> = ({ data }) => {
                       : "transform 800ms cubic-bezier(0.22, 1, 0.36, 1) 300ms",
                   }}
                 />
-                <p className="text-[15px] text-[var(--blue)] leading-[1.7]">
+                <p className="text-[15px] text-[#0A0A0A] leading-[1.7]">
                   A PEB is made in a factory and assembled on site. This is why
                   many factory, warehouse and farm owners in Pakistan now ask
                   for a PEB first.
@@ -665,8 +659,7 @@ export const Advantages: React.FC<AdvantagesProps> = ({ data }) => {
               }}
             >
               <h3
-                className="font-bold text-white leading-[1.2] tracking-[-0.01em] mb-6"
-                style={{ fontSize: "clamp(28px, 2.8vw, 44px)" }}
+                className="font-bold text-white uppercase leading-[1.2] tracking-[-0.01em] mb-6 text-[17px] sm:text-[19px] lg:text-[32px]"
               >
                 When Another Solution Is Better
               </h3>
@@ -738,11 +731,7 @@ export const Advantages: React.FC<AdvantagesProps> = ({ data }) => {
               }}
             >
               <h3
-                className="font-bold text-white tracking-[-0.01em] mb-5"
-                style={{
-                  fontSize: "clamp(18px, 5vw, 24px)",
-                  textWrap: "balance" as any,
-                }}
+                className="font-bold text-white uppercase tracking-[-0.01em] mb-5 text-[17px] sm:text-[19px]"
               >
                 When Another Solution Is Better
               </h3>
@@ -762,91 +751,14 @@ export const Advantages: React.FC<AdvantagesProps> = ({ data }) => {
         )}
       </section>
 
-      {/* 4. FAQ (compact title with FitOneLine on mobile, 15px question text) */}
+      {/* 4. FAQ */}
       {data.faq && data.faq.length > 0 && (
         <section className="w-full bg-white pt-16 lg:pt-24 pb-[64px] lg:pb-[96px] px-6 lg:px-8 border-t border-[#E5E5E5]">
           <div className="max-w-[1280px] mx-auto text-left">
-            {isDesktop ? (
-              <h2 className="text-[22px] lg:text-[40px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] mb-10">
-                Frequently Asked Questions
-              </h2>
-            ) : (
-              <div className="w-full mb-8 overflow-hidden">
-                <FitOneLine
-                  as="h2"
-                  initialClamp="clamp(18px, 6vw, 30px)"
-                  minFontSize={16}
-                  className="font-bold text-[#0A0A0A] tracking-[-0.02em] leading-tight"
-                >
-                  Frequently Asked Questions
-                </FitOneLine>
-              </div>
-            )}
-
-            <div className="w-full divide-y divide-[#E5E5E5] border-y border-[#E5E5E5]">
-              {data.faq.map((item, idx) => {
-                const isOpen = openFaqIndex === idx;
-
-                return (
-                  <div key={idx} className="w-full py-5">
-                    <button
-                      type="button"
-                      aria-expanded={isOpen}
-                      onClick={() => toggleFaq(idx)}
-                      className="w-full flex items-center justify-between text-left cursor-pointer group focus-visible:outline-none"
-                    >
-                      <span className="font-semibold text-[15px] text-[#0A0A0A] pr-6 leading-snug">
-                        {item.q}
-                      </span>
-
-                      <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center">
-                        <svg
-                          className="w-5 h-5 stroke-[#0A0A0A]"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          strokeWidth="1.5"
-                        >
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                          <line
-                            x1="12"
-                            y1="5"
-                            x2="12"
-                            y2="19"
-                            style={{
-                              transformOrigin: "center",
-                              transform: isOpen
-                                ? "rotate(90deg)"
-                                : "rotate(0deg)",
-                              opacity: isOpen ? 0 : 1,
-                              transition: prefersReduced
-                                ? "none"
-                                : "transform 700ms cubic-bezier(0.22, 1, 0.36, 1), opacity 700ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                        </svg>
-                      </span>
-                    </button>
-
-                    <div
-                      className="grid"
-                      style={{
-                        gridTemplateRows: isOpen ? "1fr" : "0fr",
-                        opacity: isOpen ? 1 : 0,
-                        transition: prefersReduced
-                          ? "none"
-                          : "grid-template-rows 700ms cubic-bezier(0.22, 1, 0.36, 1), opacity 700ms cubic-bezier(0.22, 1, 0.36, 1)",
-                      }}
-                    >
-                      <div className="overflow-hidden">
-                        <p className="pt-3 pb-2 text-[15px] text-[var(--blue)] leading-[1.7] max-w-[800px]">
-                          {item.a}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold text-[#0A0A0A] uppercase leading-[1.15] tracking-[-0.02em] mb-10">
+              Frequently Asked Questions
+            </h2>
+            <Accordion items={data.faq} size="large" />
           </div>
         </section>
       )}

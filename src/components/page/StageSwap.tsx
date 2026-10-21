@@ -155,10 +155,10 @@ export const StageSwap: React.FC<StageSwapProps> = ({
                 }}
                 onMouseEnter={() => setActiveIdx(idx)}
               >
-                <h3 className="text-[30px] font-[500] text-[var(--ink)] leading-[1.15] tracking-[-0.025em] mb-4">
+                <h3 className="text-[22px] lg:text-[30px] font-bold text-[#0A0A0A] uppercase leading-[1.15] tracking-[-0.025em] mb-4">
                   {row.title}
                 </h3>
-                <p className="text-[17px] text-[var(--blue)] leading-[1.65] max-w-[560px]">
+                <p className="text-[15px] lg:text-[17px] text-[#0A0A0A] leading-[1.65] max-w-[560px]">
                   {row.text}
                 </p>
               </div>
@@ -233,10 +233,10 @@ export const StageSwap: React.FC<StageSwapProps> = ({
               }}
               className="py-7 border-t border-[rgba(15,23,42,0.12)] text-left"
             >
-              <h3 className="text-[20px] font-[600] text-[var(--ink)] leading-[1.2] tracking-[-0.025em] mb-2.5">
+              <h3 className="text-[17px] sm:text-[19px] font-bold text-[#0A0A0A] uppercase leading-[1.2] tracking-[-0.025em] mb-2.5">
                 {row.title}
               </h3>
-              <p className="text-[15px] text-[var(--blue)] leading-[1.65]">
+              <p className="text-[15px] text-[#0A0A0A] leading-[1.65]">
                 {row.text}
               </p>
             </div>

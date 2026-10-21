@@ -106,14 +106,12 @@ export const ContactUs: React.FC = () => {
       {/* 1. Page Title Block: White bg, H1 ink colour, subtitle lead */}
       <section className="container py-10 lg:py-16 text-left">
         <h1
-          className="font-bold text-[var(--ink)] tracking-[-0.02em] mb-4 text-balance"
-          style={{ fontSize: "var(--fs-h2)" }}
+          className="font-semibold text-[#0A0A0A] uppercase tracking-[-0.01em] mb-4 text-balance text-[17px] sm:text-[19px] lg:text-[32px]"
         >
           {pageData.h1}
         </h1>
         <p
-          className="text-[var(--grey-strong)] max-w-[800px] leading-[1.6]"
-          style={{ fontSize: "var(--fs-lead)" }}
+          className="text-[#0A0A0A] max-w-[800px] leading-[1.6] text-[13px] sm:text-[14px] lg:text-[16px]"
         >
           Send your drawings, outline or building questions. An engineer reads every submission and replies with facts, not a sales pitch.
         </p>

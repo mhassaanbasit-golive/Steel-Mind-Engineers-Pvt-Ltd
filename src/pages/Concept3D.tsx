@@ -130,11 +130,10 @@ const MobileStoryBlock: React.FC<{
         />
       </div>
 
-      {/* 3. Title, margin-top 10px: font-size 19px, line-height 1.25 */}
+      {/* 3. Title, margin-top 10px */}
       <h2
-        className="font-bold text-[#0A0A0A] tracking-[-0.01em]"
+        className="font-bold text-[#0A0A0A] uppercase tracking-[-0.01em] text-[17px] sm:text-[19px] lg:text-[28px]"
         style={{
-          fontSize: "19px",
           lineHeight: 1.25,
           marginTop: "10px",
         }}
@@ -145,7 +144,7 @@ const MobileStoryBlock: React.FC<{
       {/* 4. Text, margin-top 10px: 15px, line-height 1.7, colour #6B7280 matching Advantages page */}
       {idx === 3 ? (
         <div
-          className="text-[#6B7280]"
+          className="text-[#0A0A0A]"
           style={{
             fontSize: "15px",
             lineHeight: 1.7,
@@ -158,14 +157,14 @@ const MobileStoryBlock: React.FC<{
             you approved. Read more on the{" "}
             <TransitionLink
               to="/pre-engineered-buildings-pakistan/engineering-department/"
-              className="text-[var(--blue,#1E3A8A)] underline font-medium hover:opacity-80"
+              className="text-[#0A0A0A] underline font-medium hover:opacity-80"
             >
               Engineering Department
             </TransitionLink>{" "}
             page and the{" "}
             <TransitionLink
               to="/services/detailing/"
-              className="text-[var(--blue,#1E3A8A)] underline font-medium hover:opacity-80"
+              className="text-[#0A0A0A] underline font-medium hover:opacity-80"
             >
               Detailing
             </TransitionLink>{" "}
@@ -185,7 +184,7 @@ const MobileStoryBlock: React.FC<{
         </div>
       ) : (
         <p
-          className="text-[#6B7280]"
+          className="text-[#0A0A0A]"
           style={{
             fontSize: "15px",
             lineHeight: 1.7,
@@ -364,15 +363,15 @@ export const Concept3D: React.FC<Concept3DProps> = ({ data }) => {
                         {block.num}
                       </div>
 
-                      {/* Title: 20px / 28px desktop, same as Advantages page section titles */}
-                      <h2 className="text-[20px] lg:text-[28px] font-bold text-[#0A0A0A] leading-snug tracking-[-0.01em]">
+                      {/* Title */}
+                      <h2 className="text-[17px] sm:text-[19px] lg:text-[28px] font-bold text-[#0A0A0A] uppercase leading-snug tracking-[-0.01em]">
                         {block.title}
                       </h2>
 
-                      {/* Text: 15px leading-[1.7] text-[#6B7280], exactly matching Advantages page body text */}
+                      {/* Text */}
                       {idx === 3 ? (
                         /* Block 04: with links to Engineering Department and Detailing */
-                        <div className="text-[15px] leading-[1.7] text-[#6B7280] mt-3 max-w-[520px]">
+                        <div className="text-[15px] leading-[1.7] text-[#0A0A0A] mt-3 max-w-[520px]">
                           <p>
                             The approved model is the basis for the fabrication
                             drawings. The same data feeds the cutting lists, so
@@ -380,14 +379,14 @@ export const Concept3D: React.FC<Concept3DProps> = ({ data }) => {
                             more on the{" "}
                             <TransitionLink
                               to="/pre-engineered-buildings-pakistan/engineering-department/"
-                              className="text-[var(--blue,#1E3A8A)] underline font-medium hover:opacity-80"
+                              className="text-[#0A0A0A] underline font-medium hover:opacity-80"
                             >
                               Engineering Department
                             </TransitionLink>{" "}
                             page and the{" "}
                             <TransitionLink
                               to="/services/detailing/"
-                              className="text-[var(--blue,#1E3A8A)] underline font-medium hover:opacity-80"
+                              className="text-[#0A0A0A] underline font-medium hover:opacity-80"
                             >
                               Detailing
                             </TransitionLink>{" "}
@@ -438,7 +437,7 @@ export const Concept3D: React.FC<Concept3DProps> = ({ data }) => {
       {data.faq && data.faq.length > 0 && (
         <section className="w-full bg-white border-t border-[#E5E5E5] py-16 lg:py-24">
           <div className="max-w-[1340px] mx-auto px-5 lg:px-10 text-left">
-            <h2 className="text-[22px] lg:text-[40px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] mb-10">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold text-[#0A0A0A] uppercase leading-[1.15] tracking-[-0.02em] mb-10">
               Frequently Asked Questions
             </h2>
             <Accordion items={data.faq} size="large" />

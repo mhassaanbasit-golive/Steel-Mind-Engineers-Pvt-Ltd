@@ -189,10 +189,10 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
             {/* Left: About the Project */}
             <div className="lg:col-span-6 space-y-4">
-              <h2 className="text-[22px] lg:text-[32px] font-bold text-[#0A0A0A] tracking-tight leading-[1.2]">
+              <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-semibold text-[#0A0A0A] uppercase tracking-tight leading-[1.2]">
                 About the Project
               </h2>
-              <div className="text-[14px] sm:text-[15px] font-normal leading-[1.75] text-[#374151] space-y-3 pt-1">
+              <div className="text-[14px] sm:text-[15px] font-normal leading-[1.75] text-[#0A0A0A] space-y-3 pt-1">
                 <p>
                   {aboutBlock?.text ||
                     `Steel Mind Engineers executed this ${project.type} for ${project.client} at ${project.location}. The structure covers an approximate area of ${project.area.toLocaleString()} square feet and incorporates high-strength structural engineering, tailored load distribution, and durable fabrication specifications.`}
@@ -205,31 +205,31 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
 
             {/* Right: Specification Table */}
             <div className="lg:col-span-6">
-              <div className="border-b border-[var(--blue)]">
-                <h3 className="text-[17px] lg:text-[19px] font-bold text-[#0A0A0A] tracking-tight mb-4">
+              <div className="border-b border-[#E5E5E5]">
+                <h3 className="text-[14px] sm:text-[16px] lg:text-[18px] font-bold text-[#0A0A0A] uppercase tracking-tight mb-4">
                   Project Specifications
                 </h3>
 
                 <div className="divide-y-0">
                   {/* Client */}
-                  <div className="border-t border-[var(--blue)] py-3 flex items-center justify-between text-[13px] lg:text-[14px]">
-                    <span className="text-[#4B5563] font-medium">Client</span>
+                  <div className="border-t border-[#E5E5E5] py-3 flex items-center justify-between text-[13px] lg:text-[14px]">
+                    <span className="text-[#0A0A0A] font-medium">Client</span>
                     <span className="font-semibold text-[#0A0A0A] text-right">
                       {project.client}
                     </span>
                   </div>
 
                   {/* Location */}
-                  <div className="border-t border-[var(--blue)] py-3 flex items-center justify-between text-[13px] lg:text-[14px]">
-                    <span className="text-[#4B5563] font-medium">Location</span>
+                  <div className="border-t border-[#E5E5E5] py-3 flex items-center justify-between text-[13px] lg:text-[14px]">
+                    <span className="text-[#0A0A0A] font-medium">Location</span>
                     <span className="font-semibold text-[#0A0A0A] text-right">
                       {project.location}
                     </span>
                   </div>
 
                   {/* Type */}
-                  <div className="border-t border-[var(--blue)] py-3 flex items-center justify-between text-[13px] lg:text-[14px]">
-                    <span className="text-[#4B5563] font-medium">
+                  <div className="border-t border-[#E5E5E5] py-3 flex items-center justify-between text-[13px] lg:text-[14px]">
+                    <span className="text-[#0A0A0A] font-medium">
                       Building Type
                     </span>
                     <span className="font-semibold text-[#0A0A0A] text-right">
@@ -239,8 +239,8 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
 
                   {/* Height */}
                   {project.height && (
-                    <div className="border-t border-[var(--blue)] py-3 flex items-center justify-between text-[13px] lg:text-[14px]">
-                      <span className="text-[#4B5563] font-medium">
+                    <div className="border-t border-[#E5E5E5] py-3 flex items-center justify-between text-[13px] lg:text-[14px]">
+                      <span className="text-[#0A0A0A] font-medium">
                         Clear Height
                       </span>
                       <span className="font-semibold text-[#0A0A0A] text-right tabular-nums">
@@ -251,8 +251,8 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
 
                   {/* Width */}
                   {project.width && (
-                    <div className="border-t border-[var(--blue)] py-3 flex items-center justify-between text-[13px] lg:text-[14px]">
-                      <span className="text-[#4B5563] font-medium">
+                    <div className="border-t border-[#E5E5E5] py-3 flex items-center justify-between text-[13px] lg:text-[14px]">
+                      <span className="text-[#0A0A0A] font-medium">
                         Width (Span)
                       </span>
                       <span className="font-semibold text-[#0A0A0A] text-right tabular-nums">
@@ -263,8 +263,8 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
 
                   {/* Length */}
                   {project.length && (
-                    <div className="border-t border-[var(--blue)] py-3 flex items-center justify-between text-[13px] lg:text-[14px]">
-                      <span className="text-[#4B5563] font-medium">Length</span>
+                    <div className="border-t border-[#E5E5E5] py-3 flex items-center justify-between text-[13px] lg:text-[14px]">
+                      <span className="text-[#0A0A0A] font-medium">Length</span>
                       <span className="font-semibold text-[#0A0A0A] text-right tabular-nums">
                         {project.length}
                       </span>
@@ -272,13 +272,12 @@ export const Project: React.FC<ProjectProps> = ({ data, project }) => {
                   )}
 
                   {/* Area */}
-                  <div className="border-t border-[var(--blue)] py-3 flex items-center justify-between text-[13px] lg:text-[14px]">
-                    <span className="text-[#4B5563] font-medium">
+                  <div className="border-t border-[#E5E5E5] py-3 flex items-center justify-between text-[13px] lg:text-[14px]">
+                    <span className="text-[#0A0A0A] font-medium">
                       Covered Area
                     </span>
                     <span
-                      style={{ color: "var(--blue)" }}
-                      className="font-bold text-[16px] lg:text-[18px] tabular-nums text-right"
+                      className="font-bold text-[16px] lg:text-[18px] text-[#0A0A0A] tabular-nums text-right"
                     >
                       {project.area.toLocaleString()} sq ft
                     </span>

@@ -168,7 +168,7 @@ export const MachineFramesLayout: React.FC<{ data: ContentData }> = ({ data }) =
           {/* Text: mobile size of TEXT STYLE (15px / 1.6, regular weight, var(--blue)), 40px under to image */}
           <p
             ref={mobileTextRef}
-            className="text-[15px] font-normal text-[var(--blue)] leading-[1.6] mb-[40px]"
+            className="text-[15px] font-normal text-[#0A0A0A] leading-[1.6] mb-[40px]"
           >
             {sections[0]?.text || introPs.join(" ")}
           </p>
@@ -210,7 +210,7 @@ export const MachineFramesLayout: React.FC<{ data: ContentData }> = ({ data }) =
               <h3 className="text-[20px] lg:text-[22px] font-bold text-[var(--ink)] uppercase leading-snug">
                 {sec.title.toUpperCase()}
               </h3>
-              <p className="text-[16px] text-[var(--blue)] font-normal leading-[1.7]">
+              <p className="text-[16px] text-[#0A0A0A] font-normal leading-[1.7]">
                 {sec.text}
               </p>
             </div>
@@ -222,8 +222,8 @@ export const MachineFramesLayout: React.FC<{ data: ContentData }> = ({ data }) =
       {data.faq && data.faq.length > 0 && (
         <section className="container py-[var(--sec-y)]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="font-bold text-[var(--ink)] mb-8 uppercase" style={{ fontSize: "var(--fs-h2)" }}>
-              {"Frequently Asked Questions".toUpperCase()}
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold text-[#0A0A0A] mb-8 uppercase leading-tight lg:leading-[1.15] tracking-[-0.02em]">
+              FREQUENTLY ASKED QUESTIONS
             </h2>
             <Accordion items={data.faq} size="large" />
           </div>
@@ -715,7 +715,7 @@ export const StorageTanksLayout: React.FC<{ data: ContentData }> = ({ data }) =>
                 </h3>
 
                 {/* Text: 15px / 1.6, regular weight, var(--blue) */}
-                <p className="text-[15px] font-normal text-[var(--blue)] leading-[1.6]">
+                <p className="text-[15px] font-normal text-[#0A0A0A] leading-[1.6]">
                   {b.text}
                 </p>
               </div>
@@ -777,7 +777,7 @@ export const HoppersBinsLayout: React.FC<{ data: ContentData }> = ({ data }) => 
 
           {/* Tile B: Text What Hoppers and Bins Do (Cols 8-12, Row 1, Nav Blue bg) */}
           <div className="col-span-5 bg-[var(--blue)] text-white p-8 flex flex-col justify-center space-y-3 shadow-md">
-            <h3 className="text-[24px] font-bold text-white">{sec1?.title || "What Hoppers and Bins Do"}</h3>
+            <h3 className="text-[17px] sm:text-[19px] lg:text-[24px] font-bold text-white uppercase">{sec1?.title || "What Hoppers and Bins Do"}</h3>
             <p className="text-white/90 text-[15px] leading-[1.65]">{sec1?.text}</p>
           </div>
 
@@ -788,7 +788,7 @@ export const HoppersBinsLayout: React.FC<{ data: ContentData }> = ({ data }) => 
 
           {/* Tile D: Text Design Points (Cols 1-5, Row 3) */}
           <div className="col-span-5 border border-[var(--rule)] bg-white p-8 flex flex-col justify-center space-y-3 shadow-sm">
-            <h3 className="text-[22px] font-bold text-[var(--ink)]">{sec2?.title || "Design Points"}</h3>
+            <h3 className="text-[14px] sm:text-[16px] lg:text-[22px] font-bold text-[#0A0A0A] uppercase">{sec2?.title || "Design Points"}</h3>
             <p className="text-[var(--grey-strong)] leading-[1.65]" style={{ fontSize: "var(--fs-body)" }}>{sec2?.text}</p>
           </div>
 
@@ -799,7 +799,7 @@ export const HoppersBinsLayout: React.FC<{ data: ContentData }> = ({ data }) => 
 
           {/* Tile F: Text Typical Uses (Cols 9-12, Row 3, Nav Blue 4% bg) */}
           <div className="col-span-4 border border-[var(--rule)] bg-[rgba(30,58,138,0.04)] p-8 flex flex-col justify-center space-y-3 shadow-sm">
-            <h3 className="text-[22px] font-bold text-[var(--ink)]">{sec3?.title || "Typical Uses"}</h3>
+            <h3 className="text-[14px] sm:text-[16px] lg:text-[22px] font-bold text-[#0A0A0A] uppercase">{sec3?.title || "Typical Uses"}</h3>
             <p className="text-[var(--grey-strong)] leading-[1.65]" style={{ fontSize: "var(--fs-body)" }}>{sec3?.text}</p>
           </div>
         </div>
@@ -808,17 +808,17 @@ export const HoppersBinsLayout: React.FC<{ data: ContentData }> = ({ data }) => 
         <div className="lg:hidden space-y-6 text-left">
           <PhotoBox src={IMG.custom.hoppers.h1} alt="Hopper Cone" ratio="16/9" />
           <div className="bg-[var(--blue)] text-white p-6">
-            <h3 className="text-[20px] font-bold text-white mb-2">{sec1?.title}</h3>
+            <h3 className="text-[17px] sm:text-[19px] font-bold text-white uppercase mb-2">{sec1?.title}</h3>
             <p className="text-white/90 text-[14px] leading-[1.6]">{sec1?.text}</p>
           </div>
           <PhotoBox src={IMG.custom.hoppers.h2} alt="Bin Frame" ratio="16/9" />
           <div className="border border-[var(--rule)] p-6 bg-white">
-            <h3 className="text-[20px] font-bold text-[var(--ink)] mb-2">{sec2?.title}</h3>
+            <h3 className="text-[14px] sm:text-[16px] font-bold text-[#0A0A0A] uppercase mb-2">{sec2?.title}</h3>
             <p className="text-[var(--grey-strong)] text-[14px] leading-[1.6]">{sec2?.text}</p>
           </div>
           <PhotoBox src={IMG.custom.hoppers.h3} alt="Platform" ratio="16/9" />
           <div className="border border-[var(--rule)] p-6 bg-[rgba(30,58,138,0.04)]">
-            <h3 className="text-[20px] font-bold text-[var(--ink)] mb-2">{sec3?.title}</h3>
+            <h3 className="text-[14px] sm:text-[16px] font-bold text-[#0A0A0A] uppercase mb-2">{sec3?.title}</h3>
             <p className="text-[var(--grey-strong)] text-[14px] leading-[1.6]">{sec3?.text}</p>
           </div>
         </div>
@@ -828,8 +828,8 @@ export const HoppersBinsLayout: React.FC<{ data: ContentData }> = ({ data }) => 
       {data.faq && data.faq.length > 0 && (
         <section className="container py-[var(--sec-y)]">
           <div className="max-w-[800px] mx-auto text-left">
-            <h2 className="font-bold text-[var(--ink)] mb-8" style={{ fontSize: "var(--fs-h2)" }}>
-              Frequently Asked Questions
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold text-[#0A0A0A] mb-8 uppercase leading-tight lg:leading-[1.15] tracking-[-0.02em]">
+              FREQUENTLY ASKED QUESTIONS
             </h2>
             <Accordion items={data.faq} size="large" />
           </div>
@@ -1130,7 +1130,7 @@ export const DoorsGatesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
 
       {/* 2. Types Section: 2x2 Grid with Door-Open Visual Effect */}
       <section className="container py-[var(--sec-y-lg)] text-left">
-        <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] uppercase tracking-[-0.02em] leading-tight mb-8 lg:mb-12">
+        <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] uppercase tracking-[-0.02em] leading-tight mb-8 lg:mb-12">
           {(typesSec?.title || "Types").toUpperCase()}
         </h2>
 
@@ -1178,7 +1178,7 @@ export const DoorsGatesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                 </h3>
 
                 {/* Text: 16px / 1.7, regular weight, var(--blue) */}
-                <p className="text-[16px] font-normal text-[var(--blue)] leading-[1.7]">
+                <p className="text-[16px] font-normal text-[#0A0A0A] leading-[1.7]">
                   {item.text}
                 </p>
               </div>
@@ -1230,7 +1230,7 @@ export const DoorsGatesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
                 </h3>
 
                 {/* Text: 15px / 1.6, regular weight, var(--blue) */}
-                <p className="text-[15px] font-normal text-[var(--blue)] leading-[1.6]">
+                <p className="text-[15px] font-normal text-[#0A0A0A] leading-[1.6]">
                   {item.text}
                 </p>
               </div>
@@ -1256,7 +1256,7 @@ export const DoorsGatesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
               <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug mb-3">
                 {(note1?.title || "Design Points").toUpperCase()}
               </h3>
-              <p className="text-[15px] lg:text-[16px] font-normal text-[var(--blue)] leading-[1.6] lg:leading-[1.7]">
+              <p className="text-[15px] lg:text-[16px] font-normal text-[#0A0A0A] leading-[1.6] lg:leading-[1.7]">
                 {note1?.text}
               </p>
             </div>
@@ -1264,7 +1264,7 @@ export const DoorsGatesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
               <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug mb-3">
                 {(note2?.title || "Fitted to Your Building").toUpperCase()}
               </h3>
-              <p className="text-[15px] lg:text-[16px] font-normal text-[var(--blue)] leading-[1.6] lg:leading-[1.7]">
+              <p className="text-[15px] lg:text-[16px] font-normal text-[#0A0A0A] leading-[1.6] lg:leading-[1.7]">
                 {note2?.text}
               </p>
             </div>
@@ -1616,7 +1616,7 @@ export const SteelStairsLayout: React.FC<{ data: ContentData }> = ({ data }) => 
 
       {/* Ascending Steps Section (Desktop: Rising Staircase Alignment) */}
       <section ref={desktopSecRef} className="container py-[var(--sec-y-lg)] text-left">
-        <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] uppercase tracking-[-0.02em] leading-tight mb-8 lg:mb-12">
+        <h2 className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] uppercase tracking-[-0.02em] leading-tight mb-8 lg:mb-12">
           TYPES OF STEEL STAIRS
         </h2>
 
@@ -1668,7 +1668,7 @@ export const SteelStairsLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                 <h3 className="text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug mb-3">
                   {it.name.toUpperCase()}
                 </h3>
-                <p className="text-[16px] font-normal text-[var(--blue)] leading-[1.7]">
+                <p className="text-[16px] font-normal text-[#0A0A0A] leading-[1.7]">
                   {it.text}
                 </p>
               </div>
@@ -1701,7 +1701,7 @@ export const SteelStairsLayout: React.FC<{ data: ContentData }> = ({ data }) => 
               <h3 className="text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug mb-3">
                 {it.name.toUpperCase()}
               </h3>
-              <p className="text-[16px] font-normal text-[var(--blue)] leading-[1.7]">
+              <p className="text-[16px] font-normal text-[#0A0A0A] leading-[1.7]">
                 {it.text}
               </p>
             </div>
@@ -1759,7 +1759,7 @@ export const SteelStairsLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                 }}
                 className="w-full mt-3 text-left"
               >
-                <p className="text-[15px] font-normal text-[var(--blue)] leading-[1.6]">
+                <p className="text-[15px] font-normal text-[#0A0A0A] leading-[1.6]">
                   {it.text}
                 </p>
               </div>
@@ -1787,7 +1787,7 @@ export const SteelStairsLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                   <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug mb-3">
                     {(note1.title || "Design Points").toUpperCase()}
                   </h3>
-                  <p className="text-[15px] lg:text-[16px] font-normal text-[var(--blue)] leading-[1.6] lg:leading-[1.7]">
+                  <p className="text-[15px] lg:text-[16px] font-normal text-[#0A0A0A] leading-[1.6] lg:leading-[1.7]">
                     {note1.text}
                   </p>
                 </div>
@@ -1797,7 +1797,7 @@ export const SteelStairsLayout: React.FC<{ data: ContentData }> = ({ data }) => 
                   <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] uppercase leading-snug mb-3">
                     {(note2.title || "Safety").toUpperCase()}
                   </h3>
-                  <p className="text-[15px] lg:text-[16px] font-normal text-[var(--blue)] leading-[1.6] lg:leading-[1.7]">
+                  <p className="text-[15px] lg:text-[16px] font-normal text-[#0A0A0A] leading-[1.6] lg:leading-[1.7]">
                     {note2.text}
                   </p>
                 </div>
