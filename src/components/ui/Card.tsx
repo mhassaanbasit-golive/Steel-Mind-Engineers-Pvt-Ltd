@@ -49,14 +49,14 @@ export const Card: React.FC<CardProps> = ({
         {/* Above title: a 40px wide, 2px tall #1E3A8A line. Margin-bottom 16px */}
         <div className="w-[40px] h-[2px] bg-[#1E3A8A] mb-[16px]" />
 
-        {/* Title: 16px weight 600, #0A0A0A, line-height 1.3, letter-spacing -0.01em. Margin-bottom 8px */}
-        <h3 className="text-[16px] font-semibold text-[#0A0A0A] leading-[1.3] tracking-[-0.01em] mb-[8px]">
+        {/* Title: 14px-15px mobile, 16px desktop, weight 600, #0A0A0A, uppercase. Margin-bottom 8px */}
+        <h3 className="text-[14px] sm:text-[15px] lg:text-[16px] font-semibold text-[#0A0A0A] leading-[1.3] tracking-[-0.01em] uppercase mb-[8px]">
           {title}
         </h3>
 
-        {/* Description: 13px, #6B7280, line-height 1.6, max 3 lines. Margin-bottom 12px */}
+        {/* Description: 13px, #0A0A0A, line-height 1.6, max 3 lines. Margin-bottom 12px */}
         {description && (
-          <p className="text-[13px] text-[var(--blue)] leading-[1.6] line-clamp-3 mb-[12px]">
+          <p className="text-[13px] text-[#0A0A0A] leading-[1.6] line-clamp-3 mb-[12px]">
             {description}
           </p>
         )}

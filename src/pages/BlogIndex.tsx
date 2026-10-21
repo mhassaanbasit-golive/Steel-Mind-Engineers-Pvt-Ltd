@@ -120,7 +120,7 @@ export const BlogIndex: React.FC = () => {
       {pageData.faq && pageData.faq.length > 0 && (
         <section className="py-12 lg:py-16 bg-white border-t border-[#E5E5E5]">
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-            <h2 className="text-[22px] lg:text-[48px] font-bold leading-[1.15] tracking-[-0.02em] text-[#0A0A0A] mb-6">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-semibold leading-[1.22] tracking-[-0.01em] text-[#0A0A0A] uppercase mb-6 sm:mb-8">
               Frequently Asked Questions
             </h2>
             <Accordion items={pageData.faq} />

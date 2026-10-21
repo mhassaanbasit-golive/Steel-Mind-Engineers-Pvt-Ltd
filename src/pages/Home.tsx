@@ -348,7 +348,7 @@ export const Home: React.FC = () => {
 
         {/* Bottom-left stack: Heading, Subheading, and small Buttons directly below subheading */}
         <div className="absolute inset-0 z-10 pointer-events-none flex flex-col justify-end">
-          <div className="w-full max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-10 pb-[calc(28px+env(safe-area-inset-bottom))] lg:pb-[44px] pointer-events-auto">
+          <div className="w-full max-w-[1440px] mx-auto pl-3 sm:pl-4 lg:pl-6 pr-4 sm:pr-6 lg:pr-10 pb-[calc(28px+env(safe-area-inset-bottom))] lg:pb-[44px] pointer-events-auto">
             <div className="flex flex-col items-start">
             {/* Heading */}
             <h1

@@ -99,6 +99,14 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
         children = matchedDiv.children;
       }
     }
+    // Remove "Overview" from Services Overview page so it starts directly from "Design"
+    if (data.url === "/services/") {
+      children = children.filter(
+        (child) =>
+          child.label.toLowerCase() !== "overview" &&
+          child.url !== "/services/"
+      );
+    }
     return children;
   }, [data.url]);
 
@@ -491,7 +499,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
           {/* Animated H2 Title */}
           <h2
             aria-label={introTitle}
-            className="text-[17px] sm:text-[19px] lg:text-[44px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] text-center uppercase"
+            className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold text-[#0A0A0A] leading-[1.15] tracking-[-0.02em] text-center uppercase"
           >
             {titleWords.map((word, wordIdx) => {
               let prevCharsCount = 0;
@@ -859,7 +867,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
 
                   {/* Row with title and arrow (no number) */}
                   <div className="flex items-center justify-between gap-3 mt-4">
-                    <h3 className="text-[14px] sm:text-[16px] lg:text-[18px] font-bold text-[#0A0A0A] uppercase leading-[1.2] truncate">
+                    <h3 className="text-[14px] sm:text-[15px] lg:text-[17px] font-bold text-[#0A0A0A] uppercase leading-[1.2] truncate">
                       {item.title}
                     </h3>
                     <span className="text-[#1E3A8A] text-[18px] flex-shrink-0 transition-transform duration-300 group-hover:translate-x-1">
@@ -888,7 +896,7 @@ export const Hub: React.FC<HubProps> = ({ data }) => {
       {data.faq && data.faq.length > 0 && (
         <section className="w-full bg-white pt-16 lg:pt-24 pb-[64px] lg:pb-[96px] px-5 lg:px-8 border-t border-[#E5E5E5]">
           <div className="max-w-[1280px] mx-auto text-left">
-            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-semibold text-[#0A0A0A] uppercase leading-[1.15] tracking-[-0.01em] mb-8">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-semibold text-[#0A0A0A] uppercase leading-[1.22] tracking-[-0.01em] mb-6 sm:mb-8">
               Frequently Asked Questions
             </h2>
             <Accordion items={data.faq} />

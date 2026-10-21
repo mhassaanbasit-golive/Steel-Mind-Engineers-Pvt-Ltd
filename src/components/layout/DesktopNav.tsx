@@ -35,9 +35,10 @@ export const DesktopNav: React.FC = () => {
   return (
     <nav
       ref={navRef}
-      className="hidden lg:flex items-center space-x-5 xl:space-x-7 text-[13.5px] xl:text-[14px] font-medium text-white relative h-full overflow-visible"
+      className="hidden lg:flex items-center text-[13.5px] xl:text-[14px] font-medium text-white relative h-full overflow-visible"
     >
-      {NAV.map((item: NavItem) => {
+      <div className="flex items-center space-x-5 xl:space-x-7 h-full">
+        {NAV.map((item: NavItem) => {
         const isMega = item.label === "Main Divisions";
         const isAbout = item.label === "About Us";
         const hasChildren = !!item.children || isMega;
@@ -154,13 +155,13 @@ export const DesktopNav: React.FC = () => {
                           <h4
                             className={`text-[14px] lg:text-[15px] font-bold leading-snug transition-colors ${
                               isDivActive
-                                ? "text-[var(--blue)]"
-                                : "text-[var(--ink)] group-hover/div:text-[var(--blue)]"
+                                ? "text-[var(--ink,#0A0A0A)]"
+                                : "text-[var(--ink,#0A0A0A)] group-hover/div:text-[var(--blue)]"
                             }`}
                           >
                             {div.label}
                           </h4>
-                          <span className="text-[11px] text-[var(--blue)] font-medium inline-flex items-center gap-1 mt-0.5 group-hover/div:underline">
+                          <span className="text-[11px] text-[var(--ink,#0A0A0A)] font-medium inline-flex items-center gap-1 mt-0.5 group-hover/div:underline">
                             View Overview &rarr;
                           </span>
                         </TransitionLink>
@@ -195,9 +196,10 @@ export const DesktopNav: React.FC = () => {
           </div>
         );
       })}
+      </div>
 
-      {/* Far Right Action Button — White background, Royal Blue text */}
-      <div className="pl-4">
+      {/* Action Button — White background, Royal Blue text */}
+      <div className="ml-[44px] xl:ml-[60px] shrink-0">
         <Button
           variant="hero-white"
           size="sm"

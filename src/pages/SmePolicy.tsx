@@ -123,12 +123,12 @@ export const SmePolicy: React.FC = () => {
         className="w-full bg-white text-[var(--ink)] py-[72px] lg:py-[112px]"
       >
         <div className="max-w-[1340px] mx-auto px-5 lg:px-10">
-          {/* Section Heading: ALL CAPITALS bold ink colour (One-Step size: 16px mobile, 44px desktop) */}
-          <h2 className="text-[16px] lg:text-[44px] font-bold text-[#0A0A0A] uppercase leading-[1.15] tracking-[-0.02em] mb-4 lg:mb-6">
+          {/* Section Heading: ALL CAPITALS bold ink colour (One-Step size: 17px-19px mobile, 32px desktop) */}
+          <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold text-[#0A0A0A] uppercase leading-[1.15] tracking-[-0.02em] mb-4 lg:mb-6">
             WHY STEEL MIND ENGINEERS HAS THIS POLICY
           </h2>
 
-          <p className="text-[15px] lg:text-[16px] text-[var(--blue)] font-normal max-w-[760px] leading-[1.6] lg:leading-[1.7]">
+          <p className="text-[15px] lg:text-[16px] text-[#0A0A0A] font-normal max-w-[760px] leading-[1.6] lg:leading-[1.7]">
             {page6.quickAnswer}
           </p>
 
@@ -143,13 +143,13 @@ export const SmePolicy: React.FC = () => {
                   <span className="block text-[40px] lg:text-[64px] font-[800] text-[var(--blue)] leading-none select-none mb-3">
                     {strip.num}
                   </span>
-                  <h3 className="text-[17px] lg:text-[20px] font-bold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em]">
+                  <h3 className="text-[14px] sm:text-[15px] lg:text-[17px] font-bold text-[#0A0A0A] leading-[1.25] tracking-[-0.01em] uppercase">
                     {strip.title}
                   </h3>
                 </div>
 
                 <div className="lg:col-span-7">
-                  <p className="text-[15px] lg:text-[16px] text-[var(--blue)] font-normal leading-[1.6] lg:leading-[1.7] max-w-[680px]">
+                  <p className="text-[15px] lg:text-[16px] text-[#0A0A0A] font-normal leading-[1.6] lg:leading-[1.7] max-w-[680px]">
                     {strip.desc}
                   </p>
                 </div>
@@ -171,8 +171,8 @@ export const SmePolicy: React.FC = () => {
         className="w-full bg-[var(--blue)] text-white py-[72px] lg:py-[112px] border-t border-white/20"
       >
         <div className="max-w-[1340px] mx-auto px-5 lg:px-10">
-          {/* Section Heading: ALL CAPITALS bold white (One-Step size: 16px mobile, 44px desktop) */}
-          <h2 className="text-[16px] lg:text-[44px] font-bold text-white uppercase leading-[1.15] tracking-[-0.02em] mb-4 lg:mb-6">
+          {/* Section Heading: ALL CAPITALS bold white (One-Step size: 17px-19px mobile, 32px desktop) */}
+          <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-bold text-white uppercase leading-[1.15] tracking-[-0.02em] mb-4 lg:mb-6">
             COMMITTED TO: ACCURATE STEEL, SAFE SITES AND HONEST SCHEDULES
           </h2>
 
@@ -191,7 +191,7 @@ export const SmePolicy: React.FC = () => {
                 <span className="block text-[40px] lg:text-[64px] font-[800] text-white leading-none select-none mb-3">
                   {com.num}
                 </span>
-                <h3 className="text-[17px] lg:text-[20px] font-bold text-white leading-[1.25] tracking-[-0.01em] mb-2">
+                <h3 className="text-[14px] sm:text-[15px] lg:text-[17px] font-bold text-white leading-[1.25] tracking-[-0.01em] mb-2 uppercase">
                   {com.title}
                 </h3>
                 <p className="text-[15px] lg:text-[16px] text-white font-normal leading-[1.6] lg:leading-[1.7] w-full">
@@ -209,7 +209,7 @@ export const SmePolicy: React.FC = () => {
                 <span className="block text-[40px] font-[800] text-white leading-none select-none mb-3">
                   {com.num}
                 </span>
-                <h3 className="text-[17px] font-bold text-white leading-[1.25] tracking-[-0.01em] mb-2">
+                <h3 className="text-[14px] sm:text-[15px] lg:text-[17px] font-bold text-white leading-[1.25] tracking-[-0.01em] mb-2 uppercase">
                   {com.title}
                 </h3>
                 <p className="text-[15px] text-white font-normal leading-[1.6] w-full max-w-none">

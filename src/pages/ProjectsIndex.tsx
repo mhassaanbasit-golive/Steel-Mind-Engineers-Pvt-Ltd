@@ -38,19 +38,43 @@ const getProjectCategory = (p: ProjectData): string => {
 const getIndustryIcon = (p: ProjectData) => {
   const ind = getProjectIndustry(p);
   if (ind.includes("Warehouse") || ind.includes("Distribution")) {
-    return <Warehouse className="w-4 h-4 text-[var(--blue)] shrink-0" />;
+    return <Warehouse className="w-4 h-4 text-[#0A0A0A] shrink-0" />;
   }
   if (ind.includes("Dairy") || ind.includes("Agriculture")) {
-    return <Building2 className="w-4 h-4 text-[var(--blue)] shrink-0" />;
+    return <Building2 className="w-4 h-4 text-[#0A0A0A] shrink-0" />;
   }
-  return <Factory className="w-4 h-4 text-[var(--blue)] shrink-0" />;
+  return <Factory className="w-4 h-4 text-[#0A0A0A] shrink-0" />;
 };
 
 export const ProjectsIndex: React.FC = () => {
-  const publishedProjects = useMemo(
-    () => PROJECTS.filter((p) => p.published),
-    []
-  );
+  const publishedProjects = useMemo(() => {
+    // 1. All Dairy projects at the top
+    const dairyProjects = PROJECTS.filter(
+      (p) =>
+        p.published &&
+        (p.client.toLowerCase().includes("dairy") ||
+          p.title.toLowerCase().includes("dairy") ||
+          p.type.toLowerCase().includes("dairy") ||
+          p.id.toLowerCase().includes("dairy") ||
+          p.id.toLowerCase().includes("rapid-exit") ||
+          p.id.toLowerCase().includes("milking"))
+    );
+    // 2. Non-dairy, non-Haier published projects
+    const otherProjects = PROJECTS.filter(
+      (p) =>
+        p.published &&
+        !dairyProjects.some((d) => d.id === p.id) &&
+        p.client !== "Haier" &&
+        !p.id.toLowerCase().includes("haier")
+    );
+    // 3. Haier project at the very end
+    const haierProjects = PROJECTS.filter(
+      (p) =>
+        p.published &&
+        (p.client === "Haier" || p.id.toLowerCase().includes("haier"))
+    );
+    return [...dairyProjects, ...otherProjects, ...haierProjects];
+  }, []);
 
   const [selectedIndustry, setSelectedIndustry] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -230,7 +254,7 @@ export const ProjectsIndex: React.FC = () => {
                         {getIndustryIcon(proj)}
                         <span>{getProjectIndustry(proj)}</span>
                       </div>
-                      <h3 className="text-[14px] sm:text-[16px] lg:text-[18px] font-bold text-[#0A0A0A] uppercase leading-[1.3]">
+                      <h3 className="text-[14px] sm:text-[15px] lg:text-[17px] font-bold text-[#0A0A0A] uppercase leading-[1.3]">
                         {proj.title}
                       </h3>
                     </div>
@@ -246,7 +270,7 @@ export const ProjectsIndex: React.FC = () => {
       {pageData.faq && pageData.faq.length > 0 && (
         <section className="py-12 lg:py-20 bg-white">
           <div className="max-w-[1340px] mx-auto px-[var(--pad-x)]">
-            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-semibold leading-[1.15] tracking-[-0.01em] uppercase text-[#0A0A0A] mb-8">
+            <h2 className="text-[17px] sm:text-[19px] lg:text-[32px] font-semibold leading-[1.22] tracking-[-0.01em] uppercase text-[#0A0A0A] mb-6 sm:mb-8">
               Frequently Asked Questions
             </h2>
             <Accordion items={pageData.faq} />

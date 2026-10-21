@@ -1198,9 +1198,10 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
 
     // If running wipe: finish instantly (progress(1)), kill it, start new one
     if (activeSwapTweenRef.current) {
-      activeSwapTweenRef.current.progress(1);
-      activeSwapTweenRef.current.kill();
+      const prevTween = activeSwapTweenRef.current;
       activeSwapTweenRef.current = null;
+      prevTween.progress(1);
+      prevTween.kill();
     }
 
     const currentLayer = desktopLayersRef.current[currentIdx];
@@ -1333,6 +1334,10 @@ export const TrussesLayout: React.FC<{ data: ContentData }> = ({ data }) => {
       }
       window.removeEventListener("scroll", onScroll);
       if (rafId !== null) cancelAnimationFrame(rafId);
+      if (activeSwapTweenRef.current) {
+        activeSwapTweenRef.current.kill();
+        activeSwapTweenRef.current = null;
+      }
     };
   }, [triggerSwap]);
 
