@@ -20,8 +20,11 @@
     <meta name="twitter:image" content="https://res.cloudinary.com/cyfb9slf/image/upload/f_auto,q_auto,w_1200,h_630,c_fill/v1791401768/Landscape.jpg" />
     <meta name="theme-color" content="#22488F" />
 
-    <link rel="icon" type="image/png" href="https://res.cloudinary.com/cyfb9slf/image/upload/w_64,f_png/v1791401769/transparent_logo_of_sme.png" />
-    <link rel="apple-touch-icon" href="https://res.cloudinary.com/cyfb9slf/image/upload/w_180,f_png/v1791401769/transparent_logo_of_sme.png" />
+    <link rel="icon" type="image/jpeg" href="https://res.cloudinary.com/cyfb9slf/image/upload/v1791401768/Landscape.jpg" />
+    <link rel="icon" type="image/jpeg" sizes="32x32" href="https://res.cloudinary.com/cyfb9slf/image/upload/v1791401768/Landscape.jpg" />
+    <link rel="icon" type="image/jpeg" sizes="192x192" href="https://res.cloudinary.com/cyfb9slf/image/upload/v1791401768/Landscape.jpg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://res.cloudinary.com/cyfb9slf/image/upload/v1791401768/Landscape.jpg" />
+    <link rel="apple-touch-icon" href="https://res.cloudinary.com/cyfb9slf/image/upload/v1791401768/Landscape.jpg" />
 
     <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
     <link rel="dns-prefetch" href="https://res.cloudinary.com" />
@@ -31,85 +34,8 @@
     <link rel="preload" as="image" href="https://res.cloudinary.com/cyfb9slf/image/upload/v1791401768/Landscape.jpg" fetchpriority="high" />
     <link rel="preload" as="image" href="https://res.cloudinary.com/cyfb9slf/video/upload/so_0,f_jpg,q_90,w_1920/v1791664367/Main-homepage-Video_01.mp4.mov" media="(min-width: 768px)" fetchpriority="high" />
     <link rel="preload" as="image" href="https://res.cloudinary.com/cyfb9slf/video/upload/so_0,f_jpg,q_90,w_1080/v1791664502/15409488_2160_3840_60fps_1.mov" media="(max-width: 767px)" fetchpriority="high" />
-    <style>
-      #boot {
-        position: fixed;
-        inset: 0;
-        z-index: 10001;
-        background-color: #FFFFFF;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-      }
-      #boot .boot-logo {
-        width: 180px;
-        max-width: 80vw;
-        height: auto;
-      }
-      @media (min-width: 768px) {
-        #boot .boot-logo {
-          width: 240px;
-        }
-      }
-      #boot .boot-bar {
-        width: 180px;
-        height: 2px;
-        margin-top: 28px;
-        background-color: rgba(15, 23, 42, 0.12);
-        position: relative;
-        overflow: hidden;
-      }
-      @media (min-width: 768px) {
-        #boot .boot-bar {
-          width: 220px;
-        }
-      }
-      #boot .boot-fill {
-        width: 100%;
-        height: 100%;
-        background-color: #1E3A8A;
-        transform: scaleX(0);
-        transform-origin: left;
-      }
-      #boot .boot-num {
-        margin-top: 14px;
-        font-size: 12px;
-        color: #6B7280;
-        font-family: monospace;
-        letter-spacing: 0.08em;
-      }
-    </style>
   </head>
   <body>
-    <div id="boot">
-      <img
-        class="boot-logo"
-        src="https://res.cloudinary.com/cyfb9slf/image/upload/v1791401768/Landscape.jpg"
-        alt="Steel Mind Engineers"
-        width="240"
-        height="88"
-      />
-      <div class="boot-bar">
-        <div class="boot-fill"></div>
-      </div>
-      <div class="boot-num">0%</div>
-    </div>
-    <script>
-      (function() {
-        var p = 10;
-        var fill = document.querySelector('.boot-fill');
-        var num = document.querySelector('.boot-num');
-        window.__bootInterval = setInterval(function() {
-          if (p < 85) {
-            p += Math.floor(Math.random() * 8) + 4;
-            if (p > 85) p = 85;
-            if (fill) fill.style.transform = 'scaleX(' + (p / 100) + ')';
-            if (num) num.textContent = p + '%';
-          }
-        }, 80);
-      })();
-    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

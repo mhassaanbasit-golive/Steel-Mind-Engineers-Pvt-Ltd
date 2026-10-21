@@ -38,12 +38,8 @@ export const Loader: React.FC = () => {
       clearInterval((window as any).__bootInterval);
     }
 
-    // Remove static boot div safely after React loader is painted
-    const bootEl = document.getElementById("boot");
-    if (bootEl) bootEl.remove();
-
-    let currentVal = 20;
-    let targetVal = 40;
+    let currentVal = 0;
+    let targetVal = 25;
     const startTime = performance.now();
     let isFinished = false;
     let rafId: number;
@@ -165,7 +161,7 @@ export const Loader: React.FC = () => {
             ref={barFillRef}
             className="w-full h-full bg-[#1E3A8A] origin-left rounded-full"
             style={{
-              transform: "scaleX(0.1)",
+              transform: "scaleX(0)",
               transformOrigin: "left",
               boxShadow: "0 0 8px rgba(30,58,138,0.4)",
             }}
@@ -177,7 +173,7 @@ export const Loader: React.FC = () => {
           ref={countRef}
           className="mt-3.5 text-[12px] font-semibold text-[#4B5563] tracking-[0.1em] tabular-nums font-mono leading-none"
         >
-          20%
+          0%
         </div>
       </div>
     </div>
