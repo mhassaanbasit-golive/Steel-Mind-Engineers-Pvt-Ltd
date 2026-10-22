@@ -20,13 +20,13 @@ const TURNKEY_TEXT =
   "We are a turnkey solution provider offering design, fabrication, and installation for pre-engineered steel buildings, steel structures, and industrial sheds, as well as custom steel fabrication across Pakistan.";
 
 const DESKTOP_VIDEO_MP4 =
-  "https://res.cloudinary.com/cyfb9slf/video/upload/f_mp4,vc_h264,w_1920,q_auto/v1792608975/New_video_edited.mp4";
+  "https://res.cloudinary.com/cyfb9slf/video/upload/f_mp4,vc_h264,w_1920,q_auto/v1791664367/Main-homepage-Video_01.mp4.mov";
 const DESKTOP_VIDEO_WEBM =
-  "https://res.cloudinary.com/cyfb9slf/video/upload/f_webm,vc_vp9,w_1920,q_auto/v1792608975/New_video_edited.webm";
+  "https://res.cloudinary.com/cyfb9slf/video/upload/f_webm,vc_vp9,w_1920,q_auto/v1791664367/Main-homepage-Video_01.mp4.mov";
 const DESKTOP_VIDEO_ORIGINAL =
-  "https://res.cloudinary.com/cyfb9slf/video/upload/v1792608975/New_video_edited.mov";
+  "https://res.cloudinary.com/cyfb9slf/video/upload/v1791664367/Main-homepage-Video_01.mp4.mov";
 const DESKTOP_POSTER =
-  "https://res.cloudinary.com/cyfb9slf/video/upload/so_0,f_jpg,q_90,w_1920/v1792608975/New_video_edited.jpg";
+  "https://res.cloudinary.com/cyfb9slf/video/upload/so_0,f_jpg,q_90,w_1920/v1791664367/Main-homepage-Video_01.mp4.mov";
 
 const MOBILE_VIDEO_MP4 =
   "https://res.cloudinary.com/cyfb9slf/video/upload/f_mp4,vc_h264,w_1080,q_auto/v1791664502/15409488_2160_3840_60fps_1.mp4";
@@ -307,11 +307,11 @@ export const Home: React.FC = () => {
           <video
             key={isMobile ? "mobile-video" : "desktop-video"}
             ref={videoRef}
+            preload="auto"
             autoPlay
             muted
             loop
             playsInline
-            preload="auto"
             poster={isMobile ? MOBILE_POSTER : DESKTOP_POSTER}
             onLoadedData={() => setVideoLoaded(true)}
             onPlaying={() => setVideoLoaded(true)}

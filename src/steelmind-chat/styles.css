@@ -1,0 +1,65 @@
+/* SteelMindChat Scoped Styles */
+:root {
+  /* Single variables block for all widget colours */
+  --sm-chat-bg: var(--offwhite, #FFFFFF);
+  --sm-chat-surface: #FFFFFF;
+  --sm-chat-text: var(--ink, #0A0A0A);
+  --sm-chat-text-muted: var(--grey, #6B7280);
+  --sm-chat-border: var(--line, #E5E5E5);
+  --sm-chat-primary: var(--blue, #1E3A8A);
+  --sm-chat-primary-text: #FFFFFF;
+  --sm-chat-focus: var(--blue, #1E3A8A);
+}
+
+.sm-chat-root {
+  position: relative;
+  z-index: 99999;
+  font-family: inherit;
+  color: var(--sm-chat-text);
+}
+
+.sm-chat-launcher {
+  position: fixed;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  right: calc(16px + env(safe-area-inset-right, 0px));
+  width: 54px;
+  height: 54px;
+  min-width: 54px;
+  min-height: 54px;
+  border-radius: 9999px;
+  border: 1px solid var(--sm-chat-border);
+  background-color: var(--sm-chat-bg);
+  color: var(--sm-chat-text);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  z-index: 99999;
+}
+
+.sm-chat-launcher:hover {
+  opacity: 0.9;
+  transform: scale(1.04);
+}
+
+.sm-chat-launcher:active {
+  transform: scale(0.96);
+}
+
+.sm-chat-launcher:focus-visible {
+  outline: 2px solid var(--sm-chat-focus);
+  outline-offset: 2px;
+}
+
+.sm-chat-launcher-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}

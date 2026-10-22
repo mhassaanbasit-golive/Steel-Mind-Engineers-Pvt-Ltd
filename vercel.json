@@ -1,9 +1,11 @@
 {
   "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/((?!api/|assets/|images/|fonts/|favicon|robots.txt|sitemap.xml|manifest).*)", "destination": "/index.html" }
+    { "source": "/((?!chatbot/|assets/|.*\\..*).*)", "destination": "/index.html" }
   ],
   "headers": [
+    { "source": "/(.*)", "headers": [ { "key": "Permissions-Policy", "value": "microphone=(self)" } ] },
+    { "source": "/chatbot/kb.json", "headers": [ { "key": "Cache-Control", "value": "public, max-age=3600" } ] },
     {
       "source": "/assets/(.*)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]

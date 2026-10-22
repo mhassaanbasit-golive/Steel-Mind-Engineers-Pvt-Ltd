@@ -2,6 +2,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import './styles/interactions.css';
+import { mountSteelMindChat } from './steelmind-chat/mount.ts';
 
 if (typeof window !== 'undefined') {
   const checkTouch = () => {
@@ -17,3 +18,12 @@ if (typeof window !== 'undefined') {
 }
 
 createRoot(document.getElementById('root')!).render(<App />);
+
+if (typeof window !== 'undefined') {
+  if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', () => mountSteelMindChat(), { once: true });
+  } else {
+    mountSteelMindChat();
+  }
+}
+
