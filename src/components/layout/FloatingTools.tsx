@@ -111,7 +111,7 @@ export const FloatingTools: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="fixed z-[250] right-6 bottom-[80px] flex flex-col items-center select-none"
+      className="fixed z-[250] right-4 md:right-6 bottom-[80px] flex flex-col items-center select-none"
     >
       {/* Dial Pop-up Items Stack — 20px icon inside 44px rounded square, Royal Blue bg, white icon */}
       {dialOpen && (

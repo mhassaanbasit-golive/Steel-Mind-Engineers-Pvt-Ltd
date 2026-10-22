@@ -5,13 +5,32 @@ import {
 } from "../components/icons/bot-message-square.tsx";
 import "./styles.css";
 
+// Ensure a fresh page reload resets any stale notification flag so the user can see & test the bubble
+if (typeof window !== "undefined") {
+  try {
+    if (!(window as any).__smChatSessionInitialized) {
+      (window as any).__smChatSessionInitialized = true;
+      sessionStorage.removeItem("notificationShown");
+    }
+  } catch {}
+}
+
 export interface SteelMindChatProps {
   className?: string;
 }
 
 export const SteelMindChat: React.FC<SteelMindChatProps> = () => {
+  // Check whether loader is actively running on the page
   const [visible, setVisible] = useState(() => {
-    if (typeof window === "undefined") return false;
+    if (typeof window === "undefined" || typeof document === "undefined") {
+      return false;
+    }
+    // If the loader overlay exists in the DOM, keep widget hidden (return null)
+    const loaderEl = document.querySelector(".z-\\[10000\\]");
+    if (loaderEl) {
+      return false;
+    }
+    // Otherwise check if app has already booted in this session
     return sessionStorage.getItem("app_booted") === "true";
   });
 
@@ -22,6 +41,34 @@ export const SteelMindChat: React.FC<SteelMindChatProps> = () => {
   const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
   const showTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isChatOpenRef = useRef(false);
+  const audioPlayedRef = useRef(false);
+
+  // Trigger built-in Lucide animation 2 times automatically on site load
+  useEffect(() => {
+    if (!visible) return;
+    let animTimer3: NodeJS.Timeout | null = null;
+    const animTimer1 = setTimeout(() => {
+      iconRef.current?.startAnimation();
+    }, 350);
+    const animTimer2 = setTimeout(() => {
+      iconRef.current?.stopAnimation();
+      animTimer3 = setTimeout(() => {
+        iconRef.current?.startAnimation();
+      }, 50);
+    }, 1500);
+
+    return () => {
+      clearTimeout(animTimer1);
+      clearTimeout(animTimer2);
+      if (animTimer3) clearTimeout(animTimer3);
+    };
+  }, [visible]);
+
+  // Preload chat overlay module when widget becomes visible so first click opens instantly
+  useEffect(() => {
+    if (!visible) return;
+    import("../components/chat/ChatOverlay.tsx").catch(() => {});
+  }, [visible]);
 
   // 2. Widget Visibility — Loader Gate: Mounts only with the rest of the site after loader finishes
   useEffect(() => {
@@ -32,26 +79,35 @@ export const SteelMindChat: React.FC<SteelMindChatProps> = () => {
       if (triggered) return;
       triggered = true;
       setVisible(true);
-      setTimeout(() => {
-        iconRef.current?.startAnimation();
-      }, 350);
     };
 
+    // The Loader dispatches "site:ready" and "app:ready" right when its exit wipe finishes
     window.addEventListener("site:ready", triggerEntrance);
-    window.addEventListener("loader:done", triggerEntrance);
     document.addEventListener("app:ready", triggerEntrance);
 
-    const fallbackTimer = setTimeout(triggerEntrance, 3200);
+    // Fallback: If loader is already gone or does not fire within 3.5s
+    const fallbackTimer = setTimeout(() => {
+      triggerEntrance();
+    }, 3500);
+
+    // Mutation observer check: trigger immediately if loader element is removed from DOM
+    const observer = new MutationObserver(() => {
+      const loaderEl = document.querySelector(".z-\\[10000\\]");
+      if (!loaderEl) {
+        triggerEntrance();
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {
       window.removeEventListener("site:ready", triggerEntrance);
-      window.removeEventListener("loader:done", triggerEntrance);
       document.removeEventListener("app:ready", triggerEntrance);
       clearTimeout(fallbackTimer);
+      observer.disconnect();
     };
   }, [visible]);
 
-  // Dismiss bubble immediately
+  // Dismiss notification bubble
   const dismissBubble = useCallback(() => {
     if (showTimerRef.current) clearTimeout(showTimerRef.current);
     if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
@@ -80,7 +136,7 @@ export const SteelMindChat: React.FC<SteelMindChatProps> = () => {
 
     window.addEventListener("chat:close", handleChatCloseEvent);
 
-    // Watch for removal of the assistant modal dialog
+    // Watch for removal of the assistant modal dialog to trigger close animation
     const observer = new MutationObserver(() => {
       const dialog = document.querySelector(
         'div[role="dialog"][aria-label="Steel Mind Engineers Assistant"]'
@@ -105,6 +161,7 @@ export const SteelMindChat: React.FC<SteelMindChatProps> = () => {
   useEffect(() => {
     if (!visible) return;
 
+    // Check if notification has already been shown in this session
     let notificationShown = false;
     try {
       notificationShown = sessionStorage.getItem("notificationShown") === "true";
@@ -116,23 +173,25 @@ export const SteelMindChat: React.FC<SteelMindChatProps> = () => {
       sessionStorage.setItem("notificationShown", "true");
     } catch {}
 
-    let audioPlayed = false;
     const playChime = () => {
-      if (audioPlayed) return;
-      audioPlayed = true;
+      if (audioPlayedRef.current) return;
       try {
         const audio = new Audio("/sounds/pop.mp3");
         audio.volume = 0.5;
         const playPromise = audio.play();
         if (playPromise !== undefined) {
-          playPromise.catch(() => {
-            // Silently fail if blocked by browser autoplay policy
-          });
+          playPromise
+            .then(() => {
+              audioPlayedRef.current = true;
+            })
+            .catch(() => {
+              // Silently fail if blocked by browser autoplay policy
+            });
         }
       } catch {}
     };
 
-    // Show after slight delay post-load
+    // Show after 500ms post-load
     showTimerRef.current = setTimeout(() => {
       setBubbleRendered(true);
       requestAnimationFrame(() => {
@@ -140,7 +199,7 @@ export const SteelMindChat: React.FC<SteelMindChatProps> = () => {
       });
       playChime();
 
-      // Mobile/browser autoplay fallback: if blocked, play on first user interaction while bubble is active
+      // Mobile/browser autoplay fallback: retry audio on first user interaction if blocked
       const onFirstInteract = () => {
         playChime();
         window.removeEventListener("pointerdown", onFirstInteract);
@@ -197,7 +256,7 @@ export const SteelMindChat: React.FC<SteelMindChatProps> = () => {
         </div>
       )}
 
-      {/* 3 & 4. Widget Launcher Button */}
+      {/* 3 & 4. Widget Launcher Button (sized 44px × 44px matching upper menu icon) */}
       <button
         type="button"
         className="sm-chat-launcher"

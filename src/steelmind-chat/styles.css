@@ -3,12 +3,18 @@
 .sm-chat-root {
   position: fixed;
   bottom: 24px;
-  right: 24px;
+  right: 16px;
   z-index: 250;
   display: flex;
   align-items: center;
   justify-content: center;
   user-select: none;
+}
+
+@media (min-width: 768px) {
+  .sm-chat-root {
+    right: 24px;
+  }
 }
 
 .sm-chat-launcher {
@@ -18,7 +24,7 @@
   min-height: 44px;
   border-radius: 8px;
   border: none;
-  background-color: var(--blue, #1E3A8A);
+  background-color: var(--blue, #1A3A8A);
   color: #FFFFFF;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -29,7 +35,7 @@
   margin: 0;
   outline: none;
   -webkit-tap-highlight-color: transparent;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .sm-chat-launcher:hover {
@@ -37,7 +43,7 @@
 }
 
 .sm-chat-launcher:focus-visible {
-  outline: 2px solid var(--blue, #1E3A8A);
+  outline: 2px solid var(--blue, #1A3A8A);
   outline-offset: 3px;
 }
 
@@ -61,6 +67,8 @@
   pointer-events: none;
   transition: opacity 0.4s ease, transform 0.4s ease;
   z-index: 9999;
+  max-width: calc(100vw - 80px);
+  box-sizing: border-box;
 }
 
 .sm-chat-bubble.sm-chat-bubble-visible {
@@ -74,11 +82,4 @@
   opacity: 0;
   transform: translateY(-50%);
   pointer-events: none;
-}
-
-/* Bubble must be completely hidden on mobile devices below 640px viewport width */
-@media (max-width: 639px) {
-  .sm-chat-bubble {
-    display: none !important;
-  }
 }

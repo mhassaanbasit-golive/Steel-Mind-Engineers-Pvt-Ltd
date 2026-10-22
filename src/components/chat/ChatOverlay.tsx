@@ -27,7 +27,7 @@ type Action =
   | { type: "SET_TRANSCRIPT_SENT" };
 
 const initialState: State = {
-  isOpen: false,
+  isOpen: true,
   screen: "welcome",
   lead: null,
   messages: [],
@@ -111,10 +111,12 @@ export const ChatOverlay: React.FC = () => {
       startScroll();
       const mainEl = document.getElementById("main");
       if (mainEl) mainEl.removeAttribute("aria-hidden");
+      window.dispatchEvent(new CustomEvent("chat:close"));
     }
 
     return () => {
       startScroll();
+      window.dispatchEvent(new CustomEvent("chat:close"));
     };
   }, [state.isOpen]);
 

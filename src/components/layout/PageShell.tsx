@@ -26,11 +26,19 @@ export const PageShell: React.FC<PageShellProps> = ({
   const mainRef = useRef<HTMLElement>(null);
   const [chatOpened, setChatOpened] = useState(false);
 
-  // Lazy-load chat overlay only on first open event
+  // Lazy-load chat overlay on first open event, preloading module on idle
   useEffect(() => {
     const handleChatOpen = () => setChatOpened(true);
     window.addEventListener("chat:open", handleChatOpen);
-    return () => window.removeEventListener("chat:open", handleChatOpen);
+
+    const preloadTimer = setTimeout(() => {
+      import("../chat/ChatOverlay.tsx");
+    }, 1500);
+
+    return () => {
+      window.removeEventListener("chat:open", handleChatOpen);
+      clearTimeout(preloadTimer);
+    };
   }, []);
 
   // Motion orchestration after 2 rAF ticks on every route change
