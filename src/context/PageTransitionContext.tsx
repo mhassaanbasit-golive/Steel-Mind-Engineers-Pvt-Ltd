@@ -208,6 +208,9 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
 
       stopScroll();
 
+      // Kill previous ScrollTriggers to prevent lingering stale triggers
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+
       safetyTimer = setTimeout(() => {
         cleanupLock();
       }, 1500);
@@ -228,6 +231,9 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
             window.scrollTo(0, savedY);
           }
           ScrollTrigger.refresh();
+          setTimeout(() => {
+            ScrollTrigger.refresh();
+          }, 100);
           finishLoadingBar();
 
           setTimeout(() => {
@@ -247,6 +253,14 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
     const handlePageShow = (e: PageTransitionEvent) => {
       if (e.persisted) {
         cleanupLock();
+        try {
+          if (lenis) {
+            lenis.start();
+            lenis.resize();
+          }
+          ScrollTrigger.refresh(true);
+        } catch {}
+        window.location.reload();
       }
     };
 
@@ -299,6 +313,8 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
 
       // 2. Perform navigation once covered
       setTimeout(() => {
+        // Kill previous ScrollTriggers so old triggers do not linger
+        ScrollTrigger.getAll().forEach((t) => t.kill());
         routerNavigate(to);
 
         // 3. Wait for content readiness
@@ -312,6 +328,9 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
           // Scroll immediately to top while covered
           scrollToTop();
           ScrollTrigger.refresh();
+          setTimeout(() => {
+            ScrollTrigger.refresh();
+          }, 100);
           finishLoadingBar();
 
           // 4. Revealing: upward wipe
@@ -390,6 +409,8 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
 
     // 2. Perform navigate(-1) once fully covered
     setTimeout(() => {
+      // Kill previous ScrollTriggers so old triggers do not linger
+      ScrollTrigger.getAll().forEach((t) => t.kill());
       if (typeof window !== "undefined" && window.history.length > 1) {
         routerNavigate(-1);
       } else {
@@ -406,6 +427,9 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
       ]).then(() => {
         scrollToTop();
         ScrollTrigger.refresh();
+        setTimeout(() => {
+          ScrollTrigger.refresh();
+        }, 100);
         finishLoadingBar();
 
         // 4. Revealing: upward wipe

@@ -6,6 +6,7 @@ import { Footer } from "./Footer.tsx";
 import { FloatingTools } from "./FloatingTools.tsx";
 import { BackButton } from "../ui/BackButton.tsx";
 import { initMotion } from "../../lib/motion.ts";
+import { ScrollTrigger } from "../../lib/gsap.ts";
 import { ErrorBoundary } from "../common/ErrorBoundary.tsx";
 
 const ChatOverlay = lazy(() =>
@@ -38,19 +39,27 @@ export const PageShell: React.FC<PageShellProps> = ({
     let revertMotion: (() => void) | undefined;
     let r1: number;
     let r2: number;
+    let refreshTimer: ReturnType<typeof setTimeout>;
 
     r1 = requestAnimationFrame(() => {
       r2 = requestAnimationFrame(() => {
         if (mainRef.current) {
           revertMotion = initMotion(mainRef.current);
         }
+        // Force ScrollTrigger refresh after the DOM has fully rendered
+        refreshTimer = setTimeout(() => {
+          ScrollTrigger.refresh();
+        }, 100);
       });
     });
 
     return () => {
       cancelAnimationFrame(r1);
       cancelAnimationFrame(r2);
+      clearTimeout(refreshTimer);
       if (revertMotion) revertMotion();
+      // Kill all ScrollTriggers when leaving the page so stale triggers never linger
+      ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, [location.pathname]);
 
