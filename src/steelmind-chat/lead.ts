@@ -35,7 +35,7 @@ export async function sendLead(
     return;
   }
 
-  const endpoint = `${smConfig.workerUrl}/lead`;
+  const endpoint = "/api/lead";
 
   const payload = {
     sessionId: storeState.sessionId || safeStorage.get("sm_session_id") || "",

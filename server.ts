@@ -6,9 +6,6 @@ dotenv.config();
 
 import chatHandler from "./api/chat.ts";
 import leadHandler from "./api/lead.ts";
-import quoteHandler from "./api/quote.ts";
-import surveyHandler from "./api/survey.ts";
-import newsletterHandler from "./api/newsletter.ts";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
@@ -20,9 +17,6 @@ app.use(express.urlencoded({ extended: true, limit: "15mb" }));
 // API Endpoints
 app.all("/api/chat", (req, res) => chatHandler(req, res));
 app.all("/api/lead", (req, res) => leadHandler(req, res));
-app.all("/api/quote", (req, res) => quoteHandler(req, res));
-app.all("/api/survey", (req, res) => surveyHandler(req, res));
-app.all("/api/newsletter", (req, res) => newsletterHandler(req, res));
 
 async function startServer() {
   if (!isProd) {

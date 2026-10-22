@@ -1,149 +1,117 @@
-import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import { GoogleGenAI } from "@google/genai";
-import { SYSTEM_PROMPT } from "./_prompt.ts";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const knowledgeJson = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "_knowledge.json"), "utf-8")
-);
+import knowledge from "./_knowledge.json";
 
 export default async function handler(req: any, res: any) {
+  // Handle CORS & preflight
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   if (req.method !== "POST") {
-    return res.status(405).json({ ok: false, error: "method_not_allowed" });
+    return res.status(405).json({ ok: false, error: "Method not allowed" });
+  }
+
+  // Set SSE response headers
+  res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
+  res.setHeader("Cache-Control", "no-cache, no-transform");
+  res.setHeader("Connection", "keep-alive");
+  if (res.flushHeaders) {
+    res.flushHeaders();
   }
 
   try {
-    const { message, history } = req.body || {};
+    const rawBody = typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
+    const messages = Array.isArray(rawBody.messages) ? rawBody.messages : [];
 
-    if (!message || typeof message !== "string" || message.trim().length === 0 || message.length > 500) {
-      return res.status(200).json({
-        ok: true,
-        reply: "Please call +92 300 4253966 or send the quote form, and an engineer will answer.",
-      });
+    const systemPrompt =
+      "You are the assistant for Steel Mind Engineers. Use this knowledge: " +
+      JSON.stringify(knowledge) +
+      "\nRules: No fake prices. Offer phone +92 300 4253966. Act professional. Match the user's language.";
+
+    const nvidiaApiKey = process.env.NVIDIA_API_KEY;
+
+    if (!nvidiaApiKey) {
+      console.warn("[API/CHAT] NVIDIA_API_KEY is not set. Streaming knowledge fallback response.");
+      const fallbackText =
+        "Steel Mind Engineers specializes in design, fabrication, and erection of Pre-Engineered Steel Buildings (PEB) and industrial structures across Pakistan. Please call +92 300 4253966 or visit /contact-us/#quote to discuss your project.";
+      res.write(`event: token\ndata: ${JSON.stringify({ t: fallbackText })}\n\n`);
+      res.write("event: done\ndata: {}\n\n");
+      return res.end();
     }
 
-    const validHistory: Array<{ role: "bot" | "user"; text: string }> = Array.isArray(history)
-      ? history.slice(-12).filter((h) => h && typeof h.text === "string")
-      : [];
+    const formattedMessages = messages.map((m: any) => ({
+      role: m.role === "bot" ? "assistant" : m.role || "user",
+      content: typeof m.content === "string" ? m.content : typeof m.text === "string" ? m.text : "",
+    }));
 
-    const knowledgeText = JSON.stringify(knowledgeJson);
-    const systemText = `${SYSTEM_PROMPT}\n\nKNOWLEDGE:\n${knowledgeText}`;
+    const nvidiaResponse = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${nvidiaApiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "deepseek-ai/deepseek-v4.1-flash",
+        messages: [
+          { role: "system", content: systemPrompt },
+          ...formattedMessages,
+        ],
+        temperature: 0.3,
+        stream: true,
+      }),
+    });
 
-    const provider = process.env.AI_PROVIDER || "gemini";
-    let rawReply = "";
+    if (!nvidiaResponse.ok || !nvidiaResponse.body) {
+      const errText = await nvidiaResponse.text().catch(() => "");
+      console.error(`[API/CHAT] NVIDIA API error ${nvidiaResponse.status}:`, errText);
+      const fallbackText =
+        "Steel Mind designs and fabricates steel structures across Pakistan. Please call +92 300 4253966 or visit /contact-us/#quote to discuss your project.";
+      res.write(`event: token\ndata: ${JSON.stringify({ t: fallbackText })}\n\n`);
+      res.write("event: done\ndata: {}\n\n");
+      return res.end();
+    }
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 12000);
+    const reader = nvidiaResponse.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
 
-    if (provider === "openai" && process.env.OPENAI_API_KEY) {
-      const openAiModel = process.env.OPENAI_MODEL || "gpt-4o-mini";
-      const messages = [
-        { role: "system", content: systemText },
-        ...validHistory.map((h) => ({
-          role: h.role === "bot" ? "assistant" : "user",
-          content: h.text,
-        })),
-        { role: "user", content: message.trim() },
-      ];
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
 
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: openAiModel,
-          messages,
-          temperature: 0.3,
-          max_tokens: 160,
-        }),
-        signal: controller.signal,
-      });
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || "";
 
-      clearTimeout(timeout);
-      const data = await response.json();
-      rawReply = data.choices?.[0]?.message?.content || "";
-    } else {
-      // Default to Gemini API
-      const geminiKey = process.env.GEMINI_API_KEY;
-      const model = process.env.GEMINI_MODEL || "gemini-3.8-flash";
-
-      if (!geminiKey) {
-        clearTimeout(timeout);
-        return res.status(200).json({
-          ok: true,
-          reply: "Steel Mind designs and fabricates steel structures across Pakistan. Please call +92 300 4253966 or submit the quote form to discuss your project.",
-        });
-      }
-
-      try {
-        const ai = new GoogleGenAI({
-          apiKey: geminiKey,
-          httpOptions: {
-            headers: {
-              "User-Agent": "aistudio-build",
-            },
-          },
-        });
-        const contents = [
-          ...validHistory.map((h) => ({
-            role: h.role === "bot" ? ("model" as const) : ("user" as const),
-            parts: [{ text: h.text }],
-          })),
-          { role: "user" as const, parts: [{ text: message.trim() }] },
-        ];
-
-        const aiResponse = await ai.models.generateContent({
-          model,
-          contents,
-          config: {
-            systemInstruction: systemText,
-            temperature: 0.3,
-            maxOutputTokens: 160,
-          },
-        });
-
-        clearTimeout(timeout);
-        rawReply = aiResponse.text || "";
-      } catch (genErr) {
-        clearTimeout(timeout);
-        console.warn("[API/CHAT] GenAI call error, falling back:", genErr);
-        rawReply = "Steel Mind designs and fabricates steel structures across Pakistan. Please call +92 300 4253966 or submit the quote form to discuss your project.";
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith("data:")) {
+          const raw = trimmed.slice(5).trim();
+          if (raw === "[DONE]") {
+            continue;
+          }
+          try {
+            const data = JSON.parse(raw);
+            const content = data?.choices?.[0]?.delta?.content;
+            if (content) {
+              res.write(`event: token\ndata: ${JSON.stringify({ t: content })}\n\n`);
+            }
+          } catch {}
+        }
       }
     }
 
-    // Post-processing rules (Section 16.8)
-    // 1. Remove markdown (*, #, backticks) and emoji
-    let cleaned = rawReply
-      .replace(/[*#`_~]/g, "")
-      .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, "")
-      .trim();
-
-    // 2. Keep first two sentences only (split on (?<=[.!?])\s+)
-    const sentences = cleaned.split(/(?<=[.!?])\s+/).filter(Boolean);
-    if (sentences.length > 2) {
-      cleaned = sentences.slice(0, 2).join(" ");
-    }
-
-    // 3. Fallback check for AI disclosures or empty response
-    const lower = cleaned.toLowerCase();
-    if (
-      !cleaned ||
-      lower.includes("i don't know") ||
-      lower.includes("i do not know") ||
-      lower.includes("as an ai") ||
-      lower.includes("i am an ai") ||
-      lower.includes("language model")
-    ) {
-      cleaned = "Please call +92 300 4253966 or send the quote form, and an engineer will answer.";
-    }
-
-    return res.status(200).json({ ok: true, reply: cleaned });
-  } catch (err) {
-    console.error("[API/CHAT] Error:", err);
-    return res.status(200).json({ ok: false, error: "unavailable" });
+    res.write("event: done\ndata: {}\n\n");
+    res.end();
+  } catch (err: any) {
+    console.error("[API/CHAT] Stream error:", err);
+    const fallbackText =
+      "Steel Mind designs and fabricates steel structures across Pakistan. Please call +92 300 4253966 or visit /contact-us/#quote to discuss your project.";
+    res.write(`event: token\ndata: ${JSON.stringify({ t: fallbackText })}\n\n`);
+    res.write("event: done\ndata: {}\n\n");
+    res.end();
   }
 }

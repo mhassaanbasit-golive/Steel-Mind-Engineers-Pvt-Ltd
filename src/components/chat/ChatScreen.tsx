@@ -33,6 +33,8 @@ const DEFAULT_PILLS = [
   "What is a PEB?",
   "Schedule a factory tour",
   "Request a quote",
+  "See your projects",
+  "Call an engineer",
 ];
 
 function isValidActionHref(href: string): boolean {
@@ -665,25 +667,48 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
         )}
       </div>
 
-      {/* Quick Reply Suggestions */}
-      {!hasSentUserMsg && suggestions.length > 0 && (
-        <div className="fixed bottom-[124px] md:bottom-[132px] inset-x-0 px-4 sm:px-8 max-w-[760px] mx-auto flex items-center space-x-[6px] overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pb-1 pointer-events-auto z-20">
-          {suggestions.map((pill) => (
-            <button
-              key={pill}
-              type="button"
-              disabled={isStreaming}
-              onClick={() => handleSendMessage(pill)}
-              className="px-[14px] py-[7px] text-[12px] font-medium bg-white/95 border border-[var(--line)] rounded-full text-[var(--ink)] hover:border-[#1A3A8A] transition-colors whitespace-nowrap cursor-pointer shadow-sm flex-shrink-0"
-            >
-              {pill}
-            </button>
-          ))}
-        </div>
-      )}
+      {/* Fixed Bottom Container (Docked Suggestions + Input Bar) */}
+      <div className="fixed bottom-[48px] inset-x-0 z-20 pointer-events-none">
+        {/* Rotating Starter Questions (before first user message) */}
+        {!hasSentUserMsg && (
+          <div className="pointer-events-auto max-w-[760px] mx-auto px-4 sm:px-8 mb-2 overflow-hidden select-none">
+            <div className="relative w-full overflow-hidden py-0.5">
+              <div className="sm-rotating-chips-track">
+                {[...DEFAULT_PILLS, ...DEFAULT_PILLS].map((pill, idx) => (
+                  <button
+                    key={`${pill}-${idx}`}
+                    type="button"
+                    disabled={isStreaming}
+                    onClick={() => handleSendMessage(pill)}
+                    className="px-[15px] py-[7.5px] text-[12.5px] font-medium bg-white/95 border border-[var(--line)] rounded-full text-[var(--ink)] hover:border-[#1A3A8A] hover:text-[#1A3A8A] transition-colors whitespace-nowrap cursor-pointer shadow-sm flex-shrink-0"
+                  >
+                    {pill}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
-      {/* Input Bar Fixed Bottom at 48px */}
-      <div className="fixed bottom-[48px] inset-x-0 bg-white border-t border-[var(--line)] px-4 sm:px-8 py-3 z-20">
+        {/* Dynamic Assistant Suggestions (during active conversation) */}
+        {hasSentUserMsg && suggestions.length > 0 && (
+          <div className="pointer-events-auto max-w-[760px] mx-auto px-4 sm:px-8 mb-2 flex items-center space-x-[6px] overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pb-1">
+            {suggestions.map((pill) => (
+              <button
+                key={pill}
+                type="button"
+                disabled={isStreaming}
+                onClick={() => handleSendMessage(pill)}
+                className="px-[14px] py-[7px] text-[12px] font-medium bg-white/95 border border-[var(--line)] rounded-full text-[var(--ink)] hover:border-[#1A3A8A] transition-colors whitespace-nowrap cursor-pointer shadow-sm flex-shrink-0"
+              >
+                {pill}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Input Bar */}
+        <div className="pointer-events-auto bg-white border-t border-[var(--line)] px-4 sm:px-8 py-3">
         {(privacyNote || micError) && (
           <div
             className="max-w-[760px] mx-auto mb-2 text-center text-[12px] text-[#4B5563]"
@@ -773,6 +798,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
           )}
         </form>
       </div>
+    </div>
 
       <style>{`
         .send-solid-btn {

@@ -98,6 +98,7 @@ export async function streamChat(options: StreamChatOptions): Promise<void> {
     visitor: options.visitor || store.visitor,
     messages: formattedMessages,
     memory: options.memory || store.memory || "",
+    language: "en",
     page: {
       url: page.url || (typeof window !== "undefined" ? window.location.href : ""),
       title: page.title || (typeof document !== "undefined" ? document.title : ""),
@@ -115,7 +116,7 @@ export async function streamChat(options: StreamChatOptions): Promise<void> {
     return;
   }
 
-  const endpoint = `${smConfig.workerUrl}/chat`;
+  const endpoint = "/api/chat";
   console.log("FETCHING URL:", endpoint);
 
   let response: Response;

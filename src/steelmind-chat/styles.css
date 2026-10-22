@@ -83,3 +83,28 @@
   transform: translateY(-50%);
   pointer-events: none;
 }
+
+/* Rotating Starter Questions Marquee */
+@keyframes smRotateChips {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-50% - 4px));
+  }
+}
+
+.sm-rotating-chips-track {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  animation: smRotateChips 24s linear infinite;
+  will-change: transform;
+}
+
+.sm-rotating-chips-track:hover,
+.sm-rotating-chips-track:active,
+.sm-rotating-chips-track:focus-within {
+  animation-play-state: paused;
+}
