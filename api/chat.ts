@@ -1,7 +1,7 @@
-import { knowledge } from "./_knowledge";
+import fs from "fs";
+import path from "path";
 
 export default async function handler(req: any, res: any) {
-  // CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
@@ -14,13 +14,21 @@ export default async function handler(req: any, res: any) {
     return res.status(405).json({ ok: false, error: "Method not allowed" });
   }
 
-  // SSE Headers
   res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
   res.setHeader("Cache-Control", "no-cache, no-transform");
   res.setHeader("Connection", "keep-alive");
   if (res.flushHeaders) res.flushHeaders();
 
   try {
+    // Read knowledge file safely at runtime
+    const knowledgePath = path.join(process.cwd(), "api", "_knowledge.json");
+    let knowledge = {};
+    try {
+      knowledge = JSON.parse(fs.readFileSync(knowledgePath, "utf8"));
+    } catch (e) {
+      console.error("Could not read knowledge file:", e);
+    }
+
     const rawBody = typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
     const messages = Array.isArray(rawBody.messages) ? rawBody.messages : [];
 
