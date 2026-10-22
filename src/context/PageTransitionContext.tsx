@@ -174,6 +174,21 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
 
   // Handle browser back/forward buttons (POP)
   useEffect(() => {
+    let safetyTimer: ReturnType<typeof setTimeout> | undefined;
+
+    const cleanupLock = () => {
+      if (safetyTimer) clearTimeout(safetyTimer);
+      finishLoadingBar();
+      const overlay = overlayRef.current;
+      if (overlay) {
+        overlay.style.transition = "none";
+        overlay.style.clipPath = "inset(100% 0 0 0)";
+      }
+      setOverlayActive(false);
+      isTransitioningRef.current = false;
+      startScroll();
+    };
+
     const handlePopState = () => {
       if (isTransitioningRef.current) return;
       isTransitioningRef.current = true;
@@ -193,45 +208,56 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
 
       stopScroll();
 
-      Promise.all([waitForFonts(), waitForHeroImage()]).then(() => {
-        // Restore scroll position
-        let savedY = 0;
-        try {
-          const key = `scroll_${window.location.pathname}`;
-          savedY = Number(sessionStorage.getItem(key)) || 0;
-        } catch {}
+      safetyTimer = setTimeout(() => {
+        cleanupLock();
+      }, 1500);
 
-        if (lenis) {
-          lenis.scrollTo(savedY, { immediate: true, force: true });
-        } else {
-          window.scrollTo(0, savedY);
-        }
-        ScrollTrigger.refresh();
-        finishLoadingBar();
+      Promise.all([waitForFonts(), waitForHeroImage()])
+        .catch(() => {})
+        .finally(() => {
+          // Restore scroll position
+          let savedY = 0;
+          try {
+            const key = `scroll_${window.location.pathname}`;
+            savedY = Number(sessionStorage.getItem(key)) || 0;
+          } catch {}
 
-        setTimeout(() => {
-          if (dots) dots.style.opacity = "0";
-          if (overlay) {
-            overlay.style.transition = "clip-path 500ms cubic-bezier(0.76, 0, 0.24, 1)";
-            overlay.style.clipPath = "inset(0 0 100% 0)";
+          if (lenis) {
+            lenis.scrollTo(savedY, { immediate: true, force: true });
+          } else {
+            window.scrollTo(0, savedY);
           }
+          ScrollTrigger.refresh();
+          finishLoadingBar();
 
           setTimeout(() => {
+            if (dots) dots.style.opacity = "0";
             if (overlay) {
-              // PREVENT FLICKER: Set transition to none before resetting position!
-              overlay.style.transition = "none";
-              overlay.style.clipPath = "inset(100% 0 0 0)";
+              overlay.style.transition = "clip-path 500ms cubic-bezier(0.76, 0, 0.24, 1)";
+              overlay.style.clipPath = "inset(0 0 100% 0)";
             }
-            setOverlayActive(false);
-            isTransitioningRef.current = false;
-            startScroll();
-          }, 500);
-        }, 100);
-      });
+
+            setTimeout(() => {
+              cleanupLock();
+            }, 500);
+          }, 100);
+        });
+    };
+
+    const handlePageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) {
+        cleanupLock();
+      }
     };
 
     window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
+    window.addEventListener("pageshow", handlePageShow);
+    return () => {
+      if (safetyTimer) clearTimeout(safetyTimer);
+      window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener("pageshow", handlePageShow);
+      cleanupLock();
+    };
   }, [startLoadingBar, finishLoadingBar]);
 
   // Transition navigation function

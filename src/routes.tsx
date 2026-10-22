@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect, useRef } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { PageShell } from "./components/layout/PageShell.tsx";
 import { ALL_PAGES, ALL_ARTICLES, CONTENT_BY_URL } from "./content/index.ts";
@@ -67,7 +67,6 @@ const SuspenseFallback: React.FC = () => (
 );
 
 import { useNavigate, useLocation } from "react-router-dom";
-import { ScrollTrigger } from "./lib/gsap.ts";
 
 const TrailingSlashRedirect: React.FC = () => {
   const location = useLocation();
@@ -83,54 +82,12 @@ const TrailingSlashRedirect: React.FC = () => {
   return null;
 };
 
-const RouteScrollTriggerManager: React.FC = () => {
-  const location = useLocation();
-  const prevPathRef = useRef(location.pathname);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    const prev = prevPathRef.current;
-    prevPathRef.current = location.pathname;
-    // When returning to the homepage from another page, ensure completely fresh state
-    if (location.pathname === "/" && prev !== "/") {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-      ScrollTrigger.clearScrollMemory?.();
-      ScrollTrigger.refresh(true);
-    }
-  }, [location.pathname]);
-
-  useEffect(() => {
-    // When leaving a page, ensure all ScrollTriggers are killed before initializing them on the new page
-    return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-    };
-  }, [location.pathname]);
-
-  useEffect(() => {
-    // Force ScrollTrigger refresh after the DOM has fully rendered on route change
-    let rafId: number;
-    const timer = setTimeout(() => {
-      rafId = requestAnimationFrame(() => {
-        ScrollTrigger.refresh();
-      });
-    }, 100);
-
-    return () => {
-      clearTimeout(timer);
-      cancelAnimationFrame(rafId);
-    };
-  }, [location.pathname]);
-
-  return null;
-};
-
 export const AppRoutes: React.FC = () => {
   const publishedProjects = PROJECTS.filter((p) => p.published);
 
   return (
     <>
       <TrailingSlashRedirect />
-      <RouteScrollTriggerManager />
       <Suspense fallback={null}>
         <Routes>
       {/* 1. Home */}

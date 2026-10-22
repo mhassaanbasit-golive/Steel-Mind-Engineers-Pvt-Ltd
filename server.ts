@@ -34,19 +34,8 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     const distPath = path.resolve("./dist");
-    app.use(
-      express.static(distPath, {
-        setHeaders: (res, filePath) => {
-          if (filePath.endsWith("index.html")) {
-            res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
-          } else if (filePath.includes("/assets/")) {
-            res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-          }
-        },
-      })
-    );
+    app.use(express.static(distPath));
     app.get("*", (_req, res) => {
-      res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
       res.sendFile(path.join(distPath, "index.html"));
     });
   }

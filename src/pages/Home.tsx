@@ -100,12 +100,17 @@ export const Home: React.FC = () => {
       end: "top 40%",
       scrub: 0.5,
       onUpdate: (self) => {
-        const revealed = Math.floor(self.progress * total);
+        const revealed = Math.min(total, Math.max(0, Math.floor(self.progress * total)));
         if (revealed !== lastRevealed) {
+          const start = lastRevealed === -1 ? 0 : Math.min(lastRevealed, revealed);
+          const end = lastRevealed === -1 ? total : Math.max(lastRevealed, revealed);
+          for (let i = start; i < end; i++) {
+            const charEl = chars[i];
+            if (charEl) {
+              charEl.style.color = i < revealed ? "var(--ink)" : "var(--grey)";
+            }
+          }
           lastRevealed = revealed;
-          chars.forEach((c, i) => {
-            c.style.color = i < revealed ? "var(--ink)" : "var(--grey)";
-          });
         }
       },
     });

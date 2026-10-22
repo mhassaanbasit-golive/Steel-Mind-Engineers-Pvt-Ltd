@@ -32,11 +32,7 @@ export class ErrorBoundary extends Component<Props, State> {
       msg.includes("Importing a module script failed")
     ) {
       try {
-        const reloaded = sessionStorage.getItem("chunk_reloaded");
-        if (!reloaded) {
-          sessionStorage.setItem("chunk_reloaded", "true");
-          window.location.reload();
-        }
+        window.location.reload();
       } catch {}
     }
   }
@@ -48,7 +44,14 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   private handleTryAgain = () => {
-    this.setState({ hasError: false });
+    try {
+      sessionStorage.removeItem("chunk_reloaded");
+    } catch {}
+    if (typeof window !== "undefined") {
+      window.location.reload();
+    } else {
+      this.setState({ hasError: false });
+    }
   };
 
   public render() {
