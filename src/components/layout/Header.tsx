@@ -101,8 +101,6 @@ export const Header: React.FC<HeaderProps> = ({ hasDarkHero = true }) => {
           headerRef.current.removeAttribute("data-hidden");
           headerRef.current.style.transform = "translateY(0)";
         }
-        const navH = headerRef.current?.offsetHeight || (window.innerWidth < 1024 ? 60 : 80);
-        document.documentElement.style.setProperty("--nav-offset", `${navH}px`);
       }
       lastScrollYRef.current = currentScrollY;
       return;
@@ -117,8 +115,6 @@ export const Header: React.FC<HeaderProps> = ({ hasDarkHero = true }) => {
           headerRef.current.removeAttribute("data-hidden");
           headerRef.current.style.transform = "translateY(0)";
         }
-        const navH = headerRef.current?.offsetHeight || (window.innerWidth < 1024 ? 60 : 80);
-        document.documentElement.style.setProperty("--nav-offset", `${navH}px`);
       }
       lastScrollYRef.current = currentScrollY;
       return;
@@ -134,7 +130,6 @@ export const Header: React.FC<HeaderProps> = ({ hasDarkHero = true }) => {
         headerRef.current.setAttribute("data-hidden", "true");
         headerRef.current.style.transform = "translateY(-100%)";
       }
-      document.documentElement.style.setProperty("--nav-offset", "0px");
       lastScrollYRef.current = currentScrollY;
     }
     // Scrolling UP -> show header
@@ -145,8 +140,6 @@ export const Header: React.FC<HeaderProps> = ({ hasDarkHero = true }) => {
         headerRef.current.removeAttribute("data-hidden");
         headerRef.current.style.transform = "translateY(0)";
       }
-      const navH = headerRef.current?.offsetHeight || (window.innerWidth < 1024 ? 60 : 80);
-      document.documentElement.style.setProperty("--nav-offset", `${navH}px`);
       lastScrollYRef.current = currentScrollY;
     }
     // Track reference when continuing in the same state

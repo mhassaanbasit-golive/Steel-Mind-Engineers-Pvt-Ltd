@@ -27,24 +27,8 @@ export const TransitionLink: React.FC<TransitionLinkProps> = ({
   const location = useLocation();
   const destination = to || href || "";
 
-  // Prefetch logic: load route chunk and preload images on intent
-  const handlePrefetch = useCallback(() => {
-    if (
-      !destination ||
-      destination.startsWith("http") ||
-      destination.startsWith("mailto:") ||
-      destination.startsWith("tel:") ||
-      destination.startsWith("#")
-    ) {
-      return;
-    }
-    // Prefetch image or link rel prefetch
-    const link = document.createElement("link");
-    link.rel = "prefetch";
-    link.href = destination;
-    link.as = "document";
-    document.head.appendChild(link);
-  }, [destination]);
+  // Prefetch logic: no-op to avoid iOS WebKit document prefetch conflicts
+  const handlePrefetch = useCallback(() => {}, []);
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (

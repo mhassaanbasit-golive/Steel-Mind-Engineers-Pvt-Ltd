@@ -5,26 +5,42 @@ import { ALL_PAGES, ALL_ARTICLES, CONTENT_BY_URL } from "./content/index.ts";
 import { PROJECTS } from "./data/projects.ts";
 import { getTemplateForPage } from "./data/templates.ts";
 
-const Home = lazy(() => import("./pages/Home.tsx").then((m) => ({ default: m.Home })));
-const AboutUs = lazy(() => import("./pages/AboutUs.tsx").then((m) => ({ default: m.AboutUs })));
-const Hub = lazy(() => import("./pages/Hub.tsx").then((m) => ({ default: m.Hub })));
-const Info = lazy(() => import("./pages/Info.tsx").then((m) => ({ default: m.Info })));
-const DiagramGallery = lazy(() => import("./pages/DiagramGallery.tsx").then((m) => ({ default: m.DiagramGallery })));
-const ProjectsIndex = lazy(() => import("./pages/ProjectsIndex.tsx").then((m) => ({ default: m.ProjectsIndex })));
-const Project = lazy(() => import("./pages/Project.tsx").then((m) => ({ default: m.Project })));
-const Clients = lazy(() => import("./pages/Clients.tsx").then((m) => ({ default: m.Clients })));
-const Contact = lazy(() => import("./pages/Contact.tsx").then((m) => ({ default: m.Contact })));
-const ContactUs = lazy(() => import("./pages/ContactUs.tsx").then((m) => ({ default: m.ContactUs })));
-const BlogIndex = lazy(() => import("./pages/BlogIndex.tsx").then((m) => ({ default: m.BlogIndex })));
-const Article = lazy(() => import("./pages/Article.tsx").then((m) => ({ default: m.Article })));
-const Profile = lazy(() => import("./pages/Profile.tsx").then((m) => ({ default: m.Profile })));
-const Sitemap = lazy(() => import("./pages/Sitemap.tsx").then((m) => ({ default: m.Sitemap })));
-const NotFound = lazy(() => import("./pages/NotFound.tsx").then((m) => ({ default: m.NotFound })));
-const Advantages = lazy(() => import("./pages/Advantages.tsx").then((m) => ({ default: m.Advantages })));
-const OneStepSolution = lazy(() => import("./pages/OneStepSolution.tsx").then((m) => ({ default: m.OneStepSolution })));
-const SmePolicy = lazy(() => import("./pages/SmePolicy.tsx").then((m) => ({ default: m.SmePolicy })));
-const FactoryTour = lazy(() => import("./pages/FactoryTour.tsx").then((m) => ({ default: m.FactoryTour })));
-const Concept3D = lazy(() => import("./pages/Concept3D.tsx").then((m) => ({ default: m.Concept3D })));
+import { Home } from "./pages/Home.tsx";
+
+function lazyWithRetry<T extends React.ComponentType<any>>(
+  factory: () => Promise<{ default: T }>
+) {
+  return lazy(() =>
+    factory().catch(() => {
+      // Retry once after 250ms if chunk fetch fails (e.g. mobile reconnect)
+      return new Promise<{ default: T }>((resolve, reject) => {
+        setTimeout(() => {
+          factory().then(resolve).catch(reject);
+        }, 250);
+      });
+    })
+  );
+}
+
+const AboutUs = lazyWithRetry(() => import("./pages/AboutUs.tsx").then((m) => ({ default: m.AboutUs })));
+const Hub = lazyWithRetry(() => import("./pages/Hub.tsx").then((m) => ({ default: m.Hub })));
+const Info = lazyWithRetry(() => import("./pages/Info.tsx").then((m) => ({ default: m.Info })));
+const DiagramGallery = lazyWithRetry(() => import("./pages/DiagramGallery.tsx").then((m) => ({ default: m.DiagramGallery })));
+const ProjectsIndex = lazyWithRetry(() => import("./pages/ProjectsIndex.tsx").then((m) => ({ default: m.ProjectsIndex })));
+const Project = lazyWithRetry(() => import("./pages/Project.tsx").then((m) => ({ default: m.Project })));
+const Clients = lazyWithRetry(() => import("./pages/Clients.tsx").then((m) => ({ default: m.Clients })));
+const Contact = lazyWithRetry(() => import("./pages/Contact.tsx").then((m) => ({ default: m.Contact })));
+const ContactUs = lazyWithRetry(() => import("./pages/ContactUs.tsx").then((m) => ({ default: m.ContactUs })));
+const BlogIndex = lazyWithRetry(() => import("./pages/BlogIndex.tsx").then((m) => ({ default: m.BlogIndex })));
+const Article = lazyWithRetry(() => import("./pages/Article.tsx").then((m) => ({ default: m.Article })));
+const Profile = lazyWithRetry(() => import("./pages/Profile.tsx").then((m) => ({ default: m.Profile })));
+const Sitemap = lazyWithRetry(() => import("./pages/Sitemap.tsx").then((m) => ({ default: m.Sitemap })));
+const NotFound = lazyWithRetry(() => import("./pages/NotFound.tsx").then((m) => ({ default: m.NotFound })));
+const Advantages = lazyWithRetry(() => import("./pages/Advantages.tsx").then((m) => ({ default: m.Advantages })));
+const OneStepSolution = lazyWithRetry(() => import("./pages/OneStepSolution.tsx").then((m) => ({ default: m.OneStepSolution })));
+const SmePolicy = lazyWithRetry(() => import("./pages/SmePolicy.tsx").then((m) => ({ default: m.SmePolicy })));
+const FactoryTour = lazyWithRetry(() => import("./pages/FactoryTour.tsx").then((m) => ({ default: m.FactoryTour })));
+const Concept3D = lazyWithRetry(() => import("./pages/Concept3D.tsx").then((m) => ({ default: m.Concept3D })));
 
 const SuspenseFallback: React.FC = () => (
   <div

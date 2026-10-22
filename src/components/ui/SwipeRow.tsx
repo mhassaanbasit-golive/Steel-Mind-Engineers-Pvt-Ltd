@@ -143,7 +143,6 @@ export const SwipeRow: React.FC<SwipeRowProps> = ({
         tabIndex={0}
         onKeyDown={handleKeyDown}
         className="flex gap-4 lg:gap-[var(--gutter)] overflow-x-auto scroll-smooth overscroll-x-contain pb-4 focus:outline-none [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [scroll-snap-type:x_mandatory]"
-        data-lenis-prevent=""
       >
         {React.Children.map(children, (child, idx) => (
           <div

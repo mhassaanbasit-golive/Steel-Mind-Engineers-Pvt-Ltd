@@ -1,5 +1,5 @@
 // PART 11. CLIENTS PAGE — Banner + 10 Logos Centered + Repeat Clients + FAQ + NextBand
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from "react";
 import pageData from "../content/generated/page-65.json";
 import { A } from "../data/assets.ts";
 import { HeroBand } from "../components/ui/HeroBand.tsx";
@@ -16,6 +16,7 @@ interface ClientItem {
   height?: number;
   projectUrl?: string;
   projectNote?: string;
+  photoUrl?: string;
 }
 
 const CLIENTS: ClientItem[] = [
@@ -26,6 +27,7 @@ const CLIENTS: ClientItem[] = [
     height: 572,
     projectUrl: "/projects/haier-peb-crane-and-mezzanine-shed-raiwind/",
     projectNote: "Store Shed, Crane Shed, Mezzanine",
+    photoUrl: "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401784/Haier-Injection-Modling-Structure-Fabrication-Main-Image.png",
   },
   {
     name: "Imperial Denim",
@@ -58,6 +60,7 @@ const CLIENTS: ClientItem[] = [
     height: 1024,
     projectUrl: "/projects/dravton-dairy-peb-dairy-shed-chunian/",
     projectNote: "Dairy Shed, Milking Parlour, Rapid Exit",
+    photoUrl: "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401780/Dravton-Dairy-Shed-Main-image.png",
   },
   {
     name: "Latifia Dairy",
@@ -74,6 +77,7 @@ const CLIENTS: ClientItem[] = [
     height: 572,
     projectUrl: "/projects/maria-b-peb-mezzanine-floor-lahore/",
     projectNote: "Mezzanine Floor, Lahore",
+    photoUrl: "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401787/Maria-B-Mezzanine-Floor-Main-Image.png",
   },
   {
     name: "Elite Stitching",
@@ -102,73 +106,98 @@ const CLIENTS: ClientItem[] = [
 ];
 
 export const Clients: React.FC = () => {
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [loadedPhotos, setLoadedPhotos] = useState<
+    Record<string, { loaded: boolean; aspect: string; ratio: number }>
+  >({});
+
+  const leaveTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const headingRef = useRef<HTMLHeadingElement>(null);
   const sublineRef = useRef<HTMLParagraphElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
   const cellRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const repeatClientsRef = useRef<HTMLDivElement>(null);
   const whatClientsReceiveRef = useRef<HTMLDivElement>(null);
   const becomeClientRef = useRef<HTMLDivElement>(null);
 
-  // Press-and-hold touch handler state refs
-  const holdTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const startPosRef = useRef<{ x: number; y: number } | null>(null);
-  const heldCellIndexRef = useRef<number | null>(null);
-
-  const clearHold = () => {
-    if (holdTimerRef.current) {
-      clearTimeout(holdTimerRef.current);
-      holdTimerRef.current = null;
-    }
-    startPosRef.current = null;
-    if (gridRef.current) {
-      gridRef.current.removeAttribute("data-hold");
-    }
-    if (heldCellIndexRef.current !== null) {
-      const el = cellRefs.current[heldCellIndexRef.current];
-      if (el) el.classList.remove("is-held");
-      heldCellIndexRef.current = null;
-    }
-    setHoveredIdx(null);
-  };
-
-  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>, idx: number) => {
-    if (e.pointerType === "mouse") return; // Touch only
-    startPosRef.current = { x: e.clientX, y: e.clientY };
-
-    if (holdTimerRef.current) clearTimeout(holdTimerRef.current);
-    holdTimerRef.current = setTimeout(() => {
-      if (gridRef.current && cellRefs.current[idx]) {
-        heldCellIndexRef.current = idx;
-        gridRef.current.setAttribute("data-hold", "true");
-        cellRefs.current[idx]?.classList.add("is-held");
-        setHoveredIdx(idx);
-      }
-    }, 160);
-  };
-
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!startPosRef.current) return;
-    const dx = Math.abs(e.clientX - startPosRef.current.x);
-    const dy = Math.abs(e.clientY - startPosRef.current.y);
-    if (dx > 8 || dy > 8) {
-      clearHold();
-    }
-  };
-
+  // Preload all client photos once with requestIdleCallback (fallback 1500ms timeout)
   useEffect(() => {
-    const onScrollOrCancel = () => clearHold();
-    window.addEventListener("scroll", onScrollOrCancel, { passive: true });
-    window.addEventListener("pointerup", onScrollOrCancel, { passive: true });
-    window.addEventListener("pointercancel", onScrollOrCancel, { passive: true });
+    const urls = CLIENTS.map((c) => c.photoUrl).filter(Boolean) as string[];
+
+    const preloadAll = () => {
+      urls.forEach((url) => {
+        const img = new Image();
+        img.src = url;
+        const markLoaded = () => {
+          const w = img.naturalWidth || 16;
+          const h = img.naturalHeight || 9;
+          setLoadedPhotos((prev) => ({
+            ...prev,
+            [url]: {
+              loaded: true,
+              aspect: `${w} / ${h}`,
+              ratio: w / h,
+            },
+          }));
+        };
+
+        if (img.complete && img.naturalWidth > 0) {
+          markLoaded();
+        } else {
+          img.onload = markLoaded;
+        }
+      });
+    };
+
+    if (typeof window !== "undefined") {
+      if ("requestIdleCallback" in window) {
+        const id = (window as any).requestIdleCallback(preloadAll, { timeout: 1500 });
+        return () => {
+          if ("cancelIdleCallback" in window) {
+            (window as any).cancelIdleCallback(id);
+          }
+        };
+      } else {
+        const timer = setTimeout(preloadAll, 200);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, []);
+
+  // Pointer Enter handler with timer cancellation and mouse detection
+  const handleCellEnter = useCallback((client: ClientItem) => {
+    if (typeof window !== "undefined") {
+      const isFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+      if (!isFinePointer) return;
+    }
+
+    if (leaveTimerRef.current) {
+      clearTimeout(leaveTimerRef.current);
+      leaveTimerRef.current = null;
+    }
+
+    setHoveredId(client.name);
+    // TEMPORARY LOG per specification
+    console.log("[clients-hover]", client.name, client.photoUrl || null);
+  }, []);
+
+  // Pointer Leave handler with 80ms delay to prevent gap flicker
+  const handleCellLeave = useCallback(() => {
+    if (leaveTimerRef.current) {
+      clearTimeout(leaveTimerRef.current);
+    }
+    leaveTimerRef.current = setTimeout(() => {
+      setHoveredId(null);
+    }, 80);
+  }, []);
+
+  // Cleanup leave timer on unmount
+  useEffect(() => {
     return () => {
-      window.removeEventListener("scroll", onScrollOrCancel);
-      window.removeEventListener("pointerup", onScrollOrCancel);
-      window.removeEventListener("pointercancel", onScrollOrCancel);
-      if (holdTimerRef.current) clearTimeout(holdTimerRef.current);
+      if (leaveTimerRef.current) {
+        clearTimeout(leaveTimerRef.current);
+      }
     };
   }, []);
 
@@ -309,7 +338,6 @@ export const Clients: React.FC = () => {
       });
     });
 
-    // Refresh ScrollTrigger to ensure accurate trigger measurements
     ScrollTrigger.refresh();
     const refreshTimer = setTimeout(() => {
       ScrollTrigger.refresh();
@@ -387,13 +415,13 @@ export const Clients: React.FC = () => {
 
           {/* Clean 2 columns on mobile, 3 columns on desktop */}
           <div
-            ref={gridRef}
-            onPointerMove={handlePointerMove}
             className="grid grid-cols-2 md:grid-cols-3 gap-8 sm:gap-12 lg:gap-16 items-center justify-items-center client-grid"
           >
             {CLIENTS.map((client, idx) => {
-              const isHovered = hoveredIdx === idx;
-              const isDimmed = hoveredIdx !== null && !isHovered;
+              const isHovered = hoveredId === client.name;
+              const isDimmed = hoveredId !== null && !isHovered;
+              const photoMeta = client.photoUrl ? loadedPhotos[client.photoUrl] : null;
+              const hasLoadedPhoto = Boolean(photoMeta?.loaded);
 
               return (
                 <div
@@ -401,39 +429,73 @@ export const Clients: React.FC = () => {
                   ref={(el) => {
                     cellRefs.current[idx] = el;
                   }}
-                  className={`cell w-full flex items-center justify-center ${
+                  data-hovered={isHovered ? "true" : undefined}
+                  className={`cell relative w-full flex items-center justify-center ${
                     isHovered ? "is-focused" : isDimmed ? "is-dimmed" : ""
                   }`}
-                  onMouseEnter={() => setHoveredIdx(idx)}
-                  onMouseLeave={() => setHoveredIdx(null)}
-                  onFocus={() => setHoveredIdx(idx)}
-                  onBlur={() => setHoveredIdx(null)}
-                  onPointerDown={(e) => handlePointerDown(e, idx)}
+                  onPointerEnter={() => handleCellEnter(client)}
+                  onPointerLeave={handleCellLeave}
+                  onFocus={() => handleCellEnter(client)}
+                  onBlur={handleCellLeave}
                 >
                   <TransitionLink
                     to={client.projectUrl || "/projects/"}
-                    className="fx group flex flex-col items-center justify-center p-3 sm:p-5 w-full select-none"
+                    className="group relative flex flex-col items-center justify-center p-3 sm:p-5 w-full select-none"
                   >
-                    {client.logo ? (
-                      <img
-                        src={client.logo}
-                        alt={`${client.name} logo`}
-                        width={client.width}
-                        height={client.height}
-                        loading={idx === 0 ? "eager" : "lazy"}
-                        decoding="async"
-                        className="w-full h-[90px] sm:h-[110px] md:h-[130px] lg:h-[145px] object-contain block"
-                      />
-                    ) : (
-                      <span className="font-semibold text-[16px] lg:text-[20px] text-[var(--ink)] tracking-tight group-hover:text-[var(--blue)] transition-colors">
-                        {client.name}
-                      </span>
-                    )}
-                    {client.projectNote && (
-                      <span className="mt-3 text-center text-[11px] sm:text-[12px] uppercase tracking-wider text-[#0A0A0A] font-medium line-clamp-1 transition-colors">
-                        {client.projectNote}
-                      </span>
-                    )}
+                    {/* Inner wrapper that receives blur(4px) without affecting reveal transforms */}
+                    <div className="cell-inner w-full flex flex-col items-center justify-center">
+                      {/* Logo and Project Photo Stage Area */}
+                      <div className="relative w-full h-[90px] sm:h-[110px] md:h-[130px] lg:h-[145px] flex items-center justify-center">
+                        {/* Client Logo Underneath: fades to opacity 0 over 250ms on photo reveal */}
+                        <div
+                          className={`client-logo-wrapper w-full h-full flex items-center justify-center ${
+                            isHovered && hasLoadedPhoto ? "has-photo" : ""
+                          }`}
+                        >
+                          {client.logo ? (
+                            <img
+                              src={client.logo}
+                              alt={`${client.name} logo`}
+                              width={client.width}
+                              height={client.height}
+                              loading={idx === 0 ? "eager" : "lazy"}
+                              decoding="async"
+                              className="w-full h-full object-contain block"
+                            />
+                          ) : (
+                            <span className="font-semibold text-[16px] lg:text-[20px] text-[var(--ink)] tracking-tight group-hover:text-[var(--blue)] transition-colors">
+                              {client.name}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Absolutely positioned project photo layer, centered in cell, max-height 220px */}
+                        {client.photoUrl && (
+                          <div
+                            className="client-photo-wrapper"
+                            style={
+                              {
+                                "--photo-aspect": photoMeta?.aspect || "16 / 9",
+                                "--photo-ratio": photoMeta?.ratio || 1.777,
+                              } as React.CSSProperties
+                            }
+                          >
+                            <img
+                              src={client.photoUrl}
+                              alt={`${client.name} main project`}
+                              className={`client-photo-img ${hasLoadedPhoto ? "is-ready" : ""}`}
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Sector label under the logo stays visible and sharp */}
+                      {client.projectNote && (
+                        <span className="mt-3 text-center text-[11px] sm:text-[12px] uppercase tracking-wider text-[#0A0A0A] font-medium line-clamp-1 transition-colors">
+                          {client.projectNote}
+                        </span>
+                      )}
+                    </div>
                   </TransitionLink>
                 </div>
               );
@@ -442,76 +504,85 @@ export const Clients: React.FC = () => {
         </div>
       </section>
 
-      {/* Embedded CSS for HOVER-FOCUS and Tap states */}
+      {/* Embedded CSS for Hover Focus Blur and Project Photo Reveal */}
       <style>{`
-        .client-grid .fx {
-          transition: filter 400ms cubic-bezier(.16, 1, .3, 1), transform 400ms cubic-bezier(.16, 1, .3, 1), opacity 400ms cubic-bezier(.16, 1, .3, 1);
-          transform-origin: center center;
-        }
-
-        /* React State Driven Hover-Focus Blur */
-        .client-grid .cell.is-dimmed .fx {
-          filter: blur(4px);
-          opacity: 0.65;
-          will-change: filter;
-        }
-
-        .client-grid .cell.is-focused .fx {
-          transform: scale(1.05);
-          filter: blur(0px);
-          opacity: 1;
-        }
-
-        /* Desktop Native CSS Hover-Focus (Immediate on hover, no dependency on .is-ready) */
+        /* Mouse & Fine Pointer device behaviors */
         @media (hover: hover) and (pointer: fine) {
-          .client-grid:has(.cell:hover) .cell:not(:hover) .fx,
-          .client-grid:has(.cell:focus-within) .cell:not(:focus-within) .fx {
-            filter: blur(4px);
-            opacity: 0.65;
+          /* 2. Blur transition on inner wrapper: 400ms cubic-bezier(.16, 1, .3, 1), no opacity change, no grey */
+          .client-grid .cell-inner {
+            transition: filter 400ms cubic-bezier(.16, 1, .3, 1);
             will-change: filter;
           }
 
-          .client-grid .cell:hover .fx,
-          .client-grid .cell:focus-within .fx {
-            transform: scale(1.05);
+          .client-grid .cell.is-dimmed .cell-inner {
+            filter: blur(4px);
+          }
+
+          .client-grid .cell.is-focused .cell-inner {
             filter: blur(0px);
-            opacity: 1;
+          }
+
+          /* 3. Photo Layer: centered, width 100%, aspect-ratio from image, max-height 220px, clip-path inset(100% 0 0 0) */
+          .client-photo-wrapper {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 20;
+          }
+
+          .client-photo-img {
+            display: block;
+            width: 100%;
+            max-height: 220px;
+            max-width: calc(220px * var(--photo-ratio, 1.777));
+            aspect-ratio: var(--photo-aspect, 16 / 9);
+            object-fit: cover;
+            border: none !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            clip-path: inset(100% 0 0 0);
+            transition: clip-path 300ms cubic-bezier(.76, 0, .24, 1);
+            pointer-events: none;
+          }
+
+          .cell.is-focused .client-photo-img.is-ready {
+            clip-path: inset(0 0 0 0);
+            transition: clip-path 600ms cubic-bezier(.76, 0, .24, 1);
+          }
+
+          /* Logo underneath fades out to opacity 0 over 250ms when cell is focused and photo is available */
+          .client-logo-wrapper {
+            transition: opacity 250ms cubic-bezier(.16, 1, .3, 1);
+          }
+
+          .cell.is-focused .client-logo-wrapper.has-photo {
+            opacity: 0;
           }
         }
 
-        /* Touch Press-and-Hold Focus */
-        .client-grid[data-hold]:has(.cell.is-held) .cell:not(.is-held) .fx,
-        .client-grid[data-hold] .cell:not(.is-held) .fx {
-          filter: blur(3px);
-          opacity: 0.7;
-          will-change: filter;
-        }
-
-        .client-grid[data-hold] .cell.is-held .fx {
-          transform: scale(1.05);
-          filter: blur(0px);
-          opacity: 1;
-        }
-
-        /* Tap feedback on touch: cell scales to .97 on :active (200ms) and back */
-        @media (hover: none) or (pointer: coarse) {
-          .client-grid .cell:active .fx {
-            transform: scale(0.97);
-            transition: transform 200ms cubic-bezier(.16, 1, .3, 1);
-          }
-        }
-
-        /* Reduced motion: no blur, no scale */
+        /* Reduced motion: instantaneous appearance, no transitions, no blur */
         @media (prefers-reduced-motion: reduce) {
-          .client-grid .fx,
-          .client-grid .cell.is-dimmed .fx,
-          .client-grid .cell.is-focused .fx,
-          .client-grid:has(.cell:hover) .cell .fx,
-          .client-grid[data-hold] .cell .fx {
+          .client-grid .cell-inner,
+          .client-grid .client-photo-img,
+          .client-grid .client-logo-wrapper {
             filter: none !important;
-            transform: none !important;
-            opacity: 1 !important;
             transition: none !important;
+          }
+
+          .cell.is-focused .client-photo-img.is-ready {
+            clip-path: none !important;
+            display: block !important;
+          }
+
+          .cell:not(.is-focused) .client-photo-img {
+            clip-path: none !important;
+            display: none !important;
           }
         }
       `}</style>
