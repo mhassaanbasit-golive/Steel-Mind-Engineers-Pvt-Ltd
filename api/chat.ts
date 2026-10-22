@@ -19,7 +19,7 @@ export default async function handler(req: any, res: any) {
 
   try {
     sendStatus("understand", "Understanding your question");
-    
+
     const knowledgePath = path.join(process.cwd(), "api", "_knowledge.json");
     let knowledge = {};
     try { knowledge = JSON.parse(fs.readFileSync(knowledgePath, "utf8")); } catch (e) {}
@@ -44,7 +44,8 @@ export default async function handler(req: any, res: any) {
       parts: [{ text: typeof m.content === "string" ? m.content : m.text }]
     }));
 
-    const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:streamGenerateContent?alt=sse&key=${geminiApiKey}`, {
+    // UPDATED: Using gemini-3.8-flash
+    const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:streamGenerateContent?alt=sse&key=${geminiApiKey}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
