@@ -13,6 +13,16 @@ const ChatOverlay = lazy(() =>
   import("../chat/ChatOverlay.tsx").then((m) => ({ default: m.ChatOverlay }))
 );
 
+let hasSiteLoadedInitially = false;
+if (typeof window !== "undefined") {
+  window.addEventListener("site:ready", () => {
+    hasSiteLoadedInitially = true;
+  }, { once: true });
+  document.addEventListener("app:ready", () => {
+    hasSiteLoadedInitially = true;
+  }, { once: true });
+}
+
 export interface PageShellProps {
   children: React.ReactNode;
   hasDarkHero?: boolean;
@@ -34,33 +44,65 @@ export const PageShell: React.FC<PageShellProps> = ({
     return () => window.removeEventListener("chat:open", handleChatOpen);
   }, []);
 
-  // Motion orchestration after 2 rAF ticks on every route change
+  // Motion orchestration: ensure ScrollTrigger.refresh() is ONLY called after the Loader has completely finished
   useEffect(() => {
+    // 1. Explicitly scroll to top BEFORE GSAP initializes
+    window.scrollTo(0, 0);
+
     let revertMotion: (() => void) | undefined;
     let r1: number;
     let r2: number;
     let refreshTimer: ReturnType<typeof setTimeout>;
 
-    r1 = requestAnimationFrame(() => {
-      r2 = requestAnimationFrame(() => {
-        if (mainRef.current) {
-          revertMotion = initMotion(mainRef.current);
-        }
-        // Force ScrollTrigger refresh after the DOM has fully rendered
-        refreshTimer = setTimeout(() => {
-          ScrollTrigger.refresh();
-        }, 100);
+    const executeInit = () => {
+      window.scrollTo(0, 0);
+      r1 = requestAnimationFrame(() => {
+        r2 = requestAnimationFrame(() => {
+          if (mainRef.current) {
+            revertMotion = initMotion(mainRef.current);
+          }
+          // Force ScrollTrigger refresh ONLY after Loader has completely finished and DOM has settled
+          refreshTimer = setTimeout(() => {
+            window.scrollTo(0, 0);
+            ScrollTrigger.refresh(true);
+          }, 100);
+        });
       });
-    });
-
-    return () => {
-      cancelAnimationFrame(r1);
-      cancelAnimationFrame(r2);
-      clearTimeout(refreshTimer);
-      if (revertMotion) revertMotion();
-      // Kill all ScrollTriggers when leaving the page so stale triggers never linger
-      ScrollTrigger.getAll().forEach((t) => t.kill());
     };
+
+    if (!hasSiteLoadedInitially) {
+      let executed = false;
+      const onLoaderDone = () => {
+        if (executed) return;
+        executed = true;
+        hasSiteLoadedInitially = true;
+        executeInit();
+      };
+
+      window.addEventListener("site:ready", onLoaderDone, { once: true });
+      document.addEventListener("app:ready", onLoaderDone, { once: true });
+      const timer = setTimeout(onLoaderDone, 2100);
+
+      return () => {
+        window.removeEventListener("site:ready", onLoaderDone);
+        document.removeEventListener("app:ready", onLoaderDone);
+        clearTimeout(timer);
+        cancelAnimationFrame(r1);
+        cancelAnimationFrame(r2);
+        clearTimeout(refreshTimer);
+        if (revertMotion) revertMotion();
+        ScrollTrigger.getAll().forEach((t) => t.kill());
+      };
+    } else {
+      executeInit();
+      return () => {
+        cancelAnimationFrame(r1);
+        cancelAnimationFrame(r2);
+        clearTimeout(refreshTimer);
+        if (revertMotion) revertMotion();
+        ScrollTrigger.getAll().forEach((t) => t.kill());
+      };
+    }
   }, [location.pathname]);
 
   return (

@@ -4,20 +4,24 @@ import { AppRoutes } from "./routes.tsx";
 import { PageTransitionProvider } from "./context/PageTransitionContext.tsx";
 import { ErrorBoundary } from "./components/common/ErrorBoundary.tsx";
 import { Loader } from "./components/layout/Loader.tsx";
-import { ScrollTrigger } from "./lib/gsap.ts";
+import { gsap, ScrollTrigger } from "./lib/gsap.ts";
 import { lenis } from "./lib/lenis.ts";
+
+if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
+  window.history.scrollRestoration = "manual";
+}
 
 export default function App() {
   useEffect(() => {
+    // Force scroll to top BEFORE any animations or measurements
+    window.scrollTo(0, 0);
+
+    // Global reset on mount: wipe any lingering tweens or ScrollTriggers from prior states
+    gsap.killTweensOf("*");
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+
     const handlePageShow = (event: PageTransitionEvent) => {
       if (event.persisted) {
-        try {
-          if (lenis) {
-            lenis.start();
-            lenis.resize();
-          }
-          ScrollTrigger.refresh(true);
-        } catch {}
         window.location.reload();
       }
     };

@@ -110,27 +110,24 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
   const [overlayActive, setOverlayActive] = useState(false);
   const [loadingBarVisible, setLoadingBarVisible] = useState(false);
 
-  // Set history manual scroll restoration
+// Enforce manual scroll restoration at the top level
+if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
+  window.history.scrollRestoration = "manual";
+}
+
+  // Set history manual scroll restoration and force top scroll on mount
   useEffect(() => {
-    if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
-      window.history.scrollRestoration = "manual";
+    if (typeof window !== "undefined") {
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "manual";
+      }
+      window.scrollTo(0, 0);
     }
   }, []);
 
-  // Save scroll position per path
+  // Force scroll to top on route change
   useEffect(() => {
-    const saveScroll = () => {
-      try {
-        const key = `scroll_${location.pathname}`;
-        sessionStorage.setItem(key, String(window.scrollY));
-      } catch {}
-    };
-
-    window.addEventListener("beforeunload", saveScroll);
-    return () => {
-      saveScroll();
-      window.removeEventListener("beforeunload", saveScroll);
-    };
+    window.scrollTo(0, 0);
   }, [location.pathname]);
 
   // Loading bar animation controller
@@ -224,18 +221,11 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
       Promise.all([waitForFonts(), waitForHeroImage()])
         .catch(() => {})
         .finally(() => {
-          // Restore scroll position
-          let savedY = 0;
-          try {
-            const key = `scroll_${window.location.pathname}`;
-            savedY = Number(sessionStorage.getItem(key)) || 0;
-          } catch {}
-
+          // Force scroll to top on every navigation
           if (lenis) {
-            lenis.scrollTo(savedY, { immediate: true, force: true });
-          } else {
-            window.scrollTo(0, savedY);
+            lenis.scrollTo(0, { immediate: true, force: true });
           }
+          window.scrollTo(0, 0);
           ScrollTrigger.refresh();
           setTimeout(() => {
             ScrollTrigger.refresh();

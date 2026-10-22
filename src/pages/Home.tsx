@@ -84,7 +84,7 @@ export const Home: React.FC = () => {
 
   const pRef = useRef<HTMLParagraphElement>(null);
 
-  // ITEM 1 — Step C: Animate each character on scroll efficiently
+  // ITEM 1 — Step C: Animate each character on scroll efficiently (only initialized after Loader completes)
   useEffect(() => {
     const p = pRef.current;
     if (!p) return;
@@ -93,29 +93,50 @@ export const Home: React.FC = () => {
 
     gsap.registerPlugin(ScrollTrigger);
 
-    let lastRevealed = -1;
-    const trigger = ScrollTrigger.create({
-      trigger: p,
-      start: "top 85%",
-      end: "top 40%",
-      scrub: 0.5,
-      onUpdate: (self) => {
-        const revealed = Math.min(total, Math.max(0, Math.floor(self.progress * total)));
-        if (revealed !== lastRevealed) {
-          const start = lastRevealed === -1 ? 0 : Math.min(lastRevealed, revealed);
-          const end = lastRevealed === -1 ? total : Math.max(lastRevealed, revealed);
-          for (let i = start; i < end; i++) {
-            const charEl = chars[i];
-            if (charEl) {
-              charEl.style.color = i < revealed ? "var(--ink)" : "var(--grey)";
-            }
-          }
-          lastRevealed = revealed;
-        }
-      },
-    });
+    let trigger: ScrollTrigger | undefined;
 
-    return () => trigger.kill();
+    const initCharTrigger = () => {
+      if (trigger) return;
+      window.scrollTo(0, 0);
+      let lastRevealed = -1;
+      trigger = ScrollTrigger.create({
+        trigger: p,
+        start: "top 85%",
+        end: "top 40%",
+        scrub: 0.5,
+        onUpdate: (self) => {
+          const revealed = Math.min(total, Math.max(0, Math.floor(self.progress * total)));
+          if (revealed !== lastRevealed) {
+            const start = lastRevealed === -1 ? 0 : Math.min(lastRevealed, revealed);
+            const end = lastRevealed === -1 ? total : Math.max(lastRevealed, revealed);
+            for (let i = start; i < end; i++) {
+              const charEl = chars[i];
+              if (charEl) {
+                charEl.style.color = i < revealed ? "var(--ink)" : "var(--grey)";
+              }
+            }
+            lastRevealed = revealed;
+          }
+        },
+      });
+      ScrollTrigger.refresh(true);
+    };
+
+    let executed = false;
+    const onReady = () => {
+      if (executed) return;
+      executed = true;
+      initCharTrigger();
+    };
+
+    window.addEventListener("site:ready", onReady, { once: true });
+    const timer = setTimeout(onReady, 2100);
+
+    return () => {
+      window.removeEventListener("site:ready", onReady);
+      clearTimeout(timer);
+      if (trigger) trigger.kill();
+    };
   }, []);
 
   const [isMobile, setIsMobile] = useState<boolean>(() => {

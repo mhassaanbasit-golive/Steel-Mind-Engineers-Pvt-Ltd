@@ -104,6 +104,7 @@ const RouteScrollTriggerManager: React.FC = () => {
   const prevPathRef = useRef(location.pathname);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const prev = prevPathRef.current;
     prevPathRef.current = location.pathname;
     // When returning to the homepage from another page, ensure completely fresh state
