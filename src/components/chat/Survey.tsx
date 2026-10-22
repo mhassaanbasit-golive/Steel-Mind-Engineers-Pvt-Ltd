@@ -2,13 +2,14 @@ import React, { useState } from "react";
 
 export interface SurveyProps {
   lead: { name: string; email: string; phone: string } | null;
-  onFinish: () => void;
+  onFinish: (data?: { rating: string; comment: string }) => void;
 }
 
 export const Survey: React.FC<SurveyProps> = ({ lead, onFinish }) => {
   const [firstTime, setFirstTime] = useState<"yes" | "no" | "">("");
   const [resolved, setResolved] = useState<"yes" | "no" | "">("");
   const [rating, setRating] = useState<"up" | "down" | "">("");
+  const [comment, setComment] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,16 +24,17 @@ export const Survey: React.FC<SurveyProps> = ({ lead, onFinish }) => {
           first: firstTime,
           resolved,
           rating,
+          comment,
           name: lead?.name || "",
           email: lead?.email || "",
         }),
       });
     } catch {}
 
-    // Wait 1.2s then fade overlay out
+    // After exactly 1.5 seconds via setTimeout, close and reset
     setTimeout(() => {
-      onFinish();
-    }, 1200);
+      onFinish({ rating, comment });
+    }, 1500);
   };
 
   return (
@@ -53,10 +55,10 @@ export const Survey: React.FC<SurveyProps> = ({ lead, onFinish }) => {
       {submitted ? (
         <div className="text-center py-8">
           <p
-            className="text-[13px] md:text-[15px] text-[var(--grey)]"
+            className="text-[18px] md:text-[20px] font-semibold text-[var(--ink)]"
             style={{ fontFamily: "'Inter', sans-serif" }}
           >
-            Thank you for your feedback.
+            Thank you.
           </p>
         </div>
       ) : (
@@ -178,6 +180,17 @@ export const Survey: React.FC<SurveyProps> = ({ lead, onFinish }) => {
                 </svg>
               </button>
             </div>
+          </div>
+
+          {/* Comment text input */}
+          <div className="mb-[20px]">
+            <input
+              type="text"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="Leave a comment (optional)"
+              className="w-full px-4 md:px-5 h-[46px] md:h-[50px] text-[14px] bg-white border border-[var(--line)] rounded-full focus:outline-none focus:border-[#1A3A8A] transition-colors text-[var(--ink)]"
+            />
           </div>
 
           {/* Submit Button (Solid Blue #1A3A8A) */}

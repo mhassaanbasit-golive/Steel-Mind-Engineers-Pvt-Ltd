@@ -1,11 +1,14 @@
-import React, { useReducer, useEffect, useCallback } from "react";
+import React, { useReducer, useEffect, useCallback, useRef } from "react";
 import { Welcome } from "./Welcome.tsx";
 import { DetailsForm } from "./DetailsForm.tsx";
 import { ChatScreen, Msg } from "./ChatScreen.tsx";
 import { Survey } from "./Survey.tsx";
 import { stopScroll, startScroll } from "../../lib/lenis.ts";
+import { sendLead } from "../../steelmind-chat/lead.ts";
+import { getChatStore } from "../../steelmind-chat/client.ts";
+import { safeStorage } from "../../steelmind-chat/storage.ts";
 
-type Screen = "welcome" | "form" | "chat" | "survey";
+type Screen = "welcome" | "form" | "chat" | "survey" | "review";
 
 interface State {
   isOpen: boolean;
@@ -24,7 +27,8 @@ type Action =
   | { type: "SET_LEAD"; lead: { name: string; email: string; phone: string } }
   | { type: "SET_MESSAGES"; messages: Msg[] }
   | { type: "TOGGLE_MUTE" }
-  | { type: "SET_TRANSCRIPT_SENT" };
+  | { type: "SET_TRANSCRIPT_SENT" }
+  | { type: "RESET" };
 
 const initialState: State = {
   isOpen: true,
@@ -60,6 +64,16 @@ function reducer(state: State, action: Action): State {
       return { ...state, muted: !state.muted };
     case "SET_TRANSCRIPT_SENT":
       return { ...state, transcriptSent: true };
+    case "RESET":
+      return {
+        ...initialState,
+        isOpen: false,
+        screen: "welcome",
+        lead: null,
+        messages: [],
+        leadSent: false,
+        transcriptSent: false,
+      };
     default:
       return state;
   }
@@ -67,6 +81,8 @@ function reducer(state: State, action: Action): State {
 
 export const ChatOverlay: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const sessionStartTimeRef = useRef<number>(Date.now());
+  const lastSentRef = useRef<{ [reason: string]: number }>({});
 
   // Send transcript helper
   const sendTranscript = useCallback(() => {
@@ -126,11 +142,45 @@ export const ChatOverlay: React.FC = () => {
       dispatch({ type: "CLOSE" });
     } else if (state.screen === "chat") {
       sendTranscript();
-      dispatch({ type: "SET_SCREEN", screen: "survey" });
-    } else if (state.screen === "survey") {
+      const hasActualUserMessages = state.messages.some((m) => m.role === "user");
+      if (!hasActualUserMessages) {
+        dispatch({ type: "CLOSE" });
+      } else {
+        // Send close lead trigger when X is clicked after messages exist
+        if (state.messages.length > 0 && lastSentRef.current["close"] !== state.messages.length) {
+          lastSentRef.current["close"] = state.messages.length;
+          const store = getChatStore();
+          sendLead("close", {
+            sessionId: store.sessionId,
+            visitor: state.lead || store.visitor,
+            startedAt: sessionStartTimeRef.current,
+            rating: "",
+            comment: "",
+            needsHuman: false,
+            companyWebsite: safeStorage.get("sm_honeypot") || "",
+            messages: state.messages,
+          });
+        }
+        dispatch({ type: "SET_SCREEN", screen: "review" });
+      }
+    } else if (state.screen === "survey" || state.screen === "review") {
+      if (state.messages.length > 0 && lastSentRef.current["close"] !== state.messages.length) {
+        lastSentRef.current["close"] = state.messages.length;
+        const store = getChatStore();
+        sendLead("close", {
+          sessionId: store.sessionId,
+          visitor: state.lead || store.visitor,
+          startedAt: sessionStartTimeRef.current,
+          rating: "",
+          comment: "",
+          needsHuman: false,
+          companyWebsite: safeStorage.get("sm_honeypot") || "",
+          messages: state.messages,
+        });
+      }
       dispatch({ type: "CLOSE" });
     }
-  }, [state.screen, sendTranscript]);
+  }, [state.screen, state.messages, state.lead, sendTranscript]);
 
   useEffect(() => {
     if (!state.isOpen) return;
@@ -145,57 +195,125 @@ export const ChatOverlay: React.FC = () => {
 
   if (!state.isOpen) return null;
 
+  const isWelcome = state.screen === "welcome";
+
   return (
     <div
       role="dialog"
       aria-modal="true"
       aria-label="Steel Mind Engineers Assistant"
-      className="fixed inset-0 z-[300] h-[100dvh] bg-white/95 backdrop-blur-[20px] backdrop-saturate-[180%] [-webkit-backdrop-filter:blur(20px)_saturate(180%)] flex flex-col justify-between select-none animate-[fadeIn_0.5s_cubic-bezier(0.16,1,0.3,1)_forwards]"
+      className={`fixed inset-0 z-[300] h-[100dvh] flex flex-col justify-between select-none animate-[fadeIn_0.5s_cubic-bezier(0.16,1,0.3,1)_forwards] ${
+        isWelcome
+          ? "bg-[#1A3A8A]"
+          : "bg-white/95 backdrop-blur-[20px] backdrop-saturate-[180%] [-webkit-backdrop-filter:blur(20px)_saturate(180%)]"
+      }`}
+      style={isWelcome ? { backgroundColor: "#1A3A8A" } : undefined}
     >
       {/* Top Header (64px) */}
-      <div className="relative w-full h-[64px] px-6 flex items-center justify-between border-b border-[var(--line)] flex-shrink-0 z-20">
-        {/* Mute Toggle */}
-        <button
-          type="button"
-          onClick={() => dispatch({ type: "TOGGLE_MUTE" })}
-          aria-pressed={state.muted}
-          aria-label={state.muted ? "Unmute audio" : "Mute audio"}
-          className="w-11 h-11 flex items-center justify-center text-[var(--ink)] hover:text-[var(--blue)] transition-colors cursor-pointer"
+      {isWelcome ? (
+        <div
+          className="relative w-full h-[64px] px-5 md:px-6 flex items-center justify-between flex-shrink-0 z-20"
+          style={{
+            backgroundColor: "#1A3A8A",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.12)",
+          }}
         >
-          {state.muted ? (
-            <svg className="w-5 h-5 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
-              <line x1="1" y1="1" x2="23" y2="23" />
-              <path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6" />
-              <path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23" />
-              <line x1="12" y1="19" x2="12" y2="23" />
-              <line x1="8" y1="23" x2="16" y2="23" />
-            </svg>
-          ) : (
-            <svg className="w-5 h-5 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
-            </svg>
-          )}
-        </button>
+          {/* Brand Name & Subtext */}
+          <div className="flex flex-col text-left">
+            <span
+              className="text-[12px] md:text-[13px] leading-tight"
+              style={{
+                color: "#FFFFFF",
+                fontFamily: "Inter, sans-serif",
+                fontWeight: 700,
+                letterSpacing: "0.06em",
+              }}
+            >
+              Steel Mind Engineers
+            </span>
+            <span
+              className="text-[10px] uppercase leading-tight"
+              style={{
+                color: "rgba(255, 255, 255, 0.6)",
+                fontFamily: "Inter, sans-serif",
+                fontWeight: 400,
+                letterSpacing: "0.1em",
+                marginTop: "2px",
+              }}
+            >
+              Pvt Ltd
+            </span>
+          </div>
 
-        {/* Lockup Text */}
-        <div className="text-center font-semibold text-[14px] lg:text-[17px] text-[var(--ink)] tracking-tight">
-          Steel Mind Engineers
+          {/* Close button (X) */}
+          <button
+            type="button"
+            onClick={handleCloseTrigger}
+            aria-label="Close assistant"
+            className="screen1-close-btn w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center text-[#FFFFFF] bg-transparent cursor-pointer"
+            style={{
+              border: "1px solid rgba(255, 255, 255, 0.24)",
+              transition: "background 0.2s ease, border-color 0.2s ease",
+            }}
+          >
+            <svg
+              className="w-4 h-4 md:w-5 md:h-5 stroke-current"
+              viewBox="0 0 24 24"
+              fill="none"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
         </div>
+      ) : (
+        <div className="relative w-full h-[64px] px-6 flex items-center justify-between border-b border-[var(--line)] flex-shrink-0 z-20">
+          {/* Mute Toggle */}
+          <button
+            type="button"
+            onClick={() => dispatch({ type: "TOGGLE_MUTE" })}
+            aria-pressed={state.muted}
+            aria-label={state.muted ? "Unmute audio" : "Mute audio"}
+            className="w-11 h-11 flex items-center justify-center text-[var(--ink)] hover:text-[var(--blue)] transition-colors cursor-pointer"
+          >
+            {state.muted ? (
+              <svg className="w-5 h-5 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
+                <line x1="1" y1="1" x2="23" y2="23" />
+                <path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6" />
+                <path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23" />
+                <line x1="12" y1="19" x2="12" y2="23" />
+                <line x1="8" y1="23" x2="16" y2="23" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+              </svg>
+            )}
+          </button>
 
-        {/* Close Cross (Thin 24px) */}
-        <button
-          type="button"
-          onClick={handleCloseTrigger}
-          aria-label="Close assistant"
-          className="w-11 h-11 flex items-center justify-center text-[var(--ink)] hover:text-[var(--blue)] transition-colors cursor-pointer"
-        >
-          <svg className="w-6 h-6 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
-      </div>
+          {/* Lockup Text */}
+          <div className="text-center font-semibold text-[14px] lg:text-[17px] text-[var(--ink)] tracking-tight">
+            Steel Mind Engineers
+          </div>
+
+          {/* Close Cross (Thin 24px) */}
+          <button
+            type="button"
+            onClick={handleCloseTrigger}
+            aria-label="Close assistant"
+            className="w-11 h-11 flex items-center justify-center text-[var(--ink)] hover:text-[var(--blue)] transition-colors cursor-pointer"
+          >
+            <svg className="w-6 h-6 stroke-current" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+      )}
 
       {/* Screen Body */}
       <div className="flex-1 w-full overflow-hidden flex flex-col justify-center relative">
@@ -225,25 +343,87 @@ export const ChatOverlay: React.FC = () => {
           />
         )}
 
-        {state.screen === "survey" && (
+        {(state.screen === "survey" || state.screen === "review") && (
           <Survey
             lead={state.lead}
-            onFinish={() => dispatch({ type: "CLOSE" })}
+            onFinish={(reviewData) => {
+              if (state.messages.length > 0 && lastSentRef.current["close"] !== state.messages.length) {
+                lastSentRef.current["close"] = state.messages.length;
+                const store = getChatStore();
+                sendLead("close", {
+                  sessionId: store.sessionId,
+                  visitor: state.lead || store.visitor,
+                  startedAt: sessionStartTimeRef.current,
+                  rating: reviewData?.rating || "",
+                  comment: reviewData?.comment || "",
+                  needsHuman: false,
+                  companyWebsite: safeStorage.get("sm_honeypot") || "",
+                  messages: state.messages,
+                });
+              }
+              dispatch({ type: "RESET" });
+              try {
+                sessionStorage.removeItem("chat_session_id");
+                sessionStorage.removeItem("chat_memory");
+              } catch {}
+            }}
           />
         )}
       </div>
 
       {/* Bottom Center Credit (48px bar) */}
-      <div className="h-[48px] px-6 flex items-center justify-center flex-shrink-0 z-10 pointer-events-auto">
-        <a
-          href="https://getgolive.io"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[12px] text-[var(--grey)] hover:underline"
+      {isWelcome ? (
+        <div
+          className="h-[48px] px-6 flex items-center justify-center flex-shrink-0 z-10 pointer-events-auto"
+          style={{
+            backgroundColor: "#1A3A8A",
+            borderTop: "1px solid rgba(255, 255, 255, 0.12)",
+          }}
         >
-          Powered by GetGoLive.io
-        </a>
-      </div>
+          <a
+            href="https://getgolive.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="screen1-footer-link text-[10px] md:text-[11px]"
+            style={{
+              color: "rgba(255, 255, 255, 0.7)",
+              fontFamily: "Inter, sans-serif",
+              fontWeight: 400,
+              letterSpacing: "0.04em",
+              textDecoration: "none",
+            }}
+          >
+            Powered by GetGoLive.io
+          </a>
+        </div>
+      ) : (
+        <div className="h-[48px] px-6 flex items-center justify-center flex-shrink-0 z-10 pointer-events-auto">
+          <a
+            href="https://getgolive.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[12px] text-[var(--grey)] hover:underline"
+          >
+            Powered by GetGoLive.io
+          </a>
+        </div>
+      )}
+
+      {isWelcome && (
+        <style>{`
+          .screen1-close-btn:hover {
+            background-color: rgba(255, 255, 255, 0.08) !important;
+            border-color: rgba(255, 255, 255, 0.4) !important;
+          }
+          .screen1-footer-link {
+            transition: color 0.2s ease, opacity 0.2s ease;
+          }
+          .screen1-footer-link:hover {
+            color: #FFFFFF !important;
+            opacity: 1 !important;
+          }
+        `}</style>
+      )}
     </div>
   );
 };

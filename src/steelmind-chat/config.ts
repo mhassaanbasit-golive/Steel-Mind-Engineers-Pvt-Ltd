@@ -2,6 +2,7 @@ const rawWorkerUrl = (import.meta.env.VITE_WORKER_URL || "https://steelmindengin
 const rawSiteUrl = (import.meta.env.VITE_SITE_URL || (typeof window !== "undefined" ? window.location.origin : "")).trim();
 
 const workerUrl = rawWorkerUrl.replace(/\/+$/, "");
+console.log("CONFIG WORKER URL:", workerUrl);
 const siteBaseUrl = rawSiteUrl.replace(/\/+$/, "");
 
 const isPlaceholderWorker =

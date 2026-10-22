@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import { playPop } from "../../lib/sound.ts";
 
 export interface WelcomeProps {
@@ -6,42 +7,25 @@ export interface WelcomeProps {
   muted: boolean;
 }
 
-interface LineConfig {
-  text: string;
-  startDelay: number;
-  words: { word: string; hasSpace: boolean }[];
-}
+const text = "Ask Me Anything!";
+const chars = text.split("");
 
-const LINES: LineConfig[] = [
-  {
-    text: "Hi!",
-    startDelay: 0.2,
-    words: [{ word: "Hi!", hasSpace: false }],
+const container = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.045, delayChildren: 0.15 },
   },
-  {
-    text: "I am Steel Mind Engineers AI Assistant.",
-    startDelay: 1.1,
-    words: [
-      { word: "I", hasSpace: true },
-      { word: "am", hasSpace: true },
-      { word: "Steel", hasSpace: true },
-      { word: "Mind", hasSpace: true },
-      { word: "Engineers", hasSpace: true },
-      { word: "AI", hasSpace: true },
-      { word: "Assistant.", hasSpace: false },
-    ],
+};
+
+const charVariant = {
+  hidden: { opacity: 0, y: 6 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.3, ease: [0.23, 1, 0.32, 1] as const },
   },
-  {
-    text: "How may I help?",
-    startDelay: 3.7,
-    words: [
-      { word: "How", hasSpace: true },
-      { word: "may", hasSpace: true },
-      { word: "I", hasSpace: true },
-      { word: "help?", hasSpace: false },
-    ],
-  },
-];
+};
 
 export const Welcome: React.FC<WelcomeProps> = ({ onStart, muted }) => {
   const handleClick = () => {
@@ -50,175 +34,180 @@ export const Welcome: React.FC<WelcomeProps> = ({ onStart, muted }) => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center text-center px-[20px] py-[24px] max-w-[420px] mx-auto select-none">
-      {/* 1.2 New Typewriter Title — 3 Lines */}
-      <div
-        className="w-full flex flex-col items-center text-center text-[#0A0A0A] font-bold tracking-[-0.02em]"
+    <div className="w-full h-full flex flex-col items-center justify-center text-center px-[20px] py-[24px] select-none">
+      {/* 4. TITLE — "Ask Me Anything!" (Character-by-Character Typewriter) */}
+      <motion.h1
+        variants={container}
+        initial="hidden"
+        animate="visible"
+        className="welcome-title text-[32px] md:text-[48px] max-w-[88%] md:max-w-none mx-auto leading-none text-center"
         style={{
-          fontFamily: "'Inter', sans-serif",
-          fontWeight: 700,
+          color: "#FFFFFF",
+          fontFamily: "Inter, sans-serif",
+          fontWeight: 900,
+          letterSpacing: "-0.05em",
+          lineHeight: 1.0,
+          textAlign: "center",
         }}
       >
-        {LINES.map((lineItem, lineIdx) => {
-          let lineCharOffset = 0;
-          const isLine3 = lineIdx === 2;
+        {chars.map((c, i) => (
+          <motion.span
+            key={i}
+            variants={charVariant}
+            style={{ display: "inline-block" }}
+          >
+            {c === " " ? "\u00A0" : c}
+          </motion.span>
+        ))}
+        {/* 5. CURSOR — WHITE BLINKING BAR */}
+        <span
+          aria-hidden="true"
+          className="welcome-cursor inline-block rounded-[1px] ml-[6px] align-middle bg-[#FFFFFF] w-[2px] md:w-[3px] h-[36px] md:h-[52px]"
+        />
+      </motion.h1>
 
-          return (
-            <div
-              key={lineIdx}
-              className={`text-[26px] md:text-[36px] leading-[1.25] md:leading-[1.3] flex flex-wrap justify-center items-center ${
-                lineIdx > 0 ? "mt-[6px]" : ""
-              }`}
-            >
-              {lineItem.words.map((item, wordIdx) => {
-                const isLastWordOfLine = wordIdx === lineItem.words.length - 1;
-
-                return (
-                  <span
-                    key={wordIdx}
-                    className="inline-flex items-center whitespace-nowrap"
-                  >
-                    {Array.from(item.word).map((char, charIdxInWord) => {
-                      const charDelay =
-                        lineItem.startDelay + lineCharOffset * 0.06;
-                      lineCharOffset += 1;
-
-                      return (
-                        <span
-                          key={`${wordIdx}-${charIdxInWord}`}
-                          className="inline-block"
-                          style={{
-                            animation: `charReveal 0.3s cubic-bezier(0.23, 1, 0.32, 1) ${charDelay}s both`,
-                          }}
-                        >
-                          {char}
-                        </span>
-                      );
-                    })}
-
-                    {/* Blinking Cursor right after '?' in Line 3 */}
-                    {isLine3 && isLastWordOfLine && (
-                      <span
-                        aria-hidden="true"
-                        className="inline-block rounded-[1px] ml-[3px] align-middle bg-[#1A3A8A] w-[2px] h-[26px] md:h-[36px]"
-                        style={{
-                          animation:
-                            "cursorLifecycle 8.3s cubic-bezier(0.23, 1, 0.32, 1) forwards",
-                        }}
-                      />
-                    )}
-
-                    {/* Word space */}
-                    {item.hasSpace && (
-                      <span className="inline-block w-[0.28em]">&nbsp;</span>
-                    )}
-                  </span>
-                );
-              })}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* 1.3 CTA Button — Solid Blue (NO Glassmorphism) */}
+      {/* 6. BUTTON — "Start Chat" (White Background, Blue Text) */}
       <button
         type="button"
         onClick={handleClick}
-        className="welcome-solid-cta mt-[32px] inline-flex items-center justify-center gap-[6px] px-[20px] md:px-[22px] h-[42px] md:h-[44px] w-auto rounded-full text-white font-[500] text-[13px] uppercase tracking-[0.05em] cursor-pointer"
+        className="welcome-chat-btn"
         style={{
-          fontFamily: "'Inter', sans-serif",
-          animation:
-            "buttonReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) 4.8s both",
+          backgroundColor: "#FFFFFF",
+          color: "#1A3A8A",
+          fontFamily: "Inter, sans-serif",
+          fontWeight: 600,
+          fontSize: "15px",
+          letterSpacing: "0.01em",
+          textTransform: "none",
+          border: "none",
+          borderRadius: "999px",
         }}
       >
-        <span>START CHAT</span>
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#FFFFFF"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="flex-shrink-0"
-          aria-hidden="true"
-        >
-          <line x1="5" y1="12" x2="19" y2="12" />
-          <polyline points="12 5 19 12 12 19" />
-        </svg>
+        <span>Start Chat</span>
+        <span className="welcome-arrow-badge" aria-hidden="true">
+          <svg
+            className="welcome-arrow-svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#FFFFFF"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </span>
       </button>
 
       <style>{`
-        @keyframes charReveal {
-          0% {
-            opacity: 0;
-            transform: translateY(6px);
-            filter: blur(4px);
+        .welcome-title {
+          font-size: 32px;
+        }
+
+        @media (min-width: 768px) {
+          .welcome-title {
+            font-size: 48px;
           }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-            filter: blur(0px);
-          }
+        }
+
+        .welcome-cursor {
+          opacity: 0;
+          animation: cursorLifecycle 3.6s cubic-bezier(0.23, 1, 0.32, 1) 1.13s forwards;
         }
 
         @keyframes cursorLifecycle {
-          0%, 56.5% {
-            opacity: 0;
-          }
-          56.6% {
-            opacity: 1;
-          }
-          59.6% {
-            opacity: 0;
-          }
-          62.6% {
-            opacity: 1;
-          }
-          65.6% {
-            opacity: 0;
-          }
-          68.6% {
-            opacity: 1;
-          }
-          71.6% {
-            opacity: 0;
-          }
-          74.7% {
-            opacity: 1;
-          }
-          92.7% {
-            opacity: 1;
-          }
-          100% {
-            opacity: 0;
-          }
-        }
-
-        @keyframes buttonReveal {
           0% {
             opacity: 0;
-            transform: translateY(6px);
+          }
+          1.5% {
+            opacity: 1;
+          }
+          6.9% {
+            opacity: 0;
+          }
+          13.9% {
+            opacity: 1;
+          }
+          20.8% {
+            opacity: 0;
+          }
+          27.8% {
+            opacity: 1;
+          }
+          34.7% {
+            opacity: 0;
+          }
+          41.7% {
+            opacity: 1;
+          }
+          83.3% {
+            opacity: 1;
           }
           100% {
-            opacity: 1;
-            transform: translateY(0);
+            opacity: 0;
           }
         }
 
-        .welcome-solid-cta {
-          background-color: #1A3A8A;
-          transition: background-color 0.25s ease-out, transform 0.25s ease-out;
+        .welcome-chat-btn {
+          height: 52px;
+          padding: 10px 10px 10px 20px;
+          width: auto;
+          box-shadow: 0 0 40px rgba(255, 255, 255, 0.10);
+          margin-top: 40px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          outline: none;
+          transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
         }
 
-        .welcome-solid-cta:hover {
-          background-color: #1E4A9C;
+        @media (min-width: 768px) {
+          .welcome-chat-btn {
+            height: 56px;
+            padding: 10px 10px 10px 24px;
+          }
+        }
+
+        .welcome-chat-btn:hover {
           transform: translateY(-1px);
+          box-shadow: 0 0 60px rgba(255, 255, 255, 0.18);
         }
 
-        .welcome-solid-cta:active {
+        .welcome-chat-btn:active {
           transform: scale(0.97);
+        }
+
+        .welcome-arrow-badge {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 999px;
+          background-color: #1A3A8A;
+          width: 24px;
+          height: 24px;
+          margin-left: 8px;
+          flex-shrink: 0;
+        }
+
+        @media (min-width: 768px) {
+          .welcome-arrow-badge {
+            width: 28px;
+            height: 28px;
+          }
+        }
+
+        .welcome-arrow-svg {
+          width: 14px;
+          height: 14px;
+        }
+
+        @media (min-width: 768px) {
+          .welcome-arrow-svg {
+            width: 16px;
+            height: 16px;
+          }
         }
       `}</style>
     </div>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { playDing } from "../../lib/sound.ts";
+import { safeStorage } from "../../steelmind-chat/storage.ts";
 
 export interface DetailsFormProps {
   onSubmit: (lead: { name: string; email: string; phone: string }) => void;
@@ -39,6 +40,19 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ onSubmit, muted }) => 
     setApiError(false);
 
     try {
+      if (companyWebsite.trim()) {
+        safeStorage.set("sm_honeypot", companyWebsite.trim());
+      }
+      safeStorage.set(
+        "sm_visitor",
+        JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          company_website: companyWebsite.trim(),
+        })
+      );
+
       const leadData = {
         stage: "start",
         name: name.trim(),

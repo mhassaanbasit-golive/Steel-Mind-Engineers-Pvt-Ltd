@@ -4,6 +4,7 @@ import {
   BotMessageSquareHandle,
 } from "../components/icons/bot-message-square.tsx";
 import "./styles.css";
+import { streamChat } from "./client.ts";
 
 // Ensure a fresh page reload resets any stale notification flag so the user can see & test the bubble
 if (typeof window !== "undefined") {
@@ -42,6 +43,36 @@ export const SteelMindChat: React.FC<SteelMindChatProps> = () => {
   const showTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isChatOpenRef = useRef(false);
   const audioPlayedRef = useRef(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  // Streaming chat handler as specified in Task 2
+  const handleSendMessage = useCallback(
+    async (
+      text: string,
+      currentMessages: any[] = [],
+      onEvent?: (name: string, data: any) => void
+    ) => {
+      if (!text?.trim()) return;
+      const userMsg = { role: "user", text: text.trim() };
+      const nextMessages = [...currentMessages, userMsg];
+
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
+
+      try {
+        await streamChat({
+          messages: nextMessages,
+          signal: controller.signal,
+          onEvent: (name, data) => {
+            onEvent?.(name, data);
+          },
+        });
+      } catch (err) {
+        console.warn("[SteelMindChat] stream error:", err);
+      }
+    },
+    []
+  );
 
   // Trigger built-in Lucide animation 2 times automatically on site load
   useEffect(() => {
