@@ -13,6 +13,7 @@ export interface HeroBandProps {
   breadcrumbItems?: BreadcrumbItem[];
   h1: string;
   subtitle?: string;
+  disableAnimation?: boolean;
 }
 
 export const HeroBand: React.FC<HeroBandProps> = ({
@@ -21,6 +22,7 @@ export const HeroBand: React.FC<HeroBandProps> = ({
   imageAlt,
   h1,
   subtitle,
+  disableAnimation = false,
 }) => {
   const bgImage = imageSrc || A.division.peb;
   const cleanSubtitle = subtitle ? subtitle.split(". ")[0].replace(/\.$/, "") + "." : "";
@@ -31,6 +33,7 @@ export const HeroBand: React.FC<HeroBandProps> = ({
   const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
+    if (disableAnimation) return;
     if (variant === "immersive" && containerRef.current) {
       const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (prefersReduced) return;
