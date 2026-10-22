@@ -128,7 +128,6 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
 
   // Render text with clickable phone and quote links
   const renderMessageContent = (text: string) => {
-    // If text contains phone number: make tel: link
     let formatted: React.ReactNode = text;
     if (text.includes("+92 300 4253966") || text.includes("+923004253966")) {
       formatted = (
@@ -143,8 +142,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
     } else if (text.toLowerCase().includes("quote form")) {
       formatted = (
         <span>
-          {text}
-          {" "}
+          {text}{" "}
           <button
             type="button"
             onClick={() => {
@@ -164,12 +162,12 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
 
   return (
     <div className="flex flex-col h-full w-full relative">
-      {/* Messages List Area */}
+      {/* Messages List Area (flex: 1, overflow-y: auto, padding-bottom: 100px) */}
       <div
         ref={listRef}
         role="log"
         aria-live="polite"
-        className="flex-1 overflow-y-auto pt-20 pb-36 px-4 sm:px-8 space-y-4 max-w-[760px] mx-auto w-full select-text"
+        className="flex-1 overflow-y-auto pt-4 pb-[100px] px-4 sm:px-8 space-y-3 md:space-y-4 max-w-[760px] mx-auto w-full select-text"
         data-lenis-prevent=""
       >
         {messages.map((msg, i) => (
@@ -180,18 +178,16 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
             }`}
           >
             <div
-              className={`max-w-[75%] px-5 py-3 text-[12px] lg:text-[13px] leading-[1.55] transition-all animate-[fadeIn_0.3s_ease-out] ${
+              className={`leading-[1.5] transition-all animate-[fadeIn_0.3s_ease-out] ${
                 msg.role === "user"
-                  ? "bg-[var(--blue)] text-white rounded-[20px]"
-                  : "bg-white text-[var(--ink)] shadow-[0_4px_12px_rgba(0,0,0,0.05)] rounded-[20px]"
+                  ? "max-w-[75%] px-[18px] py-[14px] text-[15px] font-normal text-white rounded-[18px_18px_4px_18px] text-right"
+                  : "max-w-[85%] md:max-w-[75%] px-[16px] py-[12px] md:px-5 md:py-3.5 text-[14px] text-[#0A0A0A] bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-[var(--line)] rounded-[18px_18px_18px_4px] text-left"
               }`}
-              style={
-                msg.role === "user"
-                  ? {
-                      backgroundColor: "var(--blue)",
-                    }
-                  : undefined
-              }
+              style={{
+                backgroundColor: msg.role === "user" ? "#1A3A8A" : "#FFFFFF",
+                color: msg.role === "user" ? "#FFFFFF" : "#0A0A0A",
+                fontFamily: "'Inter', sans-serif",
+              }}
             >
               {renderMessageContent(msg.text)}
             </div>
@@ -201,11 +197,11 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
         {/* Typing Dots */}
         {typing && (
           <div className="flex justify-start">
-            <div className="bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] rounded-[20px] px-5 py-4 flex items-center space-x-1.5">
+            <div className="bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-[var(--line)] rounded-[18px_18px_18px_4px] px-5 py-4 flex items-center space-x-1.5">
               {[0, 1, 2].map((i) => (
                 <div
                   key={i}
-                  className="w-1.5 h-1.5 bg-[var(--blue)] rounded-full animate-pulse"
+                  className="w-1.5 h-1.5 bg-[#1A3A8A] rounded-full animate-pulse"
                   style={{
                     animationDelay: `${i * 150}ms`,
                     animationDuration: "1.2s",
@@ -217,15 +213,15 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
         )}
       </div>
 
-      {/* Quick Pills (Visible until user sends first message) */}
+      {/* Quick Pills (Horizontal scroll, no wrap, padding: 7px 14px, font-size: 12px, gap: 6px) */}
       {!hasSentUserMsg && (
-        <div className="absolute bottom-[92px] inset-x-0 px-4 sm:px-8 max-w-[760px] mx-auto flex items-center space-x-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pb-2 pointer-events-auto">
+        <div className="fixed bottom-[124px] md:bottom-[132px] inset-x-0 px-4 sm:px-8 max-w-[760px] mx-auto flex items-center space-x-[6px] overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pb-1 pointer-events-auto z-20">
           {QUICK_PILLS.map((pill) => (
             <button
               key={pill}
               type="button"
               onClick={() => sendMessage(pill)}
-              className="px-4 py-2 bg-white/90 border border-[var(--line)] rounded-full text-[12px] font-medium text-[var(--ink)] hover:border-[var(--blue)] transition-colors whitespace-nowrap cursor-pointer shadow-sm"
+              className="px-[14px] py-[7px] text-[12px] font-medium bg-white/95 border border-[var(--line)] rounded-full text-[var(--ink)] hover:border-[#1A3A8A] transition-colors whitespace-nowrap cursor-pointer shadow-sm flex-shrink-0"
             >
               {pill}
             </button>
@@ -233,11 +229,11 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
         </div>
       )}
 
-      {/* Input Bar Fixed Bottom */}
-      <div className="absolute bottom-0 inset-x-0 bg-white border-t border-[var(--line)] px-4 sm:px-8 py-4 pb-[calc(16px+env(safe-area-inset-bottom))]">
+      {/* Input Bar Fixed Bottom at 48px */}
+      <div className="fixed bottom-[48px] inset-x-0 bg-white border-t border-[var(--line)] px-4 sm:px-8 py-3 z-20">
         <form
           onSubmit={handleFormSubmit}
-          className="max-w-[760px] mx-auto flex items-center space-x-3"
+          className="max-w-[760px] mx-auto flex items-center space-x-2 md:space-x-3"
         >
           <input
             type="text"
@@ -246,22 +242,53 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
             value={inputVal}
             onChange={(e) => setInputVal(e.target.value)}
             placeholder="Type your message"
-            className="flex-1 bg-white border border-[var(--line)] rounded-full px-5 py-3 text-[12px] lg:text-[13px] focus:outline-none focus:border-[var(--blue)] transition-colors"
+            className="flex-1 bg-white border border-[var(--line)] rounded-full px-[16px] py-[12px] h-[46px] md:h-[52px] text-[14px] text-[var(--ink)] focus:outline-none focus:border-[#1A3A8A] transition-colors"
           />
 
+          {/* Send Button — Solid Brand Blue #1A3A8A */}
           <button
             type="submit"
             disabled={!inputVal.trim() || typing}
             aria-label="Send message"
-            className="w-10 h-10 rounded-full bg-[var(--blue)] text-white flex items-center justify-center hover:bg-[var(--blue-dark)] transition-all disabled:opacity-30 cursor-pointer flex-shrink-0"
+            className="send-solid-btn w-[44px] h-[44px] md:w-[48px] md:h-[48px] rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer"
           >
-            <svg className="w-5 h-5 stroke-current -rotate-90 translate-x-[1px]" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
+            <svg
+              className="w-5 h-5 stroke-current -rotate-90 translate-x-[1px]"
+              viewBox="0 0 24 24"
+              fill="none"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
               <line x1="12" y1="5" x2="12" y2="19" />
               <polyline points="19 12 12 5 5 12" />
             </svg>
           </button>
         </form>
       </div>
+
+      <style>{`
+        .send-solid-btn {
+          background-color: #1A3A8A;
+          color: #FFFFFF;
+          transition: background-color 0.25s ease-out, transform 0.25s ease-out;
+        }
+
+        .send-solid-btn:not(:disabled):hover {
+          background-color: #1E4A9C;
+        }
+
+        .send-solid-btn:not(:disabled):active {
+          transform: scale(0.96);
+        }
+
+        .send-solid-btn:disabled {
+          background-color: #E5E5E5;
+          color: #B8B8B8;
+          cursor: not-allowed;
+        }
+      `}</style>
     </div>
   );
 };

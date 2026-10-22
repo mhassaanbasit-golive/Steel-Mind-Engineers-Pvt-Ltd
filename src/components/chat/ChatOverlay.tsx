@@ -152,8 +152,8 @@ export const ChatOverlay: React.FC = () => {
       aria-label="Steel Mind Engineers Assistant"
       className="fixed inset-0 z-[300] h-[100dvh] bg-white/95 backdrop-blur-[20px] backdrop-saturate-[180%] [-webkit-backdrop-filter:blur(20px)_saturate(180%)] flex flex-col justify-between select-none animate-[fadeIn_0.5s_cubic-bezier(0.16,1,0.3,1)_forwards]"
     >
-      {/* Top Header */}
-      <div className="relative w-full h-[72px] px-6 flex items-center justify-between border-b border-[var(--line)] flex-shrink-0 z-20">
+      {/* Top Header (64px) */}
+      <div className="relative w-full h-[64px] px-6 flex items-center justify-between border-b border-[var(--line)] flex-shrink-0 z-20">
         {/* Mute Toggle */}
         <button
           type="button"
@@ -233,15 +233,15 @@ export const ChatOverlay: React.FC = () => {
         )}
       </div>
 
-      {/* Bottom Center Credit (Visible outside input bar) */}
-      <div className="py-2.5 text-center flex-shrink-0 z-10 pointer-events-auto">
+      {/* Bottom Center Credit (48px bar) */}
+      <div className="h-[48px] px-6 flex items-center justify-center flex-shrink-0 z-10 pointer-events-auto">
         <a
           href="https://getgolive.io"
           target="_blank"
           rel="noopener noreferrer"
           className="text-[12px] text-[var(--grey)] hover:underline"
         >
-          Powered by getGoLive.io
+          Powered by GetGoLive.io
         </a>
       </div>
     </div>
