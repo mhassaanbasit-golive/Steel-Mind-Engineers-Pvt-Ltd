@@ -7,6 +7,9 @@ import { Loader } from "./components/layout/Loader.tsx";
 import { gsap, ScrollTrigger } from "./lib/gsap.ts";
 import { lenis } from "./lib/lenis.ts";
 
+// 👇 ADD THIS LINE HERE 👇
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
   window.history.scrollRestoration = "manual";
 }
