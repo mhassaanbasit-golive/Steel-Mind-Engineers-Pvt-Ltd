@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { SITE } from "../../data/site.ts";
 import {
-  BotMessageSquareIcon,
-  BotMessageSquareHandle,
-} from "../icons/bot-message-square.tsx";
-import {
   LayoutGridIcon,
   LayoutGridIconHandle,
 } from "../icons/layout-grid.tsx";
@@ -18,17 +14,18 @@ import {
   MessageSquareMoreIconHandle,
 } from "../icons/message-square-more.tsx";
 import { LinkedinIcon, LinkedinIconHandle } from "../icons/linkedin.tsx";
-import { playPop } from "../../lib/sound.ts";
 
 export const FloatingTools: React.FC = () => {
   const [dialOpen, setDialOpen] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(() => {
+    if (typeof window !== "undefined" && sessionStorage.getItem("app_booted") === "true") {
+      return true;
+    }
+    return false;
+  });
   const [copiedLabel, setCopiedLabel] = useState<string | null>(null);
-  const [bubbleRendered, setBubbleRendered] = useState(false);
-  const [bubbleVisible, setBubbleVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const botMessageRef = useRef<BotMessageSquareHandle>(null);
   const layoutGridRef = useRef<LayoutGridIconHandle>(null);
   const whatsappRef = useRef<MessageCircleCheckIconHandle>(null);
   const phoneRef = useRef<PhoneIconHandle>(null);
@@ -38,50 +35,14 @@ export const FloatingTools: React.FC = () => {
   // Make floating tools visible after loader completes or fallback and trigger entrance animation
   useEffect(() => {
     let triggered = false;
-    let hideTimer: NodeJS.Timeout;
-    let showTimer: NodeJS.Timeout;
-    let playedSound = false;
-
-    const playBubbleSound = () => {
-      if (playedSound) return;
-      playedSound = true;
-      playPop();
-    };
 
     const triggerEntrance = () => {
       if (triggered) return;
       triggered = true;
       setVisible(true);
       setTimeout(() => {
-        botMessageRef.current?.startAnimation();
         layoutGridRef.current?.startAnimation();
       }, 350);
-
-      // Chatbot notification bubble on page load: white bg, blue text, pop sound, disappears after 4 seconds
-      showTimer = setTimeout(() => {
-        setBubbleRendered(true);
-        setBubbleVisible(true);
-        playBubbleSound();
-
-        // Browser autoplay fallback: if browser suspended audio, play on first interaction while bubble is up
-        const onFirstInteract = () => {
-          playBubbleSound();
-          window.removeEventListener("pointerdown", onFirstInteract);
-          window.removeEventListener("touchstart", onFirstInteract);
-          window.removeEventListener("scroll", onFirstInteract);
-        };
-        window.addEventListener("pointerdown", onFirstInteract, { once: true, passive: true });
-        window.addEventListener("touchstart", onFirstInteract, { once: true, passive: true });
-        window.addEventListener("scroll", onFirstInteract, { once: true, passive: true });
-
-        hideTimer = setTimeout(() => {
-          setBubbleVisible(false);
-          window.removeEventListener("pointerdown", onFirstInteract);
-          window.removeEventListener("touchstart", onFirstInteract);
-          window.removeEventListener("scroll", onFirstInteract);
-          setTimeout(() => setBubbleRendered(false), 450);
-        }, 4000);
-      }, 650);
     };
 
     const handleLoaderDone = () => {
@@ -94,14 +55,12 @@ export const FloatingTools: React.FC = () => {
 
     window.addEventListener("site:ready", handleSiteReady);
     window.addEventListener("loader:done", handleLoaderDone);
-    const fallbackTimer = setTimeout(triggerEntrance, 900);
+    const fallbackTimer = setTimeout(triggerEntrance, 3200);
 
     return () => {
       window.removeEventListener("site:ready", handleSiteReady);
       window.removeEventListener("loader:done", handleLoaderDone);
       clearTimeout(fallbackTimer);
-      clearTimeout(showTimer);
-      clearTimeout(hideTimer);
     };
   }, []);
 
@@ -142,10 +101,6 @@ export const FloatingTools: React.FC = () => {
     };
   }, [dialOpen]);
 
-  const handleOpenChat = () => {
-    window.dispatchEvent(new CustomEvent("chat:open"));
-  };
-
   const showLabelTemporarily = (label: string) => {
     setCopiedLabel(label);
     setTimeout(() => setCopiedLabel(null), 1500);
@@ -156,7 +111,7 @@ export const FloatingTools: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="fixed z-[250] right-4 bottom-[calc(16px+env(safe-area-inset-bottom))] flex flex-col items-center select-none"
+      className="fixed z-[250] right-6 bottom-[80px] flex flex-col items-center select-none"
     >
       {/* Dial Pop-up Items Stack — 20px icon inside 44px rounded square, Royal Blue bg, white icon */}
       {dialOpen && (
@@ -243,7 +198,7 @@ export const FloatingTools: React.FC = () => {
           backgroundColor: "var(--blue)",
           color: "#FFFFFF",
         }}
-        className="w-[44px] h-[44px] text-white flex items-center justify-center mb-3 hover:bg-[var(--blue-dark)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer rounded-lg shadow-md"
+        className="w-[44px] h-[44px] text-white flex items-center justify-center hover:bg-[var(--blue-dark)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer rounded-lg shadow-md"
       >
         <LayoutGridIcon
           ref={layoutGridRef}
@@ -251,54 +206,6 @@ export const FloatingTools: React.FC = () => {
           stroke="#FFFFFF"
           className="text-white"
           style={{ color: "#FFFFFF" }}
-        />
-      </button>
-
-      {/* Chat Notification Bubble: White background, Royal blue text (var(--blue)), soft rounded corners, no emojis. Automatically fades out after exactly 4s */}
-      {bubbleRendered && (
-        <div
-          role="status"
-          aria-live="polite"
-          onClick={() => {
-            botMessageRef.current?.startAnimation();
-            handleOpenChat();
-          }}
-          style={{
-            backgroundColor: "#FFFFFF",
-            color: "var(--blue, #1E3A8A)",
-            transition: "opacity 400ms cubic-bezier(0.16, 1, 0.3, 1), transform 400ms cubic-bezier(0.16, 1, 0.3, 1)",
-          }}
-          className={`absolute right-[64px] bottom-1 px-3.5 py-2 rounded-xl bg-white text-[var(--blue)] border border-[var(--blue)]/20 text-[12px] sm:text-[13px] font-semibold leading-snug whitespace-nowrap shadow-[0_6px_24px_rgba(30,58,138,0.18),0_2px_8px_rgba(0,0,0,0.06)] cursor-pointer select-none flex items-center z-[260] ${
-            bubbleVisible
-              ? "opacity-100 translate-x-0 pointer-events-auto"
-              : "opacity-0 translate-x-2 pointer-events-none"
-          }`}
-        >
-          <span>Hi! Do you need any help?</span>
-          {/* Soft arrow tip pointing to the chat button */}
-          <span
-            className="absolute -right-1.5 top-1/2 -translate-y-1/2 w-0 h-0 border-y-[5px] border-y-transparent border-l-[6px] border-l-white drop-shadow-[2px_0_1px_rgba(30,58,138,0.15)]"
-            aria-hidden="true"
-          />
-        </div>
-      )}
-
-      {/* AI Chat Launcher */}
-      <button
-        type="button"
-        onClick={() => {
-          botMessageRef.current?.startAnimation();
-          handleOpenChat();
-        }}
-        onMouseEnter={() => botMessageRef.current?.startAnimation()}
-        aria-label="Open AI Assistant Chat"
-        style={{ backgroundColor: "var(--blue)" }}
-        className="w-[52px] h-[52px] rounded-full text-white flex items-center justify-center hover:bg-[var(--blue-dark)] hover:scale-105 active:scale-95 cursor-pointer transition-all duration-300 shadow-lg"
-      >
-        <BotMessageSquareIcon
-          ref={botMessageRef}
-          size={24}
-          className="text-white"
         />
       </button>
 
