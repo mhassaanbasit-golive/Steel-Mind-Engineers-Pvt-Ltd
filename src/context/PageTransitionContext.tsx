@@ -190,6 +190,12 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
     };
 
     const handlePopState = () => {
+      // If user navigates back to the homepage via back button/swipe, force reload for a clean fresh state
+      if (window.location.pathname === "/" || window.location.pathname === "") {
+        window.location.reload();
+        return;
+      }
+
       if (isTransitioningRef.current) return;
       isTransitioningRef.current = true;
       setOverlayActive(true);
@@ -252,14 +258,6 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
 
     const handlePageShow = (e: PageTransitionEvent) => {
       if (e.persisted) {
-        cleanupLock();
-        try {
-          if (lenis) {
-            lenis.start();
-            lenis.resize();
-          }
-          ScrollTrigger.refresh(true);
-        } catch {}
         window.location.reload();
       }
     };
@@ -287,6 +285,12 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
         } else {
           window.scrollTo({ top: 0, behavior: "smooth" });
         }
+        return;
+      }
+
+      // If user navigates back to the homepage from another page, trigger a completely fresh state
+      if (toClean === "" && currentClean !== "") {
+        window.location.href = "/";
         return;
       }
 
@@ -413,8 +417,13 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
       ScrollTrigger.getAll().forEach((t) => t.kill());
       if (typeof window !== "undefined" && window.history.length > 1) {
         routerNavigate(-1);
+        setTimeout(() => {
+          if (window.location.pathname === "/" || window.location.pathname === "") {
+            window.location.reload();
+          }
+        }, 100);
       } else {
-        routerNavigate("/");
+        window.location.href = "/";
       }
 
       // 3. Wait for content readiness on the incoming page

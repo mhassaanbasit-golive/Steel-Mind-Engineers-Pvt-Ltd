@@ -14,6 +14,15 @@ if (typeof window !== 'undefined') {
   };
   checkTouch();
   window.addEventListener('resize', checkTouch, { passive: true });
+
+  // Ensure no stale Service Workers or cached shells linger on client devices (especially iPhones)
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (const registration of registrations) {
+        registration.unregister();
+      }
+    }).catch(() => {});
+  }
 }
 
 createRoot(document.getElementById('root')!).render(<App />);

@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect } from "react";
+import React, { Suspense, lazy, useEffect, useRef } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { PageShell } from "./components/layout/PageShell.tsx";
 import { ALL_PAGES, ALL_ARTICLES, CONTENT_BY_URL } from "./content/index.ts";
@@ -101,6 +101,18 @@ const TrailingSlashRedirect: React.FC = () => {
 
 const RouteScrollTriggerManager: React.FC = () => {
   const location = useLocation();
+  const prevPathRef = useRef(location.pathname);
+
+  useEffect(() => {
+    const prev = prevPathRef.current;
+    prevPathRef.current = location.pathname;
+    // When returning to the homepage from another page, ensure completely fresh state
+    if (location.pathname === "/" && prev !== "/") {
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+      ScrollTrigger.clearScrollMemory?.();
+      ScrollTrigger.refresh(true);
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     // When leaving a page, ensure all ScrollTriggers are killed before initializing them on the new page
