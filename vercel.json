@@ -1,27 +1,11 @@
 {
   "functions": {
-    "api/**/*.ts": {
+    "api/chat.ts": {
       "includeFiles": "api/_knowledge.json"
     }
   },
   "outputDirectory": "dist",
   "rewrites": [
     { "source": "/((?!chatbot/|assets/|.*\\..*).*)", "destination": "/index.html" }
-  ],
-  "headers": [
-    { "source": "/(.*)", "headers": [ { "key": "Permissions-Policy", "value": "microphone=(self)" } ] },
-    { "source": "/chatbot/kb.json", "headers": [ { "key": "Cache-Control", "value": "public, max-age=3600" } ] },
-    {
-      "source": "/assets/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
-    },
-    {
-      "source": "/(.*).(woff2|woff|ttf|otf)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
-    },
-    {
-      "source": "/index.html",
-      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
-    }
   ]
 }
