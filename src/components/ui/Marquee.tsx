@@ -1,6 +1,7 @@
 import React from "react";
 import { TransitionLink } from "./TransitionLink.tsx";
 import { A } from "../../data/assets.ts";
+import { cl } from "../../lib/cloudinary.ts";
 
 const ROW1 = [
   "Haier",
@@ -29,11 +30,13 @@ export const Marquee: React.FC<{ className?: string }> = ({
       >
         {src ? (
           <img
-            src={src}
+            src={cl(src, 240)}
             alt={`${name} logo`}
             className="max-h-full max-w-full object-contain block filter-none mix-blend-normal"
             loading="lazy"
             decoding="async"
+            width={200}
+            height={88}
           />
         ) : (
           <span className="text-[12px] lg:text-[13px] font-semibold text-[var(--grey)]">

@@ -2,6 +2,7 @@ import React from "react";
 import { TransitionLink } from "./TransitionLink.tsx";
 import { A } from "../../data/assets.ts";
 import { SITE } from "../../data/site.ts";
+import { cl } from "../../lib/cloudinary.ts";
 
 export interface QuoteBandProps {
   title?: string;
@@ -21,7 +22,7 @@ export const QuoteBand: React.FC<QuoteBandProps> = ({
     >
       {/* Background Image: A.quote with luminosity blend and low opacity */}
       <img
-        src={A.quote}
+        src={cl(A.quote, 1200)}
         alt="Steel Mind Engineers fabrication facility"
         style={{
           position: "absolute",

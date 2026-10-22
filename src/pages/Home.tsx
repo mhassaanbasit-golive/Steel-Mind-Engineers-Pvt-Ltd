@@ -334,8 +334,8 @@ export const Home: React.FC = () => {
               </>
             ) : (
               <>
-                <source src={DESKTOP_VIDEO_WEBM} type="video/webm" />
                 <source src={DESKTOP_VIDEO_MP4} type="video/mp4" />
+                <source src={DESKTOP_VIDEO_WEBM} type="video/webm" />
                 <source src={DESKTOP_VIDEO_ORIGINAL} type="video/quicktime" />
               </>
             )}
@@ -528,6 +528,7 @@ export const Home: React.FC = () => {
               alt="Steel fabrication team at work at the Steel Mind Engineers factory"
               ratio="5/6"
               className="w-full"
+              sizes="(max-width: 1024px) 100vw, 55vw"
             />
           </div>
         </div>
@@ -553,6 +554,7 @@ export const Home: React.FC = () => {
                     src={item.img}
                     alt={item.title}
                     ratio="4/5"
+                    sizes="(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 360px"
                   />
                 </div>
               </div>
@@ -614,7 +616,12 @@ export const Home: React.FC = () => {
               >
                 <div className="overflow-hidden mb-3 bg-white/5">
                   <div className="transition-transform duration-500 group-hover:scale-[1.03]">
-                    <Img src={svc.img} alt={svc.name} ratio="4/5" />
+                    <Img
+                      src={svc.img}
+                      alt={svc.name}
+                      ratio="4/5"
+                      sizes="(max-width: 640px) 75vw, (max-width: 1024px) 35vw, 280px"
+                    />
                   </div>
                 </div>
 
@@ -651,9 +658,9 @@ export const Home: React.FC = () => {
                 <div className="overflow-hidden mb-3 bg-[#F3F4F6]">
                   <div className="transition-transform duration-500 group-hover:scale-[1.03]">
                     <img
-                      src={mainImg && !mainImg.startsWith("/") ? cl(mainImg, 1080) : mainImg}
+                      src={mainImg && !mainImg.startsWith("/") ? cl(mainImg, 480) : mainImg}
                       srcSet={mainImg && !mainImg.startsWith("/") ? srcSet(mainImg) : undefined}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 1080px"
+                      sizes="(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 380px"
                       alt={p.title}
                       loading="lazy"
                       decoding="async"
@@ -697,7 +704,7 @@ export const Home: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-5 flex items-center justify-center">
             <img
-              src={A.team}
+              src={cl(A.team, 720)}
               alt="Steel Mind Engineers fabrication team in front of the factory building in Lahore."
               loading="lazy"
               decoding="async"
@@ -755,6 +762,7 @@ export const Home: React.FC = () => {
                           src={ind.img}
                           alt={`${ind.name} sector: steel building by Steel Mind Engineers`}
                           ratio="16/9"
+                          sizes="(max-width: 768px) 100vw, 720px"
                         />
                       </div>
                       <p className="text-[12px] lg:text-[13px] leading-[1.6] text-[var(--grey)] max-w-[640px]">
@@ -799,7 +807,12 @@ export const Home: React.FC = () => {
             >
               <div className="overflow-hidden mb-4">
                 <div className="transition-transform duration-500 group-hover:scale-[1.03]">
-                  <Img src={art.img} alt={art.title} ratio="16/9" />
+                  <Img
+                    src={art.img}
+                    alt={art.title}
+                    ratio="16/9"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+                  />
                 </div>
               </div>
               <span className="block text-[9px] uppercase font-semibold text-[var(--grey)] tracking-[0.1em] mb-2">
