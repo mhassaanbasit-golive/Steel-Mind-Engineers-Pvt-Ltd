@@ -85,16 +85,18 @@ export const Loader: React.FC = () => {
       if (isFinished) return;
       const elapsed = performance.now() - startTime;
 
-      // Snappy and responsive target progression
-      if (elapsed < 120) {
-        targetVal = 55;
-      } else if (elapsed < 260) {
-        targetVal = 85;
-      } else if (elapsed >= 400) {
+      // Realistic target progression
+      if (elapsed < 300) {
+        targetVal = 45;
+      } else if (elapsed < 600) {
+        targetVal = 75;
+      } else if (elapsed < 1000) {
+        targetVal = 92;
+      } else if (elapsed >= 1100) {
         targetVal = 100;
       }
 
-      currentVal += (targetVal - currentVal) * 0.22;
+      currentVal += (targetVal - currentVal) * 0.15;
       if (currentVal > targetVal) currentVal = targetVal;
 
       const displayNum = Math.min(100, Math.round(currentVal));

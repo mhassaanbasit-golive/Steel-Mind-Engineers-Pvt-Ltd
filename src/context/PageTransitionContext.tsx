@@ -110,24 +110,27 @@ export const PageTransitionProvider: React.FC<{ children: React.ReactNode }> = (
   const [overlayActive, setOverlayActive] = useState(false);
   const [loadingBarVisible, setLoadingBarVisible] = useState(false);
 
-// Enforce manual scroll restoration at the top level
-if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
-  window.history.scrollRestoration = "manual";
-}
-
-  // Set history manual scroll restoration and force top scroll on mount
+  // Set history manual scroll restoration
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      if ("scrollRestoration" in window.history) {
-        window.history.scrollRestoration = "manual";
-      }
-      window.scrollTo(0, 0);
+    if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
     }
   }, []);
 
-  // Force scroll to top on route change
+  // Save scroll position per path
   useEffect(() => {
-    window.scrollTo(0, 0);
+    const saveScroll = () => {
+      try {
+        const key = `scroll_${location.pathname}`;
+        sessionStorage.setItem(key, String(window.scrollY));
+      } catch {}
+    };
+
+    window.addEventListener("beforeunload", saveScroll);
+    return () => {
+      saveScroll();
+      window.removeEventListener("beforeunload", saveScroll);
+    };
   }, [location.pathname]);
 
   // Loading bar animation controller
@@ -171,28 +174,7 @@ if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
 
   // Handle browser back/forward buttons (POP)
   useEffect(() => {
-    let safetyTimer: ReturnType<typeof setTimeout> | undefined;
-
-    const cleanupLock = () => {
-      if (safetyTimer) clearTimeout(safetyTimer);
-      finishLoadingBar();
-      const overlay = overlayRef.current;
-      if (overlay) {
-        overlay.style.transition = "none";
-        overlay.style.clipPath = "inset(100% 0 0 0)";
-      }
-      setOverlayActive(false);
-      isTransitioningRef.current = false;
-      startScroll();
-    };
-
     const handlePopState = () => {
-      // If user navigates back to the homepage via back button/swipe, force reload for a clean fresh state
-      if (window.location.pathname === "/" || window.location.pathname === "") {
-        window.location.reload();
-        return;
-      }
-
       if (isTransitioningRef.current) return;
       isTransitioningRef.current = true;
       setOverlayActive(true);
@@ -211,55 +193,45 @@ if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
 
       stopScroll();
 
-      // Kill previous ScrollTriggers to prevent lingering stale triggers
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      Promise.all([waitForFonts(), waitForHeroImage()]).then(() => {
+        // Restore scroll position
+        let savedY = 0;
+        try {
+          const key = `scroll_${window.location.pathname}`;
+          savedY = Number(sessionStorage.getItem(key)) || 0;
+        } catch {}
 
-      safetyTimer = setTimeout(() => {
-        cleanupLock();
-      }, 1500);
+        if (lenis) {
+          lenis.scrollTo(savedY, { immediate: true, force: true });
+        } else {
+          window.scrollTo(0, savedY);
+        }
+        ScrollTrigger.refresh();
+        finishLoadingBar();
 
-      Promise.all([waitForFonts(), waitForHeroImage()])
-        .catch(() => {})
-        .finally(() => {
-          // Force scroll to top on every navigation
-          if (lenis) {
-            lenis.scrollTo(0, { immediate: true, force: true });
+        setTimeout(() => {
+          if (dots) dots.style.opacity = "0";
+          if (overlay) {
+            overlay.style.transition = "clip-path 500ms cubic-bezier(0.76, 0, 0.24, 1)";
+            overlay.style.clipPath = "inset(0 0 100% 0)";
           }
-          window.scrollTo(0, 0);
-          ScrollTrigger.refresh();
-          setTimeout(() => {
-            ScrollTrigger.refresh();
-          }, 100);
-          finishLoadingBar();
 
           setTimeout(() => {
-            if (dots) dots.style.opacity = "0";
             if (overlay) {
-              overlay.style.transition = "clip-path 500ms cubic-bezier(0.76, 0, 0.24, 1)";
-              overlay.style.clipPath = "inset(0 0 100% 0)";
+              // PREVENT FLICKER: Set transition to none before resetting position!
+              overlay.style.transition = "none";
+              overlay.style.clipPath = "inset(100% 0 0 0)";
             }
-
-            setTimeout(() => {
-              cleanupLock();
-            }, 500);
-          }, 100);
-        });
-    };
-
-    const handlePageShow = (e: PageTransitionEvent) => {
-      if (e.persisted) {
-        window.location.reload();
-      }
+            setOverlayActive(false);
+            isTransitioningRef.current = false;
+            startScroll();
+          }, 500);
+        }, 100);
+      });
     };
 
     window.addEventListener("popstate", handlePopState);
-    window.addEventListener("pageshow", handlePageShow);
-    return () => {
-      if (safetyTimer) clearTimeout(safetyTimer);
-      window.removeEventListener("popstate", handlePopState);
-      window.removeEventListener("pageshow", handlePageShow);
-      cleanupLock();
-    };
+    return () => window.removeEventListener("popstate", handlePopState);
   }, [startLoadingBar, finishLoadingBar]);
 
   // Transition navigation function
@@ -275,12 +247,6 @@ if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
         } else {
           window.scrollTo({ top: 0, behavior: "smooth" });
         }
-        return;
-      }
-
-      // If user navigates back to the homepage from another page, trigger a completely fresh state
-      if (toClean === "" && currentClean !== "") {
-        window.location.href = "/";
         return;
       }
 
@@ -307,8 +273,6 @@ if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
 
       // 2. Perform navigation once covered
       setTimeout(() => {
-        // Kill previous ScrollTriggers so old triggers do not linger
-        ScrollTrigger.getAll().forEach((t) => t.kill());
         routerNavigate(to);
 
         // 3. Wait for content readiness
@@ -322,9 +286,6 @@ if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
           // Scroll immediately to top while covered
           scrollToTop();
           ScrollTrigger.refresh();
-          setTimeout(() => {
-            ScrollTrigger.refresh();
-          }, 100);
           finishLoadingBar();
 
           // 4. Revealing: upward wipe
@@ -403,17 +364,10 @@ if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
 
     // 2. Perform navigate(-1) once fully covered
     setTimeout(() => {
-      // Kill previous ScrollTriggers so old triggers do not linger
-      ScrollTrigger.getAll().forEach((t) => t.kill());
       if (typeof window !== "undefined" && window.history.length > 1) {
         routerNavigate(-1);
-        setTimeout(() => {
-          if (window.location.pathname === "/" || window.location.pathname === "") {
-            window.location.reload();
-          }
-        }, 100);
       } else {
-        window.location.href = "/";
+        routerNavigate("/");
       }
 
       // 3. Wait for content readiness on the incoming page
@@ -426,9 +380,6 @@ if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
       ]).then(() => {
         scrollToTop();
         ScrollTrigger.refresh();
-        setTimeout(() => {
-          ScrollTrigger.refresh();
-        }, 100);
         finishLoadingBar();
 
         // 4. Revealing: upward wipe
