@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/**/*.ts": {
+      "includeFiles": "api/_knowledge.json"
+    }
+  },
   "outputDirectory": "dist",
   "rewrites": [
     { "source": "/((?!chatbot/|assets/|.*\\..*).*)", "destination": "/index.html" }
