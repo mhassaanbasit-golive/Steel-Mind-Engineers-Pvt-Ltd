@@ -1,4 +1,5 @@
-import knowledge from "./_knowledge.json";
+import fs from "fs";
+import path from "path";
 
 export default async function handler(req: any, res: any) {
   // Handle CORS & preflight
@@ -26,6 +27,9 @@ export default async function handler(req: any, res: any) {
     const rawBody = typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
     const messages = Array.isArray(rawBody.messages) ? rawBody.messages : [];
 
+      const knowledgePath = path.join(process.cwd(), "api", "_knowledge.json");
+  const knowledge = JSON.parse(fs.readFileSync(knowledgePath, "utf8"));
+    
     const systemPrompt =
       "You are the assistant for Steel Mind Engineers. Use this knowledge: " +
       JSON.stringify(knowledge) +
