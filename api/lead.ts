@@ -1,3 +1,6 @@
+// In-memory deduplication cache
+const recentlySentLeads = new Map<string, number>();
+
 function escapeHtml(str: string): string {
   if (!str) return "";
   return String(str)
@@ -85,6 +88,23 @@ export default async function handler(req: any, res: any) {
     const hasUserQuestions = messages.some((m: any) => m.role === "user");
     if (body?.stage === "start" || !hasUserQuestions) {
       return res.status(200).json({ ok: true, skipped: true, reason: "No conversation to report yet" });
+    }
+
+    // Deduplication: prevent sending the exact same conversation multiple times within 45 seconds
+    const dedupeKey = `${(visitor.email || visitor.phone || visitor.name).toLowerCase().trim()}_${messages.length}_${messages[messages.length - 1]?.text || ""}`;
+    const now = Date.now();
+    const lastSentTime = recentlySentLeads.get(dedupeKey);
+    if (lastSentTime && now - lastSentTime < 45000) {
+      console.log(`[API/LEAD] Skipped duplicate email for "${dedupeKey}" within 45s window.`);
+      return res.status(200).json({ ok: true, deduplicated: true });
+    }
+    recentlySentLeads.set(dedupeKey, now);
+
+    // Keep cache size compact
+    if (recentlySentLeads.size > 200) {
+      for (const [key, ts] of recentlySentLeads.entries()) {
+        if (now - ts > 120000) recentlySentLeads.delete(key);
+      }
     }
 
     // Clean phone for tel: and wa.me links

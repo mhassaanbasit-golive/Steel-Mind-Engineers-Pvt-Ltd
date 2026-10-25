@@ -84,32 +84,6 @@ export const ChatOverlay: React.FC = () => {
   const sessionStartTimeRef = useRef<number>(Date.now());
   const lastSentRef = useRef<{ [reason: string]: number }>({});
 
-  // Send transcript helper
-  const sendTranscript = useCallback(() => {
-    if (state.transcriptSent || !state.lead) return;
-    const hasUserMessages = state.messages.some((m) => m.role === "user");
-    if (!hasUserMessages) return;
-
-    dispatch({ type: "SET_TRANSCRIPT_SENT" });
-
-    const payload = {
-      stage: "end",
-      name: state.lead.name,
-      email: state.lead.email,
-      phone: state.lead.phone,
-      conversation: state.messages,
-    };
-
-    try {
-      fetch("/api/lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        keepalive: true,
-      }).catch(() => {});
-    } catch {}
-  }, [state.transcriptSent, state.lead, state.messages]);
-
   // Open / Close events
   useEffect(() => {
     const handleOpen = () => dispatch({ type: "OPEN" });
@@ -147,7 +121,6 @@ export const ChatOverlay: React.FC = () => {
     if (state.screen === "welcome" || state.screen === "form") {
       dispatch({ type: "CLOSE" });
     } else if (state.screen === "chat") {
-      sendTranscript();
       const hasActualUserMessages = state.messages.some((m) => m.role === "user");
       if (!hasActualUserMessages) {
         dispatch({ type: "CLOSE" });
@@ -186,7 +159,7 @@ export const ChatOverlay: React.FC = () => {
       }
       dispatch({ type: "CLOSE" });
     }
-  }, [state.screen, state.messages, state.lead, sendTranscript]);
+  }, [state.screen, state.messages, state.lead]);
 
   useEffect(() => {
     if (!state.isOpen) return;
