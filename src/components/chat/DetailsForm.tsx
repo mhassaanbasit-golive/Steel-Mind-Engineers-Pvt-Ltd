@@ -53,26 +53,9 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ onSubmit, muted }) => 
         })
       );
 
-      const leadData = {
-        stage: "start",
-        name: name.trim(),
-        email: email.trim(),
-        phone: phone.trim(),
-        conversation: [],
-        page: window.location.pathname,
-        company_website: companyWebsite,
-      };
-
-      await fetch("/api/lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(leadData),
-      });
-
       playDing(muted);
       onSubmit({ name: name.trim(), email: email.trim(), phone: phone.trim() });
     } catch {
-      // In preview/local mock or fallback: proceed smoothly
       playDing(muted);
       onSubmit({ name: name.trim(), email: email.trim(), phone: phone.trim() });
     } finally {

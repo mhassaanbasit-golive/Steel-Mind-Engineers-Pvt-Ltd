@@ -81,10 +81,10 @@ export default async function handler(req: any, res: any) {
     const comment = body?.comment || body?.lead?.comment || "";
     const reason = body?.reason || "";
 
-    // Do not send if no user messages exist and no contact info provided
+    // Do not send if this is an initial form start or if no conversation occurred
     const hasUserQuestions = messages.some((m: any) => m.role === "user");
-    if (!hasUserQuestions && !visitor.email && !visitor.phone) {
-      return res.status(200).json({ ok: true, skipped: true });
+    if (body?.stage === "start" || !hasUserQuestions) {
+      return res.status(200).json({ ok: true, skipped: true, reason: "No conversation to report yet" });
     }
 
     // Clean phone for tel: and wa.me links
