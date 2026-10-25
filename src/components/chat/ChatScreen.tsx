@@ -93,10 +93,21 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
   const isStreamingRef = useRef(false);
   const userAbortedRef = useRef(false);
   const messagesRef = useRef<Msg[]>(messages);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     messagesRef.current = messages;
   }, [messages]);
+
+  // Auto-resize input textarea to fit content, up to 120px max height
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      if (inputVal) {
+        textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 120)}px`;
+      }
+    }
+  }, [inputVal]);
 
   // Lead sender helper
   const triggerSendLead = useCallback(
@@ -113,9 +124,12 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
       setLeadSent(`${reason}:${count}`);
 
       const store = getChatStore();
+      const visitor = (store.visitor?.email || store.visitor?.name)
+        ? store.visitor
+        : { name: leadName || "Website Visitor", email: "", phone: "" };
       sendLead(reason, {
         sessionId: store.sessionId,
-        visitor: store.visitor,
+        visitor,
         startedAt: sessionStartTimeRef.current,
         rating: extraState?.rating || "",
         comment: extraState?.comment || "",
@@ -124,7 +138,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
         messages: currentMessages,
       });
     },
-    []
+    [leadName]
   );
 
   // Idle timer: 120,000 ms (2 minutes)
@@ -549,7 +563,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
     const parts = clean.split(/(\+92\s*300\s*4253966|\+92\s*307\s*7077549|info@steelmind\.pk)/gi);
 
     return (
-      <span className="whitespace-pre-line leading-relaxed">
+      <span className="whitespace-pre-wrap leading-relaxed break-words [overflow-wrap:anywhere]">
         {parts.map((part, idx) => {
           if (part.includes("4253966")) {
             return (
@@ -610,8 +624,8 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
             <div
               className={`leading-[1.5] transition-all animate-[fadeIn_0.3s_ease-out] ${
                 msg.role === "user"
-                  ? "max-w-[75%] px-[18px] py-[14px] text-[15px] font-normal text-white rounded-[18px_18px_4px_18px] text-right"
-                  : "max-w-[85%] md:max-w-[75%] px-[16px] py-[12px] md:px-5 md:py-3.5 text-[14px] text-[#0A0A0A] bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-[var(--line)] rounded-[18px_18px_18px_4px] text-left"
+                  ? "max-w-[75%] px-[18px] py-[14px] text-[15px] font-normal text-white rounded-[18px_18px_4px_18px] text-left break-words [overflow-wrap:anywhere]"
+                  : "max-w-[85%] md:max-w-[75%] px-[16px] py-[12px] md:px-5 md:py-3.5 text-[14px] text-[#0A0A0A] bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-[var(--line)] rounded-[18px_18px_18px_4px] text-left break-words [overflow-wrap:anywhere]"
               }`}
               style={{
                 backgroundColor: msg.role === "user" ? "#1A3A8A" : "#FFFFFF",
@@ -740,20 +754,27 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
 
         <form
           onSubmit={handleFormSubmit}
-          className="max-w-[760px] mx-auto flex items-center space-x-2 md:space-x-3"
+          className="max-w-[760px] mx-auto flex items-end space-x-2 md:space-x-3"
         >
-          <input
-            type="text"
-            maxLength={500}
+          <textarea
+            ref={textareaRef}
+            rows={1}
+            maxLength={1000}
             disabled={isStreaming}
             value={inputVal}
             onChange={(e) => {
               setIsInterim(false);
               setInputVal(e.target.value);
             }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSendMessage();
+              }
+            }}
             placeholder={isListening ? "Listening..." : "Type your message"}
             style={isInterim ? { opacity: 0.6 } : undefined}
-            className="flex-1 bg-white border border-[var(--line)] rounded-full px-[16px] py-[12px] h-[46px] md:h-[52px] text-[14px] text-[var(--ink)] focus:outline-none focus:border-[#1A3A8A] transition-colors"
+            className="flex-1 bg-white border border-[var(--line)] rounded-[24px] px-[16px] md:px-[20px] py-[12px] md:py-[14px] min-h-[46px] md:min-h-[52px] max-h-[130px] text-[14px] text-[var(--ink)] focus:outline-none focus:border-[#1A3A8A] transition-colors resize-none overflow-y-auto leading-[1.45] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden break-words whitespace-pre-wrap"
           />
 
           {/* Microphone Button */}
@@ -763,7 +784,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
               onClick={toggleListening}
               disabled={isStreaming}
               aria-label={isListening ? "Stop listening" : "Start voice input"}
-              className="w-[44px] h-[44px] md:w-[48px] md:h-[48px] rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer transition-colors"
+              className="w-[44px] h-[44px] md:w-[48px] md:h-[48px] mb-[1px] md:mb-[2px] rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer transition-colors"
               style={{
                 backgroundColor: isListening ? "#1A3A8A" : "#F3F4F6",
                 color: isListening ? "#FFFFFF" : "#4B5563",
@@ -791,7 +812,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
               type="button"
               onClick={handleStop}
               aria-label="Stop generation"
-              className="send-solid-btn w-[44px] h-[44px] md:w-[48px] md:h-[48px] rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer"
+              className="send-solid-btn w-[44px] h-[44px] md:w-[48px] md:h-[48px] mb-[1px] md:mb-[2px] rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer"
             >
               <span className="w-3.5 h-3.5 bg-white rounded-[2px]" />
             </button>
@@ -800,7 +821,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
               type="submit"
               disabled={!inputVal.trim()}
               aria-label="Send message"
-              className="send-solid-btn w-[44px] h-[44px] md:w-[48px] md:h-[48px] rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer"
+              className="send-solid-btn w-[44px] h-[44px] md:w-[48px] md:h-[48px] mb-[1px] md:mb-[2px] rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer"
             >
               <svg
                 className="w-5 h-5 stroke-current -rotate-90 translate-x-[1px]"

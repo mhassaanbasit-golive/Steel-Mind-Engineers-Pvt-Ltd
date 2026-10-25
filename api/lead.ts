@@ -14,7 +14,11 @@ export default async function handler(req: any, res: any) {
 
   try {
     let body = req.body;
-    if (typeof body === "string") {
+    if (Buffer.isBuffer(body)) {
+      try {
+        body = JSON.parse(body.toString("utf8"));
+      } catch {}
+    } else if (typeof body === "string") {
       try {
         body = JSON.parse(body);
       } catch {}
@@ -25,9 +29,9 @@ export default async function handler(req: any, res: any) {
 
     // Extract visitor contact information
     const visitor = {
-      name: body?.visitor?.name || body?.name || "Website Visitor",
-      email: body?.visitor?.email || body?.email || "",
-      phone: body?.visitor?.phone || body?.phone || "",
+      name: body?.visitor?.name || body?.name || body?.lead?.visitor?.name || "Website Visitor",
+      email: body?.visitor?.email || body?.email || body?.lead?.visitor?.email || "",
+      phone: body?.visitor?.phone || body?.phone || body?.lead?.visitor?.phone || "",
     };
 
     // Extract and normalize chat messages
@@ -35,6 +39,8 @@ export default async function handler(req: any, res: any) {
       ? body.messages
       : Array.isArray(body?.conversation)
       ? body.conversation
+      : Array.isArray(body?.lead?.messages)
+      ? body.lead.messages
       : [];
 
     const messages = rawMessages.map((m: any) => ({

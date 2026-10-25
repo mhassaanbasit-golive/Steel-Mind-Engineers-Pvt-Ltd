@@ -6,6 +6,6 @@
   },
   "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/((?!chatbot/|assets/|.*\\..*).*)", "destination": "/index.html" }
+    { "source": "/((?!api/|chatbot/|assets/|.*\\..*).*)", "destination": "/index.html" }
   ]
 }
