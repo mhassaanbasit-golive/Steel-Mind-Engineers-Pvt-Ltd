@@ -538,46 +538,66 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
   };
 
   const renderMessageContent = (text: string) => {
-    let formatted: React.ReactNode = text;
-    if (text.includes("+92 300 4253966") || text.includes("+923004253966")) {
-      formatted = (
-        <span>
-          {text.split("+92 300 4253966")[0]}
-          <a href="tel:+923004253966" className="underline font-semibold">
-            +92 300 4253966
-          </a>
-          {text.split("+92 300 4253966")[1]}
-        </span>
-      );
-    } else if (text.toLowerCase().includes("quote form")) {
-      formatted = (
-        <span>
-          {text}{" "}
-          <button
-            type="button"
-            onClick={() => {
-              onCloseOverlay();
-              window.location.href = "/contact-us/#quote";
-            }}
-            className="underline font-semibold cursor-pointer"
-          >
-            Open quote form
-          </button>
-        </span>
-      );
-    }
+    // Strip raw markdown link syntax [text](url) -> text
+    let clean = text.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
+    // Strip all asterisks (* and **)
+    clean = clean.replace(/\*/g, "");
+    // Strip markdown headers and horizontal rules
+    clean = clean.replace(/^#{1,6}\s+/gm, "").replace(/---/g, "");
 
-    return formatted;
+    // Split text to keep phone numbers and email clickable
+    const parts = clean.split(/(\+92\s*300\s*4253966|\+92\s*307\s*7077549|info@steelmind\.pk)/gi);
+
+    return (
+      <span className="whitespace-pre-line leading-relaxed">
+        {parts.map((part, idx) => {
+          if (part.includes("4253966")) {
+            return (
+              <a
+                key={idx}
+                href="tel:+923004253966"
+                className="text-[#1A3A8A] font-semibold underline underline-offset-2 hover:text-[#162D6E]"
+              >
+                {part}
+              </a>
+            );
+          }
+          if (part.includes("7077549")) {
+            return (
+              <a
+                key={idx}
+                href="tel:+923077077549"
+                className="text-[#1A3A8A] font-semibold underline underline-offset-2 hover:text-[#162D6E]"
+              >
+                {part}
+              </a>
+            );
+          }
+          if (part.toLowerCase() === "info@steelmind.pk") {
+            return (
+              <a
+                key={idx}
+                href="mailto:info@steelmind.pk"
+                className="text-[#1A3A8A] font-semibold underline underline-offset-2 hover:text-[#162D6E]"
+              >
+                {part}
+              </a>
+            );
+          }
+          return <span key={idx}>{part}</span>;
+        })}
+      </span>
+    );
   };
 
   return (
-    <div className="flex flex-col h-full w-full relative">
+    <div className="flex flex-col h-full w-full relative overflow-hidden">
       {/* Messages List Area */}
       <div
         ref={listRef}
         role="log"
         aria-live="polite"
-        className="flex-1 overflow-y-auto pt-4 pb-[100px] px-4 sm:px-8 space-y-3 md:space-y-4 max-w-[760px] mx-auto w-full select-text"
+        className="flex-1 overflow-y-auto overscroll-contain pt-4 pb-4 px-4 sm:px-8 space-y-3 md:space-y-4 max-w-[760px] mx-auto w-full select-text"
         data-lenis-prevent=""
       >
         {messages.map((msg, i) => (
@@ -667,11 +687,11 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
         )}
       </div>
 
-      {/* Fixed Bottom Container (Docked Suggestions + Input Bar) */}
-      <div className="fixed bottom-[48px] inset-x-0 z-20 pointer-events-none">
+      {/* Docked Bottom Controls (Suggestions + Input Bar) */}
+      <div className="w-full flex-shrink-0 z-20 bg-white">
         {/* Rotating Starter Questions (before first user message) */}
         {!hasSentUserMsg && (
-          <div className="pointer-events-auto max-w-[760px] mx-auto px-4 sm:px-8 mb-2 overflow-hidden select-none">
+          <div className="max-w-[760px] mx-auto px-4 sm:px-8 mb-2 overflow-hidden select-none">
             <div className="relative w-full overflow-hidden py-0.5">
               <div className="sm-rotating-chips-track">
                 {[...DEFAULT_PILLS, ...DEFAULT_PILLS].map((pill, idx) => (
@@ -680,7 +700,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
                     type="button"
                     disabled={isStreaming}
                     onClick={() => handleSendMessage(pill)}
-                    className="px-[15px] py-[7.5px] text-[12.5px] font-medium bg-white/95 border border-[var(--line)] rounded-full text-[var(--ink)] hover:border-[#1A3A8A] hover:text-[#1A3A8A] transition-colors whitespace-nowrap cursor-pointer shadow-sm flex-shrink-0"
+                    className="px-[15px] py-[7.5px] text-[12.5px] font-medium bg-white border border-[var(--line)] rounded-full text-[var(--ink)] hover:border-[#1A3A8A] hover:text-[#1A3A8A] transition-colors whitespace-nowrap cursor-pointer shadow-sm flex-shrink-0"
                   >
                     {pill}
                   </button>
@@ -692,14 +712,14 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
 
         {/* Dynamic Assistant Suggestions (during active conversation) */}
         {hasSentUserMsg && suggestions.length > 0 && (
-          <div className="pointer-events-auto max-w-[760px] mx-auto px-4 sm:px-8 mb-2 flex items-center space-x-[6px] overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pb-1">
+          <div className="max-w-[760px] mx-auto px-4 sm:px-8 mb-2 flex items-center space-x-[6px] overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pb-1">
             {suggestions.map((pill) => (
               <button
                 key={pill}
                 type="button"
                 disabled={isStreaming}
                 onClick={() => handleSendMessage(pill)}
-                className="px-[14px] py-[7px] text-[12px] font-medium bg-white/95 border border-[var(--line)] rounded-full text-[var(--ink)] hover:border-[#1A3A8A] transition-colors whitespace-nowrap cursor-pointer shadow-sm flex-shrink-0"
+                className="px-[14px] py-[7px] text-[12px] font-medium bg-white border border-[var(--line)] rounded-full text-[var(--ink)] hover:border-[#1A3A8A] transition-colors whitespace-nowrap cursor-pointer shadow-sm flex-shrink-0"
               >
                 {pill}
               </button>
@@ -708,7 +728,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
         )}
 
         {/* Input Bar */}
-        <div className="pointer-events-auto bg-white border-t border-[var(--line)] px-4 sm:px-8 py-3">
+        <div className="bg-white border-t border-[var(--line)] px-4 sm:px-8 py-3">
         {(privacyNote || micError) && (
           <div
             className="max-w-[760px] mx-auto mb-2 text-center text-[12px] text-[#4B5563]"
@@ -801,6 +821,30 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
     </div>
 
       <style>{`
+        @keyframes smRotateChips {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(calc(-50% - 4px));
+          }
+        }
+
+        .sm-rotating-chips-track {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          width: max-content;
+          animation: smRotateChips 24s linear infinite;
+          will-change: transform;
+        }
+
+        .sm-rotating-chips-track:hover,
+        .sm-rotating-chips-track:active,
+        .sm-rotating-chips-track:focus-within {
+          animation-play-state: paused;
+        }
+
         .send-solid-btn {
           background-color: #1A3A8A;
           color: #FFFFFF;

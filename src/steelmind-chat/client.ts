@@ -126,7 +126,7 @@ export async function streamChat(options: StreamChatOptions): Promise<void> {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "omit",
+      credentials: "same-origin",
       signal: options.signal,
       body: JSON.stringify(payload),
     });

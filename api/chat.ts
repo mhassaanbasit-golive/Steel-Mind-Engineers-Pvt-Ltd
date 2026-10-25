@@ -1,93 +1,179 @@
 import fs from "fs";
 import path from "path";
+import { GoogleGenAI } from "@google/genai";
 
 export default async function handler(req: any, res: any) {
+  // CORS & Preflight headers
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
   if (req.method === "OPTIONS") return res.status(200).end();
-  if (req.method !== "POST") return res.status(405).json({ ok: false });
+  if (req.method !== "POST") return res.status(405).json({ ok: false, error: "Method not allowed" });
 
+  // Server-Sent Events headers for smooth streaming
   res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
   res.setHeader("Cache-Control", "no-cache, no-transform");
   res.setHeader("Connection", "keep-alive");
   if (res.flushHeaders) res.flushHeaders();
 
-  const sendStatus = (step: string, label: string) => res.write(`event: status\ndata: ${JSON.stringify({ step, label })}\n\n`);
-  const sendToken = (text: string) => res.write(`event: token\ndata: ${JSON.stringify({ t: text })}\n\n`);
+  const sendEvent = (event: string, data: any) => {
+    res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+  };
 
   try {
-    sendStatus("understand", "Understanding your question");
+    sendEvent("status", { step: "Understanding your question" });
 
+    // Load company knowledge base
     const knowledgePath = path.join(process.cwd(), "api", "_knowledge.json");
     let knowledge = {};
-    try { knowledge = JSON.parse(fs.readFileSync(knowledgePath, "utf8")); } catch (e) {}
+    try {
+      knowledge = JSON.parse(fs.readFileSync(knowledgePath, "utf8"));
+    } catch (e) {
+      console.warn("[API/CHAT] Could not read _knowledge.json:", e);
+    }
+
+    sendEvent("status", { step: "Checking Steel Mind knowledge" });
+    sendEvent("status_done", { step: "Understanding your question" });
+    sendEvent("status_done", { step: "Checking Steel Mind knowledge" });
 
     const rawBody = typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
     const messages = Array.isArray(rawBody.messages) ? rawBody.messages : [];
 
-    const systemPrompt = "You are the assistant for Steel Mind Engineers. Use this knowledge: " + JSON.stringify(knowledge) + "\nRules: No fake prices. Offer phone +92 300 4253966. Act professional.";
-    
-    sendStatus("knowledge", "Checking Steel Mind knowledge");
-    sendStatus("write", "Writing your answer");
+    const systemPrompt = `You are the technical AI engineering assistant for Steel Mind Engineers (Pvt. Ltd.), Pakistan's premier Pre-Engineered Building (PEB) design, steel fabrication, and erection company.
+Head Office: 35-D Commercial, DHA EME Sector, Lahore.
+Factory: Karol Ghati, Lahore.
+Direct Phone: +92 300 4253966, +92 307 7077549. Email: info@steelmind.pk.
+
+Reference company knowledge:
+${JSON.stringify(knowledge)}
+
+CRITICAL FORMATTING AND LENGTH RULES (MUST FOLLOW STRICTLY):
+1. NO ASTERISKS: NEVER output asterisks ('*' or '**') anywhere in your reply. Do NOT use markdown bold, italics, or asterisk bullets. Use plain text only.
+2. STRICT LENGTH: Keep your entire response strictly within 2 to 4 lines maximum. Never write long essays or prolong your answers. Be concise and to the point.
+3. NO MARKDOWN HEADERS OR LINKS: Do NOT use '###', '---', or markdown link syntax like '[label](url)'. Write phone numbers and emails as plain text. The user interface already displays direct action buttons.
+4. FACTORY TOUR: If the visitor asks to visit or schedule a factory tour, warmly welcome them to our Karol Ghati factory in Lahore, and tell them to call or WhatsApp +92 300 4253966 to confirm their visit with our engineers.
+5. PRICING & QUOTES: Clarify that steel building prices depend on specific parameters (width, length, clear span, eave height, loads). Never guess or invent numbers. Invite them to call +92 300 4253966 or submit the quote form.
+6. TONE: Professional, consultative, Pakistani industrial engineering expertise.`;
 
     const geminiApiKey = process.env.GEMINI_API_KEY;
     if (!geminiApiKey) {
-      sendToken("Error: GEMINI_API_KEY is missing in Vercel.");
-      res.write("event: done\ndata: {}\n\n");
+      sendEvent("token", {
+        t: "Welcome to Steel Mind Engineers! Please contact our engineering team directly at +92 300 4253966 or info@steelmind.pk for assistance.",
+      });
+      sendEvent("done", {});
       return res.end();
     }
 
-    const geminiContents = messages.map((m: any) => ({
-      role: m.role === "assistant" || m.role === "bot" ? "model" : "user",
-      parts: [{ text: typeof m.content === "string" ? m.content : m.text }]
-    }));
-
-    // UPDATED: Using gemini-3.8-flash
-    const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:streamGenerateContent?alt=sse&key=${geminiApiKey}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: systemPrompt }] },
-        contents: geminiContents
-      })
+    const ai = new GoogleGenAI({
+      apiKey: geminiApiKey,
+      httpOptions: {
+        headers: {
+          "User-Agent": "aistudio-build",
+        },
+      },
     });
 
-    if (!geminiResponse.ok || !geminiResponse.body) {
-      const errText = await geminiResponse.text();
-      sendToken(`Gemini API Error: ${geminiResponse.status} ${errText}`);
-      res.write("event: done\ndata: {}\n\n");
-      return res.end();
-    }
+    // Clean and normalize messages to ensure strict user/model alternation
+    const validMessages: Array<{ role: "user" | "model"; text: string }> = [];
+    for (const m of messages) {
+      const role = m.role === "assistant" || m.role === "bot" || m.role === "model" ? "model" : "user";
+      const text = (typeof m.content === "string" ? m.content : (typeof m.text === "string" ? m.text : "")).trim();
+      if (!text) continue;
 
-    const reader = geminiResponse.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = "";
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split("\n");
-      buffer = lines.pop() || "";
-      for (const line of lines) {
-        const trimmed = line.trim();
-        if (trimmed.startsWith("data:")) {
-          try {
-            const data = JSON.parse(trimmed.slice(5).trim());
-            const content = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (content) { sendToken(content); }
-          } catch {}
+      if (validMessages.length === 0) {
+        // First message must be 'user' for Gemini API compliance
+        validMessages.push({ role: "user", text });
+      } else {
+        const last = validMessages[validMessages.length - 1];
+        if (last.role === role) {
+          // Merge consecutive same-role messages
+          last.text += `\n\n${text}`;
+        } else {
+          validMessages.push({ role, text });
         }
       }
     }
 
-    res.write("event: done\ndata: {}\n\n");
+    const geminiContents = validMessages.map((m) => ({
+      role: m.role,
+      parts: [{ text: m.text }],
+    }));
+
+    const modelsToTry = Array.from(
+      new Set(
+        [
+          process.env.GEMINI_MODEL,
+          "gemini-3.5-flash",
+          "gemini-flash-lite-latest",
+          "gemini-3-flash-preview",
+          "gemini-2.5-flash",
+        ].filter(Boolean) as string[]
+      )
+    );
+
+    let streamSucceeded = false;
+    let lastError: any = null;
+
+    for (const model of modelsToTry) {
+      let tokensSentForThisModel = 0;
+      try {
+        const responseStream = await ai.models.generateContentStream({
+          model,
+          contents: geminiContents.length > 0 ? geminiContents : [{ role: "user", parts: [{ text: "Hello" }] }],
+          config: {
+            systemInstruction: systemPrompt,
+          },
+        });
+
+        for await (const chunk of responseStream) {
+          if (chunk.text) {
+            // Strip any asterisks (* or **), markdown headers (###), or markdown horizontal rules
+            const clean = chunk.text
+              .replace(/\*/g, "")
+              .replace(/#{1,6}\s*/g, "")
+              .replace(/---/g, "");
+            if (clean) {
+              sendEvent("token", { t: clean });
+              tokensSentForThisModel++;
+            }
+          }
+        }
+
+        streamSucceeded = true;
+        break;
+      } catch (err: any) {
+        lastError = err;
+        console.warn(`[API/CHAT] Model ${model} unavailable (${err?.status || err?.message}). Trying next candidate...`);
+        if (tokensSentForThisModel > 0) {
+          streamSucceeded = true;
+          break;
+        }
+      }
+    }
+
+    if (!streamSucceeded) {
+      throw lastError || new Error("All Gemini models were unavailable.");
+    }
+
+    sendEvent("action", {
+      type: "contact",
+      label: "Call Engineers: +92 300 4253966",
+      href: "tel:+923004253966",
+    });
+
+    sendEvent("suggestions", {
+      chips: ["Schedule factory tour", "Request a quote", "See Haier project details"],
+    });
+
+    sendEvent("done", {});
     res.end();
   } catch (err: any) {
-    sendToken("Server Error: " + err.message);
-    res.write("event: done\ndata: {}\n\n");
+    console.error("[API/CHAT] Error generating response:", err);
+    sendEvent("token", {
+      t: "Thank you for reaching out to Steel Mind Engineers. For immediate assistance and quotes, please call our engineering team at +92 300 4253966.",
+    });
+    sendEvent("done", {});
     res.end();
   }
 }

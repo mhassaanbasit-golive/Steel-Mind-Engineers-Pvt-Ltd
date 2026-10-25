@@ -121,10 +121,14 @@ export const ChatOverlay: React.FC = () => {
   useEffect(() => {
     if (state.isOpen) {
       stopScroll();
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
       const mainEl = document.getElementById("main");
       if (mainEl) mainEl.setAttribute("aria-hidden", "true");
     } else {
       startScroll();
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
       const mainEl = document.getElementById("main");
       if (mainEl) mainEl.removeAttribute("aria-hidden");
       window.dispatchEvent(new CustomEvent("chat:close"));
@@ -132,6 +136,8 @@ export const ChatOverlay: React.FC = () => {
 
     return () => {
       startScroll();
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
       window.dispatchEvent(new CustomEvent("chat:close"));
     };
   }, [state.isOpen]);
@@ -202,12 +208,14 @@ export const ChatOverlay: React.FC = () => {
       role="dialog"
       aria-modal="true"
       aria-label="Steel Mind Engineers Assistant"
-      className={`fixed inset-0 z-[300] h-[100dvh] flex flex-col justify-between select-none animate-[fadeIn_0.5s_cubic-bezier(0.16,1,0.3,1)_forwards] ${
+      className={`fixed inset-0 z-[300] h-[100dvh] flex flex-col justify-between select-none animate-[fadeIn_0.5s_cubic-bezier(0.16,1,0.3,1)_forwards] overscroll-contain ${
         isWelcome
           ? "bg-[#1A3A8A]"
-          : "bg-white/95 backdrop-blur-[20px] backdrop-saturate-[180%] [-webkit-backdrop-filter:blur(20px)_saturate(180%)]"
+          : "bg-white"
       }`}
-      style={isWelcome ? { backgroundColor: "#1A3A8A" } : undefined}
+      style={{
+        backgroundColor: isWelcome ? "#1A3A8A" : "#FFFFFF",
+      }}
     >
       {/* Top Header (64px) */}
       {isWelcome ? (
@@ -316,7 +324,7 @@ export const ChatOverlay: React.FC = () => {
       )}
 
       {/* Screen Body */}
-      <div className="flex-1 w-full overflow-hidden flex flex-col justify-center relative">
+      <div className={`flex-1 w-full overflow-hidden flex flex-col relative ${isWelcome || state.screen === "form" ? "justify-center" : "justify-start"}`}>
         {state.screen === "welcome" && (
           <Welcome
             muted={state.muted}
