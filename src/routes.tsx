@@ -177,6 +177,9 @@ export const AppRoutes: React.FC = () => {
       <Route path="/projects/haier-store-shed/" element={<Navigate to="/projects/haier-peb-crane-and-mezzanine-shed-raiwind/" replace />} />
       <Route path="/projects/dravton-dairy-shed/" element={<Navigate to="/projects/dravton-dairy-peb-dairy-shed-chunian/" replace />} />
       <Route path="/projects/maria-b-mezzanine/" element={<Navigate to="/projects/maria-b-peb-mezzanine-floor-lahore/" replace />} />
+      <Route path="/projects/yascon-bridge/" element={<Navigate to="/projects/yascon-water-requirement-bridge-petaro/" replace />} />
+      <Route path="/projects/water-requirement-bridge-m-s-yascon-lahore/" element={<Navigate to="/projects/yascon-water-requirement-bridge-petaro/" replace />} />
+
 
       {/* 3. Published Project Detail Pages (T5) */}
       {publishedProjects.map((proj) => {

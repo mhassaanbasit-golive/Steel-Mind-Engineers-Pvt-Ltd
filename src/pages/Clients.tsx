@@ -98,6 +98,22 @@ const CLIENTS: ClientItem[] = [
     projectUrl: "/projects/",
     projectNote: "Commercial Fabrication",
   },
+  {
+    name: "M/S Yascon",
+    logo: A.clientLogo["M/S Yascon"],
+    width: 1024,
+    height: 572,
+    projectUrl: "/projects/yascon-water-requirement-bridge-petaro/",
+    projectNote: "Water Requirement Bridge",
+  },
+  {
+    name: "Vendor City",
+    logo: A.clientLogo["Vendor City"],
+    width: 1024,
+    height: 572,
+    projectUrl: "/projects/",
+    projectNote: "Industrial Facility",
+  },
 ];
 
 export const Clients: React.FC = () => {

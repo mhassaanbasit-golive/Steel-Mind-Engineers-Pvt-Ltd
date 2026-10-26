@@ -92,7 +92,6 @@ export const FactoryTour: React.FC = () => {
 
         // Start states
         if (box) gsap.set(box, { clipPath: "inset(0 0 100% 0)" });
-        if (img) gsap.set(img, { scale: 1.06 });
         if (textGroup) gsap.set(textGroup, { y: 24, opacity: 0 });
         if (numBadge) gsap.set(numBadge, { scale: 0.85, opacity: 0 });
 
@@ -105,12 +104,10 @@ export const FactoryTour: React.FC = () => {
           },
           onStart: () => {
             if (box) gsap.set(box, { willChange: "clip-path" });
-            if (img) gsap.set(img, { willChange: "transform" });
             if (textGroup) gsap.set(textGroup, { willChange: "transform, opacity" });
           },
           onComplete: () => {
             if (box) gsap.set(box, { clearProps: "willChange,clipPath" });
-            if (img) gsap.set(img, { clearProps: "willChange,scale" });
             if (textGroup) gsap.set(textGroup, { clearProps: "willChange,transform,opacity" });
             if (numBadge) gsap.set(numBadge, { clearProps: "scale,opacity" });
           },
@@ -121,14 +118,9 @@ export const FactoryTour: React.FC = () => {
           tl.to(numBadge, { scale: 1, opacity: 1, duration: 0.5, ease: E1 }, 0);
         }
 
-        // Photo curtain reveal 1000ms E2
+        // Photo curtain reveal 1000ms E2 without distorting or zooming
         if (box) {
           tl.to(box, { clipPath: "inset(0 0 0% 0)", duration: 1.0, ease: E2 }, 0);
-        }
-
-        // Inner image zoom out 1300ms E1
-        if (img) {
-          tl.to(img, { scale: 1, duration: 1.3, ease: E1 }, 0);
         }
 
         // Text & descriptions RISE
@@ -271,13 +263,13 @@ export const FactoryTour: React.FC = () => {
                       </p>
                     </div>
 
-                    {/* Step Photo Box with Curtain Reveal & Smooth Hover Zoom */}
-                    <div className="pt-3 max-w-[500px]">
+                    {/* Step Photo Box: Container adjusts to original shape, no zoom, full size */}
+                    <div className="pt-3 max-w-[620px]">
                       <div
                         ref={(el) => {
                           stepBoxRefs.current[idx] = el;
                         }}
-                        className="relative w-full aspect-[4/3] overflow-hidden bg-[#0F172A] border border-[#E5E5E5] rounded-sm shadow-sm transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-2 group-hover:shadow-[0_16px_36px_rgba(30,58,138,0.12)] group-hover:border-[var(--blue)]"
+                        className="relative w-full overflow-hidden bg-white border border-[#E5E5E5] rounded-sm shadow-sm transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-1 group-hover:shadow-[0_16px_36px_rgba(30,58,138,0.12)] group-hover:border-[var(--blue)]"
                       >
                         <img
                           ref={(el) => {
@@ -286,8 +278,7 @@ export const FactoryTour: React.FC = () => {
                           src={stepImg}
                           alt={step.name}
                           loading="lazy"
-                          className="w-full h-full object-cover object-center block origin-center transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-                          style={{ objectFit: "cover" }}
+                          className="w-full h-auto object-contain block"
                         />
                       </div>
                     </div>

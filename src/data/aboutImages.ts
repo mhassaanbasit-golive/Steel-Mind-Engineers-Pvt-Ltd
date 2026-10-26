@@ -21,27 +21,27 @@ export const aboutImages = {
       {
         num: "01",
         title: "Material yard",
-        src: "https://res.cloudinary.com/cyfb9slf/image/upload/v1791946943/factory-step-1.jpg",
+        src: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792970157/Front_view.png",
       },
       {
         num: "02",
         title: "Cutting",
-        src: "https://res.cloudinary.com/cyfb9slf/image/upload/v1791946943/factory-step-2.jpg",
+        src: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792970160/cutting.png",
       },
       {
         num: "03",
         title: "Fitting and welding",
-        src: "https://res.cloudinary.com/cyfb9slf/image/upload/v1791947444/factory-step-3.jpg",
+        src: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792970155/fitting_and_welding.png",
       },
       {
         num: "04",
         title: "Surface preparation and painting",
-        src: "https://res.cloudinary.com/cyfb9slf/image/upload/v1791947442/factory-page-4.jpg",
+        src: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792970160/surface_preparations_and_painting.png",
       },
       {
         num: "05",
         title: "Packing and dispatch",
-        src: "https://res.cloudinary.com/cyfb9slf/image/upload/v1791946944/Factory-step-5.jpg",
+        src: "https://res.cloudinary.com/cyfb9slf/image/upload/v1792970161/Packing_and_dispatch.png",
       },
     ],
     nextPeb:

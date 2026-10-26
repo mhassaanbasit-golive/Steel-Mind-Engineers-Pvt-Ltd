@@ -44,6 +44,8 @@ export const A = {
     "Elite Stitching": "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401770/elite-stitching-logo.jpg",
     "MAB": "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401770/mab-solutions-logo.jpg",
     "Agha Waqar": "https://res.cloudinary.com/cyfb9slf/image/upload/v1791401769/agha-waqar-logo.jpg",
+    "M/S Yascon": "https://res.cloudinary.com/cyfb9slf/image/upload/v1792970164/ms-yascoon.png",
+    "Vendor City": "https://res.cloudinary.com/cyfb9slf/image/upload/v1792970164/vendor_city_logo.png",
   },
   project: {
     dravtonDairyShed: [

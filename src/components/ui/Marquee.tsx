@@ -9,6 +9,7 @@ const ROW1 = [
   "Moiz Steel",
   "Saif Engineers",
   "Dravton Dairy",
+  "M/S Yascon",
 ];
 const ROW2 = [
   "Latifia Dairy",
@@ -16,6 +17,7 @@ const ROW2 = [
   "Elite Stitching",
   "MAB",
   "Agha Waqar",
+  "Vendor City",
 ];
 
 export const Marquee: React.FC<{ className?: string }> = ({
