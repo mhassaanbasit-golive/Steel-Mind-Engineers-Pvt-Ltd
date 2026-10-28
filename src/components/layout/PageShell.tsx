@@ -6,6 +6,7 @@ import { Footer } from "./Footer.tsx";
 import { FloatingTools } from "./FloatingTools.tsx";
 import { BackButton } from "../ui/BackButton.tsx";
 import { initMotion } from "../../lib/motion.ts";
+import { applySeo } from "../../lib/seo.ts";
 import { ErrorBoundary } from "../common/ErrorBoundary.tsx";
 
 const ChatOverlay = lazy(() =>
@@ -60,6 +61,10 @@ export const PageShell: React.FC<PageShellProps> = ({
       cancelAnimationFrame(r2);
       if (revertMotion) revertMotion();
     };
+  }, [location.pathname]);
+
+  useEffect(() => {
+    applySeo(location.pathname);
   }, [location.pathname]);
 
   return (
