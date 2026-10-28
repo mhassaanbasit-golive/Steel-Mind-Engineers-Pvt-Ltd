@@ -665,7 +665,7 @@ export const pages45to68: ContentData[] = [
     keyword: "contact steel fabrication company in Pakistan",
     support: ["request steel building quote Pakistan", "PEB quote Pakistan", "steel contractor contact Lahore"],
     h1: "Contact Steel Mind Engineers: Request a Quote for Your Steel Building",
-    quickAnswer: "Call +92 300 4253966 or +92 307 7077549, email info@steelmind.pk, or send the quote form. An engineer reads each request and replies with questions and the next steps.",
+    quickAnswer: "Call +92 300 4253966 or +92 307 7077549, email info@steelmindengineers.com, or send the quote form. An engineer reads each request and replies with questions and the next steps.",
     alt: "Steel Mind Engineers factory entrance at Karol Ghati, Lahore.",
     related: ["Our Projects", "Factory Tour", "Basic Parameters"],
     faq: [
@@ -684,7 +684,7 @@ export const pages45to68: ContentData[] = [
           ["Factory", "Karol Ghati, Lahore, Punjab 54000"],
           ["Phone", "+92 300 4253966"],
           ["Phone", "+92 307 7077549"],
-          ["Email", "info@steelmind.pk"]
+          ["Email", "info@steelmindengineers.com"]
         ]
       },
       { type: "h2", title: "What to Include" },

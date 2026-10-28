@@ -32,4 +32,4 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
-Sitemap: https://www.steelmind.pk/sitemap.xml
+Sitemap: https://steelmindengineers.com/sitemap.xml

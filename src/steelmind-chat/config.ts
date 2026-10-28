@@ -9,8 +9,8 @@ export const smConfig = Object.freeze({
   phoneTel: "tel:+923004253966",
   phone2: "+92 307 7077549",
   whatsappUrl: "https://wa.me/923004253966",
-  email: "info@steelmind.pk",
-  emailUrl: "mailto:info@steelmind.pk",
+  email: "info@steelmindengineers.com",
+  emailUrl: "mailto:info@steelmindengineers.com",
   quoteUrl: `${siteBaseUrl}/contact-us/`,
 });
 

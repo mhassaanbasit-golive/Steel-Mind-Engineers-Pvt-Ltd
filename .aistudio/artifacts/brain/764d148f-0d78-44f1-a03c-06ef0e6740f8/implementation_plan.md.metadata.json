@@ -1,6 +1,0 @@
-{
-  "summary": "Plan to remove custom glow effects, scroll bobbing/rotation motions, and automated idle/scroll animation loops from the chat widget, floating menu button, and header mobile menu icon while preserving intrinsic Lucide icon hover animations.",
-  "updatedAt": "2026-10-12T23:00:05.965104045Z",
-  "requestFeedback": true,
-  "userFacing": true
-}

@@ -587,11 +587,11 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
               </a>
             );
           }
-          if (part.toLowerCase() === "info@steelmind.pk") {
+          if (part.toLowerCase() === "info@steelmindengineers.com") {
             return (
               <a
                 key={idx}
-                href="mailto:info@steelmind.pk"
+                href="mailto:info@steelmindengineers.com"
                 className="text-[#1A3A8A] font-semibold underline underline-offset-2 hover:text-[#162D6E]"
               >
                 {part}

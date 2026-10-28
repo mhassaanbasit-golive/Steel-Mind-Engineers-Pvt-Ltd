@@ -253,7 +253,7 @@ export default async function handler(req: any, res: any) {
                   <td style="background-color: #F9FAFB; padding: 18px 32px; border-top: 1px solid #E5E7EB; text-align: center;">
                     <p style="margin: 0; font-size: 12px; color: #6B7280; line-height: 1.4;">
                       This inquiry was automatically submitted by the technical assistant on 
-                      <a href="https://www.steelmind.pk" style="color: #1A3A8A; text-decoration: none; font-weight: 600;">steelmindengineers.com</a>.
+                      <a href="https://steelmindengineers.com" style="color: #1A3A8A; text-decoration: none; font-weight: 600;">steelmindengineers.com</a>.
                     </p>
                   </td>
                 </tr>

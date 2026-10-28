@@ -21,7 +21,7 @@ export function updatePageMeta(data: ContentData) {
     canonical.setAttribute("rel", "canonical");
     document.head.appendChild(canonical);
   }
-  canonical.setAttribute("href", `https://www.steelmind.pk${data.url}`);
+  canonical.setAttribute("href", `https://steelmindengineers.com${data.url}`);
 
   // OG Title & Desc
   const ogTitle = document.querySelector('meta[property="og:title"]');
@@ -31,7 +31,7 @@ export function updatePageMeta(data: ContentData) {
   if (ogDesc) ogDesc.setAttribute("content", data.description);
 
   const ogUrl = document.querySelector('meta[property="og:url"]');
-  if (ogUrl) ogUrl.setAttribute("content", `https://www.steelmind.pk${data.url}`);
+  if (ogUrl) ogUrl.setAttribute("content", `https://steelmindengineers.com${data.url}`);
 
   // OG Image
   const ogImg = document.querySelector('meta[property="og:image"]');

@@ -15,7 +15,7 @@ The following environment variables configure mail delivery, AI assistant ground
 | :--- | :--- | :--- | :--- |
 | `RESEND_API_KEY` | Resend API key for sending emails (quote inquiries, chat transcripts, customer satisfaction surveys, and newsletter subscriptions). If omitted, logs payload to console in demo mode without errors. | Optional (Demo stub active) | `re_123456789...` |
 | `MAIL_FROM` | Sender display name and email address used for outgoing notifications. | Optional | `Steel Mind Website <website@steelmind.pk>` |
-| `MAIL_TO_PRIMARY` | Primary recipient email for website quote requests and lead submissions. | Optional | `info@steelmind.pk` |
+| `MAIL_TO_PRIMARY` | Primary recipient email for website quote requests and lead submissions. | Optional | `info@steelmindengineers.com` |
 | `MAIL_TO_DEMO` | Secondary notification address for founder/demo monitoring. | Optional | `founder@getgolive.io` |
 | `AI_PROVIDER` | Selection of AI service provider for chat assistant (`gemini` or `openai`). | Optional | `gemini` |
 | `GEMINI_API_KEY` | Google Gemini API key for intelligent, verified chatbot responses. | Optional (Graceful fallback) | `AIzaSy...` |
@@ -23,7 +23,7 @@ The following environment variables configure mail delivery, AI assistant ground
 | `OPENAI_API_KEY` | OpenAI API key if `AI_PROVIDER=openai` is selected. | Optional | `sk-...` |
 | `OPENAI_MODEL` | OpenAI model identifier if OpenAI is active. | Optional | `gpt-4o-mini` |
 | `VITE_GSC_TOKEN` | Google Search Console site verification meta token. | Optional | `google-site-verification-token` |
-| `APP_URL` | Canonical URL of the deployed application. | Optional | `https://www.steelmind.pk` |
+| `APP_URL` | Canonical URL of the deployed application. | Optional | `https://steelmindengineers.com` |
 
 ---
 

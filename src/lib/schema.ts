@@ -9,7 +9,7 @@ export function generateSchema(page: ContentData): object[] {
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "@id": "https://www.steelmind.pk/#organization",
+    "@id": "https://steelmindengineers.com/#organization",
     name: SITE.name,
     alternateName: SITE.short,
     url: SITE.domain,
@@ -30,12 +30,12 @@ export function generateSchema(page: ContentData): object[] {
     const websiteSchema = {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "@id": "https://www.steelmind.pk/#website",
+      "@id": "https://steelmindengineers.com/#website",
       url: SITE.domain,
       name: SITE.name,
       inLanguage: "en-PK",
       publisher: {
-        "@id": "https://www.steelmind.pk/#organization",
+        "@id": "https://steelmindengineers.com/#organization",
       },
     };
     schemas.push(websiteSchema);
@@ -46,7 +46,7 @@ export function generateSchema(page: ContentData): object[] {
     const localBusinessSchema = {
       "@context": "https://schema.org",
       "@type": ["LocalBusiness", "GeneralContractor"],
-      "@id": "https://www.steelmind.pk/#localbusiness",
+      "@id": "https://steelmindengineers.com/#localbusiness",
       name: SITE.name,
       url: `${SITE.domain}${page.url}`,
       telephone: SITE.phones,
@@ -107,7 +107,7 @@ export function generateSchema(page: ContentData): object[] {
     url: `${SITE.domain}${page.url}`,
     inLanguage: "en-PK",
     isPartOf: {
-      "@id": "https://www.steelmind.pk/#website",
+      "@id": "https://steelmindengineers.com/#website",
     },
     speakable: {
       "@type": "SpeakableSpecification",
@@ -120,10 +120,10 @@ export function generateSchema(page: ContentData): object[] {
     webpageSchema.datePublished = SITE.launchDate;
     webpageSchema.dateModified = SITE.launchDate;
     webpageSchema.author = {
-      "@id": "https://www.steelmind.pk/#organization",
+      "@id": "https://steelmindengineers.com/#organization",
     };
     webpageSchema.publisher = {
-      "@id": "https://www.steelmind.pk/#organization",
+      "@id": "https://steelmindengineers.com/#organization",
     };
   }
   schemas.push(webpageSchema);

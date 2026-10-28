@@ -43,7 +43,7 @@ export default async function handler(req: any, res: any) {
     const systemPrompt = `You are the technical AI engineering assistant for Steel Mind Engineers (Pvt. Ltd.), Pakistan's premier Pre-Engineered Building (PEB) design, steel fabrication, and erection company.
 Head Office: 35-D Commercial, DHA EME Sector, Lahore.
 Factory: Karol Ghati, Lahore.
-Direct Phone: +92 300 4253966, +92 307 7077549. Email: info@steelmind.pk.
+Direct Phone: +92 300 4253966, +92 307 7077549. Email: info@steelmindengineers.com.
 
 Reference company knowledge:
 ${JSON.stringify(knowledge)}
@@ -59,7 +59,7 @@ CRITICAL FORMATTING AND LENGTH RULES (MUST FOLLOW STRICTLY):
     const geminiApiKey = process.env.GEMINI_API_KEY;
     if (!geminiApiKey) {
       sendEvent("token", {
-        t: "Welcome to Steel Mind Engineers! Please contact our engineering team directly at +92 300 4253966 or info@steelmind.pk for assistance.",
+        t: "Welcome to Steel Mind Engineers! Please contact our engineering team directly at +92 300 4253966 or info@steelmindengineers.com for assistance.",
       });
       sendEvent("done", {});
       return res.end();
@@ -69,7 +69,6 @@ CRITICAL FORMATTING AND LENGTH RULES (MUST FOLLOW STRICTLY):
       apiKey: geminiApiKey,
       httpOptions: {
         headers: {
-          "User-Agent": "aistudio-build",
         },
       },
     });

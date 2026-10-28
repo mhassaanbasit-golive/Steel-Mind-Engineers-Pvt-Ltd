@@ -67,7 +67,7 @@ export const Home: React.FC = () => {
         body: JSON.stringify({
           name: contactData.name,
           phone: contactData.phone,
-          email: contactData.email || "info@steelmind.pk",
+          email: contactData.email || "info@steelmindengineers.com",
           city: "General Inquiry",
           projectType: "General / Turnkey Project",
           message: contactData.details,
