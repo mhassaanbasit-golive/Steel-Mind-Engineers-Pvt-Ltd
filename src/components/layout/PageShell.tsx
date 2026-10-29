@@ -7,6 +7,7 @@ import { FloatingTools } from "./FloatingTools.tsx";
 import { BackButton } from "../ui/BackButton.tsx";
 import { initMotion } from "../../lib/motion.ts";
 import { applySeo } from "../../lib/seo.ts";
+import "../../lib/schema-inject.ts";
 import { ErrorBoundary } from "../common/ErrorBoundary.tsx";
 
 const ChatOverlay = lazy(() =>
