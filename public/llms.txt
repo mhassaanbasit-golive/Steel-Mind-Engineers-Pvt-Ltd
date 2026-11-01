@@ -2,6 +2,10 @@
 
 > Steel Mind Engineers designs, fabricates and erects pre-engineered buildings, industrial sheds, steel warehouses and custom steel structures across Pakistan. Factory and head office are in Lahore.
 
+Website: https://steelmindengineers.com
+Social links: [Facebook](https://www.facebook.com/profile.php?id=61583713948719), [Instagram](https://www.instagram.com/steelmindengineers/), [TikTok](https://www.tiktok.com/@steelmindengineers), [LinkedIn](https://www.linkedin.com/in/steel-mind-engineers-3a08213b5/)
+30+ projects completed, 8+ years of experience, 10+ cities served, 1,000+ tons of steel fabricated
+Clients include: Haier, Imperial Denim, Moiz Steel, Saif Engineers, Dravton Dairy, Latifia Dairy, Maria B, Elite Stitching, MAB, Agha Waqar
 Phone: +92 300 4253966, +92 307 7077549. Email: info@steelmindengineers.com.
 Head Office: 35-D Commercial, DHA EME Sector, Lahore. Factory: Karol Ghati, Lahore, Punjab 54000.
 
@@ -31,6 +35,14 @@ Head Office: 35-D Commercial, DHA EME Sector, Lahore. Factory: Karol Ghati, Laho
 - [Water Requirement Bridge (M/S Yascon)](https://steelmindengineers.com/projects/yascon-water-requirement-bridge-petaro/): Steel Mind Engineers Pvt. Ltd. fabricated and erected a steel water requirement bridge for M/S Yascon at Petaro Cantt, Sindh. The bridge is 150 feet long, 6 feet wide and 30 feet high, with an area of 900 square feet.
 
 ## About
+- [About Us](https://steelmindengineers.com/about/): Steel Mind Engineers Pvt. Ltd. designs, fabricates and erects steel structures in Pakistan. It has completed over thirty projects in more than ten cities and fabricated over a thousand tons of steel.
+- [SME Policy](https://steelmindengineers.com/about/sme-policy/): The SME Policy of Steel Mind Engineers sets the rules for quality control, health and safety, and environmental care in the workshop and on site.
+- [Factory](https://steelmindengineers.com/about/factory/): The Steel Mind Engineers factory is at Karol Ghati, Lahore. Steel moves through five stages: material yard, cutting, fitting and welding, cleaning and painting, and packing and dispatch.
+- [Company Profile (PDF)](https://drive.google.com/file/d/1iPb4X6r4ejdq7dRQbZx9sZZ16fOmmRWf/view?usp=sharing): The company profile is a 29-page PDF that introduces Steel Mind Engineers Pvt. Ltd., its services, its projects and its clients. Steel Mind Engineers designs, fabricates and erects steel structures in Pakistan.
+Vision: The vision of Steel Mind Engineers is to be a trusted steel fabrication and engineering company and to build long-term partnerships with industry in Pakistan.
+Mission: The mission of Steel Mind Engineers is to provide dependable fabrication and erection that meets each client's structural and operating needs, with quality, safety and efficiency.
+Core values: Steel Mind Engineers works by three values: quality fabrication, continuous improvement, and safety and reliability. Each value shows in the inspection steps, the reviews and the site rules that apply to every project.
+Commitments: Steel Mind Engineers makes five commitments on every project: steel that matches the drawing, a written schedule, safe work on site, one point of contact and support after handover.
 
 ## Blog
 - [What Is a Pre-Engineered Building? A Plain Guide for Pakistani Business Owners](https://steelmindengineers.com/blog/what-is-a-pre-engineered-building/): A pre-engineered building, or PEB, is a steel building whose frames, purlins and sheets are designed in advance and made in a factory to exact sizes. The parts are then bolted together on your site. This is why a PEB is usually finished sooner than a concrete building of the same size.
@@ -45,3 +57,10 @@ Head Office: 35-D Commercial, DHA EME Sector, Lahore. Factory: Karol Ghati, Laho
 - [Loading Dock Design in Pakistan: Dock Height, Canopy and Yard Depth](https://steelmindengineers.com/blog/loading-dock-design-pakistan/): A good loading dock lets a truck back in, load quickly and leave. Set the dock height from your truck fleet, add a steel canopy for rain and sun, choose the number of doors from the trucks you load at the same time, and leave enough yard depth for turning. Design the frame spacing to match the dock doors.
 - [Cold Storage Buildings in Pakistan: What the Steel Frame Must Do](https://steelmindengineers.com/blog/cold-storage-steel-frame-pakistan/): A cold store keeps goods at a set temperature, so the building must stop heat from entering. The steel frame carries the insulated roof and wall panels, the refrigeration equipment and the doors. Plan sealed joints, a tight envelope and the equipment loads from the first drawing, and coordinate with your cooling specialist.
 - [Storing Wheat in a Steel Warehouse in Pakistan: Keep It Dry and Ventilated](https://steelmindengineers.com/blog/wheat-storage-steel-warehouse-pakistan/): Wheat must stay dry and cool. A steel grain warehouse needs a leak-free roof, a sealed and raised floor, steady ventilation and walls designed for the sideways push of the stored grain. A good coating protects the steel from grain dust and moisture.
+
+## Contact
+- [Contact Us](https://steelmindengineers.com/contact-us/): Call +92 300 4253966 or +92 307 7077549, email info@steelmindengineers.com, or send the quote form. An engineer reads each request and replies with questions and the next steps.
+
+## Optional
+- [Full Technical Knowledge Document](https://steelmindengineers.com/llms-full.txt)
+- [XML Sitemap](https://steelmindengineers.com/sitemap.xml)

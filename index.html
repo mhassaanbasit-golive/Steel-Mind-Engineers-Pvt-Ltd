@@ -33,6 +33,128 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="preload" as="image" href="https://res.cloudinary.com/cyfb9slf/video/upload/so_0,f_jpg,q_90,w_1920/v1791664367/Main-homepage-Video_01.mp4.mov" media="(min-width: 768px)" fetchpriority="high" />
     <link rel="preload" as="image" href="https://res.cloudinary.com/cyfb9slf/video/upload/so_0,f_jpg,q_90,w_1080/v1791664502/15409488_2160_3840_60fps_1.jpg" media="(max-width: 767px)" fetchpriority="high" />
+
+    <!-- Google Analytics 4 (G-HSKF5DLMLY) -->
+    <script>
+      (function () {
+        try {
+          var GA_ID = "G-HSKF5DLMLY";
+          var host = location.hostname;
+          var isProd = host === "steelmindengineers.com" || host === "www.steelmindengineers.com";
+          var isTest = false;
+          try {
+            isTest = localStorage.getItem("smGaTest") === "1";
+          } catch (e) {}
+
+          var isON = isProd || isTest;
+          if (!isON) return;
+
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            window.dataLayer.push(arguments);
+          }
+          window.gtag = gtag;
+
+          gtag("js", new Date());
+          gtag("config", "G-HSKF5DLMLY", { send_page_view: false });
+
+          try {
+            var gaScript = document.createElement("script");
+            gaScript.async = true;
+            gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-HSKF5DLMLY";
+            document.head.appendChild(gaScript);
+          } catch (e) {}
+
+          var lastSentKey = "";
+          window.addEventListener("sm:route", function (event) {
+            try {
+              var detail = event && event.detail ? event.detail : {};
+              var p = detail.path || location.pathname;
+              if (p !== "/" && !p.endsWith("/") && p.indexOf(".") === -1) {
+                return;
+              }
+              var key = location.pathname + location.search;
+              if (key === lastSentKey) return;
+              lastSentKey = key;
+              gtag("event", "page_view", {
+                page_title: detail.title || document.title,
+                page_location: location.href,
+                page_path: key,
+              });
+            } catch (e) {}
+          });
+
+          document.addEventListener(
+            "click",
+            function (event) {
+              try {
+                if (!event || !event.target || typeof event.target.closest !== "function") return;
+                var el = event.target.closest("a,button");
+                if (!el) return;
+                var href = el.getAttribute("href") || "";
+                var text = (el.textContent || "").replace(/\s+/g, " ").trim().toLowerCase();
+
+                if (href.indexOf("tel:") === 0) {
+                  gtag("event", "phone_click", {
+                    link_url: href,
+                    page_path: location.pathname,
+                    transport_type: "beacon",
+                  });
+                } else if (/^https?:\/\/(wa\.me|api\.whatsapp\.com)\//i.test(href)) {
+                  gtag("event", "whatsapp_click", {
+                    link_url: href,
+                    page_path: location.pathname,
+                    transport_type: "beacon",
+                  });
+                } else if (text === "request a quote") {
+                  gtag("event", "quote_click", {
+                    link_url: href || "(button)",
+                    page_path: location.pathname,
+                  });
+                }
+              } catch (e) {}
+            },
+            true
+          );
+
+          try {
+            if (typeof MutationObserver !== "undefined" && document.documentElement) {
+              var observer = new MutationObserver(function (mutations) {
+                try {
+                  for (var i = 0; i < mutations.length; i++) {
+                    var added = mutations[i].addedNodes;
+                    if (!added) continue;
+                    for (var j = 0; j < added.length; j++) {
+                      var n = added[j];
+                      if (n.nodeType !== 1) continue;
+                      var h3 = null;
+                      if (n.tagName === "H3") {
+                        h3 = n;
+                      } else if (typeof n.querySelector === "function") {
+                        h3 = n.querySelector("h3");
+                      }
+                      if (h3 && (h3.textContent || "").trim() === "Thank You") {
+                        var textLen = (n.textContent || "").length;
+                        if (textLen < 800) {
+                          gtag("event", "generate_lead", {
+                            form_name: "quote_form",
+                            page_path: location.pathname,
+                          });
+                        }
+                      }
+                    }
+                  }
+                } catch (e) {}
+              });
+              observer.observe(document.documentElement, {
+                childList: true,
+                subtree: true,
+              });
+            }
+          } catch (e) {}
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
